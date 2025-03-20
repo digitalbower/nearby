@@ -4,7 +4,7 @@
         <div class="logo-header" data-background-color="dark">
             <a href="index.html" class="logo">
             <img
-                src="assets/img/kaiadmin/logo_light.svg"
+                src="{{ asset('assets/img/kaiadmin/logo_light.svg') }}"
                 alt="navbar brand"
                 class="navbar-brand"
                 height="20"
@@ -63,8 +63,8 @@
                     <div class="collapse" id="base">
                     <ul class="nav nav-collapse">
                         <li>
-                        <a href="components/avatars.html">
-                            <span class="sub-item">Avatars</span>
+                        <a href="{{ route('admin.logos.index') }}">
+                            <span class="sub-item">Logo Settings</span>
                         </a>
                         </li>
                         <li>

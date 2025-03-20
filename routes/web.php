@@ -63,7 +63,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
     Route::middleware(['admin'])->group(function () {
         Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
-        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/logos', [LogoController::class, 'index'])->name('logos.index');
         Route::get('/logos/{id}/edit', [LogoController::class, 'edit'])->name('logos.edit');
         Route::put('/logos/{id}', [LogoController::class, 'update'])->name('logos.update');
