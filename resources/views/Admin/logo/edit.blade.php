@@ -36,7 +36,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-success">Update Logo</button>
-                <a href="{{ route('logos.index') }}" class="btn btn-secondary">Cancel</a>
+                <a href="{{ route('admin.logos.index') }}" class="btn btn-secondary">Cancel</a>
             </form>
         </div>
     </div>

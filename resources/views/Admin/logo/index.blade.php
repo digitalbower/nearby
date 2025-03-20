@@ -1,4 +1,4 @@
-@extends('layouts.app')
+
 
 @section('title', 'Upload Logo')
 <div class="wrapper">
@@ -7,7 +7,7 @@
         <div class="sidebar-wrapper scrollbar scrollbar-inner">
             <ul class="nav nav-secondary">
                 <li class="nav-item">
-                    <a href="{{ route('logos.index') }}">
+                    <a href="{{ route('admin.logos.index') }}">
                         <i class="fas fa-cogs"></i>
                         <p>Logo Settings</p>
                     </a>
