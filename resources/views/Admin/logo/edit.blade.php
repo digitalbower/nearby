@@ -1,7 +1,7 @@
-@extends('layouts.app')
+@extends('admin.layouts.masteradmin')
 
 @section('content')
-<div class="wrapper">
+  
     <div class="container mt-5">
         <div class="card shadow-lg p-4">
             <h4 class="text-center mb-4">Edit Logo</h4>
@@ -38,7 +38,6 @@
                 <button type="submit" class="btn btn-success">Update Logo</button>
                 <a href="{{ route('admin.logos.index') }}" class="btn btn-secondary">Cancel</a>
             </form>
-        </div>
     </div>
 </div>
 @endsection
