@@ -9,12 +9,14 @@
     />
     <link
       rel="icon"
-      href="assets/img/kaiadmin/favicon.ico" 
+      href="{{ asset('assets/img/kaiadmin/favicon.ico') }}" 
       type="image/x-icon"
     />
 
     <!-- Fonts and icons -->
-    <script src="assets/js/plugin/webfont/webfont.min.js"></script>
+    <script src="{{ asset('assets/js/plugin/webfont/webfont.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
       WebFont.load({
         google: { families: ["Public Sans:300,400,500,600,700"] },
@@ -34,12 +36,12 @@
     </script>
 
     <!-- CSS Files -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="assets/css/plugins.min.css" />
-    <link rel="stylesheet" href="assets/css/kaiadmin.min.css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/plugins.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/kaiadmin.min.css') }}" />
 
     <!-- CSS Just for demo purpose, don't include it in your project -->
-    <link rel="stylesheet" href="assets/css/demo.css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}" />
   </head>
   <body>
     <div class="wrapper">
@@ -50,7 +52,7 @@
           <div class="logo-header" data-background-color="dark">
             <a href="index.html" class="logo">
               <img
-                src="assets/img/kaiadmin/logo_light.svg"
+                src="{{ asset('assets/img/kaiadmin/logo_light.svg') }}"
                 alt="navbar brand"
                 class="navbar-brand"
                 height="20"
@@ -109,8 +111,8 @@
                 <div class="collapse" id="base">
                   <ul class="nav nav-collapse">
                     <li>
-                      <a href="components/avatars.html">
-                        <span class="sub-item">Avatars</span>
+                    <a href="{{ route('logos.index') }}">
+                        <span class="sub-item">Logo Settings</span>
                       </a>
                     </li>
                     <li>
@@ -195,7 +197,7 @@
             <div class="logo-header" data-background-color="dark">
               <a href="index.html" class="logo">
                 <img
-                  src="assets/img/kaiadmin/logo_light.svg"
+                  src="{{ asset('assets/img/kaiadmin/logo_light.svg') }}"
                   alt="navbar brand"
                   class="navbar-brand"
                   height="20"

@@ -6,6 +6,7 @@ use App\Http\Controllers\User\AuthController;
 use App\Http\Controllers\User\ProfileController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\LogoController;
 
 // ✅ Google Authentication Routes
 Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
@@ -45,15 +46,17 @@ Route::prefix('user')->group(function () {
     });
 });
 
-Route::get('/admin', function () {
-    return view('admin.index');
-});
 
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/logosettings', [DashboardController::class, 'logosettings'])->name('admin.logosettings');
 
 // ✅ Admin Routes (To be added when required)
 Route::prefix('admin')->group(function () {
     // Example: Admin routes can be added here in the future
      Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+     Route::get('/logos', [LogoController::class, 'index'])->name('logos.index');
+     Route::get('/logos/{id}/edit', [LogoController::class, 'edit'])->name('logos.edit');
+     Route::put('/logos/{id}', [LogoController::class, 'update'])->name('logos.update');
+    
 });
