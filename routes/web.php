@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\AuthController;
 use App\Http\Controllers\User\ProfileController;
-use Laravel\Socialite\Facades\Socialite;
+use App\Http\Controllers\Admin\Auth\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 
 // ✅ Google Authentication Routes
@@ -45,15 +45,12 @@ Route::prefix('user')->group(function () {
     });
 });
 
-Route::get('/admin', function () {
-    return view('admin.index');
-});
-
-
-    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
-
 // ✅ Admin Routes (To be added when required)
-Route::prefix('admin')->group(function () {
-    // Example: Admin routes can be added here in the future
-     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [AdminAuthController::class, 'adminLogin'])->name('login');
+    Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
+    Route::middleware(['admin'])->group(function () {
+        Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
+    });
 });
