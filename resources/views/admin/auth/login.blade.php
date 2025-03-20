@@ -26,7 +26,7 @@
                         <h2 class="text-3xl font-bold text-gray-900">Login</h2>
                         <p class="mt-2 text-gray-600">Sign in to your account</p>
                     </div>
-                    <form class="mt-8 space-y-6" method="POST" action="{{ route('admin.login') }}">
+                    <form class="mt-8 space-y-6" id="login" method="POST" action="{{ route('admin.login') }}">
                     @csrf
                         <div class="space-y-4">
                             <div>
@@ -53,7 +53,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <input id="remember-me" name="remember" type="checkbox"
-                                    class="h-4 w-4 text-cyan-600 focus:ring-cyan-500 border-gray-300 rounded" {{ old('remember') || Cookie::get('remember_token') == '1' ? 'checked' : '' }}>
+                                    class="h-4 w-4 text-cyan-600 focus:ring-cyan-500 border-gray-300 rounded" {{ old('remember') || Cookie::get('remember_admin') == '1' ? 'checked' : '' }}>
                                 <label for="remember-me" class="ml-2 block text-sm text-gray-900">
                                     Remember me
                                 </label>

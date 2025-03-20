@@ -19,7 +19,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
 <script>
 $(document).ready(function () {
- $('#login1').validate({  
+ $('#login').validate({  
     rules: {  
       email: {  
         required: true,  

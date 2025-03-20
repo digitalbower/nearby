@@ -24,10 +24,14 @@ class AuthController extends Controller
         $remember = $request->has('remember'); 
         if (Auth::guard('admin')->attempt($credentials, $remember)) {
             $request->session()->regenerate();
-            Cookie::queue('remember_token', $request->remember ? '1' : '0', 43200); // 30 days
             if ($request->remember) {
+                Cookie::queue('remember_admin', $request->remember ? '1' : '0', 43200); // Store remember token
                 Cookie::queue('remember_email', $request->email, 43200);
                 Cookie::queue('remember_password', $request->password, 43200);
+            } else {
+                Cookie::queue(Cookie::forget('remember_admin'));
+                Cookie::queue(Cookie::forget('remember_email'));
+                Cookie::queue(Cookie::forget('remember_password'));
             }
             $adminId = Auth::guard('admin')->id();
             $sessionId = session()->getId();
