@@ -6,3 +6,9 @@
 
  <!-- CSS Just for demo purpose, don't include it in your project -->
  <link rel="stylesheet" href="{{asset('assets/css/demo.css')}}" />
+
+ <style>
+    .wrapper-div {
+    padding-top: 100px; /* Adjust as needed */
+}
+ </style>

@@ -11,42 +11,38 @@ class LogoController extends Controller
 {
     
 
-    public function index()
-    {
-        $logos = Logo::all();
-        return view('admin.logo.index', compact('logos'));
+    public function index() {
+        $logo = Logo::first(); // Fetch first logo entry
+        return view('admin.logo.index', compact('logo'));
     }
 
-    public function edit($id)
-    {
-        $logo = Logo::findOrFail($id);
-        return view('admin.logo.edit', compact('logo'));
-    }
-
-    // Update the logo details
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request) {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'logo_image' => 'nullable|mimes:jpeg,png,jpg,svg|max:2048',
+            'preview_image' => 'nullable|mimes:jpeg,png,jpg,svg|max:2048',
         ]);
 
-        $logo = Logo::findOrFail($id);
-        $logo->title = $request->title;
+        $logo = Logo::first();
+        if (!$logo) {
+            $logo = new Logo();
+        }
 
-        if ($request->hasFile('image')) {
-            // Delete old image
-            if ($logo->image) {
-                Storage::delete('public/' . $logo->image);
+        if ($request->hasFile('logo_image')) {
+            if ($logo->logo_image && Storage::exists($logo->logo_image)) {
+                Storage::delete($logo->logo_image);
             }
-            // Store new image
-            $imagePath = $request->file('image')->store('logos', 'public');
-            $logo->image = $imagePath;
+            $logo->logo_image = $request->file('logo_image')->store('logos', 'public');
+        }
+
+        if ($request->hasFile('preview_image')) {
+            if ($logo->preview_image && Storage::exists($logo->preview_image)) {
+                Storage::delete($logo->preview_image);
+            }
+            $logo->preview_image = $request->file('preview_image')->store('logos', 'public');
         }
 
         $logo->save();
-
-        return redirect()->route('logos.index')->with('success', 'Logo updated successfully!');
+        return redirect()->back()->with('success', 'Logo updated successfully');
     }
 }
 
