@@ -5,10 +5,12 @@ use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\AuthController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\Admin\Auth\AuthController as AdminAuthController;
+use App\Http\Controllers\Admin\Product\CompanyTermController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LogoController;
-
-
+use App\Http\Controllers\Admin\Product\ProductController;
+use App\Http\Controllers\Admin\Product\VendorController;
+use App\Http\Controllers\Admin\Product\VendorTermController;
 
 // ✅ User Routes
 
@@ -66,6 +68,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/logos', [LogoController::class, 'index'])->name('logos.index');
         Route::get('/logos/{id}/edit', [LogoController::class, 'edit'])->name('logos.edit');
         Route::put('/logos/{id}', [LogoController::class, 'update'])->name('logos.update');
+        Route::prefix('products')->name('products.')->group(function () {
+            Route::get('/', [ProductController::class, 'index'])->name('index');
+            Route::get('/create', [ProductController::class, 'create'])->name('create'); 
+            Route::post('/', [ProductController::class, 'store'])->name('store'); 
+            Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('edit'); 
+            Route::put('/{product}', [ProductController::class, 'update'])->name('update'); 
+            Route::delete('/{product}', [ProductController::class, 'destroy'])->name('destroy'); 
+            Route::get('/company-terms', [CompanyTermController::class, 'index'])->name('company_terms.index');
+            Route::get('/company-terms/{term}/edit', [CompanyTermController::class, 'edit'])->name('company_terms.edit');
+            Route::put('/company-terms/{term}', [CompanyTermController::class, 'update'])->name('company_terms.update');
+            Route::resource('vendors', VendorController::class);
+            Route::post('/vendors/change-status', [VendorController::class, 'changeVendorStatus'])->name('vendors.status');
+            Route::resource('vendor_terms', VendorTermController::class);
+        });
     });
 });
 

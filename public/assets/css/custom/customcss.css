@@ -1,0 +1,14 @@
+.form-check-input {
+    width:6rem;
+    height:1.25rem;
+    cursor: pointer;
+}
+
+.form-check-input:checked {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.form-check-input:focus {
+    box-shadow: none;
+}

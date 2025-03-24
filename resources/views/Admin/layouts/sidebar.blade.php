@@ -4,10 +4,10 @@
         <div class="logo-header" data-background-color="dark">
         <a href="index.html" class="logo">
           <img
-            src="{{ asset('assets/img/NearByVoucherswide.svg') }}"
+            src="{{ asset('images/NearByVoucherswide.svg') }}"
             alt="navbar brand"
             class="navbar-brand"
-            height="20"
+            height="70" 
           />
         </a>
             <div class="nav-toggle">
@@ -113,20 +113,30 @@
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#sidebarLayouts">
                     <i class="fas fa-th-list"></i>
-                    <p>Add Product</p>
+                    <p>Product Section</p>
                     <span class="caret"></span>
                     </a>
                     <div class="collapse" id="sidebarLayouts">
                     <ul class="nav nav-collapse">
                         <li>
-                        <a href="sidebar-style-2.html">
-                            <span class="sub-item">Add Product</span>
-                        </a>
+                            <a href="{{route('admin.products.company_terms.index')}}">
+                                <span class="sub-item">Company Terms</span>
+                            </a>
                         </li>
                         <li>
-                        <a href="icon-menu.html">
-                            <span class="sub-item">Icon Menu</span>
-                        </a>
+                            <a href="{{route('admin.products.vendors.index')}}">
+                                <span class="sub-item">Vendors</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{route('admin.products.index')}}">
+                                <span class="sub-item">Products</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{route('admin.products.vendor_terms.index')}}">
+                                <span class="sub-item">Vendor Terms</span>
+                            </a>
                         </li>
                     </ul>
                     </div>

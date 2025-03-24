@@ -7,7 +7,7 @@
             src="{{ asset('assets/img/NearByVoucherswide.svg') }}"
             alt="navbar brand"
             class="navbar-brand"
-            height="20"
+            height="70"
           />
         </a>
         <div class="nav-toggle">
@@ -25,6 +25,7 @@
       <!-- End Logo Header -->
     </div>
     <!-- Navbar Header -->
+    @auth('admin')
     <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
       <div class="container-fluid">
         <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
@@ -37,14 +38,14 @@
             >
               <div class="avatar-sm">
                 <img
-                  src="{{ asset('assets/img/profile.jpg')}}"
+                  src="{{ asset('assets/img/dprofile.png')}}"
                   alt="..."
                   class="avatar-img rounded-circle"
                 />
               </div>
               <span class="profile-username">
                 <span class="op-7">Hi,</span>
-                <span class="fw-bold">Hizrian</span>
+                <span class="fw-bold">{{Auth::guard('admin')->name}}</span>
               </span>
             </a>
             <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -53,29 +54,18 @@
                   <div class="user-box">
                     <div class="avatar-lg">
                       <img
-                        src="{{ asset('assets/img/profile.jpg')}}"
+                        src="{{ asset('assets/img/dprofile.png')}}"
                         alt="image profile"
                         class="avatar-img rounded"
                       />
                     </div>
                     <div class="u-text">
-                      <h4>Hizrian</h4>
-                      <p class="text-muted">hello@example.com</p>
-                      <a
-                        href="profile.html"
-                        class="btn btn-xs btn-secondary btn-sm"
-                        >View Profile</a
-                      >
+                      <h4>{{ Auth::guard('admin')->user()->name }}</h4>
+                      <p class="text-muted">{{ Auth::guard('admin')->user()->email }}</p>
                     </div>
                   </div>
                 </li>
                 <li>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">My Profile</a>
-                  <a class="dropdown-item" href="#">My Balance</a>
-                  <a class="dropdown-item" href="#">Inbox</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Account Setting</a>
                   <div class="dropdown-divider"></div>
                   <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" class="d-none">
                     @csrf
@@ -89,4 +79,5 @@
       </div>
     </nav>
     <!-- End Navbar -->
+    @endauth
   </div>

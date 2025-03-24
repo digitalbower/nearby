@@ -49,3 +49,10 @@
 
  <!-- Kaiadmin JS -->
  <script src="{{asset('assets/js/kaiadmin.min.js')}}"></script>
+<script src="{{asset('assets/js/plugin/jquery.validate/jquery.validate.min.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
+
+<script>
+  var csrf_token = "{{ csrf_token() }}";
+</script>
+@stack('scripts')
