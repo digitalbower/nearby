@@ -14,13 +14,11 @@ class LogoSeeder extends Seeder
     public function run(): void
     {
         DB::table('logos')->insert([
-            [
-                'title' => 'Company A',
-                'image' => 'logos/company_a.png', // Ensure you place an image in storage
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
+            'logo_image' => null, // No logo uploaded initially
+            'logo_fallback' => 'logos/default-logo.png', // Default logo path
+            'preview_image' => 'logos/default-preview.png', // Preview image
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

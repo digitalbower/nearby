@@ -2,6 +2,7 @@
 
 @section('content')
   
+<div class="wrapper-div">
     <div class="container mt-5">
         <div class="card shadow-lg p-4">
             <h4 class="text-center mb-4">Edit Logo</h4>
@@ -16,7 +17,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('logos.update', $logo->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.logos.update', $logo->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -39,6 +40,7 @@
                 <a href="{{ route('admin.logos.index') }}" class="btn btn-secondary">Cancel</a>
             </form>
     </div>
+</div>
 </div>
 @endsection
 

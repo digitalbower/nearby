@@ -57,59 +57,83 @@
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#base">
                     <i class="fas fa-layer-group"></i>
-                    <p>Dashboard Setup</p>
+                    <p>Header Management</p>
                     <span class="caret"></span>
                     </a>
                     <div class="collapse" id="base">
                     <ul class="nav nav-collapse">
                         <li>
                         <a href="{{ route('admin.logos.index') }}">
-                            <span class="sub-item">Logo Settings</span>
+                            <span class="sub-item">Logo Management</span>
                         </a>
                         </li>
                         <li>
-                        <a href="components/buttons.html">
-                            <span class="sub-item">Buttons</span>
+                        <a href="{{ route('admin.navigation.index') }}">
+                            <span class="sub-item">Header Management</span>
                         </a>
                         </li>
                         <li>
                         <a href="components/gridsystem.html">
-                            <span class="sub-item">Grid System</span>
+                            <span class="sub-item">Navigation Menu Items Management</span>
                         </a>
                         </li>
                         <li>
                         <a href="components/panels.html">
-                            <span class="sub-item">Panels</span>
+                            <span class="sub-item">PanLocation Scope Management</span>
                         </a>
                         </li>
                         <li>
                         <a href="components/notifications.html">
-                            <span class="sub-item">Notifications</span>
+                            <span class="sub-item">Footer Management</span>
+                        </a>
+                        </li>
+                        
+                    </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#base">
+                    <i class="fas fa-layer-group"></i>
+                    <p>Home Page Management</p>
+                    <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="base">
+                    <ul class="nav nav-collapse">
+                        <li>
+                        <a href="{{ route('admin.logos.index') }}">
+                            <span class="sub-item">Hero Carousel Management</span>
                         </a>
                         </li>
                         <li>
-                        <a href="components/sweetalert.html">
-                            <span class="sub-item">Sweet Alert</span>
+                        <a href="components/buttons.html">
+                            <span class="sub-item">Category Section Management</span>
                         </a>
                         </li>
                         <li>
-                        <a href="components/font-awesome-icons.html">
-                            <span class="sub-item">Font Awesome Icons</span>
+                        <a href="components/gridsystem.html">
+                            <span class="sub-item">Quick Cards Section Management</span>
                         </a>
                         </li>
                         <li>
-                        <a href="components/simple-line-icons.html">
-                            <span class="sub-item">Simple Line Icons</span>
+                        <a href="components/panels.html">
+                            <span class="sub-item">Trending Section Management</span>
                         </a>
                         </li>
                         <li>
-                        <a href="components/typography.html">
-                            <span class="sub-item">Typography</span>
+                        <a href="components/notifications.html">
+                            <span class="sub-item">Popular Section Management</span>
+                        </a>
+                        </li>
+                        <li>
+                        <a href="components/notifications.html">
+                            <span class="sub-item">Support Section Management</span>
                         </a>
                         </li>
                     </ul>
                     </div>
                 </li>
+
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#sidebarLayouts">
                     <i class="fas fa-th-list"></i>

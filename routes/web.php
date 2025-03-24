@@ -11,6 +11,9 @@ use App\Http\Controllers\Admin\LogoController;
 use App\Http\Controllers\Admin\Product\ProductController;
 use App\Http\Controllers\Admin\Product\VendorController;
 use App\Http\Controllers\Admin\Product\VendorTermController;
+use App\Http\Controllers\Admin\NavigationMenuController;
+
+
 
 // ✅ User Routes
 
@@ -58,16 +61,17 @@ Route::prefix('user')->group(function () {
 
  
     
-// ✅ Admin Routes (To be added when required)
+// ✅ Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
+    // Admin Authentication
     Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('login');
     Route::post('login', [AdminAuthController::class, 'adminLogin'])->name('login');
     Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
+
+    // Admin Panel Routes (Requires Admin Middleware)
     Route::middleware(['admin'])->group(function () {
         Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
-        Route::get('/logos', [LogoController::class, 'index'])->name('logos.index');
-        Route::get('/logos/{id}/edit', [LogoController::class, 'edit'])->name('logos.edit');
-        Route::put('/logos/{id}', [LogoController::class, 'update'])->name('logos.update');
+
         Route::prefix('products')->name('products.')->group(function () {
             Route::get('/', [ProductController::class, 'index'])->name('index');
             Route::get('/create', [ProductController::class, 'create'])->name('create'); 
@@ -81,7 +85,25 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::resource('vendors', VendorController::class);
             Route::post('/vendors/change-status', [VendorController::class, 'changeVendorStatus'])->name('vendors.status');
             Route::resource('vendor_terms', VendorTermController::class);
+
+        });
+        Route::prefix('logos')->name('logos.')->group(function () {
+            Route::get('/', [LogoController::class, 'index'])->name('index'); 
+            Route::get('/{id}/edit', [LogoController::class, 'edit'])->name('edit'); 
+            Route::post('/update', [LogoController::class, 'update'])->name('update'); 
+        });
+
+        // Navigation Menu Management Routes
+        Route::prefix('navigation')->name('navigation.')->group(function () {
+            Route::get('/', [NavigationMenuController::class, 'index'])->name('index');
+            Route::get('/create', [NavigationMenuController::class, 'create'])->name('create');
+            Route::post('/', [NavigationMenuController::class, 'store'])->name('store');
+            Route::get('/{navigationMenu}/edit', [NavigationMenuController::class, 'edit'])->name('edit');
+            Route::put('/{navigationMenu}', [NavigationMenuController::class, 'update'])->name('update');
+            Route::delete('/{navigationMenu}', [NavigationMenuController::class, 'destroy'])->name('destroy');
+
         });
     });
 });
+
 

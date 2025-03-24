@@ -9,3 +9,9 @@
  <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.css" rel="stylesheet">
 
  @yield('styles')
+
+ <style>
+    .wrapper-div {
+    padding-top: 100px; /* Adjust as needed */
+}
+ </style>

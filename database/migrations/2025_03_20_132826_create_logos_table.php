@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('logos', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('image');
+            $table->string('logo_image')->nullable(); // Main uploaded logo
+            $table->string('logo_fallback')->default('logos/default-logo.png'); // Default logo
+            $table->string('preview_image')->nullable(); // Preview image
             $table->timestamps();
         });
     }

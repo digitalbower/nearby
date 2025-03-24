@@ -4,10 +4,9 @@
       <div class="logo-header" data-background-color="dark">
         <a href="index.html" class="logo">
           <img
-            src="{{ asset('assets/img/NearByVoucherswide.svg') }}"
+            src="{{ asset('images/NearByVoucherswide.svg') }}"
             alt="navbar brand"
-            class="navbar-brand"
-            height="70"
+            height="30"
           />
         </a>
         <div class="nav-toggle">
