@@ -14,6 +14,12 @@ use App\Http\Controllers\Admin\Product\VendorTermController;
 use App\Http\Controllers\Admin\NavigationMenuController;
 use App\Http\Controllers\Admin\Product\ProductVariantController;
 
+use App\Http\Controllers\Admin\LocationScopeController;
+use App\Http\Controllers\Admin\FooterController;
+
+
+
+
 // ✅ User Routes
 
 // ✅ Google Authentication Routes
@@ -101,6 +107,28 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/{navigationMenu}/edit', [NavigationMenuController::class, 'edit'])->name('edit');
             Route::put('/{navigationMenu}', [NavigationMenuController::class, 'update'])->name('update');
             Route::delete('/{navigationMenu}', [NavigationMenuController::class, 'destroy'])->name('destroy');
+
+        });
+
+        Route::prefix('locations')->name('locations.')->group(function () {
+            Route::get('/', [LocationScopeController::class, 'index'])->name('index');
+            Route::get('/create', [LocationScopeController::class, 'create'])->name('create');
+            Route::post('/', [LocationScopeController::class, 'store'])->name('store');
+            Route::get('/{location}/edit', [LocationScopeController::class, 'edit'])->name('edit');
+            Route::put('/{location}', [LocationScopeController::class, 'update'])->name('update');
+            Route::delete('/{location}', [LocationScopeController::class, 'destroy'])->name('destroy');
+        });
+
+        Route::prefix('footer')->name('footer.')->group(function () {
+            Route::get('/', [FooterController::class, 'index'])->name('manage');
+
+            Route::post('/navigation', [FooterController::class, 'updateNavigation'])->name('navigation.update');
+            Route::post('/social', [FooterController::class, 'updateSocial'])->name('social.update');
+            Route::post('/contact', [FooterController::class, 'updateContact'])->name('contact.update');
+            Route::post('/newsletter', [FooterController::class, 'updateNewsletter'])->name('newsletter.update');
+            Route::post('/legal', [FooterController::class, 'updateLegal'])->name('legal.update');
+            Route::post('/quick', [FooterController::class, 'updateQuick'])->name('quick.update');
+            Route::post('/payment', [FooterController::class, 'updatePayment'])->name('payment.update');
 
         });
     });

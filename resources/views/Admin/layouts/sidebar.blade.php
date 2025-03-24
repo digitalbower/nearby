@@ -67,23 +67,19 @@
                             <span class="sub-item">Logo Management</span>
                         </a>
                         </li>
+                       
                         <li>
                         <a href="{{ route('admin.navigation.index') }}">
-                            <span class="sub-item">Header Management</span>
-                        </a>
-                        </li>
-                        <li>
-                        <a href="components/gridsystem.html">
                             <span class="sub-item">Navigation Menu Items Management</span>
                         </a>
                         </li>
                         <li>
-                        <a href="components/panels.html">
-                            <span class="sub-item">PanLocation Scope Management</span>
+                        <a href="{{ route('admin.locations.index') }}">
+                            <span class="sub-item">Location Scope Management</span>
                         </a>
                         </li>
                         <li>
-                        <a href="components/notifications.html">
+                        <a href="{{ route('admin.footer.manage') }}">
                             <span class="sub-item">Footer Management</span>
                         </a>
                         </li>
