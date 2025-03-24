@@ -12,8 +12,7 @@ use App\Http\Controllers\Admin\Product\ProductController;
 use App\Http\Controllers\Admin\Product\VendorController;
 use App\Http\Controllers\Admin\Product\VendorTermController;
 use App\Http\Controllers\Admin\NavigationMenuController;
-
-
+use App\Http\Controllers\Admin\Product\ProductVariantController;
 
 // ✅ User Routes
 
@@ -85,6 +84,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::resource('vendors', VendorController::class);
             Route::post('/vendors/change-status', [VendorController::class, 'changeVendorStatus'])->name('vendors.status');
             Route::resource('vendor_terms', VendorTermController::class);
+            Route::resource('product_variants', ProductVariantController::class);
 
         });
         Route::prefix('logos')->name('logos.')->group(function () {

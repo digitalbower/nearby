@@ -11,10 +11,12 @@ class VendorTerm extends Model
 
     protected $fillable = ['vendor_id','terms','product_id'];
 
-    public function vendor(){
-        return $this->belongsTo(Vendor::class);
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class, 'vendor_id');
     }
     public function product(){
+        
         return $this->belongsTo(Product::class);
     }
 

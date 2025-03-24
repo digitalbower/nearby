@@ -19,30 +19,29 @@
 
             <form action="{{ route('admin.products.vendor_terms.store') }}" id="vendorTermForm" method="POST">
                 @csrf
-
-                <div class="mb-3">
-                    <label for="name" class="form-label">Vendors</label>
-                    <select class="form-control" name="vendor_id">
-                        <option value="">Select Vendor</option>
-                        @foreach ($vendors as $vendor)
-                            <option value="{{ $vendor->id }}" {{ old('vendor_id') == $vendor->id ? 'selected' : '' }}>
-                                {{ $vendor->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
                 <div class="mb-3">
                     <label for="product_id" class="form-label">Products</label>
-                    <select class="form-control" name="product_id">
+                    <select class="form-control" name="product_id" id="productSelect">
                         <option value="">Select Product</option>
                         @foreach ($products as $product)
-                            <option value="{{ $product->id }}" {{ old('product_id') == $product->id ? 'selected' : '' }}>
+                            <option value="{{ $product->id }}" {{ old('product_id') == $product->id ? 'selected' : '' }}  data-vendor-id="{{ optional($product->vendor)->id }}">
                                 {{ $product->name }}
                             </option>
                         @endforeach
                     </select>
                 </div>
-
+                <div class="mb-3">
+                    <label for="vendor_id" class="form-label">Vendors</label>
+                    <select class="form-control" id="vendorSelect" disabled>
+                        <option value="">Vendors</option>
+                        @foreach ($vendors as $vendor)
+                            <option value="{{ $vendor->id }}">
+                                {{ $vendor->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <input type="hidden" name="vendor_id" id="vendorId">
+                </div>
                 <div class="mb-3">
                     <label for="terms" class="form-label">Terms</label>
                     <textarea class="form-control" id="terms" name="terms">{{old('terms')}}</textarea>

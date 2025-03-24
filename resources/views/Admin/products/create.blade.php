@@ -19,7 +19,17 @@
 
             <form action="{{ route('admin.products.store') }}" id="productForm" method="POST" enctype="multipart/form-data">
                 @csrf
-
+                <div class="mb-3">
+                    <label for="name" class="form-label">Vendors</label>
+                    <select class="form-control" name="vendor_id">
+                        <option value="">Select Vendor</option>
+                        @foreach ($vendors as $vendor)
+                            <option value="{{ $vendor->id }}" {{ old('vendor_id') == $vendor->id ? 'selected' : '' }}>
+                                {{ $vendor->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="mb-3">
                     <label for="name" class="form-label">Product Name</label>
                     <input type="text" class="form-control" id="name" name="name" value="{{old('name') }}">

@@ -162,6 +162,11 @@
                                 <span class="sub-item">Vendor Terms</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="{{route('admin.products.product_variants.index')}}">
+                                <span class="sub-item">Product Variants</span>
+                            </a>
+                        </li>
                     </ul>
                     </div>
                 </li>

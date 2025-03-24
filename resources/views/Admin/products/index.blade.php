@@ -29,6 +29,9 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $product->name }}</td>
+                            <td>
+                                {{ optional($product->vendor)->name ?? 'No Vendor Assigned' }}
+                            </td>
                             <td>{{ $product->short_description }}</td>
                             <td>
                                 @php
