@@ -89,40 +89,53 @@
                 </li>
 
                 <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#base">
+                    <a data-bs-toggle="collapse" href="#home">
                     <i class="fas fa-layer-group"></i>
                     <p>Home Page Management</p>
                     <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="base">
+                    <div class="collapse" id="home">
                     <ul class="nav nav-collapse">
                         <li>
-                        <a href="{{ route('admin.logos.index') }}">
+                        <a href="{{ route('admin.hero-carousel.index') }}">
                             <span class="sub-item">Hero Carousel Management</span>
                         </a>
                         </li>
                         <li>
-                        <a href="components/buttons.html">
+                        <a href="{{ route('admin.categories.index') }}">
                             <span class="sub-item">Category Section Management</span>
                         </a>
                         </li>
+
                         <li>
-                        <a href="components/gridsystem.html">
+                        <a href="{{ route('admin.subcategories.index') }}">
+                            <span class="sub-item">SubCategory Section Management</span>
+                        </a>
+                        </li>
+
+                        <li>
+                        <a href="{{ route('admin.unit_types.index') }}">
+                            <span class="sub-item">UnitTypes Section Management</span>
+                        </a>
+                        </li>
+
+                        <li>
+                        <a href="{{ route('admin.quick.index') }}">
                             <span class="sub-item">Quick Cards Section Management</span>
                         </a>
                         </li>
                         <li>
-                        <a href="components/panels.html">
+                        <a href="{{ route('admin.trending.index') }}">
                             <span class="sub-item">Trending Section Management</span>
                         </a>
                         </li>
                         <li>
-                        <a href="components/notifications.html">
+                        <a href="{{ route('admin.popular.index') }}">
                             <span class="sub-item">Popular Section Management</span>
                         </a>
                         </li>
                         <li>
-                        <a href="components/notifications.html">
+                        <a href="{{ route('admin.support.index') }}">
                             <span class="sub-item">Support Section Management</span>
                         </a>
                         </li>

@@ -170,6 +170,12 @@
         <div
           class="hidden container mx-auto lg:px-0 px-4 md:flex  w-full  justify-between items-center py-2 text-sm border-b border-gray-200">
           <div class="flex gap-4">
+          @foreach ($menuItems->where('navigation_placement', 'upper') as $menu)
+          <a href="{{ $menu->link }}" class="text-black duration-300">
+            <i class="fas pr-1 text-cyan-900 {{ $menu->icon }}"></i>
+            {{ $menu->label }}
+        </a>
+    @endforeach
             <a href="#" class="text-black  duration-300">
               <i class="fas pr-1 text-cyan-900 fa-tags"></i>
               Discounts Guide

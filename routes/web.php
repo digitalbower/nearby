@@ -14,7 +14,14 @@ use App\Http\Controllers\Admin\Product\VendorTermController;
 use App\Http\Controllers\Admin\NavigationMenuController;
 use App\Http\Controllers\Admin\LocationScopeController;
 use App\Http\Controllers\Admin\FooterController;
-
+use App\Http\Controllers\Admin\HeroCarouselController;
+use App\Http\Controllers\Admin\SubcategoryController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\QuickCardController;
+use App\Http\Controllers\Admin\TrendingProductController;
+use App\Http\Controllers\Admin\PopularProductController;
+use App\Http\Controllers\Admin\SupportSectionController;
+use App\Http\Controllers\Admin\UnitTypeController;
 
 
 // ✅ User Routes
@@ -127,6 +134,84 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/payment', [FooterController::class, 'updatePayment'])->name('payment.update');
 
         });
+
+        Route::prefix('hero-carousel')->name('hero-carousel.')->group(function () {
+            Route::get('/', [HeroCarouselController::class, 'index'])->name('index');
+            Route::get('/create', [HeroCarouselController::class, 'create'])->name('create');
+            Route::post('/store', [HeroCarouselController::class, 'store'])->name('store');
+            Route::get('/edit/{id}', [HeroCarouselController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [HeroCarouselController::class, 'update'])->name('update');
+            Route::delete('/delete/{id}', [HeroCarouselController::class, 'destroy'])->name('destroy');
+        });
+
+
+        Route::prefix('categories')->name('categories.')->group(function () {
+            Route::get('/', [CategoryController::class, 'index'])->name('index');
+            Route::get('/create', [CategoryController::class, 'create'])->name('create');
+            Route::post('/', [CategoryController::class, 'store'])->name('store');
+            Route::get('/{category}/edit', [CategoryController::class, 'edit'])->name('edit');
+            Route::put('/{category}', [CategoryController::class, 'update'])->name('update');
+            Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('destroy');
+            
+        });
+
+       
+
+        Route::prefix('subcategories')->name('subcategories.')->group(function () {
+            Route::get('/', [SubcategoryController::class, 'index'])->name('index');
+            Route::get('/create', [SubcategoryController::class, 'create'])->name('create');
+            Route::post('/', [SubcategoryController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [SubcategoryController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [SubcategoryController::class, 'update'])->name('update');
+            Route::delete('/{id}', [SubcategoryController::class, 'destroy'])->name('destroy');
+        });
+
+        Route::prefix('quick')->name('quick.')->group(function () {
+            Route::get('/', [QuickCardController::class, 'index'])->name('index');
+            Route::get('/create', [QuickCardController::class, 'create'])->name('create');
+            Route::post('/', [QuickCardController::class, 'store'])->name('store');
+            Route::get('/{quickCard}/edit', [QuickCardController::class, 'edit'])->name('edit');
+            Route::put('/{quickCard}', [QuickCardController::class, 'update'])->name('update');
+            Route::delete('/{quickCard}', [QuickCardController::class, 'destroy'])->name('destroy');
+        });
+
+        Route::prefix('trending')->name('trending.')->group(function () {
+            Route::get('/', [TrendingProductController::class, 'index'])->name('index');
+            Route::get('/create', [TrendingProductController::class, 'create'])->name('create');
+            Route::post('/', [TrendingProductController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [TrendingProductController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [TrendingProductController::class, 'update'])->name('update');
+            Route::delete('/{id}', [TrendingProductController::class, 'destroy'])->name('destroy');
+        });
+        Route::prefix('popular')->name('popular.')->group(function () {
+            Route::get('/', [PopularProductController::class, 'index'])->name('index');
+            Route::get('/create', [PopularProductController::class, 'create'])->name('create');
+            Route::post('/', [PopularProductController::class, 'store'])->name('store');
+            Route::get('/edit', [PopularProductController::class, 'edit'])->name('edit');
+            Route::put('/update', [PopularProductController::class, 'update'])->name('update');
+            Route::delete('/{id}', [PopularProductController::class, 'destroy'])->name('destroy');
+        });
+
+
+        Route::prefix('support')->name('support.')->group(function () {
+            Route::get('/', [SupportSectionController::class, 'index'])->name('index');
+            Route::get('/create', [SupportSectionController::class, 'create'])->name('create');
+            Route::post('/', [SupportSectionController::class, 'store'])->name('store');
+            Route::get('/edit', [SupportSectionController::class, 'edit'])->name('edit');
+            Route::put('/update', [SupportSectionController::class, 'update'])->name('update');
+            Route::delete('/{id}', [SupportSectionController::class, 'destroy'])->name('destroy');
+        });
+
+    Route::prefix('unit_types')->name('unit_types.')->group(function () {
+        Route::get('/', [UnitTypeController::class, 'index'])->name('index'); 
+        Route::get('/create', [UnitTypeController::class, 'create'])->name('create'); 
+        Route::post('/', [UnitTypeController::class, 'store'])->name('store'); 
+        Route::get('/{unitType}/edit', [UnitTypeController::class, 'edit'])->name('edit'); 
+        Route::put('/{unitType}', [UnitTypeController::class, 'update'])->name('update'); 
+        Route::delete('/{unitType}', [UnitTypeController::class, 'destroy'])->name('destroy'); 
+        
+       });
+ 
     });
 });
 
