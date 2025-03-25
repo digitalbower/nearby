@@ -9,9 +9,21 @@ class UnitType extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['category_id', 'item'];
+    protected $table = 'unit_types';
 
-    public function category() {
-        return $this->belongsTo(Category::class);
+    protected $fillable = [
+        'category_id',
+        'unit_type',
+        'status',
+        'ct_date',
+        'md_date'
+    ];
+
+    public $timestamps = false; 
+
+   
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 }

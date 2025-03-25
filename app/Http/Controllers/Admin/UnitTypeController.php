@@ -10,45 +10,67 @@ use App\Models\Category;
 
 class UnitTypeController extends Controller
 {
-    public function index() {
-        $unitTypes = UnitType::with('category')->paginate(10);
+    public function index()
+    {
+        $unitTypes = UnitType::with('category')->get();
         return view('admin.unittypes.index', compact('unitTypes'));
     }
 
-    public function create() {
+    public function create()
+    {
         $categories = Category::all();
         return view('admin.unittypes.create', compact('categories'));
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $request->validate([
             'category_id' => 'required|exists:categories,id',
-            'item' => 'required|string|max:255',
+            'unit_type' => 'required|string|max:255',
+            'status' => 'required|boolean',
         ]);
 
-        UnitType::create($request->all());
+        UnitType::create([
+            'category_id' => $request->category_id,
+            'unit_type' => $request->unit_type,
+            'status' => $request->status,
+           
+        ]);
 
-        return redirect()->route('admin.unit_types.index')->with('success', 'Unit Type added successfully!');
+        return redirect()->route('admin.unit_types.index')->with('success', 'Unit Type added successfully');
     }
 
-    public function edit(UnitType $unitType) {
+    public function edit($id)
+    {
+        $unitType = UnitType::findOrFail($id);
         $categories = Category::all();
         return view('admin.unittypes.edit', compact('unitType', 'categories'));
     }
 
-    public function update(Request $request, UnitType $unitType) {
+    public function update(Request $request, $id)
+    {
         $request->validate([
             'category_id' => 'required|exists:categories,id',
-            'item' => 'required|string|max:255',
+            'unit_type' => 'required|string|max:255',
+            'status' => 'required|boolean',
         ]);
 
-        $unitType->update($request->all());
+        $unitType = UnitType::findOrFail($id);
+        $unitType->update([
+            'category_id' => $request->category_id,
+            'unit_type' => $request->unit_type,
+            'status' => $request->status,
+            
+        ]);
 
-        return redirect()->route('admin.unit_types.index')->with('success', 'Unit Type updated successfully!');
+        return redirect()->route('admin.unit_types.index')->with('success', 'Unit Type updated successfully');
     }
 
-    public function destroy(UnitType $unitType) {
+    public function destroy($id)
+    {
+        $unitType = UnitType::findOrFail($id);
         $unitType->delete();
-        return redirect()->route('admin.unit_types.index')->with('success', 'Unit Type deleted successfully!');
+
+        return redirect()->route('admin.unit_types.index')->with('success', 'Unit Type deleted successfully');
     }
 }

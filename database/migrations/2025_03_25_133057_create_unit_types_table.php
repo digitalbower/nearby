@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('unit_types', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('category_id'); // Foreign Key to categories
-            $table->string('item');
+            $table->string('unit_type'); // Unit Type
+            $table->boolean('status')->default(1); // Status: 1 = Active, 0 = Inactive
             $table->timestamps();
-
-            // Foreign Key Constraint
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+        
         });
     }
 

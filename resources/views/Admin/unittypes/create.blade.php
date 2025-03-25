@@ -18,9 +18,17 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Item</label>
-            <input type="text" class="form-control" name="item" required>
+            <label class="form-label">Unit Type</label>
+            <input type="text" class="form-control" name="unit_type" required>
         </div>
+
+        <div class="mb-3">
+    <label class="form-label">Status</label>
+    <select name="status" class="form-control">
+        <option value="1" selected>Active</option>
+        <option value="0">Inactive</option>
+    </select>
+</div>
 
         <button type="submit" class="btn btn-success">Save</button>
     </form>
