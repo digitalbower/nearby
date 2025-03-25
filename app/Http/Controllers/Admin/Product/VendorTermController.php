@@ -35,12 +35,14 @@ class VendorTermController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'vendor_id' => 'required|exists:vendors,id|unique:vendor_terms,vendor_id',
             'product_id' => 'required|exists:products,id|unique:vendor_terms,product_id',
             'terms' => 'required|string',
 
         ]); 
-        VendorTerm::create($request->all());
+        $vendor_term = VendorTerm::create($request->all());
+        $product = Product::findorFail($request->product_id);
+        $product->vendor_terms_id = $vendor_term->id;
+        $product->save();
         return redirect()->route('admin.products.vendor_terms.index')->with('success', 'New Vendor Terms created successfully!');
 
     }
@@ -61,12 +63,14 @@ class VendorTermController extends Controller
     public function update(Request $request, VendorTerm $vendor_term)
     {
         $request->validate([
-            'vendor_id' => 'required|exists:vendors,id|unique:vendor_terms,vendor_id,'.$vendor_term->id,
             'product_id' => 'required|exists:products,id|unique:vendor_terms,product_id,'.$vendor_term->id,
             'terms' => 'required|string',
 
         ]);
         $vendor_term->update($request->all());
+        $product = Product::findorFail($request->product_id);
+        $product->vendor_terms_id = $vendor_term->id;
+        $product->save();
         return redirect()->route('admin.products.vendor_terms.index')->with('success', ' Vendor Terms updated successfully!');
     }
 
@@ -77,7 +81,7 @@ class VendorTermController extends Controller
     {
         $vendor_term->delete();
         
-        return redirect()->route('admin.products.vendors.index')
+        return redirect()->route('admin.products.vendor_terms.index')
                          ->with('success', 'Vendor deleted successfully.');
     }
 }

@@ -72,6 +72,7 @@ $(document).ready(function () {
     $("#productForm").validate({
             ignore: [], // Allow validation on hidden input
             rules: {
+                vendor_id: { required: true },
                 name: { required: true },
                 short_description: { required: true },
                 tags: {
@@ -92,6 +93,7 @@ $(document).ready(function () {
                 
             },
             messages: {
+                vendor_id: { required: "Vendor name is required" },
                 name: { required: "Product name is required" },
                 short_description: { required: "Short Description is required" },
                 tags: { required: "Please add at least one tag" },
@@ -119,6 +121,7 @@ $(document).ready(function () {
     $("#editProductForm").validate({
         ignore: [], // Allow validation on hidden input
         rules: {
+            vendor_id: { required: true },
             name: { required: true },
             short_description: { required: true },
             tags: {
@@ -138,6 +141,7 @@ $(document).ready(function () {
             
         },
         messages: {
+            vendor_id: { required: "Vendor name is required" },
             name: { required: "Product name is required" },
             short_description: { required: "Short Description is required" },
             tags: { required: "Please add at least one tag" },
@@ -166,20 +170,21 @@ $(document).ready(function () {
     $("#gallery").on("change", function (event) {
         let files = Array.from(event.target.files); // Convert FileList to array
         console.log("New files:", files);
-    
+        
         // Append new files to the global array
         selectedFiles = [...selectedFiles, ...files];
-    
+
         console.log("All selected files:", selectedFiles);
-    
+
         $("#images-preview").empty(); // Clear preview to avoid duplicates
-    
+
         // Display all selected files
-        selectedFiles.forEach(file => {
+        selectedFiles.forEach(function (file, index) {  // Use function() to access index properly
             let reader = new FileReader();
             reader.onload = function (e) {
                 $("#images-preview").append(
-                    `<div class="m-2 d-inline-block">
+                    `<div class="m-2 d-inline-block position-relative image-preview" data-index="${index}">
+                        <button type="button" class="btn-close position-absolute top-0 start-100 translate-middle remove-image" data-index="${index}" aria-label="Close"></button>
                         <img src="${e.target.result}" class="img-thumbnail" width="100">
                     </div>`
                 );
@@ -187,16 +192,26 @@ $(document).ready(function () {
             reader.readAsDataURL(file);
         });
     });
-    
+
+    // **Remove selected image**
+    $(document).on("click", ".remove-image", function () {
+        let index = $(this).data("index");
+        selectedFiles.splice(index, 1); // Remove from array
+        $(this).parent().remove(); // Remove from preview
+
+        console.log("Updated selected files:", selectedFiles);
+    });
+
     // **Attach all selected files before submitting**
     $("form").on("submit", function (e) {
         let fileInput = document.getElementById("gallery");
-         console.log(fileInput);
         let dataTransfer = new DataTransfer(); // Create a new file list
-    
-        selectedFiles.forEach(file => dataTransfer.items.add(file)); // Add all images
-    
-        fileInput.files = dataTransfer.files; // Attach all images to input
+
+        selectedFiles.forEach(function (file) {
+            dataTransfer.items.add(file); // Add remaining images
+        });
+
+        fileInput.files = dataTransfer.files; // Attach filtered images to input
 
         console.log("Final file count before submission:", fileInput.files.length);
     });

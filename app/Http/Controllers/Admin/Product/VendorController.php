@@ -67,6 +67,9 @@ class VendorController extends Controller
      */
     public function destroy(Vendor $vendor)
     {
+        if($vendor->products){
+            $vendor->products()->delete();
+        }
         $vendor->delete();
         
         return redirect()->route('admin.products.vendors.index')

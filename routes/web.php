@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\Product\ProductController;
 use App\Http\Controllers\Admin\Product\VendorController;
 use App\Http\Controllers\Admin\Product\VendorTermController;
 use App\Http\Controllers\Admin\NavigationMenuController;
+use App\Http\Controllers\Admin\Product\ProductVariantController;
+
 use App\Http\Controllers\Admin\LocationScopeController;
 use App\Http\Controllers\Admin\FooterController;
 use App\Http\Controllers\Admin\HeroCarouselController;
@@ -22,6 +24,7 @@ use App\Http\Controllers\Admin\TrendingProductController;
 use App\Http\Controllers\Admin\PopularProductController;
 use App\Http\Controllers\Admin\SupportSectionController;
 use App\Http\Controllers\Admin\UnitTypeController;
+
 
 
 // ✅ User Routes
@@ -94,6 +97,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::resource('vendors', VendorController::class);
             Route::post('/vendors/change-status', [VendorController::class, 'changeVendorStatus'])->name('vendors.status');
             Route::resource('vendor_terms', VendorTermController::class);
+            Route::resource('product_variants', ProductVariantController::class);
 
         });
         Route::prefix('logos')->name('logos.')->group(function () {

@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Admin\Product;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
-use App\Models\VendorTerm;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -15,7 +14,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with('vendor')
+        ->whereHas('vendor', function ($query) {
+            $query->where('status', 1);
+        })
+        ->get();
         return view('admin.products.index')->with(['products'=>$products]);
     }
 
@@ -24,7 +27,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('admin.products.create');
+        $vendors = Vendor::where('status',1)->latest()->get();
+        return view('admin.products.create')->with(['vendors'=>$vendors]);
     }
 
     /**
@@ -37,6 +41,7 @@ class ProductController extends Controller
         $request->merge(['tags' => $tagsArray]);
         
         $request->validate([
+            'vendor_id' => 'required',
             'name' => 'required',
             'short_description' => 'required|string|max:1000',
             'tags' => ['required', 'array'],
@@ -77,6 +82,7 @@ class ProductController extends Controller
         $product->short_description = $request->short_description;
         $product->about_description = $request->about_description;
         $product->tags =json_encode($request->tags);
+        $product->vendor_id = $request->vendor_id;
         $product->save();
         return redirect()->route('admin.products.index')->with('success', 'New Product created successfully!');
     }
@@ -86,8 +92,9 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+        $vendors = Vendor::where('status',1)->latest()->get();
         $product->tags = json_decode($product->tags, true);
-        return view('admin.products.edit')->with(['product'=>$product]);
+        return view('admin.products.edit')->with(['product'=>$product,'vendors'=>$vendors]);
 
     }
 
@@ -100,6 +107,7 @@ class ProductController extends Controller
         $request->merge(['tags' => $tagsArray]);
 
         $request->validate([
+            'vendor_id' => 'required',
             'name' => 'required',
             'short_description' => 'required|string|max:1000',
             'tags' => ['required', 'array'],
@@ -130,11 +138,13 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->short_description = $request->short_description;
         $product->about_description = $request->about_description;
+        $product->vendor_id = $request->vendor_id;
         $product->tags =json_encode($request->tags);
         if (!empty($galleryArray)) {
             $product->gallery = json_encode($galleryArray);
         }
         $product->save();
+
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully!');
     }
 
@@ -154,6 +164,9 @@ class ProductController extends Controller
         }
         if($product->vendorTerm){
             $product->vendorTerm()->delete();
+        }
+        if($product->variants){
+            $product->variants()->delete();
         }
         $product->delete();
         return redirect()->route('admin.products.index')

@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vendor_terms', function (Blueprint $table) {
-            $table->id();
+        Schema::table('products', function (Blueprint $table) {
             $table->foreignId('vendor_id')->nullable()->index();
             $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade');
-            $table->longText('terms')->nullable();
-            $table->foreignId('product_id')->nullable()->index();
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->timestamps();
         });
     }
 
@@ -27,6 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vendor_terms');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropForeign(['vendor_id']); 
+            $table->dropColumn('vendor_id'); 
+        });
     }
 };

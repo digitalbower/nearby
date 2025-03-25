@@ -15,7 +15,7 @@ class CompanyTermSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        CompanyTerm::create([
+        CompanyTerm::updateOrCreate([
             'terms' => $faker->paragraph,
         ]);
     }

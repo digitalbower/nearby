@@ -17,31 +17,31 @@
             @endif
 
 
-            <form action="{{ route('admin.products.vendor_terms.update', $vendor_term->id) }}"  id="vendorTermForm" method="POST">
+            <form action="{{ route('admin.products.vendor_terms.update', $vendor_term->id) }}" id="vendorTermForm" method="POST">
                 @csrf
                 @method('PUT')
-
                 <div class="mb-3">
-                    <label for="name" class="form-label">Vendors</label>
-                    <select class="form-control" name="vendor_id">
-                        <option value="">Select Vendor</option>
-                        @foreach ($vendors as $vendor)
-                            <option value="{{ $vendor->id }}" {{ $vendor_term->vendor_id == $vendor->id ? 'selected' : '' }}>
-                                {{ $vendor->name }}
+                    <label for="product_id" class="form-label">Products</label>
+                    <select class="form-control" name="product_id" id="productSelect">
+                        <option value="">Select Product</option>
+                        @foreach ($products as $product)
+                            <option value="{{ $product->id }}" {{ $vendor_term->product_id == $product->id ? 'selected' : '' }} data-vendor-id="{{ $product->vendor_id }}">
+                                {{ $product->name }}
                             </option>
                         @endforeach
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="product_id" class="form-label">Products</label>
-                    <select class="form-control" name="product_id">
-                        <option value="">Select Product</option>
-                        @foreach ($products as $product)
-                            <option value="{{ $product->id }}" {{ $vendor_term->product_id == $product->id ? 'selected' : '' }}>
-                                {{ $product->name }}
+                    <label for="vendor_id" class="form-label">Vendors</label>
+                    <select class="form-control" id="vendorSelect" disabled>
+                        <option value="">Vendors</option>
+                        @foreach ($vendors as $vendor)
+                            <option value="{{ $vendor->id }}">
+                                {{ $vendor->name }}
                             </option>
                         @endforeach
                     </select>
+                    <input type="hidden" name="vendor_id" id="vendorId">
                 </div>
                 <div class="mb-3">
                     <label for="terms" class="form-label">Terms</label>
