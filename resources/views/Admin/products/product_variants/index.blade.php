@@ -1,5 +1,8 @@
 @extends('admin.layouts.masteradmin')
 @section('title', 'Product Variants')
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/custom/customcss.css') }}?v={{ time() }}">
+@endsection
 @section('content')
     <div class="container mt-5">
         <div class="card shadow-lg p-4">
@@ -11,6 +14,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
+            <div id="status-message"></div>
             <div class="d-flex justify-content-end mb-3">
                 <a href="{{ route('admin.products.product_variants.create') }}" class="btn btn-primary">Add New Product Variant</a>
             </div>
@@ -35,7 +39,13 @@
                             <td>{{ $variant->unit_price }}</td>
                             <td>{{ $variant->validity_from }}</td>
                             <td>{{ $variant->validity_to }}</td>
-                            <td>
+                            <td class="d-flex align-items-center gap-2">
+                                <!-- Toggle Switch -->
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input toggle-status" type="checkbox" 
+                                           data-id="{{ $variant->id }}" 
+                                           {{ $variant->status ? 'checked' : '' }}>
+                                </div>
                                 <a href="{{ route('admin.products.product_variants.edit', $variant->id) }}" class="btn btn-warning">Edit</a>
                             
                                 <!-- Delete Form -->
@@ -57,3 +67,6 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+    <script src="{{ asset('assets/js/custom/js/product_variant.js') }}"></script>
+@endpush

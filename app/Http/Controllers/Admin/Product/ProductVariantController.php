@@ -27,6 +27,7 @@ class ProductVariantController extends Controller
         ->whereHas('vendor', function ($query) {
             $query->where('status', 1);
         })
+        ->where('status', 1) 
         ->get();
         return view('admin.products.product_variants.create')->with(['products'=>$products]);
     }
@@ -37,7 +38,7 @@ class ProductVariantController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'product_id' => 'required|exists:products,id|unique:product_variants,product_id',
+            'product_id' => 'required|exists:products,id',
             'title' => 'required',
             'short_description' => 'required',
             'unit_price' => 'required',
@@ -46,9 +47,6 @@ class ProductVariantController extends Controller
             'available_quantity' => 'required',
             'validity_from' => 'required',
             'validity_to' => 'required',
-            'timer_flag'=> 'required',
-
-
         ]);
         ProductVariant::create($request->all());
         return redirect()->route('admin.products.product_variants.index')->with('success', 'New Product Variant created successfully!');
@@ -71,6 +69,7 @@ class ProductVariantController extends Controller
         ->whereHas('vendor', function ($query) {
             $query->where('status', 1);
         })
+        ->where('status', 1) 
         ->get();
         return view('admin.products.product_variants.edit')->with(['products'=>$products,'product_variant'=>$product_variant]);
     }
@@ -81,7 +80,7 @@ class ProductVariantController extends Controller
     public function update(Request $request, ProductVariant $product_variant)
     {
         $request->validate([
-            'product_id' => 'required|exists:products,id|unique:product_variants,product_id,'.$product_variant->id,
+            'product_id' => 'required|exists:products,id',
             'title' => 'required',
             'short_description' => 'required',
             'unit_price' => 'required',
@@ -90,11 +89,13 @@ class ProductVariantController extends Controller
             'available_quantity' => 'required',
             'validity_from' => 'required',
             'validity_to' => 'required',
-            'timer_flag'=> 'required',
-
-
         ]);
-        $product_variant->update($request->all());
+        $data = $request->all(); 
+        if ($request->timer_flag == 0) { 
+            $data['start_time'] = null;
+            $data['end_time'] = null;
+        }
+        $product_variant->update($data);
         return redirect()->route('admin.products.product_variants.index')->with('success', 'Product Variant updated successfully!');
     }
 
@@ -106,5 +107,13 @@ class ProductVariantController extends Controller
         $product_variant->delete();
         return redirect()->route('admin.products.product_variants.index')
         ->with('success', 'Product Variant deleted successfully.');
+    }
+    public function changeVariantStatus(Request $request)
+    { 
+        $variant = ProductVariant::findOrFail($request->id);
+        $variant->status = $request->status;
+        $variant->save();
+
+        return response()->json(['message' => 'Product Variant status updated successfully!']);
     }
 }

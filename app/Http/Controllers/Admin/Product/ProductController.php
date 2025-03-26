@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin\Product;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\Subcategory;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 
@@ -28,7 +30,8 @@ class ProductController extends Controller
     public function create()
     {
         $vendors = Vendor::where('status',1)->latest()->get();
-        return view('admin.products.create')->with(['vendors'=>$vendors]);
+        $categories = Category::where('status',1)->latest()->get();
+        return view('admin.products.create')->with(['vendors'=>$vendors,'categories'=>$categories]);
     }
 
     /**
@@ -42,6 +45,8 @@ class ProductController extends Controller
         
         $request->validate([
             'vendor_id' => 'required',
+            'category_id' => 'required',
+            'sub_category_id' => 'required',
             'name' => 'required',
             'short_description' => 'required|string|max:1000',
             'tags' => ['required', 'array'],
@@ -83,6 +88,8 @@ class ProductController extends Controller
         $product->about_description = $request->about_description;
         $product->tags =json_encode($request->tags);
         $product->vendor_id = $request->vendor_id;
+        $product->category_id = $request->category_id;
+        $product->sub_category_id = $request->sub_category_id;
         $product->save();
         return redirect()->route('admin.products.index')->with('success', 'New Product created successfully!');
     }
@@ -93,8 +100,9 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $vendors = Vendor::where('status',1)->latest()->get();
+        $categories = Category::where('status',1)->latest()->get();
         $product->tags = json_decode($product->tags, true);
-        return view('admin.products.edit')->with(['product'=>$product,'vendors'=>$vendors]);
+        return view('admin.products.edit')->with(['product'=>$product,'vendors'=>$vendors,'categories'=>$categories]);
 
     }
 
@@ -108,6 +116,8 @@ class ProductController extends Controller
 
         $request->validate([
             'vendor_id' => 'required',
+            'category_id' => 'required',
+            'sub_category_id' => 'required',
             'name' => 'required',
             'short_description' => 'required|string|max:1000',
             'tags' => ['required', 'array'],
@@ -140,6 +150,8 @@ class ProductController extends Controller
         $product->about_description = $request->about_description;
         $product->vendor_id = $request->vendor_id;
         $product->tags =json_encode($request->tags);
+        $product->category_id = $request->category_id;
+        $product->sub_category_id = $request->sub_category_id;
         if (!empty($galleryArray)) {
             $product->gallery = json_encode($galleryArray);
         }
@@ -171,5 +183,19 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->route('admin.products.index')
         ->with('success', 'Product deleted successfully.');
+    }
+    public function changeProductStatus(Request $request)
+    { 
+        $product = Product::findOrFail($request->id);
+        $product->status = $request->status;
+        $product->save();
+
+        return response()->json(['message' => 'Product status updated successfully!']);
+    }
+    public function getSubcategories(Request $request){
+        $subcategories = Subcategory::where('status',1)->where('category_id',$request->category_id)->get();
+        return response()->json($subcategories);
+
+
     }
 }

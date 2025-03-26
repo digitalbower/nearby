@@ -68,11 +68,23 @@
                     <input type="date" class="form-control" id="validity_to" name="validity_to" value="{{old('validity_to') }}">
                 </div>
                 <div class="mb-3">
-                    <label for="validity_to" class="form-label">Timer</label>
+                    <label for="timer_flag" class="form-label">Timer</label>
                     <select class="form-control" name="timer_flag" id="timer_flag">
-                        <option value="0">Yes</option>
-                        <option value="1">No</option>
+                        <option value="">Show Timer</option>
+                        <option value="1" {{ old('timer_flag') == '1' ? 'selected' : '' }}>Yes</option>
+                        <option value="0" {{ old('timer_flag') == '0' ? 'selected' : '' }}>No</option>
                    </select>
+                </div>
+                
+                <div id="timer" class="hidden">
+                    <div class="mb-3">
+                        <label for="start_time" class="form-label">Select Start Time</label> 
+                        <input type="datetime-local" class="form-control" id="start_time" name="start_time" value="{{ old('start_time') }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="end_time" class="form-label">Select End Time</label> 
+                        <input type="datetime-local" class="form-control" id="end_time" name="end_time" value="{{ old('end_time') }}">
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-success">Create</button>
                 <a href="{{ route('admin.products.product_variants.index') }}" class="btn btn-secondary">Cancel</a>
