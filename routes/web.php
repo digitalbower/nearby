@@ -104,6 +104,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::resource('vendor_terms', VendorTermController::class);
             Route::resource('product_variants', ProductVariantController::class);
             Route::post('/product_variants/change-status', [ProductVariantController::class, 'changeVariantStatus'])->name('product_variants.status');
+            Route::get('/unit-types', [ProductVariantController::class, 'getCategoryUnitTypes'])->name('unit_types');
         });
         Route::prefix('logos')->name('logos.')->group(function () {
             Route::get('/', [LogoController::class, 'index'])->name('index'); 

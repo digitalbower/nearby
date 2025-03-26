@@ -21,10 +21,12 @@
                 @csrf
                 <div class="mb-3">
                     <label for="product_id" class="form-label">Products</label>
-                    <select class="form-control" name="product_id">
+                    <select class="form-control" name="product_id" id="product_id">
                         <option value="">Select Products</option>
                         @foreach ($products as $product)
-                            <option value="{{ $product->id }}" {{ old('product_id') == $product->id ? 'selected' : '' }}>
+                            <option value="{{ $product->id }}" 
+                                data-category="{{ $product->category_id }}"
+                                {{ old('product_id') == $product->id ? 'selected' : '' }}>
                                 {{ $product->name }}
                             </option>
                         @endforeach
@@ -44,8 +46,10 @@
                     <input type="text" class="form-control" id="unit_price" name="unit_price" value="{{old('unit_price') }}">
                 </div>
                 <div class="mb-3">
-                    <label for="unit_type" class="form-label">Unit Type</label>
-                    <input type="text" class="form-control" id="unit_type" name="unit_type" value="{{old('unit_type') }}">
+                    <label for="unit_type_id" class="form-label">Unit Type</label>
+                    <select class="form-control" name="unit_type_id" id="unit_type_id">
+                        <option value="">Select Unit Types</option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label for="discounted_price" class="form-label">Discounted Price</label>
@@ -70,9 +74,8 @@
                 <div class="mb-3">
                     <label for="timer_flag" class="form-label">Timer</label>
                     <select class="form-control" name="timer_flag" id="timer_flag">
-                        <option value="">Show Timer</option>
-                        <option value="1" {{ old('timer_flag') == '1' ? 'selected' : '' }}>Yes</option>
                         <option value="0" {{ old('timer_flag') == '0' ? 'selected' : '' }}>No</option>
+                        <option value="1" {{ old('timer_flag') == '1' ? 'selected' : '' }}>Yes</option>
                    </select>
                 </div>
                 

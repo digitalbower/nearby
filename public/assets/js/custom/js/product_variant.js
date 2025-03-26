@@ -76,4 +76,29 @@ $(document).ready(function () {
     $('#timer_flag').on('change', function() {
         toggleTimerSection();
     });
+
+    $('#product_id').on('change', function() { 
+        var unitTypeId = $('#unit_type').val();
+        var categoryId = $('#product_id option:selected').data('category'); 
+        $('#unit_type_id').html('<option value="">Loading...</option>');
+    
+        if (categoryId) {
+            $.ajax({
+                url: "/admin/products/unit-types",
+                type: "GET",
+                data: { category_id: categoryId },
+                success: function(data) {
+                    $('#unit_type_id').html('<option value="">Select Unit Type</option>');
+                    $.each(data, function(key, value) {
+                        var isSelected = (value.id == unitTypeId) ? "selected" : "";
+                        $('#unit_type_id').append('<option value="' + value.id + '" ' + isSelected + '>' + value.unit_type + '</option>');
+                    });
+                }
+            });
+        } else {
+            $('#unit_type_id').html('<option value="">Select Unit Type</option>');
+        }
+    });
+    $('#product_id').trigger('change');
+    
 });

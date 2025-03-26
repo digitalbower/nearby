@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin\Product;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\CategoryUnitMaster;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
@@ -42,7 +44,7 @@ class ProductVariantController extends Controller
             'title' => 'required',
             'short_description' => 'required',
             'unit_price' => 'required',
-            'unit_type' => 'required',
+            'unit_type_id' => 'required',
             'discounted_price' => 'required',
             'available_quantity' => 'required',
             'validity_from' => 'required',
@@ -84,7 +86,7 @@ class ProductVariantController extends Controller
             'title' => 'required',
             'short_description' => 'required',
             'unit_price' => 'required',
-            'unit_type' => 'required',
+            'unit_type_id' => 'required',
             'discounted_price' => 'required',
             'available_quantity' => 'required',
             'validity_from' => 'required',
@@ -116,4 +118,14 @@ class ProductVariantController extends Controller
 
         return response()->json(['message' => 'Product Variant status updated successfully!']);
     }
+    public function getCategoryUnitTypes(Request $request){
+        $category_unit_types = CategoryUnitMaster::with(['unitType:id,unit_type'])
+        ->where('category_id', $request->category_id)
+        ->get();
+        return response()->json($category_unit_types->map(function ($item) {
+            return [
+                'id' => $item->unit_type_id,  
+                'unit_type' => optional($item->unitType)->unit_type,  
+            ];
+        }));    }
 }
