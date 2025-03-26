@@ -114,8 +114,8 @@
                         </li>
 
                         <li>
-                        <a href="{{ route('admin.unit_types.index') }}">
-                            <span class="sub-item">UnitTypes Section Management</span>
+                        <a href="{{ route('admin.category_unit.index') }}">
+                            <span class="sub-item">Category UnitTypes Section Management</span>
                         </a>
                         </li>
 

@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\TrendingProductController;
 use App\Http\Controllers\Admin\PopularProductController;
 use App\Http\Controllers\Admin\SupportSectionController;
 use App\Http\Controllers\Admin\UnitTypeController;
+use App\Http\Controllers\Admin\CategoryUnitMasterController;
 
 
 
@@ -216,6 +217,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
         
        });
  
+       Route::prefix('category_unit')->name('category_unit.')->group(function () {
+        Route::get('/', [CategoryUnitMasterController::class, 'index'])->name('index'); 
+        Route::get('/create', [CategoryUnitMasterController::class, 'create'])->name('create'); 
+        Route::post('/', [CategoryUnitMasterController::class, 'store'])->name('store'); 
+        Route::get('/{categoryUnitMaster}/edit', [CategoryUnitMasterController::class, 'edit'])->name('edit'); 
+        Route::put('/{categoryUnitMaster}', [CategoryUnitMasterController::class, 'update'])->name('update'); 
+        Route::delete('/{categoryUnitMaster}', [CategoryUnitMasterController::class, 'destroy'])->name('destroy'); 
+    });
+
     });
 });
 
