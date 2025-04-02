@@ -21,10 +21,10 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call([
             AdminSeeder::class,
-            CompanyTermSeeder::class,
             CategorySeeder::class,
             SubCategorySeeder::class,
             UnitTypeSeeder::class,
+            TagsSeeder::class,
         ]);
     }
 }

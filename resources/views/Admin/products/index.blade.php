@@ -14,6 +14,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
+            <div id="status-message"></div>
             <div class="d-flex justify-content-end mb-3">
                 <a href="{{ route('admin.products.create') }}" class="btn btn-primary">Add New Product</a>
             </div>
@@ -25,7 +26,6 @@
                         <th>Category</th>
                         <th>Sub Category</th>
                         <th>Vendor</th>
-                        <th>Tags</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -42,17 +42,6 @@
                             </td>
                             <td>
                                 {{ optional($product->subcategory)->name ?? '' }}
-                            </td>
-                            <td>
-                                @php
-                                    $tags = json_decode($product->tags, true);
-                                    $tags = is_string($tags) ? json_decode($tags, true) : $tags;
-                                @endphp
-                                @if(is_array($tags))
-                                    {!! implode('<br>', $tags) !!}
-                                @else
-                                    {{ $product->tags }}
-                                @endif
                             </td>
                             <td class="d-flex align-items-center gap-2">
                                 <!-- Toggle Switch -->

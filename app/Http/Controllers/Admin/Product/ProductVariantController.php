@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\CategoryUnitMaster;
 use App\Models\Product;
+use App\Models\ProductType;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 
@@ -31,7 +32,8 @@ class ProductVariantController extends Controller
         })
         ->where('status', 1) 
         ->get();
-        return view('admin.products.product_variants.create')->with(['products'=>$products]);
+        $types = ProductType::where('status', 1)->get();
+        return view('admin.products.product_variants.create')->with(['products'=>$products,'types'=>$types]);
     }
 
     /**
@@ -41,8 +43,11 @@ class ProductVariantController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
+            'product_type_id' => 'required|exists:product_types,id',
             'title' => 'required',
             'short_description' => 'required',
+            'short_legend' => 'required',
+            'short_info' => 'required',
             'unit_price' => 'required',
             'unit_type_id' => 'required',
             'discounted_price' => 'required',
@@ -50,7 +55,13 @@ class ProductVariantController extends Controller
             'validity_from' => 'required',
             'validity_to' => 'required',
         ]);
-        ProductVariant::create($request->all());
+        $data = $request->all(); 
+        if (isset($data['unit_price']) && isset($data['discounted_price']) && $data['unit_price'] > 0) {
+            $data['discounted_percentage'] = (($data['unit_price'] - $data['discounted_price']) / $data['unit_price']) * 100;
+        } else {
+            $data['discounted_percentage'] = 0; 
+        }        
+        ProductVariant::create($data);
         return redirect()->route('admin.products.product_variants.index')->with('success', 'New Product Variant created successfully!');
     }
 
@@ -73,7 +84,8 @@ class ProductVariantController extends Controller
         })
         ->where('status', 1) 
         ->get();
-        return view('admin.products.product_variants.edit')->with(['products'=>$products,'product_variant'=>$product_variant]);
+        $types = ProductType::where('status', 1)->get();
+        return view('admin.products.product_variants.edit')->with(['products'=>$products,'product_variant'=>$product_variant,'types'=>$types]);
     }
 
     /**
@@ -83,8 +95,11 @@ class ProductVariantController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
+            'product_type_id' => 'required|exists:product_types,id',
             'title' => 'required',
             'short_description' => 'required',
+            'short_legend' => 'required',
+            'short_info' => 'required',
             'unit_price' => 'required',
             'unit_type_id' => 'required',
             'discounted_price' => 'required',
@@ -97,6 +112,11 @@ class ProductVariantController extends Controller
             $data['start_time'] = null;
             $data['end_time'] = null;
         }
+        if (isset($data['unit_price']) && isset($data['discounted_price']) && $data['unit_price'] > 0) {
+            $data['discounted_percentage'] = (($data['unit_price'] - $data['discounted_price']) / $data['unit_price']) * 100;
+        } else {
+            $data['discounted_percentage'] = 0; 
+        } 
         $product_variant->update($data);
         return redirect()->route('admin.products.product_variants.index')->with('success', 'Product Variant updated successfully!');
     }
@@ -127,5 +147,6 @@ class ProductVariantController extends Controller
                 'id' => $item->unit_type_id,  
                 'unit_type' => optional($item->unitType)->unit_type,  
             ];
-        }));    }
+        }));    
+    }
 }

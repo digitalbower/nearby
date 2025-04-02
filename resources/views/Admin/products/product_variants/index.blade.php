@@ -46,14 +46,14 @@
                                            data-id="{{ $variant->id }}" 
                                            {{ $variant->status ? 'checked' : '' }}>
                                 </div>
-                                <a href="{{ route('admin.products.product_variants.edit', $variant->id) }}" class="btn btn-warning">Edit</a>
+                                <a href="{{ route('admin.products.product_variants.edit', $variant->id) }}" class="btn btn-warning btn-sm">Edit</a>
                             
                                 <!-- Delete Form -->
                                 <form action="{{ route('admin.products.product_variants.destroy', $variant->id) }}" method="POST" class="d-inline" 
                                       onsubmit="return confirm('Are you sure you want to delete this variant?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                 </form>
                             </td>
                         </tr>

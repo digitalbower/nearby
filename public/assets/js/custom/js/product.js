@@ -1,59 +1,4 @@
 $(document).ready(function () {
-    let tags = [];
-
-    // Load existing tags from hidden input
-    let existingTags = $("#tags-hidden").val();
-
-    if (existingTags) {
-        try {
-            tags = JSON.parse(existingTags);
-            if (Array.isArray(tags)) {
-                tags.forEach(tag => addTagToContainer(tag)); // Add once
-            } else {
-                tags = [];
-            }
-        } catch (e) {
-            console.error("Invalid JSON format for tags:", e);
-            tags = [];
-        }
-    }
-
-    $("#add-tag").click(function () {
-        let tag = $("#tag-input").val().trim();
-        if (tag && !tags.includes(tag)) {
-            tags.push(tag);
-            addTagToContainer(tag);
-            updateHiddenInput();
-            $("#tag-input").val(""); // Clear input
-            $("#tags-error").hide(); // Hide error
-        }
-    });
-
-    $(document).on("click", ".remove-tag", function () {
-        let tagToRemove = $(this).data("tag");
-        tags = tags.filter(t => t !== tagToRemove);
-        $(this).parent().remove();
-        updateHiddenInput();
-
-        if (tags.length === 0) {
-            $("#tags-error").show(); // Show error if no tags are left
-        }
-    });
-
-    function addTagToContainer(tag) {
-        // Prevent adding duplicate tags visually
-        if ($("#tags-container").find(`[data-tag="${tag}"]`).length === 0) {
-            $("#tags-container").append(`
-                <span class="badge bg-primary me-2 tag-item">
-                    ${tag} <button type="button" class="btn-close ms-1 remove-tag" data-tag="${tag}"></button>
-                </span>
-            `);
-        }
-    }
-
-    function updateHiddenInput() {
-        $("#tags-hidden").val(JSON.stringify(tags));
-    }
     $.validator.addMethod("filesize", function (value, element, param) {
         let files = element.files;
         for (let i = 0; i < files.length; i++) {
@@ -76,9 +21,16 @@ $(document).ready(function () {
                 vendor_id: { required: true },
                 category_id: { required: true },
                 sub_category_id: { required: true },
+                nbv_terms_id:{ required: true },
+                vendor_terms_id:{ required: true },
+                emirates_id:{ required: true },
+                productlocation_address:{ required: true },
+                productlocation_link:{ required: true },
+                validity_from:{ required: true },
+                validity_to:{ required: true },
                 name: { required: true },
                 short_description: { required: true },
-                tags: {
+                tags_id: {
                     required: true
                 }, 
                 about_description: {
@@ -88,7 +40,12 @@ $(document).ready(function () {
                         return editorContent;
                     }
                 },
-            'gallery[]': {
+                image: {
+                    required: true,
+                    extension: "jpg|jpeg|png|gif|svg",
+                    filesize: 2 * 1024 * 1024
+                },
+                'gallery[]': {
                 required: true,
                 extension: "jpg|jpeg|png|gif|svg",
                 filesize: 2 * 1024 * 1024
@@ -99,10 +56,22 @@ $(document).ready(function () {
                 vendor_id: { required: "Vendor name is required" },
                 category_id: { required: "Category name is required" },
                 sub_category_id: { required: "Sub Category name is required" },
+                nbv_terms_id:{ required: "Nbv Terms is required" },
+                vendor_terms_id:{ required: "vendor Terms is required" },
+                emirates_id:{ required: "Emirates is required" },
+                productlocation_address:{ required: "Product Location address is required" },
+                productlocation_link:{ required: "Product Location link is required" },
+                validity_from:{ required: "Validity from is required" },
+                validity_to:{ required: "Validity to is required" },
                 name: { required: "Product name is required" },
                 short_description: { required: "Short Description is required" },
-                tags: { required: "Please add at least one tag" },
+                tags_id: { required: "Please select tag" },
                 about_description: { required: "About Description is required" },
+                image: {
+                    required: "Please upload image.",
+                    extension: "Only JPG, JPEG, PNG, and GIF files are allowed.",
+                    filesize: "Each image must be less than 2MB."
+                },
                 'gallery[]': {
                     required: "Please upload at least one image.",
                     extension: "Only JPG, JPEG, PNG, and GIF files are allowed.",
@@ -110,13 +79,14 @@ $(document).ready(function () {
                 }
             },
             errorPlacement: function (error, element) {
-                if (element.attr("name") === "tags") {
-                    $("#tags-error").show();
-                } else if (element.attr("name") === "about_description") {
+                if (element.attr("name") === "about_description") {
                     $("#about_description").next('.note-editor').after(error);
                 } else if (element.attr("name") === "gallery[]") {
                     $("#images-error").text(error.text()).show();
-                } else {
+                } 
+                else if (element.attr("name") === "image") {
+                    $("#image-error").text(error.text()).show();
+                }else {
                     error.insertAfter(element);
                 }
             }
@@ -129,9 +99,16 @@ $(document).ready(function () {
             vendor_id: { required: true },
             category_id: { required: true },
             sub_category_id: { required: true },
+            nbv_terms_id:{ required: true },
+            vendor_terms_id:{ required: true },
+            emirates_id:{ required: true },
+            productlocation_address:{ required: true },
+            productlocation_link:{ required: true },
+            validity_from:{ required: true },
+            validity_to:{ required: true },
             name: { required: true },
             short_description: { required: true },
-            tags: {
+            tags_id: {
                 required: true
             },
             about_description: {
@@ -151,9 +128,16 @@ $(document).ready(function () {
             vendor_id: { required: "Vendor name is required" },
             category_id: { required: "Category name is required" },
             sub_category_id: { required: "Sub Category name is required" },
+            nbv_terms_id:{ required: "Nbv Terms is required" },
+            vendor_terms_id:{ required: "vendor Terms is required" },
+            emirates_id:{ required: "Emirates is required" },
+            productlocation_address:{ required: "Product Location address is required" },
+            productlocation_link:{ required: "Product Location link is required" },
+            validity_from:{ required: "Validity from is required" },
+            validity_to:{ required: "Validity to is required" },
             name: { required: "Product name is required" },
             short_description: { required: "Short Description is required" },
-            tags: { required: "Please add at least one tag" },
+            tags: { required: "Please select tag" },
             about_description: { required: "About Description is required" },
             'gallery[]': {
                 extension: "Only JPG, JPEG, PNG, and GIF files are allowed.",
@@ -161,9 +145,7 @@ $(document).ready(function () {
             }
         },
         errorPlacement: function (error, element) {
-            if (element.attr("name") === "tags") {
-                $("#tags-error").show();
-            } else if (element.attr("name") === "about_description") {
+            if (element.attr("name") === "about_description") {
                 // Place error message below the Summernote editor
                 $("#about_description").next('.note-editor').after(error);
             } else if (element.attr("name") === "gallery[]") {
@@ -283,4 +265,56 @@ $(document).ready(function () {
         }
     });
     $('#category_id').trigger('change');
+
+    $('#image').on('change', function(event) {
+        let previewContainer = $('#image-preview');
+        previewContainer.html(''); // Clear existing previews
+        
+        if (this.files.length > 0) {
+            let file = this.files[0];
+            let reader = new FileReader();
+
+            reader.onload = function(e) {
+                let previewHtml = `
+                    <div class="m-2 d-inline-block position-relative image-preview">
+                        <button type="button" class="btn-close position-absolute top-0 start-100 translate-middle remove-image" aria-label="Close"></button>
+                        <img src="${e.target.result}" class="img-thumbnail" width="100">
+                    </div>
+                `;
+                previewContainer.html(previewHtml);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Handle removing the image preview
+    $(document).on('click', '.remove-image', function() {
+        $('#image-preview').html('');
+        $('#image').val(''); // Reset file input
+    });
+
+    $('#vendor_id').on('change', function() {
+        var vendor_id = $(this).val();
+        var vendorterms_id = $('#vendorterms_id').val();
+        $('#vendor_terms_id').html('<option value="">Loading...</option>');
+
+        if (vendor_id) {
+            $.ajax({
+                url: "/admin/products/vendorterms",
+                type: "GET",
+                data: { vendor_id: vendor_id },
+                success: function(data) {
+                    $('#vendor_terms_id').html('<option value="">Select Vendor Terms</option>');
+                    $.each(data, function(key, value) {
+                        var isSelected = (value.id == vendorterms_id) ? "selected" : "";
+                        $('#vendor_terms_id').append('<option value="' + value.id + '" ' + isSelected + '>' + value.name + '</option>');
+                    });
+                }
+            });
+        } else {
+            $('#vendor_terms_id').html('<option value="">Select Vendor Terms</option>'); 
+        }
+    });
+    $('#vendor_id').trigger('change');
 });

@@ -26,8 +26,20 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="contact_info" class="form-label">Contact Info</label>
-                    <input type="text" class="form-control" id="contact_info" name="contact_info" value="{{ $vendor->contact_info }}">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" class="form-control" id="email" name="email" value="{{ $vendor->email }}">
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="text" class="form-control" id="phone" name="phone" value="{{ $vendor->phone }}">
+                </div>
+                <div class="mb-3">
+                    <label for="validityfrom" class="form-label">Validity From</label> 
+                    <input type="date" class="form-control" id="validityfrom" name="validityfrom" value="{{ $vendor->validityfrom }}">
+                </div>
+                <div class="mb-3">
+                    <label for="validityto" class="form-label">Validity To</label> 
+                    <input type="date" class="form-control" id="validityto" name="validityto" value="{{ $vendor->validityto }}">
                 </div>
 
                 <button type="submit" class="btn btn-success">Update</button>

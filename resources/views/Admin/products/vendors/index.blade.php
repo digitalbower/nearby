@@ -25,7 +25,9 @@
                     <tr>
                         <th>#</th>
                         <th>Name</th>
-                        <th>Contact Info</th>
+                        <th>Email</th>
+                        <th>Validity From</th>
+                        <th>validity To</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -34,7 +36,9 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $vendor->name }}</td>
-                            <td>{{ $vendor->contact_info }}</td>
+                            <td>{{ $vendor->email }}</td>
+                            <td>{{ $vendor->validityfrom }}</td>
+                            <td>{{ $vendor->validityto }}</td>
                             <td class="d-flex align-items-center gap-2">
                                 <!-- Toggle Switch -->
                                 <div class="form-check form-switch">
@@ -44,14 +48,14 @@
                                 </div>
                             
                                 <!-- Edit Button -->
-                                <a href="{{ route('admin.products.vendors.edit', $vendor->id) }}" class="btn btn-warning">Edit</a>
+                                <a href="{{ route('admin.products.vendors.edit', $vendor->id) }}" class="btn btn-warning btn-sm">Edit</a>
                             
                                 <!-- Delete Form -->
                                 <form action="{{ route('admin.products.vendors.destroy', $vendor->id) }}" method="POST" class="d-inline" 
                                       onsubmit="return confirm('Are you sure you want to delete this vendor?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                 </form>
                             </td>                            
                         </tr>

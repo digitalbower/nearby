@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Vendor extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
 
-    protected $fillable = ['name','contact_info','status'];
+    protected $fillable = ['name','email','phone','validityfrom','validityto','status'];
+
+    protected $dates = ['deleted_at'];
 
     public function getStatusTextAttribute()
     {
