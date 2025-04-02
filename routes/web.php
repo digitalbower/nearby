@@ -47,7 +47,7 @@ Route::prefix('user')->group(function () {
     });
 
     // ✅ Authenticated Routes (Only for Logged-in Users)
-    Route::middleware('auth')->group(function () {
+   
         Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -66,7 +66,7 @@ Route::prefix('user')->group(function () {
         Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
         Route::post('/profile/upload-picture', [ProfileController::class, 'uploadPicture'])->name('profile.upload-picture');
     });
-});
+
 
 
 
@@ -225,6 +225,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/{categoryUnitMaster}', [CategoryUnitMasterController::class, 'update'])->name('update'); 
         Route::delete('/{categoryUnitMaster}', [CategoryUnitMasterController::class, 'destroy'])->name('destroy'); 
     });
+
+
 
     });
 });

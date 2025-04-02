@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('navigation_menus', function (Blueprint $table) {
+        Schema::create('footer', function (Blueprint $table) {
             $table->id();
-            $table->string('label');
-            $table->string('link');
-            $table->enum('navigation_placement', ['upper', 'lower']);
-            $table->boolean('active')->default(true);
+            $table->string('type', 255);
+            $table->text('item_text');
+            $table->text('link')->nullable();
+            $table->json('icon')->nullable();
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('navigation_menus');
+        Schema::dropIfExists('footer');
     }
 };

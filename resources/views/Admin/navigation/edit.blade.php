@@ -1,17 +1,24 @@
 @extends('admin.layouts.masteradmin')
 
 @section('content')
-  
+
 <div class="wrapper-div">
-<div class="container">
+    <div class="container">
         <h2>Edit Menu Item</h2>
+
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <form action="{{ route('admin.navigation.update', $navigationMenu->id) }}" method="POST">
             @csrf
             @method('PUT')
 
             <div class="form-group">
-                <label for="label">Label</label>
-                <input type="text" name="label" class="form-control" value="{{ $navigationMenu->label }}" required>
+                <label for="name">Name</label>
+                <input type="text" name="name" class="form-control" value="{{ $navigationMenu->name }}" required>
             </div>
 
             <div class="form-group">
@@ -20,21 +27,26 @@
             </div>
 
             <div class="form-group">
-                <label for="navigation_placement">Placement</label>
-                <select name="navigation_placement" class="form-control" required>
-                    <option value="upper" {{ $navigationMenu->navigation_placement == 'upper' ? 'selected' : '' }}>Upper</option>
-                    <option value="lower" {{ $navigationMenu->navigation_placement == 'lower' ? 'selected' : '' }}>Lower</option>
+                <label for="icon">Icon</label>
+                <input type="text" name="icon" class="form-control" value="{{ $navigationMenu->icon }}">
+            </div>
+
+            <div class="form-group">
+                <label for="type">Type</label>
+                <select name="type" class="form-control" required>
+                    <option value="upper" {{ $navigationMenu->type == 'upper' ? 'selected' : '' }}>Upper</option>
+                    <option value="lower" {{ $navigationMenu->type == 'lower' ? 'selected' : '' }}>Lower</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="active">Active</label>
-                <input type="checkbox" name="active" value="1" {{ $navigationMenu->active ? 'checked' : '' }}>
+                <label for="status">Active</label>
+                <input type="checkbox" name="status" value="1" {{ $navigationMenu->status ? 'checked' : '' }}>
             </div>
 
             <button type="submit" class="btn btn-primary">Update</button>
         </form>
     </div>
 </div>
-@endsection
 
+@endsection

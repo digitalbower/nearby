@@ -172,20 +172,13 @@
           <div class="flex gap-4">
           @foreach ($menuItems->where('navigation_placement', 'upper') as $menu)
           <a href="{{ $menu->link }}" class="text-black duration-300">
-            <i class="fas pr-1 text-cyan-900 {{ $menu->icon }}"></i>
+            <i class="fas pr-1 text-cyan-900 {{ $menu->link }}"></i>
             {{ $menu->label }}
         </a>
     @endforeach
-            <a href="#" class="text-black  duration-300">
-              <i class="fas pr-1 text-cyan-900 fa-tags"></i>
-              Discounts Guide
-            </a>
-            <a href="#" class="text-black  duration-300">
-              <i class="fas pr-1 text-cyan-900 fa-headset"></i>
-              Customer
-              Assistance
-            </a>
-          </div>
+      </div>
+
+      
           <div class="flex gap-4">
     @auth
         <!-- ✅ Show Dropdown for Logged-in Users -->

@@ -21,14 +21,24 @@ class NavigationMenuController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'label' => 'required|string|max:255',
+         // Validate the request
+         $request->validate([
+            'name' => 'required|string|max:255',
             'link' => 'required|string|max:255',
-            'navigation_placement' => 'required|in:upper,lower',
-            'active' => 'boolean'
+            'icon' => 'nullable|string|max:255',
+            'type' => 'required|in:upper,lower',
+            'status' => 'nullable|boolean',
         ]);
-        
-        NavigationMenu::create($request->all());
+
+        // Create a new menu item
+        NavigationMenu::create([
+            'name' => $request->name,
+            'link' => $request->link,
+            'icon' => $request->icon,
+            'type' => $request->type,
+            'status' => $request->has('status') ? 1 : 0, // Checkbox handling
+        ]);
+
         return redirect()->route('admin.navigation.index')->with('success', 'Menu item added successfully');
     }
 
@@ -39,14 +49,24 @@ class NavigationMenuController extends Controller
 
     public function update(Request $request, NavigationMenu $navigationMenu)
     {
-        $request->validate([
-            'label' => 'required|string|max:255',
-            'link' => 'required|string|max:255',
-            'navigation_placement' => 'required|in:upper,lower',
-            'active' => 'boolean'
-        ]);
-        
-        $navigationMenu->update($request->all());
+        // Validate the request
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'link' => 'required|string|max:255',
+        'icon' => 'nullable|string|max:255',
+        'type' => 'required|in:upper,lower',
+        'status' => 'nullable|boolean',
+    ]);
+
+    // Update the menu item with validated data
+    $navigationMenu->update([
+        'name' => $request->name,
+        'link' => $request->link,
+        'icon' => $request->icon,
+        'type' => $request->type,
+        'status' => $request->has('status') ? 1 : 0, // Handle checkbox input
+    ]);
+       
         return redirect()->route('admin.navigation.index')->with('success', 'Menu item updated successfully');
     }
 
