@@ -19,13 +19,6 @@ class HomeController extends Controller
         return view('user.index', compact('menuItems')); 
     }
 
-
-    public function product()
-    {
-        return view('user.product'); 
-    }
-
-    
     public function bookingconfirmation()
     {
         return view('user.bookingconfirmation'); 

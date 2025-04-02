@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\PopularProductController;
 use App\Http\Controllers\Admin\SupportSectionController;
 use App\Http\Controllers\Admin\UnitTypeController;
 use App\Http\Controllers\Admin\CategoryUnitMasterController;
+use App\Http\Controllers\User\ProductController as UserProductController;
 
 
 
@@ -53,7 +54,8 @@ Route::prefix('user')->group(function () {
 
         // ✅ Home & Product Routes
         
-        Route::get('/product', [HomeController::class, 'product'])->name('home.product');
+        Route::get('/products', [UserProductController::class, 'index'])->name('user.products.index');
+        Route::get('/products/{id}', [UserProductController::class, 'show'])->name('user.products.show');
 
         // ✅ E-commerce & Booking Routes
         Route::get('/bookingconfirmation', [HomeController::class, 'bookingconfirmation'])->name('home.bookingconfirmation');
@@ -92,6 +94,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('edit'); 
             Route::put('/{product}', [ProductController::class, 'update'])->name('update'); 
             Route::delete('/{product}', [ProductController::class, 'destroy'])->name('destroy'); 
+            Route::post('/change-status', [ProductController::class, 'changeProductStatus'])->name('status');
+            Route::get('/subcategories', [ProductController::class, 'getSubcategories'])->name('subcategories');
             Route::get('/company-terms', [CompanyTermController::class, 'index'])->name('company_terms.index');
             Route::get('/company-terms/{term}/edit', [CompanyTermController::class, 'edit'])->name('company_terms.edit');
             Route::put('/company-terms/{term}', [CompanyTermController::class, 'update'])->name('company_terms.update');
@@ -99,7 +103,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/vendors/change-status', [VendorController::class, 'changeVendorStatus'])->name('vendors.status');
             Route::resource('vendor_terms', VendorTermController::class);
             Route::resource('product_variants', ProductVariantController::class);
-
+            Route::post('/product_variants/change-status', [ProductVariantController::class, 'changeVariantStatus'])->name('product_variants.status');
+            Route::get('/unit-types', [ProductVariantController::class, 'getCategoryUnitTypes'])->name('unit_types');
         });
         Route::prefix('logos')->name('logos.')->group(function () {
             Route::get('/', [LogoController::class, 'index'])->name('index'); 

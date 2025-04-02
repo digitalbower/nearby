@@ -385,7 +385,7 @@
                     booking</a>
                 </li> -->
               <li>
-                <a href="{{ route('home.product') }}"
+                <a href="{{ route('user.products.index') }}"
                      class="block py-1 lg:px-4 hover:font-semibold hover:border-b-2 border-[#58af0838] hover:text-black from-cyan-300 to-blue-200">Product</a>
               </li>
               <li>

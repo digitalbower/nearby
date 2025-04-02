@@ -1,16 +1,14 @@
 $(document).ready(function () {
     let tags = [];
 
-    // Load existing tags from the hidden input
-    let existingTags = $("#tags-hidden").length ? $("#tags-hidden").val() : "";
+    // Load existing tags from hidden input
+    let existingTags = $("#tags-hidden").val();
 
     if (existingTags) {
         try {
             tags = JSON.parse(existingTags);
             if (Array.isArray(tags)) {
-                tags.forEach(tag => {
-                    addTagToContainer(tag);
-                });
+                tags.forEach(tag => addTagToContainer(tag)); // Add once
             } else {
                 tags = [];
             }
@@ -43,11 +41,14 @@ $(document).ready(function () {
     });
 
     function addTagToContainer(tag) {
-        $("#tags-container").append(`
-            <span class="badge bg-primary me-2">
-                ${tag} <button type="button" class="btn-close ms-1 remove-tag" data-tag="${tag}"></button>
-            </span>
-        `);
+        // Prevent adding duplicate tags visually
+        if ($("#tags-container").find(`[data-tag="${tag}"]`).length === 0) {
+            $("#tags-container").append(`
+                <span class="badge bg-primary me-2 tag-item">
+                    ${tag} <button type="button" class="btn-close ms-1 remove-tag" data-tag="${tag}"></button>
+                </span>
+            `);
+        }
     }
 
     function updateHiddenInput() {
@@ -73,6 +74,8 @@ $(document).ready(function () {
             ignore: [], // Allow validation on hidden input
             rules: {
                 vendor_id: { required: true },
+                category_id: { required: true },
+                sub_category_id: { required: true },
                 name: { required: true },
                 short_description: { required: true },
                 tags: {
@@ -94,6 +97,8 @@ $(document).ready(function () {
             },
             messages: {
                 vendor_id: { required: "Vendor name is required" },
+                category_id: { required: "Category name is required" },
+                sub_category_id: { required: "Sub Category name is required" },
                 name: { required: "Product name is required" },
                 short_description: { required: "Short Description is required" },
                 tags: { required: "Please add at least one tag" },
@@ -122,6 +127,8 @@ $(document).ready(function () {
         ignore: [], // Allow validation on hidden input
         rules: {
             vendor_id: { required: true },
+            category_id: { required: true },
+            sub_category_id: { required: true },
             name: { required: true },
             short_description: { required: true },
             tags: {
@@ -142,6 +149,8 @@ $(document).ready(function () {
         },
         messages: {
             vendor_id: { required: "Vendor name is required" },
+            category_id: { required: "Category name is required" },
+            sub_category_id: { required: "Sub Category name is required" },
             name: { required: "Product name is required" },
             short_description: { required: "Short Description is required" },
             tags: { required: "Please add at least one tag" },
@@ -215,5 +224,63 @@ $(document).ready(function () {
 
         console.log("Final file count before submission:", fileInput.files.length);
     });
-   
+
+    $('.toggle-status').change(function () {
+        var productId = $(this).data('id');
+        var newStatus = $(this).is(':checked') ? 1 : 0;
+    
+        $.ajax({
+            url: "/admin/products/change-status",
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrf_token, 
+            },
+            data: JSON.stringify({
+                id: productId,
+                status: newStatus
+            }),
+            success: function (response) {
+                // Display the success message in a specific div
+                $('#status-message').html(`
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        ${response.message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `);
+            },
+            error: function (xhr) {
+                let errorMessage = "Something went wrong! Please try again.";
+                $('#status-message').html(`
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        ${errorMessage}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `);
+            }
+        });
+    });
+    $('#category_id').on('change', function() {
+        var categoryId = $(this).val();
+        var sub_category_id = $('#sub_category_id').val();
+        $('#subcategory_id').html('<option value="">Loading...</option>');
+
+        if (categoryId) {
+            $.ajax({
+                url: "/admin/products/subcategories",
+                type: "GET",
+                data: { category_id: categoryId },
+                success: function(data) {
+                    $('#subcategory_id').html('<option value="">Select Sub Category</option>');
+                    $.each(data, function(key, value) {
+                        var isSelected = (value.id == sub_category_id) ? "selected" : "";
+                        $('#subcategory_id').append('<option value="' + value.id + '" ' + isSelected + '>' + value.name + '</option>');
+                    });
+                }
+            });
+        } else {
+            $('#subcategory_id').html('<option value="">Select Sub Category</option>'); // Reset dropdown if no category selected
+        }
+    });
+    $('#category_id').trigger('change');
 });

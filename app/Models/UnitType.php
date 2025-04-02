@@ -12,18 +12,8 @@ class UnitType extends Model
     protected $table = 'unit_types';
 
     protected $fillable = [
-        'category_id',
         'unit_type',
-        'status',
-        'ct_date',
-        'md_date'
+        'status'
     ];
 
-    public $timestamps = false; 
-
-   
-    public function category()
-    {
-        return $this->belongsTo(Category::class, 'category_id');
-    }
 }
