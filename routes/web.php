@@ -181,7 +181,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/create', [SubcategoryController::class, 'create'])->name('create');
             Route::post('/', [SubcategoryController::class, 'store'])->name('store');
             Route::get('/{id}/edit', [SubcategoryController::class, 'edit'])->name('edit');
-            Route::put('/{id}', [SubcategoryController::class, 'update'])->name('update');
+            Route::post('/{id}', [SubcategoryController::class, 'update'])->name('update');
             Route::delete('/{id}', [SubcategoryController::class, 'destroy'])->name('destroy');
         });
 

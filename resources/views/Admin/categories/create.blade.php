@@ -1,40 +1,33 @@
 @extends('admin.layouts.masteradmin')
 
+@section('title', 'Add Category')
+
 @section('content')
 <div class="container mt-5">
-    <div class="card p-4">
-        <h4 class="text-center">Add Category</h4>
-        <form action="{{ route('admin.categories.store') }}" method="POST">
-            @csrf
-            <div class="mb-3">
-                <label class="form-label">Name</label>
-                <input type="text" class="form-control" name="name" required>
-            </div>
+    <h2>Add Category</h2>
+    <form action="{{ route('admin.categories.store') }}" method="POST">
+        @csrf
+        <div class="mb-3">
+            <label class="form-label">Category Name</label>
+            <input type="text" class="form-control" name="name" required>
+        </div>
 
-            
-            <div class="mb-3">
-                <label class="form-label">Category Icon</label>
-                <input type="text" class="form-control" name="categoryicon" required>
-            </div>
+        <div class="mb-3">
+            <label class="form-label">Category Icon</label>
+            <input type="text" class="form-control" name="categoryicon" required>
+        </div>
 
-            <div class="mb-3">
-                <label class="form-label">Status</label>
-                <select class="form-control" name="status">
-                    <option value="1">Active</option>
-                    <option value="0">Inactive</option>
-                </select>
-            </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" name="status" value="1">
+            <label class="form-check-label">Active</label>
+        </div>
 
-            <div class="mb-3">
-                <label class="form-label">Enable Home Carousel</label>
-                <select class="form-control" name="enable_homecarousel">
-                    <option value="1">Yes</option>
-                    <option value="0">No</option>
-                </select>
-            </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" name="enable_homecarousel" value="1">
+            <label class="form-check-label">Show in Home Carousel</label>
+        </div>
 
-            <button type="submit" class="btn btn-success">Create</button>
-        </form>
-    </div>
+        <button type="submit" class="btn btn-success">Save</button>
+    </form>
 </div>
 @endsection

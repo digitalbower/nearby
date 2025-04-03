@@ -6,79 +6,79 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Subcategory;
+use Illuminate\Support\Str;
 
 class SubCategoryController extends Controller
 {
-    public function index()
-    {
-        $subcategories = Subcategory::with('category')->get();
+   
+    public function index() {
+        $subcategories = Subcategory::with('category')->latest()->paginate(10);
         return view('admin.subcategories.index', compact('subcategories'));
     }
 
-    public function create()
-    {
-        $categories = Category::where('status', 1)->get();
+    /**
+     * Show the form for creating a new subcategory.
+     */
+    public function create() {
+        $categories = Category::all();
         return view('admin.subcategories.create', compact('categories'));
     }
 
-    public function store(Request $request)
-    {
+    /**
+     * Store a newly created subcategory in storage.
+     */
+    public function store(Request $request) {
         $request->validate([
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
-            'filter_link' => 'nullable|string',
-            'code' => 'required|string|unique:subcategories,code',
-            'status' => 'boolean',
-            'show_on_home' => 'boolean',
+            'status' => 'required|boolean',
         ]);
 
         Subcategory::create([
-            'name' => $request->name,
             'category_id' => $request->category_id,
-            'filter_link' => $request->filter_link,
-            'code' => $request->code,
-            'status' => $request->status ?? 0,
-            'show_on_home' => $request->show_on_home ?? 0,
+            'name' => $request->name,
+            'code' => Str::random(10), // Auto-generated unique code
+            'status' => $request->status,
         ]);
 
-        return redirect()->route('admin.subcategories.index')->with('success', 'Subcategory added successfully.');
+        return redirect()->route('admin.subcategories.index')->with('success', 'Subcategory created successfully.');
     }
 
+    /**
+     * Show the form for editing a subcategory.
+     */
     public function edit($id)
     {
         $subcategory = Subcategory::findOrFail($id);
-        $categories = Category::where('status', 1)->get();
+        $categories = Category::all();
         return view('admin.subcategories.edit', compact('subcategory', 'categories'));
     }
 
+    /**
+     * Update the specified subcategory in storage.
+     */
     public function update(Request $request, $id)
-    {
-        $subcategory = Subcategory::findOrFail($id);
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'category_id' => 'required|exists:categories,id',
+        'status' => 'required|boolean',
+    ]);
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'filter_link' => 'nullable|string',
-            'code' => 'required|string|unique:subcategories,code,' . $id,
-            'status' => 'boolean',
-            'show_on_home' => 'boolean',
-        ]);
+    $subcategory = Subcategory::findOrFail($id);
+    $subcategory->update($request->all());
 
-        $subcategory->update([
-            'name' => $request->name,
-            'category_id' => $request->category_id,
-            'filter_link' => $request->filter_link,
-            'code' => $request->code,
-            'status' => $request->status ?? 0,
-            'show_on_home' => $request->show_on_home ?? 0,
-        ]);
+    return redirect()->route('admin.subcategories.index')->with('success', 'Subcategory updated successfully.');
+}
 
-        return redirect()->route('admin.subcategories.index')->with('success', 'Subcategory updated successfully.');
-    }
-
+    /**
+     * Remove the specified subcategory from storage.
+     */
     public function destroy($id)
-    {
-        Subcategory::findOrFail($id)->delete();
-        return redirect()->route('admin.subcategories.index')->with('success', 'Subcategory deleted successfully.');
-    }
+{
+    $subcategory = Subcategory::findOrFail($id);
+    $subcategory->delete();
+
+    return redirect()->route('admin.subcategories.index')->with('success', 'Subcategory deleted successfully.');
+}
 }

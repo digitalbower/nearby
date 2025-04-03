@@ -7,19 +7,29 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Subcategory;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $categories = Category::latest()->paginate(10);
         return view('admin.categories.index', compact('categories'));
     }
 
-    public function create() {
+    /**
+     * Show the form for creating a new category.
+     */
+    public function create()
+    {
         return view('admin.categories.create');
     }
 
-    public function store(Request $request) {
+    /**
+     * Store a newly created category in storage.
+     */
+    public function store(Request $request)
+    {
         $request->validate([
             'name' => 'required|string|max:255',
             'categoryicon' => 'required|string',
@@ -27,23 +37,32 @@ class CategoryController extends Controller
             'enable_homecarousel' => 'required|boolean'
         ]);
 
-        $uniqueCode = strtoupper(Str::random(4));
+        $uniqueCode = strtoupper(Str::random(4)); // Generate a unique code
         
-    Category::create([
-        'name' => $request->name,
-        'code' => $uniqueCode, // Auto-generate code
-        'categoryicon' => $request->categoryicon,
-        'status' => $request->status,
-        'enable_homecarousel' => $request->enable_homecarousel
-    ]);
+        Category::create([
+            'name' => $request->name,
+            'code' => $uniqueCode,
+            'categoryicon' => $request->categoryicon,
+            'status' => $request->status,
+            'enable_homecarousel' => $request->enable_homecarousel
+        ]);
+
         return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
     }
 
-    public function edit(Category $category) {
+    /**
+     * Show the form for editing the specified category.
+     */
+    public function edit(Category $category)
+    {
         return view('admin.categories.edit', compact('category'));
     }
 
-    public function update(Request $request, Category $category) {
+    /**
+     * Update the specified category in storage.
+     */
+    public function update(Request $request, Category $category)
+    {
         $request->validate([
             'name' => 'required|string|max:255',
             'categoryicon' => 'required|string',
@@ -56,7 +75,11 @@ class CategoryController extends Controller
         return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully.');
     }
 
-    public function destroy(Category $category) {
+    /**
+     * Remove the specified category from storage.
+     */
+    public function destroy(Category $category)
+    {
         $category->delete();
         return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
     }
