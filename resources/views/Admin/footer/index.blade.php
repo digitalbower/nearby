@@ -13,46 +13,66 @@
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
 
-            {{-- Footer Item Form --}}
-            <h5>Footer Item</h5>
-            <form action="{{ route('admin.footer.manage', $footer->id ?? '') }}" method="POST">
+            {{-- Add New Footer Item --}}
+            <h5>Add New Footer Item</h5>
+            <form action="{{ route('admin.footer.store') }}" method="POST">
                 @csrf
-                @method('PUT')
 
-                <div class="form-group">
-                    <label for="type">Type:</label>
-                    <input type="text" name="type" class="form-control" value="{{ $footer->type ?? '' }}" required>
-                </div>
+                <label>Type:</label>
+                <select name="type" class="form-control" required>
+                    <option value="Top Destination">Top Destination</option>
+                    <option value="Information">Information</option>
+                    <option value="Follow Us">Follow Us</option>
+                </select>
 
-                <div class="form-group">
-                    <label for="item_text">Item Text:</label>
-                    <textarea name="item_text" class="form-control" required>{{ $footer->item_text ?? '' }}</textarea>
-                </div>
+                <label>Item Text:</label>
+                <input type="text" name="item_text" class="form-control" required>
 
-                <div class="form-group">
-                    <label for="link">Link:</label>
-                    <input type="text" name="link" class="form-control" value="{{ $footer->link ?? '' }}">
-                </div>
+                <label>Link (optional):</label>
+                <input type="text" name="link" class="form-control">
 
-                <div class="form-group">
-                    <label for="icon">Icon (JSON Format):</label>
-                    <textarea name="icon" class="form-control">{{ $footer->icon ?? '{}' }}</textarea>
-                </div>
+                <label>Icon Class (optional):</label>
+                <input type="text" name="icon" class="form-control">
 
-                <div class="form-group">
-                    <label for="status">Status:</label>
-                    <select name="status" class="form-control">
-                        <option value="1" {{ isset($footer) && $footer->status == 1 ? 'selected' : '' }}>Active</option>
-                        <option value="0" {{ isset($footer) && $footer->status == 0 ? 'selected' : '' }}>Inactive</option>
-                    </select>
-                </div>
+                <label>Status:</label>
+                <select name="status" class="form-control">
+                    <option value="1">Active</option>
+                    <option value="0">Inactive</option>
+                </select>
 
-                <button type="submit" class="btn btn-success mt-3">Update</button>
+                <button type="submit" class="btn btn-success mt-3">Add</button>
             </form>
             <hr>
 
+            {{-- Existing Footer Items --}}
+            <h5>Existing Footer Items</h5>
+            <table class="table">
+                <tr>
+                    <th>Type</th>
+                    <th>Item Text</th>
+                    <th>Link</th>
+                    <th>Icon</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                @foreach ($footers as $footer)
+                    <tr>
+                        <td>{{ $footer->type }}</td>
+                        <td>{{ $footer->item_text }}</td>
+                        <td>{{ $footer->link ?? 'N/A' }}</td>
+                        <td>{{ $footer->icon ?? 'N/A' }}</td>
+                        <td>{{ $footer->status ? 'Active' : 'Inactive' }}</td>
+                        <td>
+                            <form action="{{ route('admin.footer.delete', $footer->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
         </div>
     </div>
 </div>
-
 @endsection

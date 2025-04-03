@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('logos', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('filter_link')->nullable();
-            $table->string('code')->unique();
-            $table->boolean('status')->default(1);
-            $table->boolean('show_on_home')->default(0);
+            $table->string('logo'); 
+            $table->string('link')->nullable();
+            $table->string('type');
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('logos');
     }
 };

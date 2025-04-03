@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('logos', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('logo_image')->nullable(); // Main uploaded logo
-            $table->string('logo_fallback')->default('logos/default-logo.png'); // Default logo
-            $table->string('preview_image')->nullable(); // Preview image
+            $table->string('name');
+            $table->string('code')->unique();
+            $table->string('categoryicon');
+            $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('enable_homecarousel')->default(1);
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('logos');
+        Schema::dropIfExists('categories');
     }
 };

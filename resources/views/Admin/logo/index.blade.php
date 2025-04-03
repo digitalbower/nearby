@@ -1,42 +1,51 @@
 @extends('admin.layouts.masteradmin')
-@section('title', 'Logo Preview')
+
+@section('title', 'Logo Management')
+
 @section('content')
 
-<div class="wrapper-div">
 <div class="container mt-5">
-    <div class="card shadow-lg p-4">
-        <h4 class="text-center mb-4">Logo Management</h4>
+    <div class="card p-4">
+        <h4 class="text-center">Logo Management</h4>
 
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
-        <form action="{{ route('admin.logos.update') }}" method="POST" enctype="multipart/form-data">
-            @csrf
+        
 
-            {{-- Display Current Logo --}}
-            <div class="mb-3">
-                <label class="form-label fw-bold">Current Logo</label><br>
-                <img src="{{ $logo->logo_image ? asset('storage/'.$logo->logo_image) : asset('storage/'.$logo->logo_fallback) }}" 
-                     width="150" class="border p-2 rounded">
-            </div>
-
-            {{-- Upload New Logo --}}
-            <div class="mb-3">
-                <label for="logo_image" class="form-label">Upload New Logo (PNG, JPG, SVG)</label>
-                <input type="file" class="form-control" id="logo_image" name="logo_image">
-            </div>
-
-            {{-- Preview Image (Only Show, No Upload Option) --}}
-            <div class="mb-3">
-                <label class="form-label fw-bold">Preview Image</label><br>
-                <img src="{{ $logo->logo_image ? asset('storage/'.$logo->logo_image) : asset('storage/logos/default-preview.png') }}" 
-                     width="150" class="border p-2 rounded">
-            </div>
-
-            <button type="submit" class="btn btn-success">Update Logo</button>
-        </form>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Logo</th>
+                    <th>Link</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($logos as $logo)
+                <tr>
+                    <td>{{ $logo->id }}</td>
+                    <td><img src="{{ asset('storage/'.$logo->logo) }}" width="80"></td>
+                    <td>{{ $logo->link }}</td>
+                    <td>{{ $logo->type }}</td>
+                    <td>{{ $logo->status ? 'Active' : 'Inactive' }}</td>
+                    <td>
+                        <a href="{{ route('admin.logos.edit', $logo->id) }}" class="btn btn-warning">Edit</a>
+                        <form action="{{ route('admin.logos.destroy', $logo->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 </div>
-</div>
+
 @endsection

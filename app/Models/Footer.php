@@ -9,12 +9,9 @@ class Footer extends Model
 {
     use HasFactory;
 
-    protected $table = 'footer';
+    protected $table = 'footers';
 
-    protected $fillable = [ 'type','item_text','link','icon','status',];
-
-    protected $casts = [
-        'icon' => 'array',
-        'status' => 'boolean',
+    protected $fillable = [
+        'type', 'item_text', 'link', 'icon', 'status'
     ];
 }

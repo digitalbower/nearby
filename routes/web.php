@@ -107,9 +107,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/unit-types', [ProductVariantController::class, 'getCategoryUnitTypes'])->name('unit_types');
         });
         Route::prefix('logos')->name('logos.')->group(function () {
-            Route::get('/', [LogoController::class, 'index'])->name('index'); 
-            Route::get('/{id}/edit', [LogoController::class, 'edit'])->name('edit'); 
-            Route::post('/update', [LogoController::class, 'update'])->name('update'); 
+            Route::get('/', [LogoController::class, 'index'])->name('index');
+           
+            Route::get('/edit/{id}', [LogoController::class, 'edit'])->name('edit');
+            Route::post('/update/{id}', [LogoController::class, 'update'])->name('update');
+            Route::delete('/delete/{id}', [LogoController::class, 'destroy'])->name('destroy');
         });
 
         // Navigation Menu Management Routes
@@ -133,15 +135,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
 
         Route::prefix('footer')->name('footer.')->group(function () {
-            Route::get('/', [FooterController::class, 'index'])->name('manage');
-
-            Route::post('/navigation', [FooterController::class, 'updateNavigation'])->name('navigation.update');
-            Route::post('/social', [FooterController::class, 'updateSocial'])->name('social.update');
-            Route::post('/contact', [FooterController::class, 'updateContact'])->name('contact.update');
-            Route::post('/newsletter', [FooterController::class, 'updateNewsletter'])->name('newsletter.update');
-            Route::post('/legal', [FooterController::class, 'updateLegal'])->name('legal.update');
-            Route::post('/quick', [FooterController::class, 'updateQuick'])->name('quick.update');
-            Route::post('/payment', [FooterController::class, 'updatePayment'])->name('payment.update');
+           
+                Route::get('/', [FooterController::class, 'index'])->name('index');
+                Route::post('/store', [FooterController::class, 'store'])->name('store');
+                Route::post('/update/{id}', [FooterController::class, 'update'])->name('update');
+                Route::delete('/delete/{id}', [FooterController::class, 'destroy'])->name('delete');
+           
+            
 
         });
 

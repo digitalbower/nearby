@@ -6,55 +6,58 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Subcategory;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
-    public function index()
-    {
-        return view('admin.categories.index', [
-            'categories' => Category::with('subcategories')->get()
-        ]);
+    public function index() {
+        $categories = Category::latest()->paginate(10);
+        return view('admin.categories.index', compact('categories'));
     }
 
-    public function create()
-    {
+    public function create() {
         return view('admin.categories.create');
     }
 
-    public function store(Request $request)
-    {
-        Category::create($request->validate([
+    public function store(Request $request) {
+        $request->validate([
             'name' => 'required|string|max:255',
-            'filter_link' => 'nullable|string',
-            'code' => 'required|string|unique:categories,code',
-            'status' => 'boolean',
-            'show_on_home' => 'boolean',
-        ]));
+            'categoryicon' => 'required|string',
+            'status' => 'required|boolean',
+            'enable_homecarousel' => 'required|boolean'
+        ]);
 
-        return redirect()->route('admin.categories.index')->with('success', 'Category added successfully.');
+        $uniqueCode = strtoupper(Str::random(4));
+        
+    Category::create([
+        'name' => $request->name,
+        'code' => $uniqueCode, // Auto-generate code
+        'categoryicon' => $request->categoryicon,
+        'status' => $request->status,
+        'enable_homecarousel' => $request->enable_homecarousel
+    ]);
+        return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
     }
 
-    public function edit(Category $category)
-    {
+    public function edit(Category $category) {
         return view('admin.categories.edit', compact('category'));
     }
 
-    public function update(Request $request, Category $category)
-    {
-        $category->update($request->validate([
+    public function update(Request $request, Category $category) {
+        $request->validate([
             'name' => 'required|string|max:255',
-            'filter_link' => 'nullable|string',
-            'code' => 'required|string|unique:categories,code,' . $category->id,
-            'status' => 'boolean',
-            'show_on_home' => 'boolean',
-        ]));
+            'categoryicon' => 'required|string',
+            'status' => 'required|boolean',
+            'enable_homecarousel' => 'required|boolean'
+        ]);
+
+        $category->update($request->all());
 
         return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully.');
     }
 
-    public function destroy(Category $category)
-    {
+    public function destroy(Category $category) {
         $category->delete();
-        return redirect()->route('admin.categories.index')->with('success', 'Category deleted.');
+        return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
     }
 }

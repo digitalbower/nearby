@@ -10,39 +10,73 @@ use Illuminate\Support\Facades\Storage;
 class LogoController extends Controller
 {
     
-
-    public function index() {
-        $logo = Logo::first(); // Fetch first logo entry
-        return view('admin.logo.index', compact('logo'));
+    public function index()
+    {
+        $logos = Logo::all();
+        return view('admin.logo.index', compact('logos'));
     }
 
-    public function update(Request $request) {
+    public function create()
+    {
+        return view('admin.logo.create');
+    }
+
+    public function store(Request $request)
+    {
         $request->validate([
-            'logo_image' => 'nullable|mimes:jpeg,png,jpg,svg|max:2048',
-            'preview_image' => 'nullable|mimes:jpeg,png,jpg,svg|max:2048',
+            'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'link' => 'nullable|url',
+            'type' => 'required|string',
+            'status' => 'required|boolean',
         ]);
 
-        $logo = Logo::first();
-        if (!$logo) {
-            $logo = new Logo();
+        $logoPath = $request->file('logo')->store('logos', 'public');
+
+        Logo::create([
+            'logo' => $logoPath,
+            'link' => $request->link,
+            'type' => $request->type,
+            'status' => $request->status,
+        ]);
+
+        return redirect()->route('admin.logo.index')->with('success', 'Logo added successfully.');
+    }
+
+    public function edit($id)
+    {
+        $logo = Logo::findOrFail($id);
+        return view('admin.logo.edit', compact('logo'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'link' => 'nullable|url',
+            'type' => 'required|string',
+            'status' => 'required|boolean',
+        ]);
+
+        $logo = Logo::findOrFail($id);
+
+        if ($request->hasFile('logo')) {
+            $logoPath = $request->file('logo')->store('logos', 'public');
+            $logo->logo = $logoPath;
         }
 
-        if ($request->hasFile('logo_image')) {
-            if ($logo->logo_image && Storage::exists($logo->logo_image)) {
-                Storage::delete($logo->logo_image);
-            }
-            $logo->logo_image = $request->file('logo_image')->store('logos', 'public');
-        }
-
-        if ($request->hasFile('preview_image')) {
-            if ($logo->preview_image && Storage::exists($logo->preview_image)) {
-                Storage::delete($logo->preview_image);
-            }
-            $logo->preview_image = $request->file('preview_image')->store('logos', 'public');
-        }
-
+        $logo->link = $request->link;
+        $logo->type = $request->type;
+        $logo->status = $request->status;
         $logo->save();
-        return redirect()->back()->with('success', 'Logo updated successfully');
+
+        return redirect()->route('admin.logos.index')->with('success', 'Logo updated successfully.');
+    }
+
+    public function destroy($id)
+    {
+        $logo = Logo::findOrFail($id);
+        $logo->delete();
+        return redirect()->route('admin.logos.index')->with('success', 'Logo deleted successfully.');
     }
 }
 

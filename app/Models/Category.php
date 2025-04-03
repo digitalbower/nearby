@@ -9,7 +9,11 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'filter_link', 'code', 'status', 'show_on_home'];
+    protected $fillable = [ 'name',
+    'code',
+    'categoryicon',
+    'status',
+    'enable_homecarousel'];
 
     public function subcategories()
     {

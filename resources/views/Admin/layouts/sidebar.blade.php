@@ -79,7 +79,7 @@
                         </a>
                         </li>
                         <li>
-                        <a href="{{ route('admin.footer.manage') }}">
+                        <a href="{{ route('admin.footer.index') }}">
                             <span class="sub-item">Footer Management</span>
                         </a>
                         </li>

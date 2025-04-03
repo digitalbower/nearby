@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('footer', function (Blueprint $table) {
+        Schema::create('footers', function (Blueprint $table) {
+            
             $table->id();
-            $table->string('type', 255);
+            $table->string('type'); // Dropdown: Top Destination, Information, Follow Us
             $table->text('item_text');
             $table->text('link')->nullable();
-            $table->json('icon')->nullable();
+            $table->string('icon')->nullable(); // Now a string instead of JSON
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
+            
         });
     }
 
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('footer');
+        Schema::dropIfExists('footers');
     }
 };
