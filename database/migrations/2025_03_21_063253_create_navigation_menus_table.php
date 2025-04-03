@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('quick_cards', function (Blueprint $table) {
+        Schema::create('navigation_menus', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description');
-            $table->string('button_text');
-            $table->string('link');
-            $table->string('image')->nullable();
+            $table->string('label')->nullable();
+            $table->string('link')->nullable();
+            $table->enum('navigation_placement', ['upper', 'lower']);
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('quick_cards');
+        Schema::dropIfExists('navigation_menus');
     }
 };

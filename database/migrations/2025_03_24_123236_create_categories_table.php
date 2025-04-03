@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('newsletter_subscribers', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->unique();
+            $table->string('name')->nullable();
+            $table->string('filter_link')->nullable();
+            $table->string('code')->unique();
+            $table->boolean('status')->default(1);
+            $table->boolean('show_on_home')->default(0);
             $table->timestamps();
         });
     }
@@ -23,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('newsletter_subscribers');
+        Schema::dropIfExists('categories');
     }
 };

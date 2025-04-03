@@ -16,32 +16,7 @@ class LogoController extends Controller
         return view('admin.logo.index', compact('logos'));
     }
 
-    public function create()
-    {
-        return view('admin.logo.create');
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'link' => 'nullable|url',
-            'type' => 'required|string',
-            'status' => 'required|boolean',
-        ]);
-
-        $logoPath = $request->file('logo')->store('logos', 'public');
-
-        Logo::create([
-            'logo' => $logoPath,
-            'link' => $request->link,
-            'type' => $request->type,
-            'status' => $request->status,
-        ]);
-
-        return redirect()->route('admin.logo.index')->with('success', 'Logo added successfully.');
-    }
-
+   
     public function edit($id)
     {
         $logo = Logo::findOrFail($id);
@@ -51,7 +26,7 @@ class LogoController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'logo' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'link' => 'nullable|url',
             'type' => 'required|string',
             'status' => 'required|boolean',
@@ -61,7 +36,7 @@ class LogoController extends Controller
 
         if ($request->hasFile('logo')) {
             $logoPath = $request->file('logo')->store('logos', 'public');
-            $logo->logo = $logoPath;
+            $logo->image = $logoPath;
         }
 
         $logo->link = $request->link;

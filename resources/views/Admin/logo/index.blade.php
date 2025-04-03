@@ -29,7 +29,7 @@
                 @foreach($logos as $logo)
                 <tr>
                     <td>{{ $logo->id }}</td>
-                    <td><img src="{{ asset('storage/'.$logo->logo) }}" width="80"></td>
+                    <td><img src="{{ asset('storage/'.$logo->image) }}" width="80"></td>
                     <td>{{ $logo->link }}</td>
                     <td>{{ $logo->type }}</td>
                     <td>{{ $logo->status ? 'Active' : 'Inactive' }}</td>

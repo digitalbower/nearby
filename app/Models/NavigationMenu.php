@@ -8,5 +8,5 @@ class NavigationMenu extends Model
 {
     protected $table = 'navigation_menus'; // Ensure this matches your database table name
 
-    protected $fillable = ['name', 'link', 'icon', 'type', 'status'];
-}
+    protected $fillable = ['title', 'link', 'icone', 'type', 'status','name','navigation_placement'];
+} 

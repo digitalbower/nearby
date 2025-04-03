@@ -25,6 +25,8 @@ class DatabaseSeeder extends Seeder
             SubCategorySeeder::class,
             UnitTypeSeeder::class,
             TagsSeeder::class,
+            LogoSeeder::class,
+            EmiratesSeeder::class,
         ]);
     }
 }

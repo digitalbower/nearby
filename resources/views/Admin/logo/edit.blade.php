@@ -39,13 +39,13 @@
                 <!-- Current Logo -->
                 <div class="mb-3">
                     <label class="form-label">Current Logo</label><br>
-                    <img src="{{ asset('storage/'.$logo->logo) }}" width="120" class="img-thumbnail" alt="Logo">
+                    <img src="{{ asset('storage/'.$logo->image) }}" width="120" class="img-thumbnail" alt="Logo">
                 </div>
 
                 <!-- Upload New Logo -->
-                <div class="mb-3">
+                <div class="mb-3"> 
                     <label for="logo" class="form-label">Upload New Logo</label>
-                    <input type="file" class="form-control" id="logo" name="logo">
+                    <input type="file" class="form-control" id="logo" name="logo" accept=".jpeg,.jpg,.png,.gif,.svg">
                     <small class="text-muted">Leave empty if you don't want to change.</small>
                 </div>
 

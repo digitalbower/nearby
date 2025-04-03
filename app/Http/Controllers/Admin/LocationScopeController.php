@@ -4,14 +4,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\LocationScop;
+use App\Models\Emirate;
 use Illuminate\Http\Request;
 
 class LocationScopeController extends Controller
 {
     public function index()
     {
-        $locations = LocationScop::all();
+        $locations = Emirate::all();
         return view('admin.locations.index', compact('locations'));
     }
 
@@ -27,17 +27,17 @@ class LocationScopeController extends Controller
             'active' => 'boolean',
         ]);
 
-        LocationScop::create($request->all());
+        Emirate::create($request->all());
 
         return redirect()->route('admin.locations.index')->with('success', 'Location added successfully.');
     }
 
-    public function edit(LocationScop $location)
+    public function edit(Emirate $location)
     {
         return view('admin.locations.edit', compact('location'));
     }
 
-    public function update(Request $request, LocationScop $location)
+    public function update(Request $request, Emirate $location)
     {
         $request->validate([
             'emirate_name' => 'required|string|max:255',
@@ -49,7 +49,7 @@ class LocationScopeController extends Controller
         return redirect()->route('admin.locations.index')->with('success', 'Location updated successfully.');
     }
 
-    public function destroy(LocationScop $location)
+    public function destroy(Emirate $location)
     {
         $location->delete();
 

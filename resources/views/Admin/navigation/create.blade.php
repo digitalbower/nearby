@@ -31,15 +31,15 @@
 
             <div class="form-group">
                 <label for="type">Type</label>
-                <select name="type" class="form-control" required>
+                <select name="navigation_placement" class="form-control" required>
                     <option value="upper">Upper</option>
                     <option value="lower">Lower</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="status">Active</label>
-                <input type="checkbox" name="status" value="1" checked>
+                <label for="status">Status</label>
+                <input type="checkbox" name="active" value="1" checked>
             </div>
 
             <button type="submit" class="btn btn-success">Add</button>

@@ -36,7 +36,7 @@
                     <tr>
                         <td>{{ $item->name }}</td>
                         <td><a href="{{ $item->link }}" target="_blank">{{ $item->link }}</a></td>
-                        <td>{{ ucfirst($item->type) }}</td>
+                        <td>{{ ucfirst($item->navigation_placement) }}</td>
                         <td>
                             @if($item->icon)
                                 <i class="{{ $item->icon }}"></i>
@@ -46,7 +46,7 @@
                         </td>
                         <td>
                             <span class="badge {{ $item->status ? 'badge-success' : 'badge-danger' }}">
-                                {{ $item->status ? 'Active' : 'Inactive' }}
+                                {{ $item->active ? 'Active' : 'Inactive' }}
                             </span>
                         </td>
                         <td>

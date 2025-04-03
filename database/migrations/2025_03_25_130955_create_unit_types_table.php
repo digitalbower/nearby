@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hero_carousels', function (Blueprint $table) {
+        Schema::create('unit_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->boolean('status')->default(1); // Active by default
+            $table->string('unit_type')->nullable(); // Unit Type
+            $table->boolean('status')->default(1); // Status: 1 = Active, 0 = Inactive
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hero_carousels');
+        Schema::dropIfExists('unit_types');
     }
 };

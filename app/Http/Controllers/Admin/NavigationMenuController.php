@@ -35,8 +35,8 @@ class NavigationMenuController extends Controller
             'name' => $request->name,
             'link' => $request->link,
             'icon' => $request->icon,
-            'type' => $request->type,
-            'status' => $request->has('status') ? 1 : 0, // Checkbox handling
+            'navigation_placement' => $request->type,
+            'active' => $request->has('status') ? 1 : 0, // Checkbox handling
         ]);
 
         return redirect()->route('admin.navigation.index')->with('success', 'Menu item added successfully');
@@ -63,8 +63,8 @@ class NavigationMenuController extends Controller
         'name' => $request->name,
         'link' => $request->link,
         'icon' => $request->icon,
-        'type' => $request->type,
-        'status' => $request->has('status') ? 1 : 0, // Handle checkbox input
+        'navigation_placement' => $request->type,
+        'active' => $request->has('status') ? 1 : 0, // Handle checkbox input
     ]);
        
         return redirect()->route('admin.navigation.index')->with('success', 'Menu item updated successfully');

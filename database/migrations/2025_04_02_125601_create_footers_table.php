@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('footers', function (Blueprint $table) {
             
             $table->id();
-            $table->string('type'); // Dropdown: Top Destination, Information, Follow Us
-            $table->text('item_text');
+            $table->string('type')->nullable(); // Dropdown: Top Destination, Information, Follow Us
+            $table->text('item_text')->nullable();
             $table->text('link')->nullable();
             $table->string('icon')->nullable(); // Now a string instead of JSON
             $table->tinyInteger('status')->default(1);

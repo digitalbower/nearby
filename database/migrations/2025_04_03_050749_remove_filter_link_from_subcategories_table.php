@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('unit_types', function (Blueprint $table) {
-            $table->id();
-            $table->string('unit_type'); // Unit Type
-            $table->boolean('status')->default(1); // Status: 1 = Active, 0 = Inactive
-            $table->timestamps();
-        
+        Schema::table('subcategories', function (Blueprint $table) {
+            $table->dropColumn('filter_link'); 
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('unit_types');
+        Schema::table('subcategories', function (Blueprint $table) {
+            $table->string('filter_link')->nullable();
+        });
     }
 };

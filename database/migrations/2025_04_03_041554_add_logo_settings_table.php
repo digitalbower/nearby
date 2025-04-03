@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payment_methods', function (Blueprint $table) {
-            $table->id();
-            $table->string('icon')->nullable(); // Path to uploaded file
-            $table->timestamps();
+        Schema::table('logos', function (Blueprint $table) {
+           
+            $table->string('link', 255)->nullable();
+            $table->string('type', 255)->nullable();
+            $table->tinyInteger('status')->default(1);
         });
     }
 
@@ -23,6 +24,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payment_methods');
+        Schema::table('logos', function (Blueprint $table) {
+            $table->dropColumn(['image', 'title']);
+        });
     }
 };

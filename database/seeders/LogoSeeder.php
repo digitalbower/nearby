@@ -14,7 +14,7 @@ class LogoSeeder extends Seeder
     public function run(): void
     {
         Logo::insert([
-            ['logo' => 'logos/company1.png', 'link' => 'https://company1.com', 'type' => 'HEADER', 'status' => 1],
+            ['image' => 'logos/company1.png', 'link' => 'https://company1.com', 'type' => 'HEADER', 'status' => 1],
             
         ]);
     }
