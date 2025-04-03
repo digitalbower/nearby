@@ -1,6 +1,6 @@
 @extends('User.layouts.main')
 @section('content')
-  <div x-data="massageDeals()" class="container mx-auto   lg:pt-20 py-2 lg:px-0 px-4">
+  <div x-data="products()" x-init="fetchProducts()" class="container mx-auto   lg:pt-20 py-2 lg:px-0 px-4">
     <!-- Sidebar -->
     <div x-data="{ showFilter: false }" class="my-8  md:flex-row md:items-center justify-between gap-8">
       <!-- Deals Count -->
@@ -12,7 +12,7 @@
         <span class="md:block hidden" x-text="showFilter ? 'Hide Filter' : 'Show Filter'"></span>
       </button>
 
-      <span class="md:text-xl text-sm font-bold text-gray-800 tracking-wide" x-text="filteredDeals.length + ' Deals Found'">
+      <span class="md:text-xl text-sm font-bold text-gray-800 tracking-wide" x-text="products.length + ' Deals Found'">
         <!-- Replace `filteredDeals` with actual deals count dynamically -->
       </span>
       </div>
@@ -93,28 +93,37 @@
               }
             }" class="lg:w-full bg-white p-3 rounded-lg shadow-md space-y-2">
             <h2 class="text-2xl font-bold text-gray-800">Filters</h2>
-
-            <!-- Category Filter -->
             <div class="border-b pb-2">
               <button @click="toggleSection('category')" class="flex justify-between items-center w-full text-gray-700">
-                <span class="font-medium">Category</span>
-                <i :class="isOpen('category') ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas text-xs"></i>
+                  <span class="font-medium">Category</span>
+                  <i :class="isOpen('category') ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas text-xs"></i>
               </button>
+              
               <div x-show="isOpen('category')" class="mt-2 space-y-2">
-                <div class="flex items-center">
-                  <input type="checkbox" id="category1" value="Category 1" class="form-checkbox rounded text-blue-500">
-                  <label for="category1" class="ml-2 text-sm text-gray-600">Category 1</label>
-                </div>
-                <div class="flex items-center">
-                  <input type="checkbox" id="category2" value="Category 2" class="form-checkbox rounded text-blue-500">
-                  <label for="category2" class="ml-2 text-sm text-gray-600">Category 2</label>
-                </div>
-                <div class="flex items-center">
-                  <input type="checkbox" id="category2" value="Category 2" class="form-checkbox rounded text-blue-500">
-                  <label for="category2" class="ml-2 text-sm text-gray-600">Category 2</label>
-                </div>
+                  <template x-for="category in categories" :key="category.id">
+                      <div class="flex items-center">
+                          <input type="checkbox" :id="'category' + category.id" :value="category.name"
+                              x-model="selectedCategories"  
+                              class="form-checkbox rounded text-blue-500">
+                          <label :for="'category' + category.id" class="ml-2 text-sm text-gray-600" x-text="category.name"></label>
+                      </div>
+                  </template>
               </div>
-            </div>
+          </div>
+      
+          <!-- Subcategory Filter -->
+          <div x-show="availableSubcategories.length > 0" class="border-b pb-2 mt-4">
+              <span class="font-medium text-gray-700">Subcategories</span>
+              <div class="mt-2 space-y-2">
+                  <template x-for="sub in availableSubcategories" :key="sub.id">
+                      <div class="flex items-center">
+                          <input type="checkbox" :id="'subcategory' + sub.id" :value="sub.name"
+                              x-model="selectedSubcategories" class="form-checkbox rounded text-green-500">
+                          <label :for="'subcategory' + sub.id" class="ml-2 text-sm text-gray-500" x-text="sub.name"></label>
+                      </div>
+                  </template>
+              </div>
+          </div>
 
             <!-- Location Filter -->
             <div class="border-b pb-2">
@@ -141,28 +150,26 @@
             </div>
 
             <!-- Giftable Deals -->
+            
             <div class="border-b pb-4">
               <button @click="toggleSection('giftable')"
-                class="flex justify-between items-center w-full text-gray-800 hover:text-blue-600 transition-all duration-300 ease-in-out">
-                <span class="font-medium">Giftable Deals <i class="fas fa-gift text-gray-600 text-base"></i></span>
-
-
-                <i :class="isOpen('giftable') ? 'fa-chevron-up' : 'fa-chevron-down'"
-                  class="fas text-xs text-gray-600 transition-all"></i>
+                  class="flex justify-between items-center w-full text-gray-800 hover:text-blue-600 transition-all duration-300 ease-in-out">
+                  <span class="font-medium">Giftable Deals <i class="fas fa-gift text-gray-600 text-base"></i></span>
+                  <i :class="isOpen('giftable') ? 'fa-chevron-up' : 'fa-chevron-down'"
+                      class="fas text-xs text-gray-600 transition-all"></i>
               </button>
-              <div x-show="isOpen('giftable')" class="mt-4 transition-all duration-300 ease-in-out">
-                <label for="giftable" class="flex items-center space-x-3 cursor-pointer">
-                  <div class="relative">
-                    <input type="checkbox" id="giftable" class="sr-only peer" />
-                    <div class="block w-10 h-5 bg-gray-300 rounded-full peer-checked:bg-blue-600 transition-all"></div>
-                    <div
-                      class="dot absolute left-1 top-1 bg-white w-3 h-3 rounded-full transition-all peer-checked:translate-x-4">
-                    </div>
-                  </div>
-                  <span class="text-sm text-gray-700">Enable Giftable Deals</span>
-                </label>
+              <div x-show="isOpen('giftable')"    x-init="$watch('showGiftable', value => console.log(filteredProducts))"  class="mt-4 transition-all duration-300 ease-in-out">
+                  <label for="giftable" class="flex items-center space-x-3 cursor-pointer">
+                      <div class="relative">
+                          <input type="checkbox" id="giftable" name="giftable" class="sr-only peer" x-model="showGiftable" />
+                          <div class="block w-10 h-5 bg-gray-300 rounded-full peer-checked:bg-blue-600 transition-all"></div>
+                          <div class="dot absolute left-1 top-1 bg-white w-3 h-3 rounded-full transition-all peer-checked:translate-x-4"></div>
+                      </div>
+                      <span class="text-sm text-gray-700">Enable Giftable Deals</span>
+                  </label>
               </div>
-            </div>
+          </div>
+          
 
 
 
@@ -255,22 +262,20 @@
           </div>
         </div>
         <div :class="showFilter ? 'lg:grid gap-6 md:grid-cols-2 lg:grid-cols-3 w-full' : 'grid gap-6 md:grid-cols-2 lg:grid-cols-4 w-full'" class="transition-all duration-300">
-          <template x-for="deal in sortedDeals" :key="deal.id">
+          <template x-for="product in filteredProducts" :key="product.id">
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
               <div class="relative">
-                <img :src="deal.image" :alt="deal.title" class="w-full h-48 object-cover">
+                <img :src="product.image" :alt="product.title" class="w-full h-48 object-cover">
 
                 <div class="absolute top-2 left-2 flex gap-1">
-                  <template x-for="tag in deal.tags" :key="tag">
-                    <span x-text="tag" class="bg-blue-500 text-white font-semibold  text-xs px-2 py-1 rounded"></span>
-                  </template>
+                   <span x-text="product.tags.tag_name" class="bg-blue-500 text-white font-semibold text-xs px-2 py-1 rounded"></span>
                 </div>
               </div>
               <div class="p-4">
-                <h3 x-text="deal.title" class="font-semibold text-lg mb-2"></h3>
+                <h3 x-text="product.title" class="font-semibold text-lg mb-2"></h3>
               <div class="flex gap-x-1">
                 <i class="fas fa-map-marker-alt"></i>
-                <p x-text="deal.location" class="text-sm text-gray-600 mb-2"></p>
+                <p x-text="product.location" class="text-sm text-gray-600 mb-2"></p>
               </div>
                 <div class="flex items-center mb-2">
                   <span class="text-sm mr-1">★</span>
@@ -279,27 +284,21 @@
                   <span class="text-sm mr-1">★</span>
                   <span class="text-sm mr-1">★</span>
 
-                  <span x-text="deal.rating.toFixed(1)" class="text-sm mr-1"></span>
+                  <span x-text="product.rating.toFixed(1)" class="text-sm mr-1"></span>
                   
-                  <span x-text="'(' + deal.reviews.toLocaleString() + ')'" class="text-sm text-gray-600 mr-2"></span>
+                  <span x-text="'(' + product.reviews.toLocaleString() + ')'" class="text-sm text-gray-600 mr-2"></span>
                  
                    
-                  <span x-text="deal.distance + ' mi'" class="text-sm text-gray-600"></span>
+                  <span x-text="product.distance + ' mi'" class="text-sm text-gray-600"></span>
                 </div>
-                <p class="text-gray-700 text-sm mb-2 leading-relaxed">Lorem
-                  ipsum
-                  ipsum
-                  ipsum dolor sit amet consectetur adipisicing
-                  elit. Accusantium
-                  quia ex ut fuga perferendis!"
-                </p>
+               <p class="text-gray-700 text-sm mb-2 leading-relaxed" x-text="product.description"></p>
                 <div class="flex items-center justify-between">
                   <div>
-                    <span x-text="'$' + deal.discountedPrice.toFixed(2)" class="text-xl font-bold"></span>
-                    <span x-text="'$' + deal.originalPrice" class="text-sm text-gray-500 line-through ml-1"></span>
-                    <p x-show="deal.code" x-text="'with code ' + deal.code" class="text-xs text-gray-600"></p>
+                    <span x-text="'$' + product.discountedPrice.toFixed(2)" class="text-xl font-bold"></span>
+                    <span x-text="'$' + product.originalPrice" class="text-sm text-gray-500 line-through ml-1"></span>
+                    <p x-show="product.code" x-text="'with code ' + product.code" class="text-xs text-gray-600"></p>
                   </div>
-                  <span x-text="'-' + deal.discount + '%'"
+                  <span x-text="'-' + product.discount + '%'"
                     class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-2 rounded"></span>
                 </div>
               </div>
@@ -330,130 +329,108 @@
   @push('scripts')
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
   <script>
-    function massageDeals() {
-      return {
-        deals: [
-          {
-            id: "1",
-            title: "Pure Serenity Spa",
-            location: "1136 West Armitage Avenue, Chicago",
-            originalPrice: 110,
-            discountedPrice: 89,
-            discount: 19,
-            rating: 4.8,
-            reviews: 2272,
-            distance: 3.1,
-            image: "https://picsum.photos/400/300?random=1",
-            tags: ["Popular Gift"],
-            code: "EARLYBIRD24",
-          },
-          {
-            id: "2",
-            title: "Foot Smile Spa - Chicago",
-            location: "1513 West Fullerton Avenue, Chicago",
-            originalPrice: 89,
-            discountedPrice: 39.20,
-            discount: 39,
-            rating: 4.6,
-            reviews: 7843,
-            distance: 3.8,
-            image: "https://picsum.photos/400/300?random=2",
-            tags: ["Black Friday"],
-            code: "EARLYBIRD24",
-          },
-          {
-            id: "3",
-            title: "Versailles Massage & Bar",
-            location: "1329 South Michigan Avenue, Chicago",
-            originalPrice: 50,
-            discountedPrice: 35,
-            discount: 30,
-            rating: 4.3,
-            reviews: 7167,
-            distance: 1.0,
-            image: "https://picsum.photos/400/300?random=3",
-            tags: ["Black Friday"],
-            code: "EARLYBIRD24",
-          },
-          {
-            id: "4",
-            title: "Zen Garden Massage",
-            location: "500 North Michigan Avenue, Chicago",
-            originalPrice: 120,
-            discountedPrice: 75,
-            discount: 38,
-            rating: 4.9,
-            reviews: 3456,
-            distance: 0.5,
-            image: "https://picsum.photos/400/300?random=4",
-            tags: ["Limited Time"],
-            code: "ZENRELAX",
-          },
-          {
-            id: "5",
-            title: "Urban Oasis Spa",
-            location: "900 North Michigan Avenue, Chicago",
-            originalPrice: 150,
-            discountedPrice: 99,
-            discount: 34,
-            rating: 4.7,
-            reviews: 5678,
-            distance: 1.2,
-            image: "https://picsum.photos/400/300?random=5",
-            tags: ["Luxury"],
-          }
-        ],
-        locations: [
-          { name: "Chicago", count: 15 },
-          { name: "Schaumburg", count: 11 },
-          { name: "Mount Prospect", count: 9 },
-          { name: "Worth", count: 9 },
-          { name: "Evanston", count: 7 },
-          { name: "Oak Park", count: 6 },
-        ],
-        filters: {
-          search: '',
-          locations: [],
-          maxDistance: 20,
-          giftable: false,
-          bookableOnline: false,
-        },
-        sortBy: 'recommended',
+  function products() {
+    return {
+        products: [],
+        categories: [],
+        selectedCategories: [],
+        selectedSubcategories: [],
         favorites: [],
-        locationSearch: '',
-
-        get filteredLocations() {
-          return this.locations.filter(location =>
-            location.name.toLowerCase().includes(this.locationSearch.toLowerCase())
-          );
-        },
-
-        get filteredDeals() {
-          return this.deals.filter(deal => {
-            const matchesSearch = deal.title.toLowerCase().includes(this.filters.search.toLowerCase()) ||
-              deal.location.toLowerCase().includes(this.filters.search.toLowerCase());
-            const matchesLocation = this.filters.locations.length === 0 || this.filters.locations.some(loc => deal.location.includes(loc));
-            const matchesDistance = deal.distance <= this.filters.maxDistance;
-            const matchesGiftable = !this.filters.giftable || deal.tags.includes("Popular Gift");
-            const matchesBookable = !this.filters.bookableOnline; // Assume all deals are bookable online for this example
-
-            return matchesSearch && matchesLocation && matchesDistance && matchesGiftable && matchesBookable;
+        sortBy: 'recommended',
+        openSections: '',
+        showGiftable: false, 
+        async fetchProducts() {
+            try {
+                let response = await fetch('/user/products/list'); // Replace with your actual API endpoint
+                let data = await response.json();
+                this.products = data.products.map(product => {
+                 const firstVariant = product.variants?.[0] ?? {};
+                  console.log(product.tags);
+            return {
+              id: product.id,
+              title: product.name ?? 'No title',
+              short_description: product.short_description ?? 'No description',
+              image: product.image_url ?? 'default-image.jpg',
+              location: product.location ?? 'Unknown',
+              rating: Number(product.rating ?? 4.5),
+              reviews: Number(product.reviews ?? 0),
+              priceRange: {
+                min: parseFloat(product.price_range?.min ?? 0).toFixed(2),
+                max: parseFloat(product.price_range?.max ?? 0).toFixed(2),
+              },
+              discountedPriceRange: {
+                min: parseFloat(product.discounted_price_range?.min ?? 0).toFixed(2),
+                max: parseFloat(product.discounted_price_range?.max ?? 0).toFixed(2),
+              },
+              originalPrice: parseFloat(firstVariant.unit_price ?? 0),
+              discountedPrice: parseFloat(firstVariant.discounted_price ?? 0),
+              discount: parseFloat(firstVariant.discount ?? 0),
+              code: product.code ?? '',
+              tags: product.tags ?? [],
+            };
           });
-        },
+         
 
-        get sortedDeals() {
-          return [...this.filteredDeals].sort((a, b) => {
-            switch (this.sortBy) {
-              case 'price_low_high':
-                return a.discountedPrice - b.discountedPrice;
-              case 'price_high_low':
-                return b.discountedPrice - a.discountedPrice;
-              case 'rating':
-                return b.rating - a.rating;
-              default:
-                return 0; // 'recommended' - no sorting
+        this.categories = data.categories.map(category => ({
+            id: category.id,
+            name: category.name,
+            subCategories: category.subcategories || [],  // Ensure subCategories exist
+        }));
+
+        this.tags = data.tags
+        .filter(tag => tag.giftable_deals === 1) // Filter only giftable tags
+        .map(tag => ({
+            id: tag.id,
+            name: tag.tag_name,
+        }));
+
+        console.log("All Products:", this.products);
+        console.log("Filtered Giftable Products:", this.products.filter(product => product.tags?.giftable_deals === 1));// Debugging
+            } catch (error) {
+                console.error("Error fetching products:", error);
             }
-          });
+        },
+        get availableSubcategories() {
+            const subcategories = this.categories
+                .filter(category => this.selectedCategories.includes(category.name))
+                .flatMap(category => category.subCategories);    
+
+            console.log("Filtered Subcategories:", subcategories); // Debugging
+            return subcategories;
+        },
+        get filteredProducts() {
+            return this.products.filter(product => {
+                const categoryMatch = this.selectedCategories.length === 0 ||
+                    product.categories?.some(cat => this.selectedCategories.includes(cat.name));
+
+                const subCategoryMatch = this.selectedSubcategories.length === 0 ||
+                    product.subCategories?.some(sub => this.selectedSubcategories.includes(sub.name));
+
+                // Ensure product.tags is an object (not an array)
+                const giftableMatch = this.showGiftable 
+                    ? product.tags && product.tags.giftable_deals === 1  // Directly check the single tag
+                    : true;
+
+                return categoryMatch && subCategoryMatch && giftableMatch;
+            });
+        },
+
+
+
+
+        get sortedproducts() {
+            return [...this.products].sort((a, b) => {
+                switch (this.sortBy) {
+                    case 'price_low_high':
+                        return a.discountedPrice - b.discountedPrice;
+                    case 'price_high_low':
+                        return b.discountedPrice - a.discountedPrice;
+                    case 'rating':
+                        return b.rating - a.rating;
+                    default:
+                        return 0; // 'recommended' - no sorting
+                }
+            });
         },
 
         toggleFavorite(id) {
@@ -463,8 +440,27 @@
           } else {
             this.favorites.splice(index, 1);
           }
+        },
+        toggleFavorite(id) {
+            const index = this.favorites.indexOf(id);
+            if (index === -1) {
+                this.favorites.push(id);
+            } else {
+                this.favorites.splice(index, 1);
+            }
+        },
+
+        toggleSection(section) {
+            this.openSections = this.openSections === section ? '' : section;
+        },
+
+        isOpen(section) {
+            return this.openSections === section;
+        },
+        init() {
+        this.fetchProducts();
         }
-      }
     }
-  </script>
+}
+</script>
   @endpush

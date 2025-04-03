@@ -33,6 +33,18 @@
                     </select>
                 </div>
                 <div class="mb-3">
+                    <label for="product_type_id" class="form-label">Product Type</label>
+                    <select class="form-control" name="product_type_id" id="product_type_id">
+                        <option value="">Select Product type</option>
+                        @foreach ($types as $type)
+                            <option value="{{ $type->id }}" 
+                                {{ old('product_type_id') == $type->id ? 'selected' : '' }}>
+                                {{ $type->product_type }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
                     <input type="text" class="form-control" id="title" name="title" value="{{old('title') }}">
                 </div>
@@ -40,6 +52,14 @@
                 <div class="mb-3">
                     <label for="short_description" class="form-label">Short Description</label>
                     <textarea class="form-control" id="short_description" name="short_description">{{old('short_description')}}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="short_legend" class="form-label">Short Legend</label>
+                    <textarea class="form-control" id="short_legend" name="short_legend">{{old('short_legend')}}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="short_info" class="form-label">Short Info</label>
+                    <textarea class="form-control" id="short_info" name="short_info">{{old('short_info')}}</textarea>
                 </div>
                 <div class="mb-3">
                     <label for="unit_price" class="form-label">Unit Price</label>

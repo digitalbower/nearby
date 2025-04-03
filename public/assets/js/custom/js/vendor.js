@@ -2,11 +2,17 @@ $(document).ready(function () {
     $("#vendorForm").validate({
         rules: {
             name: { required: true, minlength: 3 },
-            contact_info: { required: true, email: true }
+            email: { required: true, email: true },
+            phone: { required: true },
+            validityfrom: { required: true },
+            validityto: { required: true }
         },
         messages: {
             name: { required: "Vendor name is required", minlength: "Must be at least 3 characters" },
-            contact_info: { required: "Contact info is required", email: "Enter a valid email" }
+            email: { required: "Email is required", email: "Enter a valid email" },
+            phone: { required: "Phone is required"},
+            validityfrom: { required: "Validity From is required" },
+            validityto: {required: "Validity To is required" }
         }
     });
 

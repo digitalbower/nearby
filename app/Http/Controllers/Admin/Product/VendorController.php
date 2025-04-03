@@ -32,8 +32,10 @@ class VendorController extends Controller
     {
         $request->validate([
             'name' => 'required|min:3',
-            'contact_info' => 'required|email',
-
+            'email' => 'required|email',
+            'phone' => 'required',
+            'validityfrom' => 'required',
+            'validityto' => 'required',
         ]);
         Vendor::create($request->all());
         return redirect()->route('admin.products.vendors.index')->with('success', 'New Vendor created successfully!');
@@ -54,8 +56,10 @@ class VendorController extends Controller
     {
         $request->validate([
             'name' => 'required|min:3',
-            'contact_info' => 'required|email',
-
+            'email' => 'required|email',
+            'phone' => 'required',
+            'validityfrom' => 'required',
+            'validityto' => 'required',
         ]);
         $vendor->update($request->all());
         return redirect()->route('admin.products.vendors.index')->with('success', 'Vendor updated successfully!');
@@ -67,9 +71,6 @@ class VendorController extends Controller
      */
     public function destroy(Vendor $vendor)
     {
-        if($vendor->products){
-            $vendor->products()->delete();
-        }
         $vendor->delete();
         
         return redirect()->route('admin.products.vendors.index')
