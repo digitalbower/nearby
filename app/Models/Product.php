@@ -40,7 +40,14 @@ class Product extends Model
         return $this->belongsTo(Subcategory::class, 'sub_category_id');
     }
     public function tag() {
-
-        return Tags::whereIn('id', $this->tags_id)->get(); // Fetch users manually
+        $cleanTagIds = trim($this->tags_id, '"'); 
+        $tagIds = explode(',', $cleanTagIds); 
+        $tagIds = array_map('intval', $tagIds); 
+        $tags = Tags::whereIn('id', $tagIds)->pluck('tags'); 
+        return $tags;
+    }
+    public function emirate()
+    { 
+        return $this->belongsTo(Emirate::class, 'emirates_id');
     }
 }

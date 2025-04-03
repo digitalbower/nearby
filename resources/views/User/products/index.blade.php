@@ -12,7 +12,7 @@
         <span class="md:block hidden" x-text="showFilter ? 'Hide Filter' : 'Show Filter'"></span>
       </button>
 
-      <span class="md:text-xl text-sm font-bold text-gray-800 tracking-wide" x-text="products.length + ' Deals Found'">
+      <span class="md:text-xl text-sm font-bold text-gray-800 tracking-wide" x-text="filteredProducts.length + ' Deals Found'">
         <!-- Replace `filteredDeals` with actual deals count dynamically -->
       </span>
       </div>
@@ -39,12 +39,6 @@
             x-cloak
             class="absolute left-0 top-10 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-10"
           >
-            <li
-              class="px-4 py-2 flex items-center gap-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-            >
-              <i class="fas fa-thumbs-up text-blue-500"></i>
-              Recommended
-            </li>
             <li
               class="px-4 py-2 flex items-center gap-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
             >
@@ -132,19 +126,15 @@
                 <i :class="isOpen('location') ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas text-xs"></i>
               </button>
               <div x-show="isOpen('location')" class="mt-2">
-                <input type="text" placeholder="Search locations"
-                  class="w-full border rounded-md p-2 text-sm text-gray-600 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                 <div class="mt-2 space-y-2 max-h-32 overflow-y-auto">
-                  <div class="flex items-center">
-                    <input type="checkbox" id="location1" value="Location 1"
-                      class="form-checkbox rounded text-blue-500">
-                    <label for="location1" class="ml-2 text-sm text-gray-600">Location 1</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input type="checkbox" id="location2" value="Location 2"
-                      class="form-checkbox rounded text-blue-500">
-                    <label for="location2" class="ml-2 text-sm text-gray-600">Location 2</label>
-                  </div>
+                  <template x-for="loc in locations" :key="loc.id">
+                    <div class="flex items-center">
+                      <input type="checkbox" :id="'location' + loc.id" :value="loc.name"
+                        class="form-checkbox rounded text-blue-500"
+                        @change="toggleLocation(loc.name)">
+                      <label :for="'location' + loc.id" class="ml-2 text-sm text-gray-600" x-text="loc.name"></label>
+                    </div>
+                    </template>
                 </div>
               </div>
             </div>
@@ -209,29 +199,36 @@
               </div>
             </div>
 
-            <!-- Price -->
             <div class="border-b pb-4">
+              <!-- Price Section Toggle -->
               <button @click="toggleSection('price')"
                 class="flex justify-between items-center w-full text-gray-700 transition-all duration-300 ease-in-out">
-                <span class="font-semibold ">Price</span>
+                <span class="font-semibold">Price</span>
                 <i :class="isOpen('price') ? 'fa-chevron-up' : 'fa-chevron-down'"
                   class="fas text-xs text-gray-600 transition-all"></i>
               </button>
+            
               <div x-show="isOpen('price')" class="mt-4 transition-all duration-300 ease-in-out">
                 <!-- Min Price Slider -->
+                <input type="range" min="0" max="500" step="1" x-model="minPrice"
+                @input="console.log('Min Price Changed:', minPrice); updateFilters();"
+                  class="w-full accent-blue-500 rounded-lg h-2 hover:accent-blue-600 focus:outline-none">
+                <p class="text-base font-semibold text-gray-800 mt-2">Min: 
+                  <span x-text="formatPrice(minPrice)" class="font-semibold text-blue-600"></span>
+                </p>
             
-                <input type="range" min="0" max="500" x-model="minPrice"
-                  class="w-full accent-blue-500 rounded-lg h-2 hover:accent-blue-600 focus:outline-none">
-                <p class="text-base font-semibold text-gray-800 mt-2">Min: <span x-text="formatPrice(minPrice)" class="font-semibold text-blue-600"></span></p>
-        
                 <!-- Max Price Slider -->
-           
-                <input type="range" min="0" max="500" x-model="maxPrice"
+                <input type="range" min="0" max="500" step="1" x-model="maxPrice"
+                @input="console.log('Max Price Changed:', maxPrice); updateFilters();"
                   class="w-full accent-blue-500 rounded-lg h-2 hover:accent-blue-600 focus:outline-none">
-                <p class="text-base font-semibold text-gray-800 mt-2">Max: <span x-text="formatPrice(maxPrice)" class="font-semibold text-blue-600"></span></p>
+                <p class="text-base font-semibold text-gray-800 mt-2">Max: 
+                  <span x-text="formatPrice(maxPrice)" class="font-semibold text-blue-600"></span>
+                </p>
               </div>
             </div>
-
+            
+            
+            
 
             <!-- Discounts -->
             <div class="border-b pb-2">
@@ -268,7 +265,7 @@
                 <img :src="product.image" :alt="product.title" class="w-full h-48 object-cover">
 
                 <div class="absolute top-2 left-2 flex gap-1">
-                   <span x-text="product.tags.tag_name" class="bg-blue-500 text-white font-semibold text-xs px-2 py-1 rounded"></span>
+                   <span x-text="product.tags" class="bg-blue-500 text-white font-semibold text-xs px-2 py-1 rounded"></span>
                 </div>
               </div>
               <div class="p-4">
@@ -333,25 +330,37 @@
     return {
         products: [],
         categories: [],
+        locations: [],
         selectedCategories: [],
         selectedSubcategories: [],
+        selectedLocations: [],
         favorites: [],
         sortBy: 'recommended',
         openSections: '',
         showGiftable: false, 
+        destinationCoordinates: null, 
+        minPrice: 0,  
+        maxPrice: 500,
+        filteredByPrice: [],
         async fetchProducts() {
             try {
-                let response = await fetch('/user/products/list'); // Replace with your actual API endpoint
-                let data = await response.json();
-                this.products = data.products.map(product => {
+                let response = await fetch('/user/products/list'); 
+                let data = await response.json(); 
+                this.products = data.products.map(product => { 
                  const firstVariant = product.variants?.[0] ?? {};
-                  console.log(product.tags);
+                 const productCoordinates = this.getLocationCoordinates(product.location);
+                 const destinationCoordinates = this.extractCoordinates(product.productlocation_link);
+
             return {
               id: product.id,
               title: product.name ?? 'No title',
               short_description: product.short_description ?? 'No description',
               image: product.image_url ?? 'default-image.jpg',
               location: product.location ?? 'Unknown',
+              category: product.category ?? 'Unknown',
+              subcategory:product.subcategory ?? 'Unknown',
+              productlocation_link: product.productlocation_link,
+              giftable:product.giftable,
               rating: Number(product.rating ?? 4.5),
               reviews: Number(product.reviews ?? 0),
               priceRange: {
@@ -364,32 +373,74 @@
               },
               originalPrice: parseFloat(firstVariant.unit_price ?? 0),
               discountedPrice: parseFloat(firstVariant.discounted_price ?? 0),
-              discount: parseFloat(firstVariant.discount ?? 0),
-              code: product.code ?? '',
-              tags: product.tags ?? [],
+              discount: parseFloat(firstVariant.discounted_percentage ?? 0),
+              tags: product.tags,
+              coordinates: productCoordinates,  
+              destinationCoordinates: destinationCoordinates, 
+              distance: (productCoordinates && destinationCoordinates) 
+                  ? this.calculateDistance(productCoordinates, destinationCoordinates) 
+                  : null
             };
           });
          
-
+        
         this.categories = data.categories.map(category => ({
             id: category.id,
             name: category.name,
-            subCategories: category.subcategories || [],  // Ensure subCategories exist
+            subCategories: category.subcategories || [],  
         }));
-
-        this.tags = data.tags
-        .filter(tag => tag.giftable_deals === 1) // Filter only giftable tags
-        .map(tag => ({
-            id: tag.id,
-            name: tag.tag_name,
+        this.locations = data.locations.map(location => ({
+                    id: location.id,
+                    name: location.name,
         }));
-
-        console.log("All Products:", this.products);
-        console.log("Filtered Giftable Products:", this.products.filter(product => product.tags?.giftable_deals === 1));// Debugging
+        this.updateFilters();
             } catch (error) {
                 console.error("Error fetching products:", error);
             }
         },
+               // Extract coordinates from Google Maps link
+        extractCoordinates(url) {
+            if (!url) return null;
+            let match = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+            if (match) {
+                return { lat: parseFloat(match[1]), lng: parseFloat(match[2]) };
+            }
+            return null;
+        },
+
+        // Get coordinates for product location (you can replace this with an API call)
+        getLocationCoordinates(location) {
+          const predefinedLocations = {
+              "All over UAE": { lat: 24.0000, lng: 54.0000 },  
+              "Abu Dhabi": { lat: 24.466667, lng: 54.366669 },
+              "Dubai": { lat: 25.276987, lng: 55.296249 },
+              "Sharjah": { lat: 25.3374, lng: 55.4121 },
+              "Ajman": { lat: 25.4018, lng: 55.4788 },
+              "Umm Al Quwain": { lat: 25.56473, lng: 55.55517 },
+              "Ras Al Khaimah": { lat: 25.800694, lng: 55.976200 },
+              "Fujairah": { lat: 25.1333, lng: 56.2500 }
+          };
+            return predefinedLocations[location] || null;
+        },
+
+        // Haversine formula to calculate distance in kilometers
+        calculateDistance(coord1, coord2) {
+            const R = 6371; // Earth's radius in km
+            const dLat = (coord2.lat - coord1.lat) * (Math.PI / 180);
+            const dLon = (coord2.lng - coord1.lng) * (Math.PI / 180);
+
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(coord1.lat * (Math.PI / 180)) * Math.cos(coord2.lat * (Math.PI / 180)) *
+                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+            const distanceKm = R * c; // Distance in kilometers
+            const distanceMi = distanceKm * 0.621371; // Convert km to miles
+
+            return distanceMi.toFixed(2); // Return distance in miles
+        },
+
         get availableSubcategories() {
             const subcategories = this.categories
                 .filter(category => this.selectedCategories.includes(category.name))
@@ -398,28 +449,33 @@
             console.log("Filtered Subcategories:", subcategories); // Debugging
             return subcategories;
         },
-        get filteredProducts() {
-            return this.products.filter(product => {
-                const categoryMatch = this.selectedCategories.length === 0 ||
-                    product.categories?.some(cat => this.selectedCategories.includes(cat.name));
+        updateFilters() {
+            console.log("Updating Filters: Min", this.minPrice, "Max", this.maxPrice);
+            
+            // ✅ Ensure prices are numbers
+            this.minPrice = Number(this.minPrice);
+            this.maxPrice = Number(this.maxPrice);
 
-                const subCategoryMatch = this.selectedSubcategories.length === 0 ||
-                    product.subCategories?.some(sub => this.selectedSubcategories.includes(sub.name));
-
-                // Ensure product.tags is an object (not an array)
-                const giftableMatch = this.showGiftable 
-                    ? product.tags && product.tags.giftable_deals === 1  // Directly check the single tag
-                    : true;
-
-                return categoryMatch && subCategoryMatch && giftableMatch;
+            this.filteredByPrice = this.products.filter(product => {
+                console.log("Checking product:", product.title, "Price:", product.originalPrice);
+                return Number(product.originalPrice) >= this.minPrice && Number(product.originalPrice) <= this.maxPrice;
             });
+
+            console.log("Filtered Products Count (by price):", this.filteredByPrice.length);
         },
+        get filteredProducts() {
+              return this.filteredByPrice.filter(product => {
+                  const categoryMatch = this.selectedCategories.length === 0 || this.selectedCategories.includes(String(product.category ?? ''));
+                  const subCategoryMatch = this.selectedSubcategories.length === 0 || this.selectedSubcategories.includes(String(product.subcategory ?? ''));
+                  const locationMatch = this.selectedLocations.length === 0 || this.selectedLocations.includes(String(product.location ?? ''));
+                  const giftableMatch = this.showGiftable ? Boolean(product.giftable) : true;
 
-
-
-
-        get sortedproducts() {
-            return [...this.products].sort((a, b) => {
+                  return categoryMatch && subCategoryMatch && locationMatch && giftableMatch;
+              });
+          },
+       
+        get sortedProducts() {
+            return [...this.filteredProducts].sort((a, b) => {
                 switch (this.sortBy) {
                     case 'price_low_high':
                         return a.discountedPrice - b.discountedPrice;
@@ -428,19 +484,18 @@
                     case 'rating':
                         return b.rating - a.rating;
                     default:
-                        return 0; // 'recommended' - no sorting
+                        return 0; 
                 }
             });
         },
-
-        toggleFavorite(id) {
-          const index = this.favorites.indexOf(id);
-          if (index === -1) {
-            this.favorites.push(id);
-          } else {
-            this.favorites.splice(index, 1);
-          }
+        toggleLocation(name) {
+            if (this.selectedLocations.includes(name)) {
+                this.selectedLocations = this.selectedLocations.filter(loc => loc !== name);
+            } else {
+                this.selectedLocations.push(name);
+            }
         },
+
         toggleFavorite(id) {
             const index = this.favorites.indexOf(id);
             if (index === -1) {
@@ -456,6 +511,9 @@
 
         isOpen(section) {
             return this.openSections === section;
+        },
+        formatPrice(value) {
+            return `$${parseFloat(value).toFixed(2)}`;
         },
         init() {
         this.fetchProducts();
