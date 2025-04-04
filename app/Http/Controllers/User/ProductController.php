@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Emirate;
+use App\Models\NbvTerm;
 use App\Models\Product;
 use App\Models\Subcategory;
 use App\Models\Tags;
@@ -23,25 +24,6 @@ class ProductController extends Controller
         ->whereHas('vendor', function ($query) {
             $query->where('status', 1);
         });
-    
-        // Apply filters dynamically
-        if ($request->has('location')) {
-            $query->where('location', 'LIKE', '%' . $request->location . '%');
-        }
-    
-    
-        // Apply sorting dynamically
-        if ($request->has('sort_by')) {
-            $sortBy = $request->sort_by;
-            $sortDirection = $request->has('sort_order') && strtolower($request->sort_order) == 'desc' ? 'desc' : 'asc';
-    
-            if (in_array($sortBy, ['unit_price', 'discounted_price', 'rating', 'distance'])) {
-                $query->orderBy($sortBy, $sortDirection);
-            }
-        }
-        if ($request->has('giftable') && $request->giftable == 1) {
-            $query->where('giftable', 1);
-        }
         $categories = Category::where('status', 1)
         ->with(['subcategories' => function ($query) {
             $query->select('id', 'category_id', 'name');
@@ -108,7 +90,12 @@ class ProductController extends Controller
     
     public function show($id)
     {
+        $nbvterms = NbvTerm::all();
         $product = Product::findOrFail($id);
-        return view('user.products.show', compact('product'));
+        $tagNames = $product->tag()->toArray();
+        $tag_name = implode(', ', $tagNames); 
+        $gallery = json_decode($product->gallery, true);
+        $variants =  $product->variants; 
+        return view('user.products.show', compact('product','tag_name','gallery','nbvterms','variants'));
     }
 }
