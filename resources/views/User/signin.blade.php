@@ -415,7 +415,7 @@
           adventure!</p>
       </div>
 
-      <form method="POST" action="{{ route('login.submit') }}">
+      <form method="POST" action="{{ route('user.login.submit') }}">
       @csrf
       <div class="space-y-4">
         <div>
@@ -457,7 +457,7 @@
         </div>
 
         <div class="grid grid-cols-1 gap-4 px-2">
-    <a href="{{ route('auth.google') }}"
+    <a href="{{ route('user.auth.google') }}"
        class="px-6 py-2 text-black rounded-lg bg-[#58af0838] hover:bg-[#4a910954] transition duration-300 flex items-center justify-center">
         <i class="fab fa-google mr-2"></i> Sign in with Google
     </a>
@@ -467,7 +467,7 @@
 
       <div class="mt-8 text-center text-base text-gray-800">
         Already have an account?
-        <a href="{{ route('signup') }}"
+        <a href="{{ route('user.signup') }}"
           class="font-semibold text-primary hover:underline">
           Sign Up  here
         </a>

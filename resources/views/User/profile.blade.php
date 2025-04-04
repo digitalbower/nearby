@@ -1,5 +1,14 @@
 <!-- Add this to the bottom of your CSS -->
-
+@extends('User.layouts.main')
+@if ($errors->any())
+    <div class="bg-red-500 text-white p-3 rounded-md">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <!DOCTYPE html>
 <html lang="en">
 
@@ -482,13 +491,11 @@
               <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">
                 <i class="fas fa-venus-mars text-black text-base mr-2"></i> Gender
               </label>
-              <select id="gender" name="gender"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                <option value="">Select your gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
+              <select name="gender">
+        <option value="male" {{ $user->gender == 'male' ? 'selected' : '' }}>Male</option>
+        <option value="female" {{ $user->gender == 'female' ? 'selected' : '' }}>Female</option>
+        <option value="other" {{ $user->gender == 'other' ? 'selected' : '' }}>Other</option>
+    </select>
             </div>
             <div>
               <label for="birthday" class="block text-sm font-medium text-gray-700 mb-1">
@@ -527,7 +534,7 @@
               <select id="country" name="country"
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 <option value="" disabled selected>Select your country</option>
-                <option value="USA">United States</option>
+                <option value="USA">United Statesccccccccc</option>
                 <option value="UK">United Kingdom</option>
                 <option value="India">India</option>
               </select>
@@ -551,10 +558,10 @@
 
           <!-- Save Button -->
           <div class="flex justify-end">
-            <button type="button" id="save-personal-info"
-              class="px-6 py-2 bg-gradient-to-r bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg text-white font-semibold transition-all duration-300 hover:shadow-lg">
-              <i class="fas fa-save"></i> Save Changes
-            </button>
+          <button type="submit" id="save-personal-info"
+    class="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg text-white font-semibold transition-all duration-300 hover:shadow-lg">
+    <i class="fas fa-save"></i> Save Changes
+</button>
           </div>
         </form>
       </div>
@@ -702,97 +709,9 @@
       </div>
     </div>
 
-    <div class="accordion-item mb-3">
-      <button
-        class="accordion-header flex justify-between items-center w-full py-3 px-4 border-gray-300 border-2 rounded-lg"
-        data-tab="payment-method">
-        <span>Payment Method</span>
-        <i class="fas fa-chevron-down"></i>
-      </button>
-      <div class="accordion-content px-0 mt-4 pt-2">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">
-          <i class="fas fa-credit-card text-blue-500 mr-2"></i> Payment Method
-        </h2>
-        <p class="text-gray-600 mb-8">Select your preferred payment method and fill in the required details below.</p>
+   
 
-        <!-- Payment Options -->
-        <div id="payment-options" class="space-y-6">
-          <!-- Credit/Debit Card -->
-          <div data-method="credit-card"
-            class="flex items-center gap-4 bg-gray-50 border border-gray-300 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
-            <i class="fas fa-wallet text-blue-500 text-2xl"></i>
-            <div>
-              <h3 class="text-lg font-semibold text-gray-700">Credit/Debit Card</h3>
-              <p class="text-sm text-gray-500">Pay securely using your credit or debit card.</p>
-            </div>
-          </div>
-          <!-- Bank Transfer -->
-          <div data-method="bank-transfer"
-            class="flex items-center gap-4 bg-gray-50 border border-gray-300 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
-            <i class="fas fa-university text-blue-500 text-2xl"></i>
-            <div>
-              <h3 class="text-lg font-semibold text-gray-700">Bank Transfer</h3>
-              <p class="text-sm text-gray-500">Directly transfer funds from your bank account.</p>
-            </div>
-          </div>
-          <!-- PayPal -->
-          <div data-method="paypal"
-            class="flex items-center gap-4 bg-gray-50 border border-gray-300 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
-            <i class="fab fa-paypal text-blue-500 text-2xl"></i>
-            <div>
-              <h3 class="text-lg font-semibold text-gray-700">PayPal</h3>
-              <p class="text-sm text-gray-500">Use your PayPal account for a quick checkout.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Dynamic Inputs -->
-        <div id="payment-details" class="mt-8 hidden">
-          <!-- Credit/Debit Card Details -->
-          <div id="credit-card-details" class="hidden">
-            <h3 class="font-semibold text-gray-700 mb-4">Credit/Debit Card Details</h3>
-            <div class="space-y-4">
-              <input type="text" placeholder="Card Number"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-              <div class="grid grid-cols-2 gap-4">
-                <input type="text" placeholder="Expiry Date (MM/YY)"
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                <input type="text" placeholder="CVV"
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-              </div>
-              <!-- Save Card Details Checkbox -->
-              <div class="flex items-center">
-                <input type="checkbox" id="save-card"
-                  class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                <label for="save-card" class="ml-2 text-gray-700">Save card details for future payments</label>
-              </div>
-            </div>
-          </div>
-          <!-- Bank Transfer Details -->
-          <div id="bank-transfer-details" class="hidden">
-            <h3 class="font-semibold text-gray-700 mb-4">Bank Transfer Details</h3>
-            <div class="space-y-4">
-              <input type="text" placeholder="Account Number"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-              <input type="text" placeholder="Bank Name"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-            </div>
-          </div>
-          <!-- PayPal Details -->
-          <div id="paypal-details" class="hidden">
-            <h3 class="font-semibold text-gray-700 mb-4">PayPal Details</h3>
-            <input type="email" placeholder="PayPal Email"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-          </div>
-        </div>
-
-        <!-- Action Button -->
-        <div id="continue-button" class="mt-8 hidden">
-          <button
-            class="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 transition-all">
-            Continue to Payment
-          </button>
-        </div>
+       
       </div>
     </div>
   </div>
@@ -854,11 +773,7 @@
               <span>Change password</span>
             </button>
   
-            <button data-tab="payment-method"
-              class="flex items-center space-x-3 px-4 py-3 w-full text-left rounded-lg text-gray-700 hover:bg-gray-50">
-              <i class="fas fa-credit-card"></i>
-              <span>Payment method</span>
-            </button>
+          
           </nav>
         </div>
   
@@ -869,57 +784,65 @@
               <h2 class="text-2xl font-semibold text-gray-800 mb-8 flex items-center gap-3">
                 <i class="fas fa-user-circle text-blue-500"></i> Profile Information
               </h2>
-  
-              <!-- Profile Picture -->
-              <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700 mb-3">
-                  <i class="fas fa-camera text-black text-base mr-2"></i> Profile Picture
-                </label>
-                <div class="flex flex-col md:flex-row items-center gap-6">
-                  <!-- Profile Picture -->
-                  <div class="relative group w-28 h-28">
-                    <img src="https://via.placeholder.com/100" alt="Profile Picture"
-                      class="w-full h-full rounded-full object-cover">
-                    <div
-                      class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full">
-                      <button type="button"
-                        class="text-white text-sm px-3 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        <i class="fas fa-camera"></i>
-                      </button>
-                    </div>
-                  </div>
-  
-                  <!-- Upload Section -->
-                  <div class="flex flex-col gap-2">
-                    <label for="profile-upload"
-                      class="block w-full px-4 py-2 text-sm text-center text-gray-700 border border-dashed border-gray-300 rounded-lg bg-gray-100 hover:bg-gray-200 cursor-pointer">
-                      <i class="fas fa-upload text-blue-500 mr-2"></i> Drag & Drop or <span
-                        class="text-blue-600">Browse</span>
-                      <input type="file" id="profile-upload" class="hidden">
-                    </label>
-                    <p class="text-sm text-black text-base">Supports JPG, PNG. Max size: 2MB.</p>
-                  </div>
-                </div>
-              </div>
-  
-  
+             <!-- Profile Picture Form -->
+
+
+             
+
+   
+    
               <!-- Form Start -->
-              <form class="space-y-6" id="personal-info-form">
+              <form action="{{ route('user.profile.update') }}" method="POST" enctype="multipart/form-data"  class="space-y-6" id="personal-info-form">
+              @csrf
+
+             
+              <div class="mb-4 flex justify-center">
+        <img id="profile-image-preview" 
+             src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://via.placeholder.com/100' }}" 
+             alt="Profile Picture"
+             class="w-28 h-28 rounded-full object-cover border border-gray-300">
+    </div>
+
+    <!-- Upload Button -->
+    
+    <div class="flex flex-col items-center">
+        
+       
+        <input type="file" id="profile-upload" name="profile_picture" 
+       accept="image/*" 
+       onchange="previewProfileImage(event)" 
+       class="block w-full px-3 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+    </div>
+    
+<!-- JavaScript for Live Preview -->
+<script>
+    function previewProfileImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            document.getElementById('profile-image-preview').src = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+
                 <!-- Name Section -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label for="first-name" class="block text-sm font-medium text-gray-700 mb-1">
                       <i class="fas fa-id-badge text-black text-base mr-2"></i> First Name
                     </label>
-                    <input type="text" id="first-name" name="first-name" value="Vivek"
-                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <input type="text" id="first-name" name="first_name" value="{{ old('first_name', $user->first_name) }}"
+    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+
                   </div>
                   <div>
                     <label for="last-name" class="block text-sm font-medium text-gray-700 mb-1">
                       <i class="fas fa-id-card text-black text-base mr-2"></i> Last Name
                     </label>
-                    <input type="text" id="last-name" name="last-name" value="Shakya"
-                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <input type="text" id="last-name" name="last_name" value="{{ old('last_name', $user->last_name) }}"
+    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+
                   </div>
                 </div>
   
@@ -930,19 +853,21 @@
                       <i class="fas fa-venus-mars text-black text-base mr-2"></i> Gender
                     </label>
                     <select id="gender" name="gender"
-                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                      <option value="">Select your gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
-                    </select>
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option value="">Select your gender</option>
+            <option value="male" {{ old('gender', $user->gender) == 'male' ? 'selected' : '' }}>Male</option>
+            <option value="female" {{ old('gender', $user->gender) == 'female' ? 'selected' : '' }}>Female</option>
+            <option value="other" {{ old('gender', $user->gender) == 'other' ? 'selected' : '' }}>Other</option>
+        </select>
                   </div>
                   <div>
                     <label for="birthday" class="block text-sm font-medium text-gray-700 mb-1">
                       <i class="fas fa-birthday-cake text-black text-base mr-2"></i> Birthday
                     </label>
-                    <input type="date" id="birthday" name="birthday"
-                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <input type="date" id="birthday" name="birthday" 
+    value="{{ old('birthday', $user->birthday ? date('Y-m-d', strtotime($user->birthday)) : '') }}"
+    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+
                   </div>
                 </div>
   
@@ -952,15 +877,20 @@
                     <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">
                       <i class="fas fa-phone-alt text-black text-base mr-2"></i> Phone Number
                     </label>
-                    <input type="tel" id="phone" name="phone" placeholder="+91 1234567890"
-                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <input type="tel" id="phone" name="phone"
+    placeholder="+91 1234567890"
+    value="{{ old('phone', $user->phone ?? '') }}"
+    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                   </div>
                   <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
                       <i class="fas fa-envelope text-black text-base mr-2"></i> Email Address
                     </label>
-                    <input type="email" id="email" name="email" value="vivekshakya8447@gmail.com" readonly
-                      class="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-600">
+                    <input type="email" id="email" name="email" 
+    value="{{ $user->email ?? '' }}" 
+    readonly
+    class="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-600 cursor-not-allowed">
+
                   </div>
                 </div>
                 <div class="mb-4">
@@ -971,13 +901,17 @@
   
                   <!-- Select Input -->
                   <div class="relative">
-                    <select id="country" name="country"
-                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                      <option value="" disabled selected>Select your country</option>
-                      <option value="USA">United States</option>
-                      <option value="UK">United Kingdom</option>
-                      <option value="India">India</option>
-                    </select>
+                  <select id="country" name="country"
+    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+    <option value="">Select your country</option>
+    @foreach(App\Models\Country::all() as $country)
+        <option value="{{ $country->country_code }}" 
+            {{ (old('country', $user->country) == $country->country_code) ? 'selected' : '' }}>
+            {{ $country->country }}
+        </option>
+    @endforeach
+</select>
+
   
   
                   </div>
@@ -988,7 +922,8 @@
                     <i class="fas fa-map-marker-alt text-black text-base mr-2"></i> Address
                   </label>
                   <textarea id="address" name="address" rows="3" placeholder="Enter your address"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">{{ old('address', $user->address) }}</textarea>
+
                 </div>
   
   
@@ -998,10 +933,10 @@
   
                 <!-- Save Button -->
                 <div class="flex justify-end">
-                  <button type="button" id="save-personal-info"
-                    class="px-6 py-2 bg-[#58af0838] hover:bg-[#58af0838] rounded-lg text-white font-semibold transition-all duration-300 hover:shadow-lg">
-                    <i class="fas fa-save"></i> Save Changes
-                  </button>
+                <button type="submit" id="save-personal-info"
+    class="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg text-white font-semibold transition-all duration-300 hover:shadow-lg">
+    <i class="fas fa-save"></i> Save Changes
+</button>
                 </div>
               </form>
             </div>
@@ -1012,62 +947,53 @@
               <h2 class="text-2xl font-bold text-gray-800 mb-6">
                 <i class="fas fa-lock text-blue-500 mr-2"></i> Change Password
               </h2>
-              <form class="space-y-6" id="change-password-form">
-                <!-- Current Password -->
-                <div>
-                  <label for="current-password" class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-key text-gray-400 mr-2"></i> Current Password
-                  </label>
-                  <div class="relative">
-                    <input type="password" id="current-password" name="current-password"
-                      placeholder="Enter current password"
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <button type="button"
-                      class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-gray-700 toggle-password">
-                      <i class="fas fa-eye"></i>
-                    </button>
-                  </div>
-                </div>
-  
-                <!-- New Password -->
-                <div>
-                  <label for="new-password" class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-shield-alt text-gray-400 mr-2"></i> New Password
-                  </label>
-                  <div class="relative">
-                    <input type="password" id="new-password" name="new-password" placeholder="Enter new password"
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <button type="button"
-                      class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-gray-700 toggle-password">
-                      <i class="fas fa-eye"></i>
-                    </button>
-                  </div>
-                </div>
-  
-                <!-- Confirm New Password -->
-                <div>
-                  <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-check-circle text-gray-400 mr-2"></i> Confirm New Password
-                  </label>
-                  <div class="relative">
-                    <input type="password" id="confirm-password" name="confirm-password"
-                      placeholder="Re-enter new password"
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <button type="button"
-                      class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-gray-700 toggle-password">
-                      <i class="fas fa-eye"></i>
-                    </button>
-                  </div>
-                </div>
-  
-                <!-- Submit Button -->
-                <div class="flex justify-end mt-4">
-                  <button type="button" id="change-password-btn"
-                    class="px-6 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition duration-300">
-                    <i class="fas fa-save mr-2"></i> Change Password
-                  </button>
-                </div>
-              </form>
+              <form class="space-y-6" id="change-password-form" method="POST" action="{{ route('user.profile.updatepassword') }}">
+    @csrf
+    <!-- Current Password -->
+    <div>
+        <label for="current-password" class="block text-sm font-medium text-gray-700 mb-2">
+            <i class="fas fa-key text-gray-400 mr-2"></i> Current Password
+        </label>
+        <div class="relative">
+            <input type="password" id="current-password" name="current-password"
+                   placeholder="Enter current password"
+                   class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        </div>
+    </div>
+
+    <!-- New Password -->
+    <div>
+        <label for="new-password" class="block text-sm font-medium text-gray-700 mb-2">
+            <i class="fas fa-shield-alt text-gray-400 mr-2"></i> New Password
+        </label>
+        <div class="relative">
+            <input type="password" id="new-password" name="new-password" placeholder="Enter new password"
+                   class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        </div>
+    </div>
+
+    <!-- Confirm New Password -->
+    <div>
+        <label for="new-password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">
+            <i class="fas fa-check-circle text-gray-400 mr-2"></i> Confirm New Password
+        </label>
+        <div class="relative">
+            <input type="password" id="new-password_confirmation" name="new-password_confirmation"
+                   placeholder="Re-enter new password"
+                   class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="flex justify-end mt-4">
+        <button type="submit" id="change-password-btn"
+                class="px-6 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition duration-300">
+            <i class="fas fa-save mr-2"></i> Change Password
+        </button>
+    </div>
+</form>
+           
+
             </div>
   
             <div id="booking" class="tab-content  max-w-4xl mx-auto p-8">
@@ -1771,6 +1697,20 @@
 
 
 
+<script>
+document.querySelectorAll('.toggle-password').forEach(button => {
+    button.addEventListener('click', function () {
+        let input = this.previousElementSibling;
+        if (input.type === "password") {
+            input.type = "text";
+            this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+        } else {
+            input.type = "password";
+            this.innerHTML = '<i class="fas fa-eye"></i>';
+        }
+    });
+});
+</script>
 
 </body>
 

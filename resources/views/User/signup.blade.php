@@ -443,15 +443,16 @@
           <!-- Phone Number field -->
           <div class="flex items-center gap-2">
             <!-- Country Code Dropdown -->
-            <select
-              class="w-1/4 rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
-              name="country_code" required>
-              <option value="+1">+1</option>
-              <option value="+44">+44</option>
-              <option value="+91" selected>+91</option>
-              <option value="+61">+61</option>
-              <option value="+81">+81</option>
-            </select>
+            <select 
+    class="w-1/4 rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+    name="co_id" required>
+    <option value="">Select Country Code</option>
+    @foreach($countries as $country)
+        <option value="{{ $country->id }}" {{ old('country_code_id', isset($user) ? $user->country_code_id : '') == $country->id ? 'selected' : '' }}>
+            {{ $country->country_code }} ({{ $country->country }})
+        </option>
+    @endforeach
+</select>
           
             <!-- Phone Number Input -->
             <input
@@ -464,12 +465,13 @@
           <div class="relative w-full">
             <!-- Styled Select -->
             <select
-              class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" name="country" required>
-              <option>Select your country</option>
-              <option value="USA">United States</option>
-              <option value="UK">United Kingdom</option>
-              <option value="India">India</option>
-            </select>
+    class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    name="country" required>
+    <option value="">Select your country</option>
+    @foreach(App\Models\Country::all() as $country)
+        <option value="{{ $country->country_code }}">{{ $country->country }}</option>
+    @endforeach
+</select>
 
             <!-- Font Awesome Icon -->
 
@@ -481,8 +483,10 @@
             class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Create a password" required type="password" name="password">
 
-            
-<input type="password" name="password_confirmation" placeholder="Confirm Password" required>
+            <input 
+            class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Confirm Password" required type="password" name="password_confirmation">
+
 
           <!-- Terms and conditions -->
 

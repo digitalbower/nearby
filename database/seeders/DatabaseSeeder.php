@@ -27,6 +27,8 @@ class DatabaseSeeder extends Seeder
             TagsSeeder::class,
             LogoSeeder::class,
             EmiratesSeeder::class,
+            CountrySeeder::class,
+            GenderSeeder::class,
         ]);
     }
 }

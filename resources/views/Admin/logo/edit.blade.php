@@ -25,7 +25,7 @@
                 <div class="mb-3">
                 <label for="type" class="form-label">Type</label>
     <select class="form-control" id="type" name="type" required>
-        <option value="company" {{ $logo->type == 'company' ? 'selected' : '' }}>Header</option>
+        <option value="header" {{ $logo->type == 'header' ? 'selected' : '' }}>Header</option>
         <option value="footer" {{ $logo->type == 'footer' ? 'selected' : '' }}>Footer</option>
     </select>
                 </div>

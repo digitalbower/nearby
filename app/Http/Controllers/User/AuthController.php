@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use App\Models\Country;
 
 class AuthController extends Controller
 {
@@ -27,7 +28,7 @@ class AuthController extends Controller
 
         // Attempt to authenticate user
         if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect()->route('home.index')->with('success', 'Login successful!');
+            return redirect()->route('user.index')->with('success', 'Login successful!');
         }
 
         // If authentication fails, return back with error
@@ -51,7 +52,8 @@ class AuthController extends Controller
 
     public function signup()
     {
-        return view('user.signup'); 
+        $countries = Country::all(); 
+        return view('user.signup', compact('countries'));  
     }
 
     public function register(Request $request)
@@ -73,6 +75,7 @@ class AuthController extends Controller
             'email'      => $request->email,
             'phone'      => $request->phone,
             'country'    => $request->country,
+            'cor_id '    => $request->cor_id ,
             'password'   => Hash::make($request->password),
         ]);
 

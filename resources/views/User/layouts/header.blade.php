@@ -20,7 +20,7 @@
             </button>
             <div class="absolute hidden group-hover:block bg-white shadow-md rounded-lg mt-2 w-40">
                 <a href="{{ route('home.index') }}" class="block px-4 py-2 text-black hover:bg-gray-200">Dashboard</a>
-                <form method="POST" action="{{ route('logout') }}" class="block">
+                <form method="POST" action="{{ route('user.logout') }}" class="block">
                     @csrf
                     <button type="submit" class="w-full text-left px-4 py-2 text-black hover:bg-gray-200">Logout</button>
                 </form>
@@ -28,10 +28,10 @@
         </div>
       @else
         <!-- ✅ Show Sign In and Sign Up for Guests -->
-        <a href="{{ route('login') }}" class="text-black flex items-center">
+        <a href="{{ route('user.login') }}" class="text-black flex items-center">
             <i class="fas pr-1 text-cyan-900 fa-sign-in-alt"></i> Sign In
         </a>
-        <a href="{{ route('signup') }}" class="text-black flex items-center">
+        <a href="{{ route('user.signup') }}" class="text-black flex items-center">
             <i class="fas pr-1 text-cyan-900 fa-user-plus"></i> Sign Up
         </a>
       @endauth
@@ -220,7 +220,7 @@
                class="block py-1 lg:px-4 hover:font-semibold hover:border-b-2 border-[#58af0838] hover:text-black from-cyan-300 to-blue-200">Product</a>
         </li>
         <li>
-          <a href="/profile.html"
+          <a href="{{ route('user.profile.index') }}"
                class="block py-1 lg:px-4 hover:font-semibold hover:border-b-2 border-[#58af0838] hover:text-black from-cyan-300 to-blue-200">Profile</a>
         </li>
         <li>

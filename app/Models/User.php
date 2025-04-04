@@ -18,10 +18,18 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
+        'gender',
+        'dob',
+        'phone',
+        'country',
+        'address',
+        'profileicon',
     ];
+    
 
     /**
      * The attributes that should be hidden for serialization.
@@ -45,4 +53,25 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function gender()
+{
+    return $this->belongsTo(Gender::class, 'gender_id');
+}
+
+public function nationality()
+{
+    return $this->belongsTo(Country::class, 'nationality_id');
+}
+
+public function countryOfResidence()
+{
+    return $this->belongsTo(Country::class, 'cor_id');
+}
+
+public function countryCode()
+{
+    return $this->belongsTo(Country::class, 'country_code_id');
+}
+
 }

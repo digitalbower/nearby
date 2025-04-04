@@ -1,5 +1,5 @@
 <!-- Add this to the bottom of your CSS -->
-@extends('user.layouts.app')
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -170,10 +170,10 @@
         <div
           class="hidden container mx-auto lg:px-0 px-4 md:flex  w-full  justify-between items-center py-2 text-sm border-b border-gray-200">
           <div class="flex gap-4">
-          @foreach ($menuItems->where('navigation_placement', 'upper') as $menu)
+          @foreach ($uppermenuItems->where('navigation_placement', 'upper') as $menu)
           <a href="{{ $menu->link }}" class="text-black duration-300">
-            <i class="fas pr-1 text-cyan-900 {{ $menu->link }}"></i>
-            {{ $menu->label }}
+            <i class="fas pr-1 text-cyan-900 {{ $menu->icon }}"></i>
+            {{ $menu->name }}
         </a>
     @endforeach
       </div>
@@ -188,7 +188,7 @@
             </button>
             <div class="absolute hidden group-hover:block bg-white shadow-md rounded-lg mt-2 w-40">
                 <a href="{{ route('home.index') }}" class="block px-4 py-2 text-black hover:bg-gray-200">Dashboard</a>
-                <form method="POST" action="{{ route('logout') }}" class="block">
+                <form method="POST" action="{{ route('user.logout') }}" class="block">
                     @csrf
                     <button type="submit" class="w-full text-left px-4 py-2 text-black hover:bg-gray-200">Logout</button>
                 </form>
@@ -196,10 +196,10 @@
         </div>
     @else
         <!-- ✅ Show Sign In and Sign Up for Guests -->
-        <a href="{{ route('login') }}" class="text-black flex items-center">
+        <a href="{{ route('user.login') }}" class="text-black flex items-center">
             <i class="fas pr-1 text-cyan-900 fa-sign-in-alt"></i> Sign In
         </a>
-        <a href="{{ route('signup') }}" class="text-black flex items-center">
+        <a href="{{ route('user.signup') }}" class="text-black flex items-center">
             <i class="fas pr-1 text-cyan-900 fa-user-plus"></i> Sign Up
         </a>
     @endauth
@@ -215,10 +215,9 @@
           <!-- Main header -->
           <div class="flex justify-between w-full gap-x-2 lg:gap-x-4  items-center py-4 bg-white ">
   
-            <a href="/" class="text-2xl font-bold text-gray-900">
-            <img src="{{ asset('images/NearByVoucherswide.svg') }}" alt="logo" class="w-36 object-fit">
-
-            </a>
+          <a href="{{ $logo->link ?? '/' }}" class="text-2xl font-bold text-gray-900">
+    <img src="{{ asset('storage/' . $logo->image) }}" alt="logo" class="w-36 object-fit">
+</a>
   
             <!-- Mobile Menu Toggle -->
             <button id="mobile-menu-toggle"
@@ -227,62 +226,7 @@
             </button>
   
             <!-- Search Bar -->
-            <form class="hidden md:block relative w-full max-w-2xl">
-              <div class="relative">
-                <input id="search-input" type="text" placeholder="Search for deals"
-                  class="w-full pl-10 pr-20 py-2 rounded-full focus:outline-none border focus:ring-0 focus:ring-none "
-                  onclick="toggleDropdown()"
-                  autocomplete="off"  />
-                <i
-                  class="fas pr-1 text-[#58af0838] fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"></i>
-             
-             
-                <select id="location" name="location"
-                class="absolute right-20 w-auto inset-y-0 px-4 border-none text-gray-500 bg-gray-100 hover:bg-gray-200 flex items-center rounded-r-full focus:outline-none focus:ring-0 focus:ring-[#58af0838]">
-                  <option class="bg-white text-gray-700 hover:bg-gray-100" value="chicago">Chicago</option>
-                  <option class="bg-white text-gray-700 hover:bg-gray-100" value="new-york">New York</option>
-                  <option class="bg-white text-gray-700 hover:bg-gray-100" value="los-angeles">Los Angeles</option>
-                  <option class="bg-white text-gray-700 hover:bg-gray-100" value="san-francisco">San Francisco</option>
-                  <option class="bg-white text-gray-700 hover:bg-gray-100" value="miami">Miami</option>
-                  <option class="bg-white text-gray-700 hover:bg-gray-100" value="dallas">Dallas</option>
-                </select>
-             
-               
-  
-                <div
-                  class="absolute right-0 w-10 h-10  inset-y-0 px-4 -bottom-0 text-gray-500 bg-[#58af0838] hover:bg-[#58af0838] flex items-center justify-center rounded-full">
-                  <i
-                    class="fas text-black fa-search    w-5 h-5"></i>
-                </div>
-  
-                <!-- Dropdown -->
-                <div id="dropdown"
-                  class="absolute z-50 mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-lg hidden">
-                  <!-- Dynamic Items -->
-                  <ul id="dropdown-list" class="divide-y divide-gray-200">
-                    <li class="py-2 px-4 hover:bg-gray-100">Deal
-                      of the Day:
-                      Electronics</li>
-                    <li class="py-2 px-4 hover:bg-gray-100">50%
-                      Off on
-                      Shoes</li>
-                    <li class="py-2 px-4 hover:bg-gray-100">Best
-                      Deals on
-                      Mobiles</li>
-                    <li class="py-2 px-4 hover:bg-gray-100">Discounted
-                      Furniture
-                      Sale</li>
-                    <li class="py-2 px-4 hover:bg-gray-100">Summer
-                      Clothing
-                      Offers</li>
-                    <li class="py-2 px-4 hover:bg-gray-100">Grocery
-                      Discounts
-                      Nearby</li>
-                  </ul>
-                </div>
-              </div>
-            </form>
-  
+           
             <!-- Cart -->
             <a href="/cart.html" class="relative hidden md:block">
               <i class="fas pr-1 text-[#58af0838] fa-shopping-cart w-6 h-6 text-gray-700"></i>
@@ -293,117 +237,26 @@
         </div>
   
         <!-- Mobile menu -->
-        <nav id="mobile-menu"
-          class="hidden  fixed md:top-0 top-20 md:h-auto lg:auto z-30 md:relative md:py-0 py-10 w-full px-4 lg:px-0 bg-white border-y md:flex justify-between border-gray-200">
-          <div class="container mx-auto lg:px-0 px-4 ">
-            <ul class="flex py-2 flex-col md:flex-row md:items-center md:space-x-4 text-gray-700">
-              <li>
-                <a href="{{ route('home.index') }}" 
-                   class="block py-1 lg:px-4 hover:font-semibold hover:border-b-2 border-[#58af0838] hover:text-black from-cyan-300 to-blue-200 border-b-2 active:border-b-4 border-white hover:border-[#58af0838]">
-                  Home
-                </a>
-              </li> 
-              <li class="relative group">
-                <a href=""
-                  class="block py-1 lg:px-4 hover:font-semibold hover:border-b-2 border-[#58af0838] hover:text-black from-cyan-300 to-blue-200">Deals</a>
-                <ul
-                  class="absolute hidden group-hover:block z-50 md:w-[200px] z-50 w-50 pl-4 transition-all duration-300 ease-in-out bg-white border rounded-md shadow-lg mt-0">
-                  <li>
-                    <a href="" class="block py-2 lg:px-4 hover:bg-gray-100">Electronics</a>
-                  </li>
-                  <li>
-                    <a href="" class="block py-2 lg:px-4 hover:bg-gray-100">Clothing</a>
-                  </li>
-                  <li>
-                    <a href="" class="block py-2 lg:px-4 hover:bg-gray-100">Home
-                      Goods</a>
-                  </li>
-                  <li> 
-                    <a href="" class="block py-2 lg:px-4 hover:bg-gray-100">Groceries</a>
-                  </li>
-                  <li> 
-                    <a href="" class="block py-2 lg:px-4 hover:bg-gray-100">Furniture</a>
-                  </li>
-                  <li> 
-                    <a href="" class="block py-2 lg:px-4 hover:bg-gray-100">Sports
-                      Equipment</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="relative group">
-                <a href=""
-                  class="block py-1 lg:px-4 hover:font-semibold hover:border-b-2 border-[#58af0838] hover:text-black from-cyan-300 to-blue-200">Coupons</a>
-                <ul
-                  class="absolute hidden group-hover:block z-50 md:w-[200px] pl-4 transition-all duration-300 ease-in-out bg-white border rounded-md shadow-lg mt-0">
-                  <li> 
-                    <a href="" class="block py-2 lg:px-4 hover:bg-gray-100">Electronics</a>
-                  </li>
-                  <li>
-                    <a href="" class="block py-2 lg:px-4 hover:bg-gray-100">Clothing</a>
-                  </li>
-                  <li>
-                    <a href="" class="block py-2 lg:px-4 hover:bg-gray-100">Home
-                      Goods</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="relative group">
-                <a href=""
-                  class="block py-1 lg:px-4 hover:font-semibold hover:border-b-2 border-[#58af0838] hover:text-black from-cyan-300 to-blue-200">Stores</a>
-                <ul
-                  class="absolute hidden group-hover:block z-50 md:w-[200px] pl-4 transition-all duration-300 ease-in-out bg-white border rounded-md shadow-lg mt-0">
-                  <li>
-                    <a href="" class="block py-2 lg:px-4 hover:bg-gray-100">Electronics</a>
-                  </li>
-                  <li>
-                    <a href="" class="block py-2 lg:px-4 hover:bg-gray-100">Clothing</a>
-                  </li>
-                  <li>
-                    <a href="" class="block py-2 lg:px-4 hover:bg-gray-100">Home
-                      Goods</a>
-                  </li>
-                </ul>
-              </li>
-              <!-- <li>
-                  <a href="/booking-confirmation.html"
-                    class="block py-1 lg:px-4 hover:font-semibold hover:border-b-2 border-[#58af0838] hover:text-black from-cyan-300 to-blue-200">booking
-                    conformation</a>
-                </li>
-                <li>
-                  <a href="/checkout.html"
-                    class="block py-3 lg:px-4 hover:font-semibold hover:text-black from-cyan-300 to-blue-200 rounded-md">checkout
-                  </a>
-                </li>
-  
-                <li>
-                  <a href="/filter.html"
-                    class="block py-3 lg:px-4 hover:font-semibold hover:text-black from-cyan-300 to-blue-200 rounded-md">Filter</a>
-                </li>
-                <li>
-                  <a href="/my-booking.html"
-                    class="block py-3 lg:px-4 hover:font-semibold hover:text-black from-cyan-300 to-blue-200 rounded-md">my
-                    booking</a>
-                </li> -->
-              <li>
-                <a href="{{ route('user.products.index') }}"
-                     class="block py-1 lg:px-4 hover:font-semibold hover:border-b-2 border-[#58af0838] hover:text-black from-cyan-300 to-blue-200">Product</a>
-              </li>
-              <li>
-                <a href=""
-                     class="block py-1 lg:px-4 hover:font-semibold hover:border-b-2 border-[#58af0838] hover:text-black from-cyan-300 to-blue-200">Profile</a>
-              </li>
-              <li>
-                <a href=""
-                     class="block py-1 lg:px-4 hover:font-semibold hover:border-b-2 border-[#58af0838] hover:text-black from-cyan-300 to-blue-200">Contact</a>
-              </li>
-              <li>
-                <a href="{{ route('login') }}"
-                     class="block py-1 lg:px-4 hover:font-semibold hover:border-b-2 border-[#58af0838] hover:text-black from-cyan-300 to-blue-200">signin</a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-  
+        <nav id="mobile-menu" class="hidden fixed md:top-0 top-20 md:h-auto lg:auto z-30 md:relative md:py-0 py-10 w-full px-4 lg:px-0 bg-white border-y md:flex justify-between border-gray-200">
+    <div class="container mx-auto lg:px-0 px-4">
+        <ul class="flex py-2 flex-col md:flex-row md:items-center md:space-x-4 text-gray-700">
+        @foreach($lowermenuitem as $menu)
+        @php
+        // Check if it's a named route
+        $url = Route::has($menu->link) ? route($menu->link) : $menu->link;
+    @endphp
+        <li> 
+            <a href="{{ $url }}"
+               class="block py-1 lg:px-4 hover:font-semibold hover:border-b-2 border-[#58af0838] hover:text-black">
+                {!! $menu->icon ? '<i class="' . $menu->icon . ' mr-2"></i>' : '' !!}
+                {{ $menu->name }}
+            </a>
+        </li>
+    @endforeach
+        </ul>
+    </div>
+</nav>
+
       </header>
 
   </div>
@@ -424,96 +277,21 @@
           <div id="menuContent" class="hidden md:block p-4">
             <h2 class="hidden lg:block text-2xl ml-5 font-bold mb-6 text-gray-700">Categories</h2>
             <nav class="space-y-2 ml-5">
-              <a href="/category/beauty"
-                class="flex items-center justify-between py-3 px-4 rounded hover:bg-white/40 transition-colors duration-200 text-gray-700">
-                <div class="flex items-center gap-3">
-                  <i class="fas fa-heart h-5 w-5"></i><span class="font-medium">BEAUTY</span>
-                </div>
-                <div class="flex items-center">
-                  <i class="fas fa-chevron-right h-4 w-4 ml-2"></i>
-                </div>
-              </a>
-              <a href="/category/events"
-                class="flex items-center justify-between py-3 px-4 rounded hover:bg-white/40 transition-colors duration-200 text-gray-700">
-                <div class="flex items-center gap-3">
-                  <i class="fas fa-calendar h-5 w-5"></i><span class="font-medium">EVENTS</span>
-                </div>
-                <div class="flex items-center">
-                  <i class="fas fa-chevron-right h-4 w-4 ml-2"></i>
-                </div>
-              </a>
-              <a href="/category/fashion"
-                class="flex items-center justify-between py-3 px-4 rounded hover:bg-white/40 transition-colors duration-200 text-gray-700">
-                <div class="flex items-center gap-3">
-                  <i class="fas fa-tshirt h-5 w-5"></i><span class="font-medium">FASHION</span>
-                </div>
-                <div class="flex items-center">
-                  <i class="fas fa-chevron-right h-4 w-4 ml-2"></i>
-                </div>
-              </a>
-              <a href="/category/fitness"
-                class="flex items-center justify-between py-3 px-4 rounded hover:bg-white/40 transition-colors duration-200 text-gray-700">
-                <div class="flex items-center gap-3">
-                  <i class="fas fa-dumbbell h-5 w-5"></i><span class="font-medium">FITNESS</span>
-                </div>
-                <div class="flex items-center">
-                  <i class="fas fa-chevron-right h-4 w-4 ml-2"></i>
-                </div>
-              </a>
-              <a href="/category/food &amp; drink"
-                class="flex items-center justify-between py-3 px-4 rounded hover:bg-white/40 transition-colors duration-200 text-gray-700">
-                <div class="flex items-center gap-3">
-                  <i class="fas fa-utensils h-5 w-5"></i><span class="font-medium">FOOD &amp; DRINK</span>
-                </div>
-                <div class="flex items-center">
-                  <i class="fas fa-chevron-right h-4 w-4 ml-2"></i>
-                </div>
-              </a>
-              <a href="/category/furniture"
-                class="flex items-center justify-between py-3 px-4 rounded hover:bg-white/40 transition-colors duration-200 text-gray-700">
-                <div class="flex items-center gap-3">
-                  <i class="fas fa-couch h-5 w-5"></i><span class="font-medium">FURNITURE</span>
-                </div>
-                <div class="flex items-center">
-                  <i class="fas fa-chevron-right h-4 w-4 ml-2"></i>
-                </div>
-              </a>
-              <a href="/category/home &amp; garden"
-                class="flex items-center justify-between py-3 px-4 rounded hover:bg-white/40 transition-colors duration-200 text-gray-700">
-                <div class="flex items-center gap-3">
-                  <i class="fas fa-home h-5 w-5"></i><span class="font-medium">HOME &amp; GARDEN</span>
-                </div>
-                <div class="flex items-center">
-                  <i class="fas fa-chevron-right h-4 w-4 ml-2"></i>
-                </div>
-              </a>
-              <a href="/category/shopping"
-                class="flex items-center justify-between py-3 px-4 rounded hover:bg-white/40 transition-colors duration-200 text-gray-700">
-                <div class="flex items-center gap-3">
-                  <i class="fas fa-shopping-bag h-5 w-5"></i><span class="font-medium">SHOPPING</span>
-                </div>
-                <div class="flex items-center">
-                  <i class="fas fa-chevron-right h-4 w-4 ml-2"></i>
-                </div>
-              </a>
-              <a href="/category/travel"
-                class="flex items-center justify-between py-3 px-4 rounded hover:bg-white/40 transition-colors duration-200 text-gray-700">
-                <div class="flex items-center gap-3">
-                  <i class="fas fa-plane h-5 w-5"></i><span class="font-medium">TRAVEL</span>
-                </div>
-                <div class="flex items-center">
-                  <i class="fas fa-chevron-right h-4 w-4 ml-2"></i>
-                </div>
-              </a>
-            </nav>
-            <div class="mt-8 pt-6 ml-5 border-t border-white/20">
-              <a href="/categories"
-                class="inline-flex rounded-lg p-2 px-3 items-center text-gray-700 hover:bg-white/40 transition-colors duration-200 text-gray-700 font-medium  transition-all">
-                ALL CATEGORIES
-                <i
-                  class="fas fa-chevron-right h-4 w-4 ml-1 transition-transform transform group-hover:translate-x-1"></i>
-              </a>
+    @foreach ($categories as $category)
+        <a href="{{ url('/category/' . $category->code) }}"
+           class="flex items-center justify-between py-3 px-4 rounded hover:bg-white/40 transition-colors duration-200 text-gray-700">
+            <div class="flex items-center gap-3">
+                <i class="{{ $category->categoryicon }} h-5 w-5"></i>
+                <span class="font-medium">{{ strtoupper($category->name) }}</span>
             </div>
+            <div class="flex items-center">
+                <i class="fas fa-chevron-right h-4 w-4 ml-2"></i>
+            </div>
+        </a>
+    @endforeach
+</nav>
+
+           
 
           </div>
         </aside>
