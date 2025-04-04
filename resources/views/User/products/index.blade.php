@@ -239,20 +239,16 @@
               </button>
               <div x-show="isOpen('discounts')" class="mt-2 space-y-2">
                 <div class="flex items-center">
-                  <input type="radio" id="discount50" name="discount" value="50%" class="form-radio text-blue-500">
-                  <label for="discount50" class="ml-2 text-sm text-gray-600">All</label>
+                  <input type="radio" id="discountAll" name="discount" :value="0" x-model.number="minDiscountPercentage" class="form-radio text-blue-500">
+                  <label for="discountAll" class="ml-2 text-sm text-gray-600">All</label>
                 </div>
                 <div class="flex items-center">
-                  <input type="radio" id="discount25" name="discount" value="25%" class="form-radio text-blue-500">
+                  <input type="radio" id="discount25" name="discount" :value="25" x-model.number="minDiscountPercentage" class="form-radio text-blue-500">
                   <label for="discount25" class="ml-2 text-sm text-gray-600">25% or more</label>
                 </div>
                 <div class="flex items-center">
-                  <input type="radio" id="discount50" name="discount" value="50%" class="form-radio text-blue-500">
+                  <input type="radio" id="discount50" name="discount" :value="50" x-model.number="minDiscountPercentage" class="form-radio text-blue-500">
                   <label for="discount50" class="ml-2 text-sm text-gray-600">50% or more</label>
-                </div>
-                <div class="flex items-center">
-                  <input type="radio" id="discount25" name="discount" value="25%" class="form-radio text-blue-500">
-                  <label for="discount25" class="ml-2 text-sm text-gray-600">25% or more</label>
                 </div>
               </div>
             </div>
@@ -341,6 +337,7 @@
         destinationCoordinates: null, 
         minPrice: 0,  
         maxPrice: 500,
+        minDiscountPercentage: 0,
         filteredByPrice: [],
         async fetchProducts() {
             try {
@@ -469,8 +466,9 @@
                   const subCategoryMatch = this.selectedSubcategories.length === 0 || this.selectedSubcategories.includes(String(product.subcategory ?? ''));
                   const locationMatch = this.selectedLocations.length === 0 || this.selectedLocations.includes(String(product.location ?? ''));
                   const giftableMatch = this.showGiftable ? Boolean(product.giftable) : true;
+                  const discountMatch = product.discount >= Number(this.minDiscountPercentage);
 
-                  return categoryMatch && subCategoryMatch && locationMatch && giftableMatch;
+                  return categoryMatch && subCategoryMatch && locationMatch && giftableMatch && discountMatch;
               });
           },
        
