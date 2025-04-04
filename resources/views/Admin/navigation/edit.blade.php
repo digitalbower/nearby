@@ -23,7 +23,7 @@
 
             <div class="form-group">
                 <label for="link">Link</label>
-                <input type="text" name="link" class="form-control" value="{{ $navigationMenu->link }}" required>
+                <input type="text" name="link" class="form-control" value="{{ $navigationMenu->link }}">
             </div>
 
             <div class="form-group">
@@ -33,7 +33,7 @@
 
             <div class="form-group">
                 <label for="type">Type</label>
-                <select name="type" class="form-control" required>
+                <select name="navigation_placement" class="form-control" required>
                     <option value="upper" {{ $navigationMenu->type == 'upper' ? 'selected' : '' }}>Upper</option>
                     <option value="lower" {{ $navigationMenu->type == 'lower' ? 'selected' : '' }}>Lower</option>
                 </select>
@@ -41,7 +41,7 @@
 
             <div class="form-group">
                 <label for="status">Active</label>
-                <input type="checkbox" name="status" value="1" {{ $navigationMenu->status ? 'checked' : '' }}>
+                <input type="checkbox" name="active" value="1" {{ $navigationMenu->active ? 'checked' : '' }}>
             </div>
 
             <button type="submit" class="btn btn-primary">Update</button>

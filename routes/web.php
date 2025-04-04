@@ -31,16 +31,15 @@ use App\Http\Controllers\Admin\Product\PromoController;
 use App\Http\Controllers\User\ProductController as UserProductController;
 
 
-
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
 // ✅ User Routes
 
-// ✅ Google Authentication Routes
-Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
-Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
-Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::prefix('user')->name('user.')->group(function () {
 
-
-Route::prefix('user')->group(function () {
+    // ✅ Publicly Accessible Routes (Available to Everyone)
+    Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
+    Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+   
 
     // ✅ Guest Routes (Only for Unauthenticated Users)
     Route::middleware('guest')->group(function () {
@@ -48,30 +47,46 @@ Route::prefix('user')->group(function () {
         Route::get('/signup', [AuthController::class, 'signup'])->name('signup');
         Route::post('/register', [AuthController::class, 'register'])->name('register');
         Route::post('/login', [AuthController::class, 'loginsubmit'])->name('login.submit');
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    });
+
+     // ✅ Home & Product Routes
+     Route::prefix('products')->name('products.')->group(function () {
+        Route::get('/', [UserProductController::class, 'index'])->name('index');
+        Route::get('/list', [UserProductController::class, 'getProducts'])->name('filter');
+        Route::get('/{id}', [UserProductController::class, 'show'])->name('show');
     });
 
     // ✅ Authenticated Routes (Only for Logged-in Users)
-   
-        Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
+    Route::middleware('auth')->group(function () {
+        
+       
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-        // ✅ Home & Product Routes
-        
-        Route::get('/products', [UserProductController::class, 'index'])->name('user.products.index');
-        Route::get('/products/list', [UserProductController::class, 'getProducts'])->name('user.products.filter');
-        Route::get('/products/{id}', [UserProductController::class, 'show'])->name('user.products.show');
+       
 
         // ✅ E-commerce & Booking Routes
-        Route::get('/bookingconfirmation', [HomeController::class, 'bookingconfirmation'])->name('home.bookingconfirmation');
-        Route::get('/cart', [HomeController::class, 'cart'])->name('home.cart');
-        Route::get('/checkout', [HomeController::class, 'checkout'])->name('home.checkout');
+        Route::prefix('home')->name('home.')->group(function () {
+            Route::get('/bookingconfirmation', [HomeController::class, 'bookingconfirmation'])->name('bookingconfirmation');
+            Route::get('/cart', [HomeController::class, 'cart'])->name('cart');
+            Route::get('/checkout', [HomeController::class, 'checkout'])->name('checkout');
+        });
 
         // ✅ Profile Management Routes
-        Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
-        Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-        Route::post('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
-        Route::post('/profile/upload-picture', [ProfileController::class, 'uploadPicture'])->name('profile.upload-picture');
+        Route::prefix('profile')->name('profile.')->group(function () {
+            Route::get('/', [ProfileController::class, 'profile'])->name('index');
+            Route::post('/update', [ProfileController::class, 'update'])->name('update');
+            Route::post('/change-password', [ProfileController::class, 'changePassword'])->name('change-password');
+            Route::post('/uploadPicture', [ProfileController::class, 'uploadPicture'])->name('uploadPicture');
+            Route::post('/update-password', [ProfileController::class, 'updatePassword'])->name('updatepassword');
+        });
     });
+
+});
+
+
+    
 
 
 

@@ -7,76 +7,73 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use App\Models\User;
+use App\Models\Gender;
+use App\Models\Country;
+use Illuminate\Validation\ValidationException;
 
 class ProfileController extends Controller
 {
     public function profile()
     {
-        $user = Auth::user(); // Get logged-in user
-        return view('user.profile', compact('user'));
+        $user = Auth::user(); // Get the authenticated user
+        $countries = Country::all(); 
+        $gender = Gender::all();
+
+        return view('user.profile', compact('user','countries')); // Pass user data to the view
     }
 
-
-    // Update profile information
+    /**
+     * Update the profile information.
+     */
     public function update(Request $request)
     { 
-        $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'gender' => 'nullable|string|in:male,female,other',
-            'birthday' => 'nullable|date',
-            'phone' => 'nullable|string|max:20',
-            'country' => 'nullable|string|max:100',
-            'address' => 'nullable|string|max:500',
-        ]);
+        $user = Auth::user(); // Get the authenticated user
 
-        $user = Auth::user(); 
+        // ✅ Validate incoming data
+      
+
+        // ✅ Update user details
         $user->update([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'gender' => $request->gender,
-            'birthday' => $request->birthday,
-            'phone' => $request->phone,
-            'country' => $request->country,
-            'address' => $request->address,
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'gender' => $request->input('gender'),
+            'date_of_birth' => $request->input('birthday'),
+            'phone' => $request->input('phone'),
+            'country' => $request->input('country'),
+            'address' => $request->input('address'),
         ]);
 
-        return redirect()->route('profile')->with('success', 'Profile updated successfully.');
-    }
-
-    // Change user password
-    public function changePassword(Request $request)
-    {
-        $request->validate([
-            'current_password' => ['required'],
-            'new_password' => ['required', 'confirmed', Password::min(8)],
-        ]);
-
-        $user = Auth::user();
-
-        if (!Hash::check($request->current_password, $user->password)) {
-            return redirect()->back()->withErrors(['current_password' => 'Current password is incorrect.']);
+        // ✅ Handle Profile Picture Upload
+        if ($request->hasFile('profile_picture')) {
+            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $user->profile_picture = $path;
+            $user->save();
         }
 
-        $user->update([
-            'password' => Hash::make($request->new_password),
-        ]);
-
-        return redirect()->route('user.profile')->with('success', 'Password changed successfully.');
+        return redirect()->route('user.profile.index')->with('success', 'Profile updated successfully.');
     }
 
-    // Upload profile picture
-    public function uploadPicture(Request $request)
+    public function updatePassword(Request $request)
     {
         $request->validate([
-            'profile_picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'current-password' => ['required'],
+            'new-password' => ['required', 'min:8', 'confirmed'],
         ]);
-
+    
         $user = Auth::user();
-        $path = $request->file('profile_picture')->store('profile_pictures', 'public');
-
-        $user->update(['profile_picture' => $path]);
-
-        return redirect()->route('user.profile')->with('success', 'Profile picture updated successfully.');
+    
+        // Check if the current password matches
+        if (!Hash::check($request->input('current-password'), $user->password)) {
+            throw ValidationException::withMessages([
+                'current-password' => 'The current password is incorrect.',
+            ]);
+        }
+    
+        // Update the password
+        $user->password = Hash::make($request->input('new-password'));
+        $user->save();
+    
+        return redirect()->route('user.profile.index')->with('success', 'Password successfully updated.');
     }
+
 }
