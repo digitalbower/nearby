@@ -17,7 +17,17 @@ class ProductVariantController extends Controller
      */
     public function index()
     {
-        $variants = ProductVariant::with('product')->get();
+        $variants = ProductVariant::latest()
+        ->whereHas('product', function ($query) {
+            $query->where('status', 1)
+                  ->whereNull('deleted_at')
+                  ->whereHas('vendor', function ($vendorQuery) {
+                      $vendorQuery->where('status', 1)
+                                  ->whereNull('deleted_at');
+                  });
+        })
+        ->get();
+    
         return view('admin.products.product_variants.index')->with(['variants'=>$variants]);
     }
 

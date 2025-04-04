@@ -114,10 +114,10 @@ class ProductController extends Controller
         $product->importantinfo  = $request->importantinfo;
         $product->validity_from  = $request->validity_from;
         $product->validity_to  = $request->validity_to;
-        $product->giftable  = $request->giftable;
-        $product->herocarousel = $request->herocarousel;
-        $product->trending = $request->trending;
-        $product->categorycarousel = $request->categorycarousel;
+        $product->giftable  = $request->has('giftable') ? 1 : 0;
+        $product->herocarousel = $request->has('herocarousel') ? 1 : 0;
+        $product->trending = $request->has('trending') ? 1 : 0;
+        $product->categorycarousel = $request->has('categorycarousel') ? 1 : 0;
         $product->save();
         return redirect()->route('admin.products.index')->with('success', 'New Product created successfully!');
     }
@@ -204,10 +204,10 @@ class ProductController extends Controller
         $product->importantinfo  = $request->importantinfo;
         $product->validity_from  = $request->validity_from;
         $product->validity_to  = $request->validity_to;
-        $product->giftable  = $request->giftable;
-        $product->herocarousel = $request->herocarousel;
-        $product->trending = $request->trending;
-        $product->categorycarousel = $request->categorycarousel;
+        $product->giftable  = $request->has('giftable') ? 1 : 0;
+        $product->herocarousel = $request->has('herocarousel') ? 1 : 0;
+        $product->trending = $request->has('trending') ? 1 : 0;
+        $product->categorycarousel = $request->has('categorycarousel') ? 1 : 0;
         if (!empty($galleryArray)) {
             $product->gallery = json_encode($galleryArray);
         }
