@@ -9,7 +9,6 @@
 
 </head>
 <body class="bg-white">
-  <div class=" ">
     @include('user.layouts.header')
     @yield('content')
     @include('user.layouts.footer')

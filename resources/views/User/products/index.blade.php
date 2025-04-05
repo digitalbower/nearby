@@ -12,7 +12,7 @@
         <span class="md:block hidden" x-text="showFilter ? 'Hide Filter' : 'Show Filter'"></span>
       </button>
 
-      <span class="md:text-xl text-sm font-bold text-gray-800 tracking-wide" x-text="filteredProducts.length + ' Deals Found'">
+      <span class="md:text-xl text-sm font-bold text-gray-800 tracking-wide" x-text="sortedProducts.length + ' Deals Found'">
         <!-- Replace `filteredDeals` with actual deals count dynamically -->
       </span>
       </div>
@@ -20,7 +20,7 @@
         <!-- Deals Count -->
       
         <!-- Dropdown Container -->
-        <div class="relative lg:w-64 w-full ml-auto">
+        <div class="relative lg:w-64 w-full ml-auto" x-data="{ showFilters: false }">
           <!-- Dropdown Toggle Button -->
           <button
             @click="showFilters = !showFilters"
@@ -35,24 +35,28 @@
       
           <!-- Dropdown Options -->
           <ul
-            x-show="showFilters"
-            x-cloak
-            class="absolute left-0 top-10 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-10"
-          >
-            <li
-              class="px-4 py-2 flex items-center gap-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-            >
-              <i class="fas fa-arrow-down text-green-500"></i>
-              Price: Low to High
-            </li>
-            <li
-              class="px-4 py-2 flex items-center gap-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+          x-show="showFilters"
+          x-cloak
+          @click.away="showFilters = false"
+          class="absolute left-0 top-10 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-10"
+        >
+        <li @click="setSort('price_low_high')"
+          :class="sortBy === 'price_low_high' ? 'bg-blue-100' : ''"
+            class="px-4 py-2 flex items-center gap-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+            <i class="fas fa-arrow-down text-green-500"></i>
+            Price: Low to High
+          </li>
+      
+          <li @click="setSort('price_high_low')"
+            :class="sortBy === 'price_high_low' ? 'bg-blue-100' : ''"
+            class="px-4 py-2 flex items-center gap-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
             >
               <i class="fas fa-arrow-up text-red-500"></i>
               Price: High to Low
             </li>
-            <li
-              class="px-4 py-2 flex items-center gap-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+          <li @click="setSort('rating')"
+            :class="sortBy === 'rating' ? 'bg-blue-100' : ''"
+            class="px-4 py-2 flex items-center gap-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
             >
               <i class="fas fa-star text-yellow-500"></i>
               Rating
@@ -148,10 +152,10 @@
                   <i :class="isOpen('giftable') ? 'fa-chevron-up' : 'fa-chevron-down'"
                       class="fas text-xs text-gray-600 transition-all"></i>
               </button>
-              <div x-show="isOpen('giftable')"    x-init="$watch('showGiftable', value => console.log(filteredProducts))"  class="mt-4 transition-all duration-300 ease-in-out">
+              <div x-show="isOpen('giftable')"  class="mt-4 transition-all duration-300 ease-in-out">
                   <label for="giftable" class="flex items-center space-x-3 cursor-pointer">
                       <div class="relative">
-                          <input type="checkbox" id="giftable" name="giftable" class="sr-only peer" x-model="showGiftable" />
+                          <input type="checkbox" id="giftable" name="giftable" class="sr-only peer" x-model="showGiftable" @change="updateFilters()" />
                           <div class="block w-10 h-5 bg-gray-300 rounded-full peer-checked:bg-blue-600 transition-all"></div>
                           <div class="dot absolute left-1 top-1 bg-white w-3 h-3 rounded-full transition-all peer-checked:translate-x-4"></div>
                       </div>
@@ -211,7 +215,7 @@
               <div x-show="isOpen('price')" class="mt-4 transition-all duration-300 ease-in-out">
                 <!-- Min Price Slider -->
                 <input type="range" min="0" max="500" step="1" x-model="minPrice"
-                @input="console.log('Min Price Changed:', minPrice); updateFilters();"
+                @input="updateFilters();"
                   class="w-full accent-blue-500 rounded-lg h-2 hover:accent-blue-600 focus:outline-none">
                 <p class="text-base font-semibold text-gray-800 mt-2">Min: 
                   <span x-text="formatPrice(minPrice)" class="font-semibold text-blue-600"></span>
@@ -219,7 +223,7 @@
             
                 <!-- Max Price Slider -->
                 <input type="range" min="0" max="500" step="1" x-model="maxPrice"
-                @input="console.log('Max Price Changed:', maxPrice); updateFilters();"
+                @input="updateFilters();"
                   class="w-full accent-blue-500 rounded-lg h-2 hover:accent-blue-600 focus:outline-none">
                 <p class="text-base font-semibold text-gray-800 mt-2">Max: 
                   <span x-text="formatPrice(maxPrice)" class="font-semibold text-blue-600"></span>
@@ -239,15 +243,15 @@
               </button>
               <div x-show="isOpen('discounts')" class="mt-2 space-y-2">
                 <div class="flex items-center">
-                  <input type="radio" id="discountAll" name="discount" :value="0" x-model.number="minDiscountPercentage" class="form-radio text-blue-500">
+                  <input type="radio" id="discountAll" name="discount" :value="0" x-model.number="minDiscountPercentage"  @change="updateFilters()" class="form-radio text-blue-500">
                   <label for="discountAll" class="ml-2 text-sm text-gray-600">All</label>
                 </div>
                 <div class="flex items-center">
-                  <input type="radio" id="discount25" name="discount" :value="25" x-model.number="minDiscountPercentage" class="form-radio text-blue-500">
+                  <input type="radio" id="discount25" name="discount" :value="25" x-model.number="minDiscountPercentage"  @change="updateFilters()" class="form-radio text-blue-500">
                   <label for="discount25" class="ml-2 text-sm text-gray-600">25% or more</label>
                 </div>
                 <div class="flex items-center">
-                  <input type="radio" id="discount50" name="discount" :value="50" x-model.number="minDiscountPercentage" class="form-radio text-blue-500">
+                  <input type="radio" id="discount50" name="discount" :value="50" x-model.number="minDiscountPercentage"  @change="updateFilters()" class="form-radio text-blue-500">
                   <label for="discount50" class="ml-2 text-sm text-gray-600">50% or more</label>
                 </div>
               </div>
@@ -255,47 +259,49 @@
           </div>
         </div>
         <div :class="showFilter ? 'lg:grid gap-6 md:grid-cols-2 lg:grid-cols-3 w-full' : 'grid gap-6 md:grid-cols-2 lg:grid-cols-4 w-full'" class="transition-all duration-300">
-          <template x-for="product in filteredProducts" :key="product.id">
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-              <div class="relative">
-                <img :src="product.image" :alt="product.title" class="w-full h-48 object-cover">
+          <template x-for="product in sortedProducts" :key="product.id">
+            <a :href="'/user/products/' + product.id" class="block transition-all duration-300 rounded-lg">
+              <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="relative">
+                  <img :src="product.image" :alt="product.title" class="w-full h-48 object-cover">
 
-                <div class="absolute top-2 left-2 flex gap-1">
-                   <span x-text="product.tags" class="bg-blue-500 text-white font-semibold text-xs px-2 py-1 rounded"></span>
-                </div>
-              </div>
-              <div class="p-4">
-                <h3 x-text="product.title" class="font-semibold text-lg mb-2"></h3>
-              <div class="flex gap-x-1">
-                <i class="fas fa-map-marker-alt"></i>
-                <p x-text="product.location" class="text-sm text-gray-600 mb-2"></p>
-              </div>
-                <div class="flex items-center mb-2">
-                  <span class="text-sm mr-1">★</span>
-                  <span class="text-sm mr-1">★</span>
-                  <span class="text-sm mr-1">★</span>
-                  <span class="text-sm mr-1">★</span>
-                  <span class="text-sm mr-1">★</span>
-
-                  <span x-text="product.rating.toFixed(1)" class="text-sm mr-1"></span>
-                  
-                  <span x-text="'(' + product.reviews.toLocaleString() + ')'" class="text-sm text-gray-600 mr-2"></span>
-                 
-                   
-                  <span x-text="product.distance + ' mi'" class="text-sm text-gray-600"></span>
-                </div>
-               <p class="text-gray-700 text-sm mb-2 leading-relaxed" x-text="product.description"></p>
-                <div class="flex items-center justify-between">
-                  <div>
-                    <span x-text="'$' + product.discountedPrice.toFixed(2)" class="text-xl font-bold"></span>
-                    <span x-text="'$' + product.originalPrice" class="text-sm text-gray-500 line-through ml-1"></span>
-                    <p x-show="product.code" x-text="'with code ' + product.code" class="text-xs text-gray-600"></p>
+                  <div class="absolute top-2 left-2 flex gap-1">
+                    <span x-text="product.tags" class="bg-blue-500 text-white font-semibold text-xs px-2 py-1 rounded"></span>
                   </div>
-                  <span x-text="'-' + product.discount + '%'"
-                    class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-2 rounded"></span>
+                </div>
+                <div class="p-4">
+                  <h3 x-text="product.title" class="font-semibold text-lg mb-2"></h3>
+                <div class="flex gap-x-1">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <p x-text="product.location" class="text-sm text-gray-600 mb-2"></p>
+                </div>
+                  <div class="flex items-center mb-2">
+                    <span class="text-sm mr-1">★</span>
+                    <span class="text-sm mr-1">★</span>
+                    <span class="text-sm mr-1">★</span>
+                    <span class="text-sm mr-1">★</span>
+                    <span class="text-sm mr-1">★</span>
+
+                    <span x-text="product.rating.toFixed(1)" class="text-sm mr-1"></span>
+                    
+                    <span x-text="'(' + product.reviews.toLocaleString() + ')'" class="text-sm text-gray-600 mr-2"></span>
+                  
+                    
+                    <span x-text="product.distance + ' mi'" class="text-sm text-gray-600"></span>
+                  </div>
+                <p class="text-gray-700 text-sm mb-2 leading-relaxed" x-text="product.description"></p>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <span x-text="'$' + product.discountedPrice.toFixed(2)" class="text-xl font-bold"></span>
+                      <span x-text="'$' + product.originalPrice" class="text-sm text-gray-500 line-through ml-1"></span>
+                      <p x-show="product.code" x-text="'with code ' + product.code" class="text-xs text-gray-600"></p>
+                    </div>
+                    <span x-text="'-' + product.discount + '%'"
+                      class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-2 rounded"></span>
+                  </div>
                 </div>
               </div>
-            </div>
+            </a>
           </template>
         </div>
       </div>
@@ -331,14 +337,15 @@
         selectedSubcategories: [],
         selectedLocations: [],
         favorites: [],
-        sortBy: 'recommended',
         openSections: '',
         showGiftable: false, 
         destinationCoordinates: null, 
         minPrice: 0,  
         maxPrice: 500,
         minDiscountPercentage: 0,
-        filteredByPrice: [],
+        filteredByPrice: [],        
+        showFilters: false,
+        sortBy: '',
         async fetchProducts() {
             try {
                 let response = await fetch('/user/products/list'); 
@@ -369,7 +376,7 @@
                 max: parseFloat(product.discounted_price_range?.max ?? 0).toFixed(2),
               },
               originalPrice: parseFloat(firstVariant.unit_price ?? 0),
-              discountedPrice: parseFloat(firstVariant.discounted_price ?? 0),
+              discountedPrice: Number(firstVariant.discounted_price ?? 0),
               discount: parseFloat(firstVariant.discounted_percentage ?? 0),
               tags: product.tags,
               coordinates: productCoordinates,  
@@ -395,7 +402,7 @@
                 console.error("Error fetching products:", error);
             }
         },
-               // Extract coordinates from Google Maps link
+        // Extract coordinates from Google Maps link
         extractCoordinates(url) {
             if (!url) return null;
             let match = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
@@ -443,48 +450,52 @@
                 .filter(category => this.selectedCategories.includes(category.name))
                 .flatMap(category => category.subCategories);    
 
-            console.log("Filtered Subcategories:", subcategories); // Debugging
             return subcategories;
         },
         updateFilters() {
-            console.log("Updating Filters: Min", this.minPrice, "Max", this.maxPrice);
             
             // ✅ Ensure prices are numbers
             this.minPrice = Number(this.minPrice);
             this.maxPrice = Number(this.maxPrice);
 
             this.filteredByPrice = this.products.filter(product => {
-                console.log("Checking product:", product.title, "Price:", product.originalPrice);
                 return Number(product.originalPrice) >= this.minPrice && Number(product.originalPrice) <= this.maxPrice;
             });
 
-            console.log("Filtered Products Count (by price):", this.filteredByPrice.length);
         },
         get filteredProducts() {
-              return this.filteredByPrice.filter(product => {
-                  const categoryMatch = this.selectedCategories.length === 0 || this.selectedCategories.includes(String(product.category ?? ''));
-                  const subCategoryMatch = this.selectedSubcategories.length === 0 || this.selectedSubcategories.includes(String(product.subcategory ?? ''));
-                  const locationMatch = this.selectedLocations.length === 0 || this.selectedLocations.includes(String(product.location ?? ''));
-                  const giftableMatch = this.showGiftable ? Boolean(product.giftable) : true;
-                  const discountMatch = product.discount >= Number(this.minDiscountPercentage);
+            if (!Array.isArray(this.filteredByPrice)) return []; // 👈 prevent crash
+            return this.filteredByPrice.filter(product => {
+                const categoryMatch = this.selectedCategories.length === 0 || this.selectedCategories.includes(String(product.category ?? ''));
+                const subCategoryMatch = this.selectedSubcategories.length === 0 || this.selectedSubcategories.includes(String(product.subcategory ?? ''));
+                const locationMatch = this.selectedLocations.length === 0 || this.selectedLocations.includes(String(product.location ?? ''));
+                const giftableMatch = this.showGiftable ? Boolean(product.giftable) : true;
+                const discountMatch = product.discount >= Number(this.minDiscountPercentage);
 
-                  return categoryMatch && subCategoryMatch && locationMatch && giftableMatch && discountMatch;
-              });
-          },
-       
-        get sortedProducts() {
-            return [...this.filteredProducts].sort((a, b) => {
-                switch (this.sortBy) {
-                    case 'price_low_high':
-                        return a.discountedPrice - b.discountedPrice;
-                    case 'price_high_low':
-                        return b.discountedPrice - a.discountedPrice;
-                    case 'rating':
-                        return b.rating - a.rating;
-                    default:
-                        return 0; 
-                }
+                return categoryMatch && subCategoryMatch && locationMatch && giftableMatch && discountMatch;
             });
+        },
+      
+        get sortedProducts() {
+          if (!Array.isArray(this.filteredProducts)) return [];
+
+          const sorted = [...this.filteredProducts].sort((a, b) => {
+              switch (this.sortBy) {
+                  case 'price_low_high':
+                      return Number(a.discountedPrice || 0) - Number(b.discountedPrice || 0);
+                  case 'price_high_low':
+                      return Number(b.discountedPrice || 0) - Number(a.discountedPrice || 0);
+                  case 'rating':
+                      return Number(b.rating || 0) - Number(a.rating || 0);
+                  default:
+                      return 0;
+              }
+          });
+
+          return sorted;
+        },
+        setSort(sortType) {
+          this.sortBy = sortType;
         },
         toggleLocation(name) {
             if (this.selectedLocations.includes(name)) {

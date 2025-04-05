@@ -50,12 +50,10 @@
         <div class="col-span-7">
           <!-- Deal Title -->
           <h1 class="md:text-2xl text-base font-bold text-gray-800 mb-4">
-            65 or 90-Minute Foot Reflexology with Aloe Salt, Body Massage,
-            and Spa Effervescent Foot Bath (Up To 39% Off)
+          {{$product->name}}
           </h1>
           <div class="flex items-center gap-6 mb-6">
-            <a href="#" class="text-gray-800 text-sm lg:text-base hover:underline font-medium">Foot Smile
-              Spa - Chicago</a>
+            <a href="#" class="text-gray-800 text-sm lg:text-base hover:underline font-medium"> {{$product->emirate->name}}</a>
             <div class="flex items-center text-gray-600 gap-2">
               <i class="fas fa-star text-yellow-500"></i>
               <span class="font-semibold">4.6</span>
@@ -67,7 +65,7 @@
           <div class="flex gap-1 lg:gap-3 mb-6">
             <span
               class="bg-black text-white px-2 md:px-4 py-2 rounded-full text-xs md:text-sm flex items-center gap-2">
-              <i class="fas fa-fire"></i> Black Friday
+              <i class="fas fa-fire"></i> {{$tag_name}}
             </span>
             <span
               class="bg-yellow-100 text-yellow-800 px-2 md:px-4 py-2 rounded-full text-xs md:text-sm flex items-center gap-2">
@@ -90,69 +88,15 @@
             <section id="main-slider" class="splide" aria-label="Main Image Slider">
               <div class="splide__track">
                 <ul class="splide__list rounded-md">
+                  @foreach ($gallery as $image)
                   <li class="splide__slide rounded-md">
                     <img
-                      src="/images/banner.png"
-                      alt="Spa Interior"
+                      src="{{ asset('storage/'.$image) }}"
+                      alt="Product Image"
                       class="w-full rounded-lg object-cover shadow-md"
                     />
                   </li>
-                  <li class="splide__slide rounded-md">
-                    <img
-                      src="/images/banner.png"
-                      alt="Product 1"
-                      class="w-full rounded-lg object-cover shadow-md"
-                    />
-                  </li>
-                  <li class="splide__slide rounded-md">
-                    <img
-                      src="/images/banner.png"
-                      alt="Product 2"
-                      class="w-full rounded-lg object-cover shadow-md"
-                    />
-                  </li>
-                  <li class="splide__slide rounded-md">
-                    <img
-                      src="/images/banner.png"
-                      alt="Product 3"
-                      class="w-full rounded-lg object-cover shadow-md"
-                    />
-                  </li>
-                  <li class="splide__slide rounded-md">
-                    <img
-                      src="/images/banner.png"
-                      alt="Product 4"
-                      class="w-full rounded-lg object-cover shadow-md"
-                    />
-                  </li>
-                  <li class="splide__slide rounded-md">
-                    <img
-                      src="/images/banner.png"
-                      alt="Product 3"
-                      class="w-full rounded-lg object-cover shadow-md"
-                    />
-                  </li>
-                  <li class="splide__slide rounded-md">
-                    <img
-                      src="/images/banner.png"
-                      alt="Product 4"
-                      class="w-full rounded-lg object-cover shadow-md"
-                    />
-                  </li>
-                  <li class="splide__slide rounded-md">
-                    <img
-                      src="/images/banner.png"
-                      alt="Product 3"
-                      class="w-full rounded-lg object-cover shadow-md"
-                    />
-                  </li>
-                  <li class="splide__slide rounded-md">
-                    <img
-                      src="/images/banner.png"
-                      alt="Product 4"
-                      class="w-full rounded-lg object-cover shadow-md"
-                    />
-                  </li>
+                  @endforeach
                 </ul>
               </div>
             </section>
@@ -165,69 +109,15 @@
             >
               <div class="splide__track">
                 <ul class="splide__list">
+                  @foreach ($gallery as $image)
                   <li class="splide__slide rounded-md">
                     <img
-                      src="/images/banner.png"
+                      src="{{ asset('storage/'.$image) }}"
                       alt="Thumbnail 1"
                       class=" object-cover rounded-lg cursor-pointer"
                     />
                   </li>
-                  <li class="splide__slide rounded-md">
-                    <img
-                      src="/images/banner.png"
-                      alt="Thumbnail 2"
-                      class=" object-cover rounded-lg cursor-pointer"
-                    />
-                  </li>
-                  <li class="splide__slide rounded-md">
-                    <img
-                      src="/images/banner.png"
-                      alt="Thumbnail 1"
-                      class=" object-cover rounded-lg cursor-pointer"
-                    />
-                  </li>
-                  <li class="splide__slide rounded-md">
-                    <img
-                      src="/images/banner.png"
-                      alt="Thumbnail 2"
-                      class=" object-cover rounded-lg cursor-pointer"
-                    />
-                  </li>
-                  <li class="splide__slide rounded-md">
-                    <img
-                      src="/images/banner.png"
-                      alt="Thumbnail 1"
-                      class=" object-cover rounded-lg cursor-pointer"
-                    />
-                  </li>
-                  <li class="splide__slide rounded-md">
-                    <img
-                      src="/images/banner.png"
-                      alt="Thumbnail 2"
-                      class=" object-cover rounded-lg cursor-pointer"
-                    />
-                  </li>
-                  <li class="splide__slide rounded-md">
-                    <img
-                      src="/images/banner.png"
-                      alt="Thumbnail 3"
-                      class=" object-cover rounded-lg cursor-pointer"
-                    />
-                  </li>
-                  <li class="splide__slide rounded-md">
-                    <img
-                      src="/images/banner.png"
-                      alt="Thumbnail 4"
-                      class=" object-cover rounded-lg cursor-pointer"
-                    />
-                  </li>
-                  <li class="splide__slide rounded-md">
-                    <img
-                      src="/images/banner.png"
-                      alt="Thumbnail 5"
-                      class=" object-cover rounded-lg cursor-pointer"
-                    />
-                  </li>
+                  @endforeach
                 </ul>
               </div>
             </section>
@@ -269,10 +159,8 @@
           <div class="max-w-4xl mx-auto mt-2 lg:mt-10 bg-white rounded-lg shadow-lg p-3 lg:p-6 space-y-6">
             <!-- Header Section -->
             <div>
-              <h1 class="lg:text-2xl text-base font-bold text-gray-800">65 or 90-Minute
-                Foot Reflexology with Aloe</h1>
-              <p class="text-gray-600 text-sm lg:text-base">Salt, Body Massage, and Spa
-                Effervescent Foot Bath (Up To 59% Off)</p>
+              <h1 class="lg:text-2xl text-base font-bold text-gray-800">{{$product->name}}</h1>
+              <p class="text-gray-600 text-sm lg:text-base">{{$product->short_description}}</p>
             </div>
 
             <!-- Tabs Section -->
@@ -302,28 +190,24 @@
                 </button>
               </div>
               <!-- Tab Contents -->
+              <style>
+                #about ul {
+                  list-style: disc;
+                  margin-left: 1.25rem;
+                }
+              </style>
               <div id="about" class="tab-content mt-4">
-                <h3 class="text-lg font-semibold">What We Offer</h3>
-                <ul class="list-disc pl-5 space-y-2 text-sm lg:text-base text-gray-700">
-                  <li>65 or 90-minute foot reflexology session</li>
-                  <li>Professional massage therapists</li>
-                  <li>Relaxing spa environment</li>
-                  <li>Complimentary aloe treatment</li>
-                </ul>
-                <h3 class="text-lg font-semibold mt-4">Why You Should Give
-                  This Offer</h3>
-                <p class=" text-sm lg:text-base text-gray-600">
-                  Experience ultimate relaxation with our comprehensive foot
-                  reflexology package. Our skilled therapists combine
-                  traditional techniques with modern comfort to provide a
-                  truly rejuvenating experience.
-                </p>
+               {!! $product->about_description !!}
               </div>
               <div id="fine-print" class="tab-content hidden mt-4  bg-white">
                 <h3 class="text-xl font-bold text-gray-800 mb-4">Fine
                   Print</h3>
                 <ul class="list-disc text-sm lg:text-base list-inside space-y-2 text-gray-700">
-                  <li>
+                  <li>{{$product->vendorTerms->terms}}</li>
+                  @foreach ($nbvterms as $nbvterm)
+                    <li>{{ $nbvterm->terms}}</li>
+                  @endforeach
+                  {{-- <li>
                     <strong class="text-gray-900">Eligibility:</strong> This
                     offer is valid for new customers only.
                   </li>
@@ -345,7 +229,7 @@
                   <li>
                     <strong class="text-gray-900">Validity Period:</strong>
                     Please check the specific terms for expiry dates.
-                  </li>
+                  </li> --}}
                 </ul>
                 <div class="mt-6 bg-blue-100 text-blue-800 p-4 rounded-lg">
                   <i class="fas fa-info-circle text-blue-600 mr-2"></i>
@@ -646,33 +530,31 @@
               </div>
 
 
-              <div  id="location" class="tab-content hidden text-sm lg:text-base mt-4">
+              <div id="location" class="tab-content hidden text-sm lg:text-base mt-4">
                 <h3 class="text-lg font-semibold text-gray-800 md:text-base text-sm">Our
                   Location</h3>
                 <div class="mt-4   space-y-4">
                   <!-- Address -->
                   <div>
                     <h4 class="font-medium text-gray-900">Address</h4>
-                    <p class="text-gray-600">123 Spa Street, Relaxation
-                      City, Bliss Country</p>
+                    <p class="text-gray-600">{{$product->productlocation_address}}</p>
                   </div>
                   <!-- Map Placeholder -->
                   <div class="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-                    <p class="text-gray-500">[Map Placeholder]</p>
+                      <p class="text-gray-500">[Map Placeholder]</p>
                   </div>
                   <!-- Contact Details -->
                   <div class="pb-4">
                     <h4 class="font-medium text-gray-900">Contact Us</h4>
                     <p class="text-gray-600">
-                      Phone: <a href="tel:+1234567890" class="text-gray-800 hover:underline">+1 234 567
-                        890</a><br>
-                      Email: <a href="mailto:info@spaexample.com"
-                        class="text-gray-800 hover:underline">info@spaexample.com</a>
+                      Phone: <a href="tel:+1234567890" class="text-gray-800 hover:underline">{{$product->product_support_phone}}</a><br>
+                      Email: <a href="mailto:{{$product->product_support_email}}"
+                        class="text-gray-800 hover:underline">{{$product->product_support_email}}</a>
                     </p>
                   </div>
                   <!-- Directions Button -->
                   <div class="">
-                    <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer"
+                    <a href="{{ $product->productlocation_link }}" target="_blank" rel="noopener noreferrer"
                       class="w-auto px-9 py-3 bg-[#58af0838]  text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
                       Get Directions
                     </a>
