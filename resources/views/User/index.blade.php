@@ -309,100 +309,65 @@
           <div class="swiper mySwiper w-full h-full">
             <div class="swiper-wrapper">
 
-              <div class="swiper-slide">
-                <div class="lg:flex w-full relative mb-10 items-center justify-center">
-                  <!-- Left Section (Top Animation) -->
-                  <div id="left-section" class="w-full left-10 rounded-xl z-20 transform translate-x-[-50px] opacity-0">
-                    <div class="rounded-xl lg:w-3/5"> 
-                      <img src="{{ asset('images/images.jpeg') }}" alt="PS5 Console"
+            @foreach ($products as $product)
+    <div class="swiper-slide">
+        <div class="lg:flex w-full relative mb-10 items-center justify-center">
+            <!-- Left Section (Top Animation) -->
+            <div id="left-section" class="w-full left-10 rounded-xl z-20 transform translate-x-[-50px] opacity-0">
+                <div class="rounded-xl lg:w-3/5">  
+                    <img src="{{ asset('storage/' .$product->image) }}" alt="{{ $product->name }}"
                         class="w-full h-auto max-h-[300px] lg:pb-0 pb-0 lg:max-h-[500px] rounded-xl object-cover">
-                    </div>
-                  </div>
-
-                  <!-- Right Section (Bottom Animation) -->
-                  <div id="right-section"
-                    class="lg:absolute flex flex-col w-full lg:w-1/2 bg-white text-gray-800 rounded-lg p-3 lg:p-8 shadow-xl z-20 right-0 transform translate-x-[50px] opacity-0">
-                    <h1 class="lg:text-2xl text-lg font-extrabold mb-0 leading-tight text-gray-900 leading-snug">
-                      Up to 76% Off Custom Holiday Photo Cards
-                    </h1>
-
-                    <div>
-                      <h2 class="lg:text-lg text-base font-bold text-gray-900">Pure White Med
-                        Spa, DUBAI</h2>
-                      <div class="flex items-center space-x-2 text-gray-600">
-                        <span class="text-yellow-400 text-2xl">★★★★☆</span>
-                        <span class="text-sm">(4.8 / 41,744 reviews)</span>
-                      </div>
-                    </div>
-
-                    <p class="text-gray-600 text-sm lg:text-base leading-relaxed">
-                      Discover premium-quality holiday photo cards with an
-                      unbeatable discount.
-                      Transform your memories into stunning prints today!
-                    </p>
-
-                    <div class="flex items-center space-x-4">
-                      <span class="text-3xl font-bold text-red-600">$19.99</span>
-                      <span class="text-xl text-gray-400 line-through">$79.29</span>
-                    </div>
-
-                    <span class="text-lg text-green-600 font-semibold">-75%</span>
-
-                    <div>
-                      <button
-                        class="w-auto px-9 py-3 bg-[#58af0838]  text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:bg-[#4a910954]">
-                        ADD TO CART
-                      </button>
-                    </div>
-                  </div>
                 </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="lg:flex w-full relative mb-10 items-center justify-center">
-                  <!-- Left Section (Top Animation) -->
-                  <div id="left-section" class="w-full left-10 rounded-xl z-20 transform translate-x-[-50px] opacity-0">
-                    <div class="rounded-xl lg:w-3/5">
-                      <img src="/images/images.jpeg" alt="PS5 Console"
-                        class="w-full h-auto max-h-[300px] lg:pb-0 pb-0 lg:max-h-[500px] rounded-xl object-cover">
-                    </div>
-                  </div>
+            </div>
 
-                  <!-- Right Section (Bottom Animation) -->
-                  <div id="right-section"
-                    class="lg:absolute flex flex-col w-full lg:w-1/2 bg-white text-gray-800 rounded-lg p-3 lg:p-8 shadow-xl z-20 right-0 transform translate-x-[50px] opacity-0">
-                    <h1 class="lg:text-2xl text-lg font-extrabold mb-0 leading-tight text-gray-900 leading-snug">
-                      Up to 76% Off Custom Holiday Photo Cards
-                    </h1>
+            <!-- Right Section (Bottom Animation) -->
+            <div id="right-section"
+                class="lg:absolute flex flex-col w-full lg:w-1/2 bg-white text-gray-800 rounded-lg p-3 lg:p-8 shadow-xl z-20 right-0 transform translate-x-[50px] opacity-0">
+                
+                <h1 class="lg:text-2xl text-lg font-extrabold mb-0 leading-tight text-gray-900 leading-snug">
+                    {{ $product->name }}
+                </h1>
 
-                    <div>
-                      <h2 class="lg:text-lg text-base font-bold text-gray-900">Pure White Med
-                        Spa, DUBAI</h2>
-                      <div class="flex items-center space-x-2 text-gray-600">
+                <div>
+                    <h2 class="lg:text-lg text-base font-bold text-gray-900">
+                        {{ $product->productlocation_address ?? 'Dubai, UAE' }}
+                    </h2>
+                    <div class="flex items-center space-x-2 text-gray-600">
                         <span class="text-yellow-400 text-2xl">★★★★☆</span>
-                        <span class="text-sm">(4.8 / 41,744 reviews)</span>
-                      </div>
+                        <span class="text-sm">(4.8 / 1,234 reviews)</span> {{-- Hardcoded for now --}}
                     </div>
+                </div>
 
-                    <p class="text-gray-600 text-sm lg:text-base leading-relaxed">
-                      Discover premium-quality holiday photo cards with an
-                      unbeatable discount.
-                      Transform your memories into stunning prints today!
-                    </p>
+                <p class="text-gray-600 text-sm lg:text-base leading-relaxed">
+                    {{ $product->short_description }}
+                </p>
 
-                    <div class="flex items-center space-x-4">
-                      <span class="text-3xl font-bold text-red-600">$19.99</span>
-                      <span class="text-xl text-gray-400 line-through">$79.29</span>
-                    </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-3xl font-bold text-red-600">
+                        {{ $product->sale_price ?? '$19.99' }} {{-- Replace with real pricing logic --}}
+                    </span>
+                    <span class="text-xl text-gray-400 line-through">
+                        {{ $product->original_price ?? '$79.29' }} {{-- Replace with real original price --}}
+                    </span>
+                </div>
 
-                    <span class="text-lg text-green-600 font-semibold">-75%</span>
+                <span class="text-lg text-green-600 font-semibold">
+                    {{ isset($product->sale_price, $product->original_price) ? '-' . round((($product->original_price - $product->sale_price) / $product->original_price) * 100) . '%' : '-75%' }}
+                </span>
 
-                    <div>
-                      <button
-                        class="w-auto px-9 py-3 bg-[#58af0838]  text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:bg-[#4a910954]">
+                <div>
+                    <button
+                        class="w-auto px-9 py-3 bg-[#58af0838] text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:bg-[#4a910954]">
                         ADD TO CART
-                      </button>
-                    </div>
-                  </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
+
+              </div>
+               </div>
                 </div>
               </div>
             </div>
@@ -547,530 +512,200 @@
       </div>
     </div>
   </section>
-  <section class=" bg-[#58af0838] lg:pt-20 py-10 lg:px-4 from-cyan-50 to-blue">
-    <div class="mb-8 container  mb-10 mx-auto px-4 lg:px-0">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="lg:text-3xl text-base font-bold text-black">Trending
-          Today in
-          Chicago</h2>
+  <section class="bg-[#58af0838] lg:pt-20 py-10 lg:px-4 from-cyan-50 to-blue">
+  <div class="mb-8 container mb-10 mx-auto px-4 lg:px-0">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="lg:text-3xl text-base font-bold text-black">
+        Trending Today in UAE
+      </h2>
+    </div>
 
-      </div>
-
-      <div class="owl-carousel1  owl-carousel owl-theme">
+    <div class="owl-carousel1 owl-carousel owl-theme">
+      @foreach($trendingProducts as $product)
         <div class="item">
-          <a href="/">
-            <div
-              class="rounded-lg hover:shadow-xl hover:border-[#58af0838] shadow-lg h-full hover:shadow-xl  border bg-white shadow-lg overflow-hidden transition-transform duration-300 "
-              data-v0-t="card">
-              <!-- Image with Wave Shape -->
-
+          <a href="{{ url('/product/' . $product->id) }}">
+            <div class="rounded-lg hover:shadow-xl shadow-lg h-full border bg-white overflow-hidden transition-transform duration-300">
+              
+              <!-- Product Image -->
               <div class="relative">
-                <img alt="Up to 76% Off Custom Holiday Photo Cards" class="w-full h-48 object-cover"
-                  src="{{ asset('images/banner.png') }}">
+                <img alt="{{ $product->name }}" class="w-full h-48 object-cover"
+                  src="{{ asset('storage/' . $product->image) }}">
 
-
-
-                <!-- Discount Badge -->
+                <!-- Discount & Countdown -->
                 <div class="w-full flex items-center justify-between text-[#fe8500] text-2xl p-2 font-bold">
                   <div class="flex items-center mt-1">
-                    <img src="{{ asset('images/banner.png') }}" class="w-8" />
+                    <img src="{{ asset('images/discount_7939803.png') }}" class="w-8" />
                     <span class="ml-0.5 text-base text-black">50% OFF</span>
                   </div>
-                  <div
-                    class="flex items-center ml-auto py-0 rounded-md px-2 gap-x-1 text-[#000] font-semibold">
-                    <!-- Days -->
-                    <span class="text-sm flex mt-1 text-red-400">
-                      <img src="{{ asset('images/banner.png') }}" class="w-8 h-9 pr-1" />
-                    </span>
-                
-                    <!-- Countdown Timer -->
+                  <div class="flex items-center ml-auto py-0 rounded-md px-2 gap-x-1 text-[#000] font-semibold">
+                    <img src="{{ asset('images/clock_4241462.png') }}" class="w-8 h-9 pr-1" />
                     <div class="flex items-center gap-x-1 text-center">
                       <div class="flex flex-col items-center w-4">
                         <span class="block text-sm font-semibold mt-1" id="days">3</span>
                       </div>
                       <div class="text-red-500 text-base">:</div>
-                
                       <div class="flex flex-col items-center w-4">
                         <span class="block text-sm font-semibold mt-1" id="hours">18</span>
                       </div>
                       <div class="text-red-500 text-base">:</div>
-                
                       <div class="flex flex-col items-center w-4">
                         <span class="block text-sm font-semibold mt-1" id="minutes">43</span>
                       </div>
                       <div class="text-red-500 text-base">:</div>
-                
                       <div class="flex flex-col items-center w-4">
                         <span class="block text-sm font-semibold mt-1" id="seconds">21</span>
                       </div>
                     </div>
                   </div>
                 </div>
-                
-                <script>
-                  function updateCountdown() {
-                    const endDate = new Date(new Date().getTime() + 3 * 24 * 60 * 60 * 1000); // 3 days from now
-                    const daysElement = document.getElementById('days');
-                    const hoursElement = document.getElementById('hours');
-                    const minutesElement = document.getElementById('minutes');
-                    const secondsElement = document.getElementById('seconds');
-                
-                    function updateTimer() {
-                      const now = new Date();
-                      const timeDiff = endDate - now;
-                
-                      if (timeDiff <= 0) {
-                        clearInterval(timerInterval);
-                        daysElement.textContent = hoursElement.textContent = minutesElement.textContent = secondsElement.textContent = '00';
-                        return;
-                      }
-                
-                      const days = String(Math.floor(timeDiff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-                      const hours = String(Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-                      const minutes = String(Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                      const seconds = String(Math.floor((timeDiff % (1000 * 60)) / 1000)).padStart(2, '0');
-                
-                      daysElement.textContent = days;
-                      hoursElement.textContent = hours;
-                      minutesElement.textContent = minutes;
-                      secondsElement.textContent = seconds;
-                    }
-                
-                    const timerInterval = setInterval(updateTimer, 1000);
-                    updateTimer(); // Initial call to display timer immediately
-                  }
-                
-                  // Initialize countdown
-                  updateCountdown();
-                </script>
-                
               </div>
 
-              <!-- Content Section -->
+              <!-- Product Details -->
               <div class="px-4 pb-4 space-y-2 mt-1 relative z-50">
-                <h3 class="text-xl font-semibold leading-tight">
-                  Up to 76% Off Custom Holiday Photo Cards
-                </h3>
+                <h3 class="text-xl font-semibold leading-tight">{{ $product->name }}</h3>
 
                 <div class="flex items-center text-sm text-gray-500 gap-1">
                   <i class="fas fa-map-marker-alt"></i>
-                  <span>Pure White Med Spa, DUBAI </span>
+                  <span>{{ $product->location ?? 'UAE' }}</span>
                 </div>
+
                 <div class="flex items-center gap-0">
                   <span class="text-yellow-500">★★★★☆</span>
-                  <span class="text-sm text-gray-500">4.8
-                    (41,744)</span>
+                  <span class="text-sm text-gray-500">{{ number_format($product->rating, 1) }} (1,244)</span>
                 </div>
-                <p class="text-gray-700 text-sm leading-relaxed">Lorem
-                  ipsum
-                  ipsum
-                  ipsum dolor sit amet consectetur adipisicing
-                  elit. Accusantium
-                  quia ex ut fuga perferendis!"
+
+                <p class="text-gray-700 text-sm leading-relaxed line-clamp-2">
+                  {{ Str::limit($product->description, 100) }}
                 </p>
 
                 <div class="flex justify-between items-center">
-                  <!-- Price Section -->
                   <div class="flex items-center space-x-4">
-                    <span class="text-3xl font-semibold text-gray-800">$19.99</span>
-                    <span class="text-lg text-gray-400 line-through">$79.29</span>
+                    <span class="text-3xl font-semibold text-gray-800">${{ $product->price }}</span>
+                    <span class="text-lg text-gray-400 line-through">${{ $product->old_price }}</span>
                   </div>
-
                 </div>
-
-                <!-- Coupon Code Section -->
-
               </div>
-
             </div>
-
           </a>
         </div>
-
-      </div>
+      @endforeach
     </div>
-  </section>
+  </div>
 
-  <section class="bg-white lg:p-4  lg:py-20 py-10 ">
-    <div class=" container mx-auto lg:px-0 px-4">
-      <h2 class="lg:text-3xl text-base font-bold text-black mb-3">Popular on </h2>
-      <div class="owl-carousel1  owl-carousel owl-theme">
-        <div class="item">
-          <a href="/">
-            <div
-              class="rounded-lg hover:shadow-xl hover:border-[#58af0838] shadow-lg h-full hover:shadow-xl  border bg-white shadow-lg overflow-hidden transition-transform duration-300 "
-              data-v0-t="card">
-              <!-- Image with Wave Shape -->
+  <!-- Countdown Script -->
+  <script>
+    function updateCountdown() {
+      const endDate = new Date(new Date().getTime() + 3 * 24 * 60 * 60 * 1000); // 3 days
+      const days = document.getElementById('days');
+      const hours = document.getElementById('hours');
+      const minutes = document.getElementById('minutes');
+      const seconds = document.getElementById('seconds');
 
-              <div class="relative">
-                <img alt="Up to 76% Off Custom Holiday Photo Cards" class="w-full h-48 object-cover"
-                  src="{{ asset('images/banner.png') }}">
+      function updateTimer() {
+        const now = new Date();
+        const timeDiff = endDate - now;
+
+        if (timeDiff <= 0) {
+          days.textContent = hours.textContent = minutes.textContent = seconds.textContent = '00';
+          return;
+        }
+
+        days.textContent = String(Math.floor(timeDiff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+        hours.textContent = String(Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+        minutes.textContent = String(Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+        seconds.textContent = String(Math.floor((timeDiff % (1000 * 60)) / 1000)).padStart(2, '0');
+      }
+
+      updateTimer();
+      setInterval(updateTimer, 1000);
+    }
+
+    updateCountdown();
+  </script>
+</section>
 
 
 
-                <!-- Discount Badge -->
-                <div class=" w-full flex items-center justify-center text-[#fe8500] text-2xl p-2 font-bold ">
-                  <div class=" flex items-center mt-1"> 
-                    <img src="{{ asset('images/discount_7939803.png') }}" class="w-8" /> <span
-                      class="ml-0.5   text-base text-black">50%
-                      OFF</span>
-                  </div>
-                  <div
-                    class=" items-center ml-auto py-0 rounded-md   px-2  ml-auto flex  gap-x-1 text-[#000] font-semibold">
-                    <!-- Days -->
-                    <span class="text-sm flex mt-1 text-red-400"> <img src="{{ asset('images/clock_4241462.png') }}"
-                        class="w-8 h-9 pr-1" /> </span>
-                    <div class="flex flex-col items-center text-center">
-                      <div class="">
-
-                        <span class="block text-sm font-semibold mt-1" id="days">3</span>
-                      </div>
-
-                    </div>
-
-                    <div class="flex flex-col items-center text-red-500 text-base text-center">
-                      :
-
-                    </div>
-                    <!-- Hours -->
-                    <div class="flex flex-col items-center text-center">
-                      <div class="">
-
-                        <span class="block text-sm font-semibold mt-1" id="hours">18</span>
-                      </div>
-
-                    </div>
-                    <div class="flex flex-col items-center text-red-500 text-base text-center">
-                      :
-
-                    </div>
-
-                    <!-- Minutes -->
-                    <div class="flex flex-col items-center text-center">
-                      <div class="">
-
-                        <span class="block text-sm font-semibold mt-1" id="minutes">43</span>
-                      </div>
-
-                    </div>
-                    <div class="flex flex-col items-center text-red-500 text-base text-center">
-                      :
-
-                    </div>
-                    <!-- Seconds -->
-                    <div class="flex flex-col items-center text-center">
-                      <div class="">
-
-                        <span class="block text-sm font-semibold mt-1" id="seconds">21</span>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-
-              <!-- Content Section -->
-              <div class="px-4 pb-4 space-y-2 mt-1 relative z-50">
-                <h3 class="text-xl font-semibold leading-tight">
-                  Up to 76% Off Custom Holiday Photo Cards
-                </h3>
-
-                <div class="flex items-center text-sm text-gray-500 gap-1">
-                  <i class="fas fa-map-marker-alt"></i>
-                  <span>Pure White Med Spa, DUBAI </span>
-                </div>
-                <div class="flex items-center gap-0">
-                  <span class="text-yellow-500">★★★★☆</span>
-                  <span class="text-sm text-gray-500">4.8
-                    (41,744)</span>
-                </div>
-                <p class="text-gray-700 text-sm leading-relaxed">Lorem
-                  ipsum
-                  ipsum
-                  ipsum dolor sit amet consectetur adipisicing
-                  elit. Accusantium
-                  quia ex ut fuga perferendis!"
-                </p>
-
-                <div class="flex justify-between items-center">
-                  <!-- Price Section -->
-                  <div class="flex items-center space-x-4">
-                    <span class="text-3xl font-semibold text-gray-800">$19.99</span>
-                    <span class="text-lg text-gray-400 line-through">$79.29</span>
-                  </div>
-
-                </div>
-
-                <!-- Coupon Code Section -->
-
-              </div>
-
-            </div>
-
-          </a>
-        </div>
-
-      </div>
-    </div>
-
-   
-
-  </section>
-
+ @foreach($carouselCategories as $category)
   <section class="bg-[#58af0838] relative lg:py-20 py-10">
-    <div class="container mx-auto lg:px-0 px-4">
+  <div class="container mx-auto lg:px-0 px-4">
+    
+    <!-- Section Title -->
+    <h2 class="lg:text-3xl text-base font-bold text-black mb-3">Popular on</h2>
 
-      <h2 class="lg:text-3xl text-base font-bold text-black mb-3">Popular on </h2>
-      <div class="owl-carousel1  owl-carousel owl-theme">
+    <!-- Owl Carousel -->
+    <div class="owl-carousel owl-theme owl-carousel1">
+     
         <div class="item">
-          <a href="/">
-            <div
-              class="rounded-lg hover:shadow-xl hover:border-[#58af0838] shadow-lg h-full hover:shadow-xl  border bg-white shadow-lg overflow-hidden transition-transform duration-300 "
-              data-v0-t="card">
-              <!-- Image with Wave Shape -->
-
+          <a href="{{ url('/category/' . strtolower($category->code)) }}">
+            <div class="rounded-lg hover:shadow-xl hover:border-[#58af0838] shadow-lg h-full border bg-white overflow-hidden transition-transform duration-300">
+              
+              <!-- Category Image -->
               <div class="relative">
-                <img alt="Up to 76% Off Custom Holiday Photo Cards" class="w-full h-48 object-cover"
-                  src="{{ asset('images/banner.png') }}
-">  
-
+                <img alt="{{ $category->name }}" class="w-full h-48 object-cover"
+                     src="{{ asset('storage/' . $category->image) }}" />
 
                 <!-- Discount Badge -->
-                <div class=" w-full flex items-center justify-center text-[#fe8500] text-2xl p-2 font-bold ">
-                  <div class=" flex items-center mt-1"> 
-                    <img src="{{ asset('images/discount_7939803.png') }}" class="w-8" /> <span
-                      class="ml-0.5   text-base text-black">50%
-                      OFF</span>
+                <div class="w-full flex items-center justify-center text-[#fe8500] text-2xl p-2 font-bold">
+                  <div class="flex items-center mt-1">
+                    <img src="{{ asset('images/discount_7939803.png') }}" class="w-8" />
+                    <span class="ml-0.5 text-base text-black">50% OFF</span>
                   </div>
-                  <div
-                    class=" items-center ml-auto py-0 rounded-md   px-2  ml-auto flex  gap-x-1 text-[#000] font-semibold">
-                    <!-- Days --> 
-                    <span class="text-sm flex mt-1 text-red-400"> <img src="{{ asset('images/clock_4241462.png') }}"
-                        class="w-8 h-9 pr-1" /> </span>
-                    <div class="flex flex-col items-center text-center">
-                      <div class="">
 
-                        <span class="block text-sm font-semibold mt-1" id="days">3</span>
-                      </div>
-
-                    </div>
-
-                    <div class="flex flex-col items-center text-red-500 text-base text-center">
-                      :
-
-                    </div>
-                    <!-- Hours -->
-                    <div class="flex flex-col items-center text-center">
-                      <div class="">
-
-                        <span class="block text-sm font-semibold mt-1" id="hours">18</span>
-                      </div>
-
-                    </div>
-                    <div class="flex flex-col items-center text-red-500 text-base text-center">
-                      :
-
-                    </div>
-
-                    <!-- Minutes -->
-                    <div class="flex flex-col items-center text-center">
-                      <div class="">
-
-                        <span class="block text-sm font-semibold mt-1" id="minutes">43</span>
-                      </div>
-
-                    </div>
-                    <div class="flex flex-col items-center text-red-500 text-base text-center">
-                      :
-
-                    </div>
-                    <!-- Seconds -->
-                    <div class="flex flex-col items-center text-center">
-                      <div class="">
-
-                        <span class="block text-sm font-semibold mt-1" id="seconds">21</span>
-                      </div>
-
+                  <div class="items-center ml-auto py-0 px-2 flex gap-x-1 text-[#000] font-semibold">
+                    <span class="text-sm flex mt-1 text-red-400">
+                      <img src="{{ asset('images/clock_4241462.png') }}" class="w-8 h-9 pr-1" />
+                    </span>
+                    <div class="flex items-center text-center gap-1">
+                      <span class="text-sm font-semibold" id="days">3</span>
+                      <span class="text-red-500">:</span>
+                      <span class="text-sm font-semibold" id="hours">18</span>
+                      <span class="text-red-500">:</span>
+                      <span class="text-sm font-semibold" id="minutes">43</span>
+                      <span class="text-red-500">:</span>
+                      <span class="text-sm font-semibold" id="seconds">21</span>
                     </div>
                   </div>
                 </div>
-
               </div>
 
-              <!-- Content Section -->
+              <!-- Category Info -->
               <div class="px-4 pb-4 space-y-2 mt-1 relative z-50">
                 <h3 class="text-xl font-semibold leading-tight">
-                  Up to 76% Off Custom Holiday Photo Cards
+                  {{ $category->name }}
                 </h3>
 
                 <div class="flex items-center text-sm text-gray-500 gap-1">
                   <i class="fas fa-map-marker-alt"></i>
-                  <span>Pure White Med Spa, DUBAI </span>
+                  <span>UAE</span>
                 </div>
+
                 <div class="flex items-center gap-0">
                   <span class="text-yellow-500">★★★★☆</span>
-                  <span class="text-sm text-gray-500">4.8
-                    (41,744)</span>
+                  <span class="text-sm text-gray-500">4.8 (1,244)</span>
                 </div>
-                <p class="text-gray-700 text-sm leading-relaxed">Lorem
-                  ipsum
-                  ipsum
-                  ipsum dolor sit amet consectetur adipisicing
-                  elit. Accusantium
-                  quia ex ut fuga perferendis!"
+
+                <p class="text-gray-700 text-sm leading-relaxed">
+                  Discover amazing offers and experiences in {{ $category->name }} category.
                 </p>
 
                 <div class="flex justify-between items-center">
-                  <!-- Price Section -->
                   <div class="flex items-center space-x-4">
-                    <span class="text-3xl font-semibold text-gray-800">$19.99</span>
-                    <span class="text-lg text-gray-400 line-through">$79.29</span>
+                    <span class="text-3xl font-semibold text-gray-800">AED 19.99</span>
+                    <span class="text-lg text-gray-400 line-through">AED 79.29</span>
                   </div>
-
                 </div>
-
-                <!-- Coupon Code Section -->
-
               </div>
-
             </div>
-
           </a>
         </div>
-
-      </div>
+    
     </div>
-
-    <!-- Left and Right Navigation Buttons with Custom Icons -->
-
-  </section>
-  <section>
-    <div class="container mx-auto px-4 lg:pt-20 py-10 lg:px-0">
-      <h2 class="lg:text-3xl text-base font-bold text-black mb-3 text-left">So Many Deals...
-        See Them
-        All!</h2>
-      <div class="owl-carousel1  owl-carousel owl-theme">
-        <div class="item">
-          <a href="/">
-            <div
-              class="rounded-lg hover:shadow-xl hover:border-[#58af0838] shadow-lg h-full hover:shadow-xl  border bg-white shadow-lg overflow-hidden transition-transform duration-300 "
-              data-v0-t="card">
-              <!-- Image with Wave Shape -->
-
-              <div class="relative">
-                <img alt="Up to 76% Off Custom Holiday Photo Cards" class="w-full h-48 object-cover"
-                  src=" {{ asset('images/banner.png') }}">
+  </div>
+</section>
+@endforeach
 
 
-                  
-                <!-- Discount Badge -->
-                <div class=" w-full flex items-center justify-center text-[#fe8500] text-2xl p-2 font-bold ">
-                  <div class=" flex items-center mt-1">
-                    <img src="{{ asset('images/discount_7939803.png') }}" class="w-8" /> <span
-                      class="ml-0.5   text-base text-black">50%
-                      OFF</span>
-                  </div>
-                  <div
-                    class=" items-center ml-auto py-0 rounded-md   px-2  ml-auto flex  gap-x-1 text-[#000] font-semibold">
-                    <!-- Days --> 
-                    <span class="text-sm flex mt-1 text-red-400"> <img src="{{ asset('images/clock_4241462.png') }}"
-                        class="w-8 h-9 pr-1" /> </span>
-                    <div class="flex flex-col items-center text-center">
-                      <div class="">
-
-                        <span class="block text-sm font-semibold mt-1" id="days">3</span>
-                      </div>
-
-                    </div>
-
-                    <div class="flex flex-col items-center text-red-500 text-base text-center">
-                      :
-
-                    </div>
-                    <!-- Hours -->
-                    <div class="flex flex-col items-center text-center">
-                      <div class="">
-
-                        <span class="block text-sm font-semibold mt-1" id="hours">18</span>
-                      </div>
-
-                    </div>
-                    <div class="flex flex-col items-center text-red-500 text-base text-center">
-                      :
-
-                    </div>
-
-                    <!-- Minutes -->
-                    <div class="flex flex-col items-center text-center">
-                      <div class="">
-
-                        <span class="block text-sm font-semibold mt-1" id="minutes">43</span>
-                      </div>
-
-                    </div>
-                    <div class="flex flex-col items-center text-red-500 text-base text-center">
-                      :
-
-                    </div>
-                    <!-- Seconds -->
-                    <div class="flex flex-col items-center text-center">
-                      <div class="">
-
-                        <span class="block text-sm font-semibold mt-1" id="seconds">21</span>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-
-              <!-- Content Section -->
-              <div class="px-4 pb-4 space-y-2 mt-1 relative z-50">
-                <h3 class="text-xl font-semibold leading-tight">
-                  Up to 76% Off Custom Holiday Photo Cards
-                </h3>
-
-                <div class="flex items-center text-sm text-gray-500 gap-1">
-                  <i class="fas fa-map-marker-alt"></i>
-                  <span>Pure White Med Spa, DUBAI </span>
-                </div>
-                <div class="flex items-center gap-0">
-                  <span class="text-yellow-500">★★★★☆</span>
-                  <span class="text-sm text-gray-500">4.8
-                    (41,744)</span>
-                </div>
-                <p class="text-gray-700 text-sm leading-relaxed">Lorem
-                  ipsum
-                  ipsum
-                  ipsum dolor sit amet consectetur adipisicing
-                  elit. Accusantium
-                  quia ex ut fuga perferendis!"
-                </p>
-
-                <div class="flex justify-between items-center">
-                  <!-- Price Section -->
-                  <div class="flex items-center space-x-4">
-                    <span class="text-3xl font-semibold text-gray-800">$19.99</span>
-                    <span class="text-lg text-gray-400 line-through">$79.29</span>
-                  </div>
-
-                </div>
-
-                <!-- Coupon Code Section -->
-
-              </div>
-
-            </div>
-
-          </a>
-        </div>
-
-      </div>
-    </div>
-
-  </section>
   <section class="bg-[#58af0838] text-black  lg:px-0  lg:py-20 py-10 px-4 lg:px-0">
     <div class="container mx-auto">
       <div class=" flex flex-col lg:px-0 px-6 md:flex-row items-center  justify-between">

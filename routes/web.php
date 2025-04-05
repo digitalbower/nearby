@@ -51,20 +51,18 @@ Route::prefix('user')->name('user.')->group(function () {
 
     });
 
-     // ✅ Home & Product Routes
-     Route::prefix('products')->name('products.')->group(function () {
-        Route::get('/', [UserProductController::class, 'index'])->name('index');
-        Route::get('/list', [UserProductController::class, 'getProducts'])->name('filter');
-        Route::get('/{id}', [UserProductController::class, 'show'])->name('show');
-    });
-
     // ✅ Authenticated Routes (Only for Logged-in Users)
     Route::middleware('auth')->group(function () {
         
-       
+        Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-       
+        // ✅ Home & Product Routes
+        Route::prefix('products')->name('products.')->group(function () {
+            Route::get('/', [UserProductController::class, 'index'])->name('index');
+            Route::get('/list', [UserProductController::class, 'getProducts'])->name('filter');
+            Route::get('/{id}', [UserProductController::class, 'show'])->name('show');
+        });
 
         // ✅ E-commerce & Booking Routes
         Route::prefix('home')->name('home.')->group(function () {

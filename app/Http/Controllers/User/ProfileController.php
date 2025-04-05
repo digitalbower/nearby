@@ -14,7 +14,7 @@ use Illuminate\Validation\ValidationException;
 class ProfileController extends Controller
 {
     public function profile()
-    {
+    { dd($user);
         $user = Auth::user(); // Get the authenticated user
         $countries = Country::all(); 
         $gender = Gender::all();

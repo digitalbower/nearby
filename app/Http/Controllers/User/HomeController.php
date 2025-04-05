@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\NavigationMenu;
 use App\Models\Logo;
 use App\Models\Category;
-
+use App\Models\Product;
 class HomeController extends Controller
 {
 
@@ -28,11 +28,21 @@ class HomeController extends Controller
 
         $categories = Category::where('status', 1)->get();
 
-        $carouselCategories = Category::where('status', 1)
-            ->where('enable_homecarousel', 1)
-            ->get();
+        $carouselCategories = Product::where('status', 1)
+        ->where('categorycarousel', 1)
+        ->with('category')
+        ->get();
+    
+
+        $trendingProducts = Product::where('trending', 1)->latest()->take(10)->get();
+
+
+
+            $products = Product::where('status', 1)
+            ->where('herocarousel', 1)
+            ->get();    
    
-        return view('user.index', compact('uppermenuItems','lowermenuitem','logo','categories')); 
+        return view('user.index', compact('uppermenuItems','lowermenuitem','logo','categories','products','carouselCategories','trendingProducts')); 
     }
 
     public function bookingconfirmation()

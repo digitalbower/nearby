@@ -15,7 +15,7 @@ class AuthController extends Controller
 {
     public function login()
     {
-        return view('user.signin'); 
+        return view('signin'); 
     }
 
     public function loginsubmit(Request $request)
@@ -41,7 +41,7 @@ class AuthController extends Controller
     $request->session()->invalidate();
     $request->session()->regenerateToken();
     
-    return redirect()->route('login')->with('success', 'You have logged out.');
+    return redirect()->route('user.login')->with('success', 'You have logged out.');
 }
 
     // Dashboard page (protected)
@@ -82,7 +82,7 @@ class AuthController extends Controller
         Session::flash('success', 'User registered successfully! You can now log in.');
 
         // Redirect to login page with success message
-        return redirect()->route('login');
+        return redirect()->route('user.login');
     }
 
 
@@ -98,7 +98,7 @@ class AuthController extends Controller
             $googleUser = Socialite::driver('google')->stateless()->user();
             
             if (!$googleUser) {
-                return redirect()->route('login')->with('error', 'Failed to get user details from Google.');
+                return redirect()->route('user.login')->with('error', 'Failed to get user details from Google.');
             }
     
             \Log::info('Google User:', (array) $googleUser);
@@ -119,11 +119,11 @@ class AuthController extends Controller
             // Log in the user
             Auth::login($user);
     
-            return redirect()->route('login')->with('success', 'Logged in successfully!');
+            return redirect()->route('user.login')->with('success', 'Logged in successfully!');
     
         } catch (\Exception $e) {
             \Log::error('Google Login Error: ' . $e->getMessage());
-            return redirect()->route('login')->with('error', 'Google Sign-In failed: ' . $e->getMessage());
+            return redirect()->route('user.login')->with('error', 'Google Sign-In failed: ' . $e->getMessage());
         }
     }
 }
