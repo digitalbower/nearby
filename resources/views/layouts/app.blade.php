@@ -36,7 +36,7 @@
         <div class="sidebar" data-background-color="dark">
             <div class="sidebar-logo">
                 <div class="logo-header" data-background-color="dark">
-                    <a href="{{ route('logos.index') }}" class="logo">
+                    <a href="{{ route('admin.logos.index') }}" class="logo">
                         <img src="{{ asset('assets/img/kaiadmin/logo_light.svg') }}" alt="Admin Logo" height="20" />
                     </a>
                     <button class="topbar-toggler more">
@@ -48,7 +48,7 @@
                 <div class="sidebar-content">
                     <ul class="nav nav-secondary">
                         <li class="nav-item active">
-                            <a href="{{ route('logos.index') }}">
+                            <a href="{{ route('admin.logos.index') }}">
                                 <i class="fas fa-home"></i>
                                 <p>Dashboard</p>
                             </a>
@@ -57,7 +57,7 @@
                             <h4 class="text-section">Components</h4>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('logos.index') }}">
+                            <a href="{{ route('admin.logos.index') }}">
                                 <i class="fas fa-image"></i>
                                 <p>Logo Settings</p>
                             </a>

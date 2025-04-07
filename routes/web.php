@@ -29,9 +29,15 @@ use App\Http\Controllers\Admin\Product\NbvTermController;
 use App\Http\Controllers\Admin\Product\ProductTypeController;
 use App\Http\Controllers\Admin\Product\PromoController;
 use App\Http\Controllers\User\ProductController as UserProductController;
+use App\Http\Controllers\User\NewsletterController;
+use App\Http\Controllers\User\SpecialistRequestController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::post('/subscribe', [NewsletterController::class, 'subscribe'])->name('subscribe');
+
+
+Route::post('/specialist', [SpecialistRequestController::class, 'submit'])->name('specialist.submit');
 // ✅ User Routes
 
 Route::prefix('user')->name('user.')->group(function () {
@@ -64,6 +70,9 @@ Route::prefix('user')->name('user.')->group(function () {
             Route::get('/{id}', [UserProductController::class, 'show'])->name('show');
         });
 
+         
+
+
         // ✅ E-commerce & Booking Routes
         Route::prefix('home')->name('home.')->group(function () {
             Route::get('/bookingconfirmation', [HomeController::class, 'bookingconfirmation'])->name('bookingconfirmation');
@@ -80,6 +89,8 @@ Route::prefix('user')->name('user.')->group(function () {
             Route::post('/update-password', [ProfileController::class, 'updatePassword'])->name('updatepassword');
         });
     });
+
+    
 
 });
 
@@ -252,6 +263,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/{categoryUnitMaster}', [CategoryUnitMasterController::class, 'update'])->name('update'); 
         Route::delete('/{categoryUnitMaster}', [CategoryUnitMasterController::class, 'destroy'])->name('destroy'); 
     });
+      
+     
 
 
 

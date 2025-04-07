@@ -10,7 +10,7 @@ class NewsletterSubscriber extends Model
 {
     use HasFactory;
 
-    protected $table = 'newsletter_subscribers';
+    protected $table = 'newsletters';
 
     protected $fillable = ['email'];
 }

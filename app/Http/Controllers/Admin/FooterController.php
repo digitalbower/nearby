@@ -17,31 +17,43 @@ class FooterController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'type' => 'required',
-            'item_text' => 'required',
-            'link' => 'nullable',
-            'icon' => 'nullable',
-            'status' => 'required',
+            'type' => 'nullable|string|max:255',
+            'item_text' => 'nullable|string',
+            'link' => 'nullable|url',
+            'icon' => 'nullable|string', // not an image, just a class string
+            'status' => 'nullable|boolean',
         ]);
-
-        Footer::create($request->all());
+    
+        $data = $request->only(['type', 'item_text', 'link', 'icon', 'status']);
+    
+        // Default status
+        $data['status'] = $data['status'] ?? 1;
+    
+        Footer::create($data);
+    
+        
         return back()->with('success', 'Footer item added successfully.');
     }
 
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'type' => 'required|in:Top Destination,Information,Follow Us',
-            'item_text' => 'required|string',
-            'link' => 'nullable|url',
-            'icon' => 'nullable|string',
-            'status' => 'required|boolean',
-        ]);
+{
+    $request->validate([
+        'type' => 'nullable|in:Top Destination,Information,Follow Us',
+        'item_text' => 'nullable|string',
+        'link' => 'nullable|url',
+        'icon' => 'nullable|string',
+        'status' => 'nullable|boolean',
+    ]);
 
-        $footer = Footer::findOrFail($id);
-        $footer->update($request->all());
-        return back()->with('success', 'Footer item updated successfully.');
-    }
+    $footer = Footer::findOrFail($id);
+
+    $data = $request->only(['type', 'item_text', 'link', 'icon', 'status']);
+
+    $footer->update($data);
+
+    return back()->with('success', 'Footer item updated successfully.');
+}
+
 
     public function destroy($id)
     {

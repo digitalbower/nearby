@@ -1,4 +1,10 @@
 <!-- Add this to the bottom of your CSS -->
+@if(session('success'))
+  <div x-data="{ show: true }" x-show="show" class="mb-4 p-4 rounded-md bg-green-100 text-green-800 border border-green-300 flex justify-between items-center">
+      <span>{{ session('success') }}</span>
+      <button @click="show = false" class="text-green-700 hover:text-green-900">&times;</button>
+  </div>
+@endif
 
 <!DOCTYPE html>
 <html lang="en">
@@ -733,22 +739,25 @@
   </section>
 
 
-  <!-- Newsletter Section -->
-  <section class=" bg-white container mx-auto lg:px-0 px-4 lg:py-20 py-10">
-    <div class="  flex flex-col md:flex-row items-center justify-between gap-8">
-      <h2 class="text-3xl text-black lg:text-3xl text-base font-bold text-black font-extrabold">Stay
-        Updated
-        With Our Latest Newsletter</h2>
-      <div class="lg:flex w-full md:w-auto gap-4">
-        <input type="email" placeholder="Enter Email"
-          class="flex-1 lg:w-80 px-6 py-4 rounded-full border-2 lg:w-auto w-full lg:mb-0 mb-5 focus:outline-none focus:ring-2 focus:ring-cyan-700 bg-white text-black placeholder-gray-500 shadow-md">
-        <button
-          class="w-full lg:w-auto px-9 py-3 bg-[#58af0838]  text-black font-semibold rounded-full shadow-md hover:shadow-lg transition-all duration-300">
-          Subscribe Now <i class="fas fa-paper-plane ml-2"></i>
-        </button>
-      </div>
+  <section class="bg-white container mx-auto lg:px-0 px-4 lg:py-20 py-10">
+  <form method="POST" action="{{ route('subscribe') }}" class="flex flex-col md:flex-row items-center justify-between gap-8">
+    @csrf
+    <!-- input fields -->
+
+    <h2 class="text-3xl text-black lg:text-3xl text-base font-bold text-black font-extrabold">
+      Stay Updated With Our Latest Newsletter
+    </h2>
+    <div class="lg:flex w-full md:w-auto gap-4">
+      <input name="email" type="email" placeholder="Enter Email"
+        class="flex-1 lg:w-80 px-6 py-4 rounded-full border-2 lg:w-auto w-full lg:mb-0 mb-5 focus:outline-none focus:ring-2 focus:ring-cyan-700 bg-white text-black placeholder-gray-500 shadow-md"
+        required>
+      <button type="submit"
+        class="w-full lg:w-auto px-9 py-3 bg-[#58af0838] text-black font-semibold rounded-full shadow-md hover:shadow-lg transition-all duration-300">
+        Subscribe Now <i class="fas fa-paper-plane ml-2"></i>
+      </button>
     </div>
-  </section>
+  </form>
+</section>
 
   <!-- Footer -->
   <footer class="bg-[#58af0838] lg:block hidden text-gray-900 py-16 shadow-lg">
@@ -780,74 +789,50 @@
 
         <!-- Top Destination -->
         <div>
-          <h3 class="text-black text-base lg:text-xl font-bold mb-6">Top
-            Destination</h3>
-          <ul class="space-y-3 text-sm lg:text-base">
-            <li><a href="#" class="hover:text-black transition-colors">Bali</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">Bangkok</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">Cancun</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">Nha
-                Trang</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">Phuket</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">Tokyo</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">More
-                Destinations</a></li>
-          </ul>
-        </div>
-
+        <h3 class="text-black text-base lg:text-xl font-bold mb-6">Top Destination</h3>
+<ul class="space-y-3 text-sm lg:text-base">
+    @foreach ($topDestinations as $item)
+        <li>
+            <a href="{{ $item->link ?? '#' }}" class="hover:text-black transition-colors">
+                {{ $item->item_text }}
+            </a>
+        </li>
+    @endforeach
+</ul>
+  </div>
         <!-- Information -->
         <div>
-          <h3 class="text-black text-base lg:text-xl font-bold mb-6">Information</h3>
-          <ul class="space-y-3 text-sm lg:text-base">
-            <li><a href="#" class="hover:text-black transition-colors">Help
-                &
-                FAQs</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">Careers</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">About
-                us</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">Contact
-                us</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">Privacy
-                policy</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">Blogs</a></li>
-          </ul>
-        </div>
+  <h3 class="text-black text-base lg:text-xl font-bold mb-6">Information</h3>
+  <ul class="space-y-3 text-sm lg:text-base">
+    @foreach ($informationLinks as $item)
+      <li>
+        <a href="{{ $item->link ?? '#' }}" class="hover:text-black transition-colors">
+          {{ $item->item_text }}
+        </a>
+      </li>
+    @endforeach
+  </ul>
+</div>
+
 
         <!-- Follow Us & Payment -->
         <div>
-          <h3 class="text-black text-base lg:text-xl font-bold mb-6">Follow
-            Us</h3>
-          <div class="flex gap-4 mb-8">
-            <a href="#"
-              class="bg-[#58af0838] p-1 justify-center rounded-full w-10 h-10 flex items-center hover:bg-cyan-600 transition-colors">
-              <i class="fab fa-facebook-f text-white"></i>
-            </a>
-            <a href="#"
-              class="bg-blue-400 p-1 justify-center rounded-full w-10 h-10 flex items-center hover:bg-blue-500 transition-colors">
-              <i class="fab fa-twitter text-white"></i>
-            </a>
-            <a href="#"
-              class="bg-red-600 p-1 justify-center rounded-full w-10 h-10 flex items-center hover:bg-red-700 transition-colors">
-              <i class="fab fa-youtube text-white"></i>
-            </a>
-            <a href="#"
-              class="bg-pink-600 p-1 justify-center rounded-full w-10 h-10 flex items-center hover:bg-pink-700 transition-colors">
-              <i class="fab fa-instagram text-white"></i>
-            </a>
-          </div>
+  <h3 class="text-black text-base lg:text-xl font-bold mb-6">Follow Us</h3>
+  <div class="flex gap-4 mb-8">
+    @foreach ($followus->where('type', 'Follow Us')->where('status', 1) as $item)
+      <a href="{{ $item->link ?? '#' }}"
+        class="bg-[#58af0838] p-1 justify-center rounded-full w-10 h-10 flex items-center hover:bg-cyan-600 transition-colors">
+        <i class="{{ $item->icon }}"></i>
+      </a>
+    @endforeach
+  </div>
 
 
-          <h3 class="text-black text-base lg:text-xl font-bold mb-6">Payment
-            Channels</h3>
-          <div class="grid grid-cols-4 gap-4"> 
-            <img src="https://img.icons8.com/?size=100&id=34350&format=png&color=000000" alt="Union Pay" class="h-9">
-            <img src="https://img.icons8.com/?size=100&id=13608&format=png&color=000000" alt="Visa" class="h-9">
-            <img src="https://img.icons8.com/?size=100&id=13610&format=png&color=000000" alt="Mastercard" class="h-9">
-            
-            <img src="https://img.icons8.com/?size=100&id=13607&format=png&color=000000" alt="American Express" class="h-9">
-            <img src="https://img.icons8.com/?size=100&id=63492&format=png&color=000000" alt="Apple Pay" class="h-9">
-            <img src="https://img.icons8.com/?size=100&id=am4ltuIYDpQ5&format=png&color=000000" alt="Google Pay" class="h-9">
-           
+        <h3 class="text-black text-base lg:text-xl font-bold mb-6">Payment Channels</h3>
+              <div class="grid grid-cols-4 gap-4">
+                @foreach ($payment_channels->where('type', 'payment_channels')->where('status', 1) as $item)
+                  <img src="{{ asset($item->icon) }}" alt="{{ $item->item_text }}" class="h-9">
+                @endforeach
           </div>
 
           <button
@@ -1203,7 +1188,9 @@
     </button>
 
     <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Talk to a Specialist</h2>
-    <form id="modalForm" class="">
+   
+    <form id="modalForm" class=""  action="{{ route('specialist.submit') }}" method="POST">
+    @csrf
       <!-- Name Field -->
       <div class="mb-5">
         <label for="name" class="block text-sm font-medium text-gray-800">Name</label>
@@ -1224,11 +1211,16 @@
       <div class="mb-5">
         <label for="number" class="block text-sm font-medium text-gray-800">Phone Number</label>
         <div class="flex items-center space-x-3">
+
+   
           <select id="countryCode" name="countryCode"
             class="p-3 border border-transparent rounded-lg bg-white focus:ring-2 focus:ring-blue-400 transition-all">
-            <option value="+1">+1 (USA)</option>
-            <option value="+44">+44 (UK)</option>
-            <option value="+91">+91 (India)</option>
+            @foreach($countryCodes as $country)
+            <option value="{{ $country->id }}" {{ old('country_code_id', isset($user) ? $user->country_code_id : '') == $country->id ? 'selected' : '' }}>
+            {{ $country->country_code }} 
+        </option>
+    @endforeach
+           
             <!-- Add more country codes as needed -->
           </select>
           <input type="tel" id="phone" name="phone"

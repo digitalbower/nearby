@@ -23,10 +23,11 @@
                     <option value="Top Destination">Top Destination</option>
                     <option value="Information">Information</option>
                     <option value="Follow Us">Follow Us</option>
+                    <option value="payment_channels">Payment Channels</option>
                 </select>
 
                 <label>Item Text:</label>
-                <input type="text" name="item_text" class="form-control" required>
+                <input type="text" name="item_text" class="form-control">
 
                 <label>Link (optional):</label>
                 <input type="text" name="link" class="form-control">

@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('footer', function (Blueprint $table) {
+        Schema::create('newsletters', function (Blueprint $table) {
             $table->id();
-            $table->string('type')->nullable();
-            $table->text('item_text')->nullable();
-            $table->text('link')->nullable();
-            $table->json('icon')->nullable();
-            $table->tinyInteger('status')->default(1);
+            $table->string('email')->unique();
             $table->timestamps();
         });
     }
@@ -27,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('footer');
+        Schema::dropIfExists('newsletters');
     }
 };
