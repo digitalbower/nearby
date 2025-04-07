@@ -68,6 +68,8 @@ Route::prefix('user')->name('user.')->group(function () {
             Route::get('/', [UserProductController::class, 'index'])->name('index');
             Route::get('/list', [UserProductController::class, 'getProducts'])->name('filter');
             Route::get('/{id}', [UserProductController::class, 'show'])->name('show');
+            Route::post('/store-review', [UserProductController::class, 'storeReview'])->name('store_review');
+            Route::get('/show-review/{id}', [UserProductController::class, 'showReview'])->name('show_review');
         });
 
          

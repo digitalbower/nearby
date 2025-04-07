@@ -7,8 +7,7 @@ use App\Models\Category;
 use App\Models\Emirate;
 use App\Models\NbvTerm;
 use App\Models\Product;
-use App\Models\Subcategory;
-use App\Models\Tags;
+use App\Models\Review;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -18,7 +17,7 @@ class ProductController extends Controller
         return view('user.products.index');
     }
 
-    public function getProducts(Request $request) {
+    public function getProducts() {
         
         $query = Product::with('vendor')
         ->whereHas('vendor', function ($query) {
@@ -42,14 +41,19 @@ class ProductController extends Controller
             $maxDiscountedPrice = $variants->whereNotNull('discounted_price')->max('discounted_price') ?? $maxVariantPrice;
             $tagNames = $product->tag()->toArray();
             $tag_name = implode(', ', $tagNames); 
+            $reviews = $product->reviews;
+            $totalRatings = $reviews->sum('review_rating');
+            $totalReviews = $reviews->count();
+            $averageRating = $totalReviews > 0 ? $totalRatings / $totalReviews : 0;
+            $averageRating = number_format($averageRating, 1);
             return [
                 'id' => $product->id,
                 'name' => $product->name,
                 'short_description' => $product->short_description,
                 'image_url' => $product->image ? asset('storage/' . $product->image) : asset('default-image.jpg'),
                 'location' => $product->emirate->name ?? 'Unknown',
-                'rating' => $product->rating ?? 4.5,
-                'reviews' => $product->reviews ?? 0,
+                'rating' => $averageRating ?? 0,
+                'total_reviews' => $totalReviews,
                 // 'distance' => $product->distance ?? 5,
                 'price_range' => [
                     'min' => $minVariantPrice,
@@ -95,7 +99,56 @@ class ProductController extends Controller
         $tagNames = $product->tag()->toArray();
         $tag_name = implode(', ', $tagNames); 
         $gallery = json_decode($product->gallery, true);
+        $reviews =  $product->reviews; 
+        $totalRatings = $reviews->sum('review_rating');
+        $totalReviews = $reviews->count();
+        $averageRating = $totalReviews > 0 ? $totalRatings / $totalReviews : 0;
+        $averageRating = number_format($averageRating, 1);
+        $ratingCounts = [
+            5 => $reviews->where('review_rating', 5)->count(),
+            4 => $reviews->where('review_rating', 4)->count(),
+            3 => $reviews->where('review_rating', 3)->count(),
+            2 => $reviews->where('review_rating', 2)->count(),
+            1 => $reviews->where('review_rating', 1)->count(),
+        ];
+
+        $percentages = [];
+        foreach ($ratingCounts as $rating => $count) {
+            $percentages[$rating] = $totalReviews > 0 ? ($count / $totalReviews) * 100 : 0;
+        }
+
         $variants =  $product->variants; 
-        return view('user.products.show', compact('product','tag_name','gallery','nbvterms','variants'));
+
+        $variantsWithType = $variants->map(function ($variant) {
+            $typeName = $variant->types ? $variant->types->name : 'No Type Available';
+            $variant->product_type = $typeName;
+            return $variant;
+        });
+        return view('user.products.show', compact('product','tag_name','gallery','nbvterms','variants','reviews',
+        'totalReviews','averageRating','percentages','variantsWithType'));
     }
+    public function storeReview(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'review_title' => 'required|string|max:255',
+            'user_id' => 'required|exists:users,id', 
+            'review_rating' => 'required|integer|between:1,5',
+            'review_description' => 'required|string',
+        ]);
+    
+        Review::create($request->all());
+    
+        return response()->json(['message' => 'Review added successfully!']);
+    }
+    public function showReview($product_id){
+        $reviews = Review::where('product_id', $product_id)
+        ->get()
+        ->map(function ($review) {
+            $review->formatted_date = $review->created_at->format('F j, Y'); 
+            return $review;
+        });        
+        return response()->json($reviews);
+    }
+    
 }

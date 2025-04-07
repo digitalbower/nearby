@@ -50,4 +50,8 @@ class Product extends Model
     { 
         return $this->belongsTo(Emirate::class, 'emirates_id');
     }
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

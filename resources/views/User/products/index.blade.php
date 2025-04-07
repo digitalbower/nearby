@@ -84,11 +84,6 @@
               isOpen(section) {
                   return this.openSections.includes(section);
               },
-              minPrice: 0,  // Added min price value
-              maxPrice: 500, // Added max price value
-              formatPrice(price) {
-                  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
-              }
             }" class="lg:w-full bg-white p-3 rounded-lg shadow-md space-y-2">
             <h2 class="text-2xl font-bold text-gray-800">Filters</h2>
             <div class="border-b pb-2">
@@ -175,7 +170,19 @@
               </button>
               <div x-show="isOpen('rating')" class="mt-2 space-y-2">
                 <div class="flex items-center">
-                  <input type="radio" id="rating4" name="rating" value="4+" class="form-radio text-blue-500">
+                  <input type="radio" id="rating5" name="rating" value="5+" x-model="selectedRating" class="form-radio text-blue-500">
+                  <label for="rating5" class="ml-2 text-sm text-gray-600 flex items-center">
+                    <span class="flex text-yellow-400">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </span>
+                  </label>
+                </div>
+                <div class="flex items-center">
+                  <input type="radio" id="rating4" name="rating" value="4+" x-model="selectedRating" class="form-radio text-blue-500">
                   <label for="rating4" class="ml-2 text-sm text-gray-600 flex items-center">
                     <span class="flex text-yellow-400">
                       <i class="fas fa-star"></i>
@@ -184,11 +191,11 @@
                       <i class="fas fa-star"></i>
                       <i class="far fa-star text-gray-300"></i>
                     </span>
-                    <span class="ml-1">& Up (297)</span>
+
                   </label>
                 </div>
                 <div class="flex items-center">
-                  <input type="radio" id="rating3" name="rating" value="3+" class="form-radio text-blue-500">
+                  <input type="radio" id="rating3" name="rating" value="3+" x-model="selectedRating" class="form-radio text-blue-500">
                   <label for="rating3" class="ml-2 text-sm text-gray-600 flex items-center">
                     <span class="flex text-yellow-400">
                       <i class="fas fa-star"></i>
@@ -197,7 +204,30 @@
                       <i class="far fa-star text-gray-300"></i>
                       <i class="far fa-star text-gray-300"></i>
                     </span>
-                    <span class="ml-1">& Up (350)</span>
+                  </label>
+                </div>
+                <div class="flex items-center">
+                  <input type="radio" id="rating2" name="rating" value="2+" x-model="selectedRating" class="form-radio text-blue-500">
+                  <label for="rating2" class="ml-2 text-sm text-gray-600 flex items-center">
+                    <span class="flex text-yellow-400">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="far fa-star text-gray-300"></i>
+                      <i class="far fa-star text-gray-300"></i>
+                      <i class="far fa-star text-gray-300"></i>
+                    </span>
+                  </label>
+                </div>
+                <div class="flex items-center">
+                  <input type="radio" id="rating1" name="rating" value="1+" x-model="selectedRating" class="form-radio text-blue-500">
+                  <label for="rating1" class="ml-2 text-sm text-gray-600 flex items-center">
+                    <span class="flex text-yellow-400">
+                      <i class="fas fa-star"></i>
+                      <i class="far fa-star text-gray-300"></i>
+                      <i class="far fa-star text-gray-300"></i>
+                      <i class="far fa-star text-gray-300"></i>
+                      <i class="far fa-star text-gray-300"></i>
+                    </span>
                   </label>
                 </div>
               </div>
@@ -214,17 +244,17 @@
             
               <div x-show="isOpen('price')" class="mt-4 transition-all duration-300 ease-in-out">
                 <!-- Min Price Slider -->
-                <input type="range" min="0" max="500" step="1" x-model="minPrice"
-                @input="updateFilters();"
-                  class="w-full accent-blue-500 rounded-lg h-2 hover:accent-blue-600 focus:outline-none">
+                <input type="range" step="1" x-model="minPrice"
+                @input="updateFilters();" 
+                min="0" :max="maxPrice" class="w-full accent-blue-500 rounded-lg h-2 hover:accent-blue-600 focus:outline-none">
                 <p class="text-base font-semibold text-gray-800 mt-2">Min: 
-                  <span x-text="formatPrice(minPrice)" class="font-semibold text-blue-600"></span>
+                    <span x-text="formatPrice(minPrice)" class="font-semibold text-blue-600"></span>
                 </p>
             
                 <!-- Max Price Slider -->
-                <input type="range" min="0" max="500" step="1" x-model="maxPrice"
+                <input type="range" step="1" x-model="maxPrice"
                 @input="updateFilters();"
-                  class="w-full accent-blue-500 rounded-lg h-2 hover:accent-blue-600 focus:outline-none">
+                min="0" :max="maxPrice" class="w-full accent-blue-500 rounded-lg h-2 hover:accent-blue-600 focus:outline-none">
                 <p class="text-base font-semibold text-gray-800 mt-2">Max: 
                   <span x-text="formatPrice(maxPrice)" class="font-semibold text-blue-600"></span>
                 </p>
@@ -276,20 +306,18 @@
                   <p x-text="product.location" class="text-sm text-gray-600 mb-2"></p>
                 </div>
                   <div class="flex items-center mb-2">
-                    <span class="text-sm mr-1">★</span>
-                    <span class="text-sm mr-1">★</span>
-                    <span class="text-sm mr-1">★</span>
-                    <span class="text-sm mr-1">★</span>
-                    <span class="text-sm mr-1">★</span>
+                    <template x-for="n in 5" :key="n">
+                      <i :class="n <= Math.floor(product.rating) ? 'fas fa-star text-yellow-400' : 'far fa-star text-yellow-400'"></i>
+                    </template>
 
                     <span x-text="product.rating.toFixed(1)" class="text-sm mr-1"></span>
                     
-                    <span x-text="'(' + product.reviews.toLocaleString() + ')'" class="text-sm text-gray-600 mr-2"></span>
+                    <span x-text="'(' + product.total_reviews.toLocaleString() + ')'" class="text-sm text-gray-600 mr-2"></span>
                   
                     
                     <span x-text="product.distance + ' mi'" class="text-sm text-gray-600"></span>
                   </div>
-                <p class="text-gray-700 text-sm mb-2 leading-relaxed" x-text="product.description"></p>
+                <p class="text-gray-700 text-sm mb-2 leading-relaxed" x-text="product.short_description"></p>
                   <div class="flex items-center justify-between">
                     <div>
                       <span x-text="'$' + product.discountedPrice.toFixed(2)" class="text-xl font-bold"></span>
@@ -336,12 +364,13 @@
         selectedCategories: [],
         selectedSubcategories: [],
         selectedLocations: [],
+        selectedRating: '',
         favorites: [],
         openSections: '',
         showGiftable: false, 
         destinationCoordinates: null, 
-        minPrice: 0,  
-        maxPrice: 500,
+        minPrice: 0, 
+        maxPrice: 500,  
         minDiscountPercentage: 0,
         filteredByPrice: [],        
         showFilters: false,
@@ -350,6 +379,13 @@
             try {
                 let response = await fetch('/user/products/list'); 
                 let data = await response.json(); 
+             
+                const productPrices = data.products.map(product => parseFloat(product.price_range?.min ?? 0));
+                const productMaxPrices = data.products.map(product => parseFloat(product.price_range?.max ?? 0));
+
+                this.minPrice = Math.min(...productPrices); 
+                this.maxPrice = Math.max(...productMaxPrices); 
+
                 this.products = data.products.map(product => { 
                  const firstVariant = product.variants?.[0] ?? {};
                  const productCoordinates = this.getLocationCoordinates(product.location);
@@ -366,10 +402,10 @@
               productlocation_link: product.productlocation_link,
               giftable:product.giftable,
               rating: Number(product.rating ?? 4.5),
-              reviews: Number(product.reviews ?? 0),
+              total_reviews: Number(product.total_reviews ?? 0),
               priceRange: {
-                min: parseFloat(product.price_range?.min ?? 0).toFixed(2),
-                max: parseFloat(product.price_range?.max ?? 0).toFixed(2),
+                    min: parseFloat(product.price_range?.min ?? 0),
+                    max: parseFloat(product.price_range?.max ?? 0),
               },
               discountedPriceRange: {
                 min: parseFloat(product.discounted_price_range?.min ?? 0).toFixed(2),
@@ -386,8 +422,7 @@
                   : null
             };
           });
-         
-        
+      
         this.categories = data.categories.map(category => ({
             id: category.id,
             name: category.name,
@@ -411,7 +446,7 @@
             }
             return null;
         },
-
+       
         // Get coordinates for product location (you can replace this with an API call)
         getLocationCoordinates(location) {
           const predefinedLocations = {
@@ -453,26 +488,34 @@
             return subcategories;
         },
         updateFilters() {
-            
-            // ✅ Ensure prices are numbers
-            this.minPrice = Number(this.minPrice);
-            this.maxPrice = Number(this.maxPrice);
+                      // Ensure prices are numbers
+          this.minPrice = Number(this.minPrice);
+          this.maxPrice = Number(this.maxPrice);
+          
+          // Filter products by price range
+          this.filteredByPrice = this.products.filter(product => {
+              // Ensure the price range is numeric
+              const productMinPrice = Number(product.priceRange.min);
+              const productMaxPrice = Number(product.priceRange.max);
 
-            this.filteredByPrice = this.products.filter(product => {
-                return Number(product.originalPrice) >= this.minPrice && Number(product.originalPrice) <= this.maxPrice;
-            });
-
+              // Check if the product's price range intersects with the selected price range
+              return (
+                  (productMinPrice <= this.maxPrice) &&  // Product's min price is less than or equal to max price
+                  (productMaxPrice >= this.minPrice)     // Product's max price is greater than or equal to min price
+              );
+          });
+        
         },
         get filteredProducts() {
-            if (!Array.isArray(this.filteredByPrice)) return []; // 👈 prevent crash
+            if (!Array.isArray(this.filteredByPrice)) return []; 
             return this.filteredByPrice.filter(product => {
                 const categoryMatch = this.selectedCategories.length === 0 || this.selectedCategories.includes(String(product.category ?? ''));
                 const subCategoryMatch = this.selectedSubcategories.length === 0 || this.selectedSubcategories.includes(String(product.subcategory ?? ''));
                 const locationMatch = this.selectedLocations.length === 0 || this.selectedLocations.includes(String(product.location ?? ''));
                 const giftableMatch = this.showGiftable ? Boolean(product.giftable) : true;
                 const discountMatch = product.discount >= Number(this.minDiscountPercentage);
-
-                return categoryMatch && subCategoryMatch && locationMatch && giftableMatch && discountMatch;
+                const ratingMatch = this.selectedRating ? product.rating >= parseInt(this.selectedRating) : true;
+                return categoryMatch && subCategoryMatch && locationMatch && giftableMatch && discountMatch && ratingMatch;
             });
         },
       
@@ -497,6 +540,7 @@
         setSort(sortType) {
           this.sortBy = sortType;
         },
+
         toggleLocation(name) {
             if (this.selectedLocations.includes(name)) {
                 this.selectedLocations = this.selectedLocations.filter(loc => loc !== name);

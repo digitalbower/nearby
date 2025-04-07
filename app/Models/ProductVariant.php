@@ -17,4 +17,8 @@ class ProductVariant extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
+    public function types()
+    {
+        return $this->hasOne(ProductType::class, 'id', 'product_type_id');
+    }
 }
