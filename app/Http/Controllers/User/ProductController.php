@@ -33,13 +33,20 @@ class ProductController extends Controller
         $products = $query->get()->map(function ($product) {
             $variants = $product->variants ?? collect([]);
 
-            // Get min/max prices from variants
-            $minVariantPrice = $variants->min('unit_price') ?? $product->unit_price; 
-            $maxVariantPrice = $variants->max('unit_price') ?? $product->unit_price; 
+            $minVariant = $variants->isNotEmpty() ? $variants->sortBy('unit_price')->first() : null;
+            $maxVariant = $variants->isNotEmpty() ? $variants->sortByDesc('unit_price')->first() : null;
+
+            $minVariantPrice = $minVariant ? $minVariant->unit_price : $product->unit_price;
+            $maxVariantPrice = $maxVariant ? $maxVariant->unit_price : $product->unit_price;
     
-            // Get discounted prices from variants
-            $minDiscountedPrice = $variants->whereNotNull('discounted_price')->min('discounted_price') ?? $minVariantPrice;
-            $maxDiscountedPrice = $variants->whereNotNull('discounted_price')->max('discounted_price') ?? $maxVariantPrice;
+            // Get min and max discounted prices from variants
+            $minDiscountedVariant = $variants->whereNotNull('discounted_price')->sortBy('discounted_price')->first();
+            $maxDiscountedVariant = $variants->whereNotNull('discounted_price')->sortByDesc('discounted_price')->first();
+    
+            // If discounted prices exist, use the min and max discounted prices, otherwise fall back to unit prices
+            $minDiscountedPrice = $minDiscountedVariant ? $minDiscountedVariant->discounted_price : $minVariantPrice;
+            $maxDiscountedPrice = $maxDiscountedVariant ? $maxDiscountedVariant->discounted_price : $maxVariantPrice;
+            
             $tagNames = $product->tag()->toArray();
             $tag_name = implode(', ', $tagNames); 
             $reviews = $product->reviews;
@@ -72,16 +79,22 @@ class ProductController extends Controller
                 'emirates_id' => $product->emirates_id,
                 'giftable' => $product->giftable,
                 'productlocation_link' => $product->productlocation_link,
-                'variants' => $variants->map(function ($variant) {
-                    return [
-                        'id' => $variant->id,
-                        'name' => $variant->title,
-                        'unit_price' => $variant->unit_price,
-                        'discounted_percentage'=> $variant->discounted_percentage,
-                        'discounted_price' => $variant->discounted_price ?? $variant->unit_price,
-                    ];
-                    
-                })->toArray(),
+                'variants' => [
+                    'min_variant' => $minVariant ? [
+                        'id' => $minVariant->id,
+                        'name' => $minVariant->title,
+                        'unit_price' => $minVariant->unit_price,
+                        'discounted_percentage' => $minVariant->discounted_percentage,
+                        'discounted_price' => $minVariant->discounted_price ?? $minVariant->unit_price,
+                    ] : null,
+                    'max_variant' => $maxVariant ? [
+                        'id' => $maxVariant->id,
+                        'name' => $maxVariant->title,
+                        'unit_price' => $maxVariant->unit_price,
+                        'discounted_percentage' => $maxVariant->discounted_percentage,
+                        'discounted_price' => $maxVariant->discounted_price ?? $maxVariant->unit_price,
+                    ] : null,
+                ],
             ];
         });
        

@@ -387,7 +387,6 @@
                 this.maxPrice = Math.max(...productMaxPrices); 
 
                 this.products = data.products.map(product => { 
-                 const firstVariant = product.variants?.[0] ?? {};
                  const productCoordinates = this.getLocationCoordinates(product.location);
                  const destinationCoordinates = this.extractCoordinates(product.productlocation_link);
 
@@ -411,9 +410,9 @@
                 min: parseFloat(product.discounted_price_range?.min ?? 0).toFixed(2),
                 max: parseFloat(product.discounted_price_range?.max ?? 0).toFixed(2),
               },
-              originalPrice: parseFloat(firstVariant.unit_price ?? 0),
-              discountedPrice: Number(firstVariant.discounted_price ?? 0),
-              discount: parseFloat(firstVariant.discounted_percentage ?? 0),
+              originalPrice: parseFloat(product.variants.min_variant.unit_price ?? 0),
+              discountedPrice: Number(product.variants.min_variant.discounted_price ?? 0),
+              discount: parseFloat( product.variants.min_variant.discounted_percentage ?? 0),
               tags: product.tags,
               coordinates: productCoordinates,  
               destinationCoordinates: destinationCoordinates, 
@@ -488,23 +487,24 @@
             return subcategories;
         },
         updateFilters() {
-                      // Ensure prices are numbers
           this.minPrice = Number(this.minPrice);
           this.maxPrice = Number(this.maxPrice);
-          
-          // Filter products by price range
           this.filteredByPrice = this.products.filter(product => {
-              // Ensure the price range is numeric
               const productMinPrice = Number(product.priceRange.min);
               const productMaxPrice = Number(product.priceRange.max);
-
-              // Check if the product's price range intersects with the selected price range
+              // Exclude products where:
+              // - The product's minimum price is greater than the selected maxPrice
+              // - The product's maximum price is less than the selected minPrice
               return (
-                  (productMinPrice <= this.maxPrice) &&  // Product's min price is less than or equal to max price
-                  (productMaxPrice >= this.minPrice)     // Product's max price is greater than or equal to min price
+              (productMinPrice >= this.minPrice) &&  
+              (productMaxPrice <= this.maxPrice)     
               );
-          });
-        
+              //If the price between min and max then use this 
+              // return (
+              //     (productMinPrice <= this.maxPrice) &&  
+              //     (productMaxPrice >= this.minPrice)     
+              // );
+            });
         },
         get filteredProducts() {
             if (!Array.isArray(this.filteredByPrice)) return []; 
