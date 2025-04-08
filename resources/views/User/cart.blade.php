@@ -193,7 +193,7 @@
           </div>
         </div>
       </div>
-      <header  id="header" class="  shadow-sm  z-50">
+      <header  id="header" class="shadow-sm  z-50">
         
   
         <!-- Top bar -->
