@@ -23,7 +23,6 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Terms</th>
                         <th>Type</th>
                         <th>Actions</th>
                     </tr>
@@ -32,7 +31,6 @@
                     @forelse($terms as $term)
                         <tr>
                             <td>{{$term->name}}</td>
-                            <td>{{ \Illuminate\Support\Str::limit($term->terms, 50, '...') }}</td>
                             <td>{{$term->type}}</td>
                             <td class="d-flex align-items-center gap-2">
                                 <!-- Toggle Switch -->

@@ -47,6 +47,17 @@
 @endsection
 @push('scripts')
     <script src="{{ asset('assets/js/custom/js/vendor_terms.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+                $('#terms').summernote({
+                    height: 200,
+                    toolbar: [
+                        ['style', ['bold', 'italic', 'underline']],
+                        ['para', ['ul', 'ol', 'paragraph']]
+                    ]
+                });
+            });
+    </script>
 @endpush
 
 

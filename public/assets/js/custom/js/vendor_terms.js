@@ -1,14 +1,28 @@
 $(document).ready(function () {
     $("#vendorTermForm").validate({
+        ignore: [], 
         rules: {
             vendor_id: { required: true},
             name: { required: true},
-            terms: { required: true }
+            terms: {
+                required: function (textarea) {
+                    // Get Summernote content
+                    var editorContent = $('#terms').summernote('isEmpty');
+                    return editorContent;
+                }
+            },
         },
         messages: {
             vendor_id: { required: "Vendor is required"},
             name: { required: "Vendor Term Name is required"},
             terms: { required: "Terms is required"}
+        },
+        errorPlacement: function (error, element) {
+            if (element.attr("name") === "terms") {
+                $("#terms").next('.note-editor').after(error);
+            } else {
+                error.insertAfter(element);
+            }
         }
     });
     $('.toggle-status').change(function () {

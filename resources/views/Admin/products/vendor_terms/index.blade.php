@@ -26,7 +26,6 @@
                         <th>#</th>
                         <th>Vendor</th>
                         <th>Vendor Terms Name</th>
-                        <th>Terms</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -36,7 +35,6 @@
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $vendor_term->vendor ? $vendor_term->vendor->name : 'N/A' }}</td>
                             <td>{{ $vendor_term->name }}</td>
-                            <td>{{ \Illuminate\Support\Str::limit($vendor_term->terms, 50, '...') }}</td>
                             <td class="d-flex align-items-center gap-2">
                                 <!-- Toggle Switch -->
                                 <div class="form-check form-switch">

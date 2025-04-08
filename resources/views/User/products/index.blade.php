@@ -511,7 +511,7 @@
             return this.filteredByPrice.filter(product => {
                 const categoryMatch = this.selectedCategories.length === 0 || this.selectedCategories.includes(String(product.category ?? ''));
                 const subCategoryMatch = this.selectedSubcategories.length === 0 || this.selectedSubcategories.includes(String(product.subcategory ?? ''));
-                const locationMatch = this.selectedLocations.length === 0 || this.selectedLocations.includes(String(product.location ?? ''));
+                const locationMatch = this.selectedLocations.length === 0 || this.selectedLocations.includes("All over UAE") || this.selectedLocations.includes(String(product.location ?? ''));
                 const giftableMatch = this.showGiftable ? Boolean(product.giftable) : true;
                 const discountMatch = product.discount >= Number(this.minDiscountPercentage);
                 const ratingMatch = this.selectedRating ? product.rating >= parseInt(this.selectedRating) : true;

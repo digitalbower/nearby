@@ -1,14 +1,28 @@
 $(document).ready(function () {
     $("#nbvTermForm").validate({
+        ignore: [], 
         rules: {
             name: { required: true},
-            terms: { required: true},
+            terms: {
+                required: function (textarea) {
+                    // Get Summernote content
+                    var editorContent = $('#terms').summernote('isEmpty');
+                    return editorContent;
+                }
+            },
             type: { required: true},
         },
         messages: {
             name: { required: "Name is required"},
             terms: { required: "Terms is required"},
             type: { required: "Type is required"},
+        },
+        errorPlacement: function (error, element) {
+            if (element.attr("name") === "terms") {
+                $("#terms").next('.note-editor').after(error);
+            } else {
+                error.insertAfter(element);
+            }
         }
     });
     $('.toggle-status').change(function () {
