@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\Report\ReviewReportController;
 use App\Http\Controllers\User\ProductController as UserProductController;
 use App\Http\Controllers\User\NewsletterController;
 use App\Http\Controllers\User\SpecialistRequestController;
+use App\Http\Controllers\User\ContactController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
@@ -48,6 +49,10 @@ Route::prefix('user')->name('user.')->group(function () {
 });
 
 Route::post('/specialist', [SpecialistRequestController::class, 'submit'])->name('specialist.submit');
+Route::get('contactus', [ContactController::class, 'contactus'])->name('contactus');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contactus.submit');
+
+
 // ✅ User Routes
 
 Route::prefix('user')->name('user.')->group(function () {
