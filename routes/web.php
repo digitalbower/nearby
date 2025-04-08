@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\CategoryUnitMasterController;
 use App\Http\Controllers\Admin\Product\NbvTermController;
 use App\Http\Controllers\Admin\Product\ProductTypeController;
 use App\Http\Controllers\Admin\Product\PromoController;
+use App\Http\Controllers\Admin\Report\ReviewReportController;
 use App\Http\Controllers\User\ProductController as UserProductController;
 use App\Http\Controllers\User\NewsletterController;
 use App\Http\Controllers\User\SpecialistRequestController;
@@ -35,7 +36,16 @@ use App\Http\Controllers\User\SpecialistRequestController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::post('/subscribe', [NewsletterController::class, 'subscribe'])->name('subscribe');
-
+Route::prefix('user')->name('user.')->group(function () {
+    Route::prefix('products')->name('products.')->group(function () {
+        Route::get('/', [UserProductController::class, 'index'])->name('index');
+        Route::get('/list', [UserProductController::class, 'getProducts'])->name('filter');
+        Route::get('/{id}', [UserProductController::class, 'show'])->name('show');
+        Route::post('/store-review', [UserProductController::class, 'storeReview'])->name('store_review');
+        Route::get('/show-review/{id}', [UserProductController::class, 'showReview'])->name('show_review');
+        Route::post('/add-cart', [UserProductController::class, 'addCart'])->name('add_cart');
+    });
+});
 
 Route::post('/specialist', [SpecialistRequestController::class, 'submit'])->name('specialist.submit');
 // ✅ User Routes
@@ -60,18 +70,7 @@ Route::prefix('user')->name('user.')->group(function () {
     // ✅ Authenticated Routes (Only for Logged-in Users)
     Route::middleware('auth')->group(function () {
         
-        Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-        // ✅ Home & Product Routes
-        Route::prefix('products')->name('products.')->group(function () {
-            Route::get('/', [UserProductController::class, 'index'])->name('index');
-            Route::get('/list', [UserProductController::class, 'getProducts'])->name('filter');
-            Route::get('/{id}', [UserProductController::class, 'show'])->name('show');
-        });
-
-         
-
 
         // ✅ E-commerce & Booking Routes
         Route::prefix('home')->name('home.')->group(function () {
@@ -138,6 +137,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/product_types/change-status', [ProductTypeController::class, 'changeTypeStatus'])->name('product_types.status');
             Route::resource('promos', PromoController::class);
             Route::post('/promos/change-status', [PromoController::class, 'changePromoStatus'])->name('promos.status');
+         
+        });
+        Route::prefix('reports')->name('reports.')->group(function () {
+            Route::resource('reviews', ReviewReportController::class);
+            Route::post('/reviews/change-status', [ReviewReportController::class, 'changeReviewStatus'])->name('reviews.status');
         });
         Route::prefix('logos')->name('logos.')->group(function () {
             Route::get('/', [LogoController::class, 'index'])->name('index');

@@ -15,7 +15,7 @@ class AuthController extends Controller
 {
     public function login()
     {
-        return view('signin'); 
+        return view('user.signin'); 
     }
 
     public function loginsubmit(Request $request)
@@ -28,7 +28,8 @@ class AuthController extends Controller
 
         // Attempt to authenticate user
         if (Auth::attempt($request->only('email', 'password'))) {
-            return redirect()->route('user.index')->with('success', 'Login successful!');
+            $redirectUrl = $request->input('redirect', route('home.index'));
+            return redirect()->to($redirectUrl);
         }
 
         // If authentication fails, return back with error

@@ -438,7 +438,7 @@
         </div>
     </div>
        
-
+        <input type="hidden" name="redirect" value="{{ request()->input('redirect', '/') }}">
         <div class="w-full px-2">
           <button type="submit"
             class="px-6 py-2 text-black rounded-lg w-full  bg-[#58af0838] hover:bg-[#4a910954] transition duration-300">
