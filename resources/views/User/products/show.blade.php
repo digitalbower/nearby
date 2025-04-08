@@ -28,8 +28,8 @@
             <a href="#" class="text-gray-800 text-sm lg:text-base hover:underline font-medium"> {{$product->emirate->name}}</a>
             <div class="flex items-center text-gray-600 gap-2">
               <i class="fas fa-star text-yellow-500"></i>
-              <span class="font-semibold">4.6</span>
-              <span class="text-xs lg:text-sm">(7,843 reviews)</span>
+              <span class="font-semibold">{{$averageRating}}</span>
+              <span class="text-xs lg:text-sm">({{$totalReviews}} reviews)</span>
             </div>
           </div>
 
@@ -378,264 +378,161 @@
         </div>
 
         <!-- Right Column -->
-        <div
-          class=" lg:mt-0 mt-5 w-full pb-20 col-span-5 sticky top-0  h-[120vh]  bg-[#58af0838] rounded-lg  p-3 lg:p-5 space-y-6">
+        <div class=" lg:mt-0 mt-5 w-full pb-20 col-span-5 sticky top-0  h-[120vh]  bg-[#58af0838] rounded-lg  p-3 lg:p-5 space-y-6">
           <!-- Option Selector -->
-        
-        
-        
-          <!-- Options -->
-          <div class="space-y-4">
-            <h2 class="md:text-2xl text-base font-bold text-gray-800 mb-0">
-              Choose a Variant
-          </h2>
-          @foreach ($variants as $variant)
-            <div
-            class="rounded-lg border bg-white text-card-foreground shadow-sm w-full overflow-hidden hover:shadow-xl f transition-all duration-300 ease-in-out transform hover:border-cyan-300 hover:ring-2 hover:ring-cyan-600">
-            <div class="flex flex-col space-y-2 p-4 pb-2">
-              <h3 class="tracking-tight text-base lg:text-2xl font-bold">{{$variant->title}}</h3>
-              <div class="gap-x-4 flex items-center">
-                <div>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-bed h-5 w-5 text-gray-800">
-                    <path d="M2 4v16"></path>
-                    <path d="M2 8h18a2 2 0 0 1 2 2v10"></path>
-                    <path d="M2 17h20"></path>
-                    <path d="M6 8v9"></path>
-                  </svg>
-                </div>
-                <p class="text-sm text-muted-foreground flex items-center gap-2">
-                  <span>{{$variant->short_description}}</span>
-                </p>
+        <!-- Options -->
+          <form action="{{route('user.products.add_cart')}}" id="addCartForm" method="POST">
+            @csrf
+            <input type="hidden" name="user_id" id="user_id" value="{{auth()->user()->id}}">
+            <div class="space-y-4">
+              <h2 class="md:text-2xl text-base font-bold text-gray-800 mb-0">
+                Choose a Variant
+              </h2>
+              @if ($errors->any())
+              <div class="bg-red-500 text-white p-4 rounded-lg shadow-md">
+                  <ul>
+                      @foreach ($errors->all() as $error)
+                          <li>{{ $error }}</li>
+                      @endforeach
+                  </ul>
               </div>
-            </div>
-          
-            <div class="p-4 pt-0 space-y-3">
-              <div class="flex items-center justify-between">
-                <div class="space-y-1">
-                  <div class="flex items-center gap-2">
-                    <span class="text-sm font-medium text-muted-foreground">From</span>
-                    <span class="text-sm line-through text-muted-foreground">{{$variant->unit_price}}</span>
-                    <div
-                      class="inline-flex items-center rounded-full border px-2 py-1 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-secondary/80 text-green-600 bg-green-100 font-semibold"
-                      data-v0-t="badge">-{{$variant->discounted_percentage}}%</div>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span class="text-3xl font-bold text-primary">${{$variant->discounted_price}}</span>
-                    <span class="text-sm text-muted-foreground">/{{$variant->types->product_type}}</span>
-          
-                    <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
-                      <!-- Decrement Button -->
-                      <button
-                        type="button"
-                        class="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-300"
-                        onclick="decrementQty()"
-                        aria-label="Decrease Quantity">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                          stroke="currentColor" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
+              @endif
+                @foreach ($variants as $index=>$variant)
+                <div
+                  class="rounded-lg border bg-white text-card-foreground shadow-sm w-full overflow-hidden hover:shadow-xl f transition-all duration-300 ease-in-out transform hover:border-cyan-300 hover:ring-2 hover:ring-cyan-600">
+                  <div class="flex flex-col space-y-2 p-4 pb-2">
+                    <h3 class="tracking-tight text-base lg:text-2xl font-bold">{{$variant->title}}</h3>
+                    <div class="gap-x-4 flex items-center">
+                      <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          class="lucide lucide-bed h-5 w-5 text-gray-800">
+                          <path d="M2 4v16"></path>
+                          <path d="M2 8h18a2 2 0 0 1 2 2v10"></path>
+                          <path d="M2 17h20"></path>
+                          <path d="M6 8v9"></path>
                         </svg>
-                      </button>
-          
-                      <!-- Quantity Display -->
-                      <input
-                        type="number"
-                        id="quantity"
-                        value="0"
-                        min="0"
-                        class="w-12 h-8 pl-4 text-center flex justify-center rounded-lg text-lg font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
-                        aria-label="Quantity" />
-          
-                      <!-- Increment Button -->
-                      <button
-                        type="button"
-                        class="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
-                        onclick="incrementQty()"
-                        aria-label="Increase Quantity">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                          stroke="currentColor" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
-                        </svg>
-                      </button>
+                      </div>
+                      <p class="text-sm text-muted-foreground flex items-center gap-2">
+                        <span>{{$variant->short_description}}</span>
+                      </p>
                     </div>
                   </div>
-                </div>
-                <div
-                  class="bg-primary text-primary-foreground rounded-full p-2 hover:bg-primary/90 transition-colors duration-200 cursor-pointer">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-arrow-right h-6 w-6">
-                    <path d="M5 12h14"></path>
-                    <path d="m12 5 7 7-7 7"></path>
-                  </svg>
-                </div>
-              </div>
-          
-              <div
-                class="text-xs  bg-[#58af0838] rounded-md p-2 text-black flex gap-x-4 items-center rounded-lg p-3">
-                <p class="font-medium">{{$variant->short_info}}</p>
-                <p class="text-primary font-semibold">Learn more</p>
-              </div>
-          
-              <div class="flex items-center justify-between text-sm text-muted-foreground">
-                <span class="flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-users h-5 w-5 text-gray-800">
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                  </svg>
-                  <span class="font-medium">10,000+ booked</span>
-                </span>
-                <span class="flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-calendar h-4 w-4 text-purple-500">
-                    <path d="M8 2v4"></path>
-                    <path d="M16 2v4"></path>
-                    <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-                    <path d="M3 10h18"></path>
-                  </svg>
-                  <span class="font-medium">{{$variant->short_legend}}</span>
-                </span>
-              </div>
-            </div>
-          </div>
-          @endforeach
-          {{-- <div
-          class="rounded-lg border bg-white text-card-foreground shadow-sm w-full overflow-hidden hover:shadow-xl f transition-all duration-300 ease-in-out transform hover:border-cyan-300 hover:ring-2 hover:ring-cyan-600">
-            <div class="flex flex-col space-y-2 p-4 pb-2">
-              <h3 class="tracking-tight text-base lg:text-2xl font-bold">1NT Family Suite</h3>
-              <div class="gap-x-4 flex items-center">
-                <div>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-bed h-5 w-5 text-gray-800">
-                    <path d="M2 4v16"></path>
-                    <path d="M2 8h18a2 2 0 0 1 2 2v10"></path>
-                    <path d="M2 17h20"></path>
-                    <path d="M6 8v9"></path>
-                  </svg>
-                </div>
-                <p class="text-sm text-muted-foreground flex items-center gap-2">
-                  <span>Two queen beds and one full sofa bed w/ daily water park wristbands for six</span>
-                </p>
-              </div>
-            </div>
-        
-          <div class="p-4 pt-0 space-y-3">
-            <div class="flex items-center justify-between">
-              <div class="space-y-1">
-                <div class="flex items-center gap-2">
-                  <span class="text-sm font-medium text-muted-foreground">From</span>
-                  <span class="text-sm line-through text-muted-foreground">$286.09</span>
-                  <div
-                    class="inline-flex items-center rounded-full border px-2 py-1 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-secondary/80 text-green-600 bg-green-100 font-semibold"
-                    data-v0-t="badge">-54%</div>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="text-3xl font-bold text-primary">$131.43</span>
-                  <span class="text-sm text-muted-foreground">/night</span>
-        
-                  <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
-                    <!-- Decrement Button -->
-                    <button
-                      type="button"
-                      class="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-300"
-                      onclick="decrementQty()"
-                      aria-label="Decrease Quantity">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
-                      </svg>
-                    </button>
-        
-                    <!-- Quantity Display -->
-                    <input
-                      type="number"
-                      id="quantity"
-                      value="0"
-                      min="0"
-                      class="w-12 h-8 pl-4 text-center flex justify-center rounded-lg text-lg font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
-                      aria-label="Quantity" />
-        
-                    <!-- Increment Button -->
-                    <button
-                      type="button"
-                      class="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
-                      onclick="incrementQty()"
-                      aria-label="Increase Quantity">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
-                      </svg>
-                    </button>
+                
+                  <div class="p-4 pt-0 space-y-3">
+                    <div class="flex items-center justify-between">
+                      <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                          <span class="text-sm font-medium text-muted-foreground">From</span>
+                          <span class="text-sm line-through text-muted-foreground">{{$variant->unit_price}}</span>
+                          <div
+                            class="inline-flex items-center rounded-full border px-2 py-1 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-secondary/80 text-green-600 bg-green-100 font-semibold"
+                            data-v0-t="badge">-{{$variant->discounted_percentage}}%</div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                          <span class="text-3xl font-bold text-primary">${{$variant->discounted_price}}</span>
+                          <span class="text-sm text-muted-foreground">/{{$variant->types->product_type}}</span>
+                
+                          <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
+                            <!-- Decrement Button -->
+                            <button
+                              type="button"
+                              class="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-300"
+                             onclick="decrementQty({{ $variant->id }})"
+                              aria-label="Decrease Quantity">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
+                              </svg>
+                            </button>
+                
+                            <!-- Quantity Display -->
+                            <input
+                              type="number" name="variants[{{ $variant->id }}][quantity]" data-variant-id="{{ $variant->id }}"
+                              id="quantity_{{ $variant->id }}" 
+                              value="{{ old('quantity', $variant->cart->quantity ?? 0) }}"                               
+                              min="0"
+                              class="w-12 h-8 pl-4 text-center flex justify-center rounded-lg text-lg font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 variant-quantity"
+                              aria-label="Quantity" />
+                            
+                            <!-- Increment Button -->
+                            <button
+                              type="button"
+                              class="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
+                              onclick="incrementQty({{ $variant->id }})" 
+                              aria-label="Increase Quantity">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+                              </svg>
+                            </button>
+                          </div>
+                         
+                        </div>
+                      </div>
+                      <div
+                        class="bg-primary text-primary-foreground rounded-full p-2 hover:bg-primary/90 transition-colors duration-200 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          class="lucide lucide-arrow-right h-6 w-6">
+                          <path d="M5 12h14"></path>
+                          <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                      </div>
+                    </div>
+                    <span id="quantity-error-{{$variant->id}}"></span>
+                    <div
+                      class="text-xs  bg-[#58af0838] rounded-md p-2 text-black flex gap-x-4 items-center rounded-lg p-3">
+                      <p class="font-medium">{{$variant->short_info}}</p>
+                      <p class="text-primary font-semibold">Learn more</p>
+                    </div>
+                
+                    <div class="flex items-center justify-between text-sm text-muted-foreground">
+                      <span class="flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          class="lucide lucide-users h-5 w-5 text-gray-800">
+                          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                          <circle cx="9" cy="7" r="4"></circle>
+                          <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <span class="font-medium">10,000+ booked</span>
+                      </span>
+                      <span class="flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          class="lucide lucide-calendar h-4 w-4 text-purple-500">
+                          <path d="M8 2v4"></path>
+                          <path d="M16 2v4"></path>
+                          <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                          <path d="M3 10h18"></path>
+                        </svg>
+                        <span class="font-medium">{{$variant->short_legend}}</span>
+                      </span>
+                    </div>
+                    <input type="hidden" name="variants[{{ $variant->id }}][product_variant_id]" value="{{ $variant->id }}" />
                   </div>
                 </div>
-              </div>
-              <div
-                class="bg-primary text-primary-foreground rounded-full p-2 hover:bg-primary/90 transition-colors duration-200 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="lucide lucide-arrow-right h-6 w-6">
-                  <path d="M5 12h14"></path>
-                  <path d="m12 5 7 7-7 7"></path>
-                </svg>
-              </div>
+                @endforeach
+            
             </div>
-        
-            <div
-              class="text-xs  bg-[#58af0838] rounded-md p-2 text-black flex gap-x-4 items-center rounded-lg p-3">
-              <p class="font-medium">4 interest-free payments of $32.86 with Klarna</p>
-              <p class="text-primary font-semibold">Learn more</p>
-            </div>
-        
-            <div class="flex items-center justify-between text-sm text-muted-foreground">
-              <span class="flex items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="lucide lucide-users h-5 w-5 text-gray-800">
-                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="9" cy="7" r="4"></circle>
-                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                </svg>
-                <span class="font-medium">10,000+ booked</span>
-              </span>
-              <span class="flex items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="lucide lucide-calendar h-4 w-4 text-purple-500">
-                  <path d="M8 2v4"></path>
-                  <path d="M16 2v4"></path>
-                  <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-                  <path d="M3 10h18"></path>
-                </svg>
-                <span class="font-medium">1 night minimum</span>
-              </span>
-            </div>
-          </div>
-        </div> --}}
-        
-        
-          </div>
-
-          <!-- Continue Button -->
-          <button
-            class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-            Continue
-          </button>
-          <button
-          class="relative px-6 w-full py-3  bg-[#58af0838] hover:bg-[#4a910954] text-black font-semibold rounded-lg shadow-md  transition-transform transform  duration-300 ease-in-out"
-        >
-          <i class="fas fa-shopping-cart mr-2"></i>
-          Add to Cart
-          <!-- Floating Animation Icon -->
-        
-        </button>
+            @auth
+            <!-- Continue Button -->
+            <button
+              class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+              Continue
+            </button>
+            <button
+            class="relative px-6 w-full py-3  bg-[#58af0838] hover:bg-[#4a910954] text-black font-semibold rounded-lg shadow-md  transition-transform transform  duration-300 ease-in-out"
+            >
+            <i class="fas fa-shopping-cart mr-2"></i>
+            Add to Cart
+            <!-- Floating Animation Icon -->
+          
+            </button>
+            @endauth
+          </form>
         </div>
       </div>
     </div>
@@ -669,23 +566,14 @@
         }
       }
       function setRating(rating) {
-        console.log("Selected Rating:", rating); // Log the rating selected by the user
-
-        // Get all the star icons
         const stars = document.querySelectorAll('.rating-stars .fa-star');
-
-        // Loop through each star
         stars.forEach((star, index) => {
-            // Log the index of the current star
-            console.log("Star Index:", index);
-
-            // Check if the current index is less than the rating
             if (index < rating) {
-                star.classList.add('text-yellow-500');  // Add yellow color if within rating
-                star.classList.remove('text-gray-300'); // Remove gray color
+                star.classList.add('text-yellow-500'); 
+                star.classList.remove('text-gray-300'); 
             } else {
-                star.classList.remove('text-yellow-500');  // Remove yellow color if beyond rating
-                star.classList.add('text-gray-300'); // Add gray color
+                star.classList.remove('text-yellow-500');  
+                star.classList.add('text-gray-300'); 
             }
         });
       }
@@ -888,9 +776,9 @@ if (defaultTab && document.getElementById(defaultTabContentId)) {
 });
 
 // Function to decrement the quantity
-function decrementQty() {
-const quantityInput = document.getElementById('quantity');
-let currentValue = parseInt(quantityInput.value);
+function decrementQty(variantId) {
+  const quantityInput = document.getElementById('quantity_' + variantId); 
+  let currentValue = parseInt(quantityInput.value);
 
 if (currentValue > 0) { // Prevent decrementing below zero
   quantityInput.value = currentValue - 1;
@@ -898,10 +786,57 @@ if (currentValue > 0) { // Prevent decrementing below zero
 }
 
 // Function to increment the quantity
-function incrementQty() {
-const quantityInput = document.getElementById('quantity');
-let currentValue = parseInt(quantityInput.value) || 0; // Ensure a valid number
+function incrementQty(variantId) {
+  const quantityInput = document.getElementById('quantity_' + variantId);
+  let currentValue = parseInt(quantityInput.value) || 0; // Ensure a valid number
 quantityInput.value = currentValue + 1;
 }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
+<script>
+  
+  $(document).ready(function () { 
+    var rules = {};
+    var messages = {};
+    var numVariants = $(".variant-quantity").length; 
+    $(".variant-quantity").each(function (index) {
+        // Get the variant ID dynamically (assuming it exists in your form data)
+        var variant_id = $(this).data('variant-id'); // Use data attribute to store variant_id in each input
+
+        // Construct the unique name for each quantity field
+        var quantityName = "variants[" + variant_id + "][quantity]";
+
+        // Set rules for this specific variant's quantity field
+        rules[quantityName] = { required: true, min: 1 };
+        
+        // Set custom error messages for this specific variant's quantity field
+        messages[quantityName] = {
+            required: "Minimum 1 quantity is required",
+            min: "Minimum 1 quantity is required"
+        };
+    });
+    
+    // Initialize validation on the form
+    $("#addCartForm").validate({
+        rules: rules,    // Apply the dynamically generated rules
+        messages: messages,  // Apply the custom error messages
+        errorPlacement: function (error, element) {
+            // Get the variant_id dynamically (assuming it's stored in data-variant-id)
+            var variant_id = element.data('variant-id');
+            
+            // Construct the custom error container ID
+            var errorContainerId = "#quantity-error-" + variant_id;
+
+            // If the error container exists, show the error message there
+            if ($(errorContainerId).length) {
+                $(errorContainerId).html(error); // Insert error message into custom container
+                $(errorContainerId).show(); // Show the error container
+            } else {
+                // Default behavior: Insert error message after the input element
+                error.insertAfter(element);
+            }
+        }
+    });
+  });
 </script>
 @endpush

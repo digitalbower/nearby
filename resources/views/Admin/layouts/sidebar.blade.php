@@ -189,6 +189,22 @@
                     </ul>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#reportLayouts">
+                    <i class="fas fa-th-list"></i>
+                    <p>Reports</p>
+                    <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="reportLayouts">
+                    <ul class="nav nav-collapse">
+                        <li>
+                            <a href="{{route('admin.reports.reviews.index')}}">
+                                <span class="sub-item">Review Report</span>
+                            </a>
+                        </li>
+                    </ul>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>
