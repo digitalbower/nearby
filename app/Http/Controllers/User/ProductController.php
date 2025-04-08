@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Emirate;
 use App\Models\NbvTerm;
@@ -122,6 +123,8 @@ class ProductController extends Controller
         $variantsWithType = $variants->map(function ($variant) {
             $typeName = $variant->types ? $variant->types->name : 'No Type Available';
             $variant->product_type = $typeName;
+            $cart = $variant->cart ? $variant->cart : null; 
+            $variant->quantity =  $cart  ? $cart->quantity : '0';
             return $variant;
         });
         return view('user.products.show', compact('product','tag_name','gallery','nbvterms','variants','reviews',
@@ -143,6 +146,7 @@ class ProductController extends Controller
     }
     public function showReview($product_id){
         $reviews = Review::where('product_id', $product_id)
+        ->where('status', 1)
         ->get()
         ->map(function ($review) {
             $review->formatted_date = $review->created_at->format('F j, Y'); 
@@ -150,5 +154,35 @@ class ProductController extends Controller
         });        
         return response()->json($reviews);
     }
+    public function addCart(Request $request){
+
+        $request->validate([
+            'user_id' => 'required|exists:users,id', 
+            'variants' => 'required|array',
+            'variants.*.product_variant_id' => 'required|exists:product_variants,id',
+            'variants.*.quantity' => 'required|integer|min:1', 
+        ],
+        [
+            'variants.*.quantity.required' => 'Add quantity', 
+            'variants.*.quantity.min' => 'Add quantity with minimum value 1', 
+        ]);
+        foreach ($request->variants as $variant) {
+            $cart = Cart::where('product_variant_id',$variant['product_variant_id'])->first(); 
+            if($cart == null){
+                Cart::create([
+                    'product_variant_id' => $variant['product_variant_id'],
+                    'quantity' => $variant['quantity'],
+                    'user_id' => $request->user_id, 
+                ]);
+            
+            }
+            else{
+                $cart->quantity = $variant['quantity'];
+                $cart->save();
+            }
+         
+        }
     
+        return redirect()->back()->with('success', 'New Promo code created successfully!');
+    }
 }
