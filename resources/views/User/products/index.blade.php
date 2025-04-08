@@ -1,4 +1,7 @@
 @extends('User.layouts.main')
+@push('styles')
+<link rel="stylesheet" href="{{asset('assets/css/custom/front/product.css')}}">
+@endpush
 @section('content')
   <div x-data="products()" x-init="fetchProducts()" class="container mx-auto   lg:pt-20 py-2 lg:px-0 px-4">
     <!-- Sidebar -->
@@ -355,6 +358,7 @@
   @endsection
   @push('scripts')
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <script src="{{asset('assets/js/custom//front/product.js')}}"></script>
   <script>
   function products() {
     return {

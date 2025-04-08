@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Emirate;
+use App\Models\Footer;
+use App\Models\Logo;
+use App\Models\NavigationMenu;
 use App\Models\NbvTerm;
 use App\Models\Product;
 use App\Models\Review;
@@ -15,7 +18,36 @@ class ProductController extends Controller
 {
     public function index()
     {
-        return view('user.products.index');
+        $uppermenuItems = NavigationMenu::where('active', 1)
+        ->where('navigation_placement', 'upper')
+        ->get(); 
+
+        $lowermenuitem = NavigationMenu::where('active', 1)
+        ->where('navigation_placement', 'lower')
+        ->get();
+
+        $logo = Logo::where('status', 1)
+        ->where('type', 'header') 
+        ->first(); 
+        
+        $topDestinations = Footer::where('type', 'Top Destination')
+                              ->where('status', 1)
+                              ->get();
+    
+        $informationLinks = Footer::where('type', 'Information')
+                            ->where('status', 1)
+                            ->get();
+
+        $followus = Footer::where('type', 'Follow Us')
+        ->where('status', 1)
+        ->get();
+
+        $payment_channels = Footer::where('type', 'payment_channels')
+        ->where('status', 1)
+        ->get();    
+    
+        return view('user.products.index',compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+        'followus','payment_channels'));
     }
 
     public function getProducts() {
