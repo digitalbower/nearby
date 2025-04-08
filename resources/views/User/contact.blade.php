@@ -200,7 +200,7 @@
   
         <div class="container   mx-auto lg:px-0 px-4">
           <!-- Main header -->
-          <div class="flex justify-between w-full gap-x-2 lg:gap-x-4  items-center py-4 bg-white ">
+          <div class="flex justify-between w-full gap-x-2 lg:gap-x-4  items-center py-4 bg-white">
   
             <a href="/" class="text-2xl font-bold text-gray-900">
               <img src="/images/NearByVoucherswide.svg" alt="logo" class="w-36 ovject-fit">
@@ -392,105 +392,82 @@
   
       </header>
 </div>
-  <div class="   w-full      z-10  py-8 lg:px-10 bg-[#58af0838] p-4 relative overflow-hidden">
-    <div class=" container mx-auto  lg:w-1/2 gap-12">
-      <!-- Form Section -->
-      <div>
-        <h1 class="text-gray-800 text-opecity/80 text-3xl md:text-4xl font-bold mb-6">Let's talk</h1>
-        <p class="text-gray-600 mb-8">
-          To request a quote or want to meet up for coffee, contact us directly or fill out the form and we will get
-          back to you promptly.
-        </p>
-
+<div class="w-full z-50 py-8 lg:px-10 bg-[#58af0838] p-4 relative overflow-hidden">
+  <div class="container mx-auto lg:w-1/2 gap-12">
+    <!-- Form Section -->
     <div>
-      <form action="#" method="POST" class="space-y-6">
-        <div>
-          <input type="text" name="name" placeholder="Your Name"
-            class="w-full px-4 py-3 rounded-lg  border border-gray-200 focus:border-[#6C5CE7] focus:ring-2 focus:ring-[#6C5CE7] focus:ring-opacity-20 outline-none transition"
-            required />
-        </div>
+      <h1 class="text-gray-800 text-opacity/80 text-3xl md:text-4xl font-bold mb-6">Let's talk</h1>
+      <p class="text-gray-600 mb-8">
+        To request a quote or want to meet up for coffee, contact us directly or fill out the form and we will get back to you promptly.
+      </p>
 
-        <div>
-          <input type="email" name="email" placeholder="Your Email"
-            class="w-full px-4 py-3 rounded-lg  border border-gray-200 focus:border-[#6C5CE7] focus:ring-2 focus:ring-[#6C5CE7] focus:ring-opacity-20 outline-none transition"
-            required />
-        </div>
+      <form action="{{ route('contactus.submit') }}" method="POST" class="space-y-6">
+        @csrf
 
-        <div>
-          <textarea name="message" placeholder="Type something if you want..." rows="4"
-            class="w-full px-4 py-3 rounded-lg  border border-gray-200 focus:border-[#6C5CE7] focus:ring-2 focus:ring-[#6C5CE7] focus:ring-opacity-20 outline-none transition resize-none"
-            required></textarea>
-        </div>
+        <input type="text" name="name" placeholder="Your Name" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[#6C5CE7] focus:ring-2 outline-none" required />
 
-        <button type="submit"
-          class="flex items-center justify-center text-gray-800 rounded-full bg-[#58af0838] hover:bg-[#4a910954] rounded-lg px-4 py-2 gap-3">
+        <input type="email" name="email" placeholder="Your Email" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[#6C5CE7] focus:ring-2 outline-none" required />
+
+        <textarea name="message" placeholder="Type something if you want..." rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[#6C5CE7] focus:ring-2 outline-none resize-none" required></textarea>
+
+        <button type="submit" class="flex items-center justify-center text-gray-800 rounded-full bg-[#58af0838] hover:bg-[#4a910954] px-4 py-2 gap-3">
           Send Message
           <i class="fas fa-paper-plane w-4 h-4"></i>
         </button>
       </form>
     </div>
-        <div class="mt-auto lg:flex bg-white rounded-lg lg:mt-10 gap-x-4 py-6 lg:px-10">
-          <div class="space-y-6">
-            <!-- Address Section -->
-            <p class="flex items-center gap-3 text-gray-700">
-              <span class="text-2xl text-gray-800">
-                <i class="fas fa-phone-alt"></i>
-              </span>
-              +1 (203) 302-9545
-            </p>
-            <p class="flex items-center gap-3 text-gray-700">
-              <span class="text-2xl text-gray-800">
-                <i class="fas fa-map-marker-alt"></i>
-              </span>
-              151 New Park Ave, Hartford, CT 06106 United States
-            </p>
 
-            <!-- Phone Section -->
+    <div class="mt-auto lg:flex bg-white rounded-lg lg:mt-10 gap-x-4 py-6 lg:px-10">
+      <div class="space-y-6">
+        <!-- Address Section -->
+        <p class="flex items-center gap-3 text-gray-700">
+          <span class="text-2xl text-gray-800">
+            <i class="fas fa-phone-alt"></i>
+          </span>
+          +1 (203) 302-9545
+        </p>
+        <p class="flex items-center gap-3 text-gray-700">
+          <span class="text-2xl text-gray-800">
+            <i class="fas fa-map-marker-alt"></i>
+          </span>
+          151 New Park Ave, Hartford, CT 06106 United States
+        </p>
+      </div>
 
+      <!-- Contact Email -->
+      <div>
+        <p class="flex items-center gap-3 text-gray-700">
+          <span class="text-2xl text-gray-800">
+            <i class="fas fa-envelope"></i>
+          </span>
+          <a href="mailto:contactus@inventissoft.com" class="text-black hover:underline-none">contactus@inventissoft.com</a>
+        </p>
 
-            <!-- Email Section -->
-
-          </div>
-
-          <!-- Social Media Links -->
-          <div>
-            <p class="flex items-center gap-3 text-gray-700">
-              <span class="text-2xl text-gray-800">
-                <i class="fas fa-envelope"></i>
-              </span>
-              <a href="mailto:contactus@inventissoft.com"
-                class="text-black hover:underline-none ">contactus@inventissoft.com</a>
-            </p>
-
-            <div class="flex gap-6 mt-6 ">
-              <a href="#"
-                class="w-12 h-12 rounded-full  hover:bg-[#4a910954] bg-[#58af0838] text-gray-900 flex items-center justify-center  transition-transform transform hover:scale-110">
-                <i class="fab fa-facebook-f text-lg"></i>
-              </a>
-              <a href="#"
-                class="w-12 h-12 rounded-full  hover:bg-[#4a910954] bg-[#58af0838] text-gray-900 flex items-center justify-center  transition-transform transform hover:scale-110">
-                <i class="fab fa-twitter text-lg"></i>
-              </a>
-              <a href="#"
-                class="w-12 h-12 rounded-full  hover:bg-[#4a910954] bg-[#58af0838] text-gray-900 flex items-center justify-center  transition-transform transform hover:scale-110">
-                <i class="fab fa-instagram text-lg"></i>
-              </a>
-            </div>
-          </div>
+        <!-- Social Media Links -->
+        <div class="flex gap-6 mt-6">
+          <a href="#" class="w-12 h-12 rounded-full hover:bg-[#4a910954] bg-[#58af0838] text-gray-900 flex items-center justify-center transition-transform transform hover:scale-110">
+            <i class="fab fa-facebook-f text-lg"></i>
+          </a>
+          <a href="#" class="w-12 h-12 rounded-full hover:bg-[#4a910954] bg-[#58af0838] text-gray-900 flex items-center justify-center transition-transform transform hover:scale-110">
+            <i class="fab fa-twitter text-lg"></i>
+          </a>
+          <a href="#" class="w-12 h-12 rounded-full hover:bg-[#4a910954] bg-[#58af0838] text-gray-900 flex items-center justify-center transition-transform transform hover:scale-110">
+            <i class="fab fa-instagram text-lg"></i>
+          </a>
         </div>
       </div>
-      
-
-      <!-- Illustration & Contact Info Section -->
-    
     </div>
   </div>
-  <div class="w-full absolute  top-0 z-40 h-full w-full overflow-hidden">
-    <div class="absolute b -right-16 -top-16 h-48 w-48 rounded-full z-10  bg-cyan-400/10"></div>
-    <div class="absolute b left-1/3 -top-24 h-48 w-48 rounded-full z-10  bg-cyan-400/10"></div>
-    <div class="absolute b -bottom-10 right-1/2 h-24 w-24 rounded-full z-10  bg-cyan-400/10 "></div>
-    <div class="absolute b -left-8 top-32 h-24 w-24 rounded-full z-10  bg-cyan-400/10 "></div>
-  </div>
+</div>
+
+<!-- Background Design (Behind Form) -->
+<div class="w-full absolute top-0 z-0 h-full w-full overflow-hidden pointer-events-none">
+  <div class="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-cyan-400/10"></div>
+  <div class="absolute left-1/3 -top-24 h-48 w-48 rounded-full bg-cyan-400/10"></div>
+  <div class="absolute -bottom-10 right-1/2 h-24 w-24 rounded-full bg-cyan-400/10"></div>
+  <div class="absolute -left-8 top-32 h-24 w-24 rounded-full bg-cyan-400/10"></div>
+</div>
+
   <footer class="bg-[#58af0838] lg:block hidden border-t-2 border-[#58af0838] text-gray-900 py-16 shadow-lg">
     <div class="container mx-auto  px-4 lg:px-0">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
