@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Emirate;
+use App\Models\Footer;
+use App\Models\Logo;
+use App\Models\NavigationMenu;
 use App\Models\NbvTerm;
 use App\Models\Product;
 use App\Models\Review;
@@ -15,11 +18,41 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 
+
 class ProductController extends Controller
 {
     public function index()
     {
-        return view('user.products.index');
+        $uppermenuItems = NavigationMenu::where('active', 1)
+        ->where('navigation_placement', 'upper')
+        ->get(); 
+
+        $lowermenuitem = NavigationMenu::where('active', 1)
+        ->where('navigation_placement', 'lower')
+        ->get();
+
+        $logo = Logo::where('status', 1)
+        ->where('type', 'header') 
+        ->first(); 
+        
+        $topDestinations = Footer::where('type', 'Top Destination')
+                              ->where('status', 1)
+                              ->get();
+    
+        $informationLinks = Footer::where('type', 'Information')
+                            ->where('status', 1)
+                            ->get();
+
+        $followus = Footer::where('type', 'Follow Us')
+        ->where('status', 1)
+        ->get();
+
+        $payment_channels = Footer::where('type', 'payment_channels')
+        ->where('status', 1)
+        ->get();    
+    
+        return view('user.products.index',compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+        'followus','payment_channels'));
     }
 
     public function getProducts() {
@@ -37,13 +70,20 @@ class ProductController extends Controller
         $products = $query->get()->map(function ($product) {
             $variants = $product->variants ?? collect([]);
 
-            // Get min/max prices from variants
-            $minVariantPrice = $variants->min('unit_price') ?? $product->unit_price; 
-            $maxVariantPrice = $variants->max('unit_price') ?? $product->unit_price; 
+            $minVariant = $variants->isNotEmpty() ? $variants->sortBy('unit_price')->first() : null;
+            $maxVariant = $variants->isNotEmpty() ? $variants->sortByDesc('unit_price')->first() : null;
+
+            $minVariantPrice = $minVariant ? $minVariant->unit_price : $product->unit_price;
+            $maxVariantPrice = $maxVariant ? $maxVariant->unit_price : $product->unit_price;
     
-            // Get discounted prices from variants
-            $minDiscountedPrice = $variants->whereNotNull('discounted_price')->min('discounted_price') ?? $minVariantPrice;
-            $maxDiscountedPrice = $variants->whereNotNull('discounted_price')->max('discounted_price') ?? $maxVariantPrice;
+            // Get min and max discounted prices from variants
+            $minDiscountedVariant = $variants->whereNotNull('discounted_price')->sortBy('discounted_price')->first();
+            $maxDiscountedVariant = $variants->whereNotNull('discounted_price')->sortByDesc('discounted_price')->first();
+    
+            // If discounted prices exist, use the min and max discounted prices, otherwise fall back to unit prices
+            $minDiscountedPrice = $minDiscountedVariant ? $minDiscountedVariant->discounted_price : $minVariantPrice;
+            $maxDiscountedPrice = $maxDiscountedVariant ? $maxDiscountedVariant->discounted_price : $maxVariantPrice;
+            
             $tagNames = $product->tag()->toArray();
             $tag_name = implode(', ', $tagNames); 
             $reviews = $product->reviews;
@@ -76,16 +116,22 @@ class ProductController extends Controller
                 'emirates_id' => $product->emirates_id,
                 'giftable' => $product->giftable,
                 'productlocation_link' => $product->productlocation_link,
-                'variants' => $variants->map(function ($variant) {
-                    return [
-                        'id' => $variant->id,
-                        'name' => $variant->title,
-                        'unit_price' => $variant->unit_price,
-                        'discounted_percentage'=> $variant->discounted_percentage,
-                        'discounted_price' => $variant->discounted_price ?? $variant->unit_price,
-                    ];
-                    
-                })->toArray(),
+                'variants' => [
+                    'min_variant' => $minVariant ? [
+                        'id' => $minVariant->id,
+                        'name' => $minVariant->title,
+                        'unit_price' => $minVariant->unit_price,
+                        'discounted_percentage' => $minVariant->discounted_percentage,
+                        'discounted_price' => $minVariant->discounted_price ?? $minVariant->unit_price,
+                    ] : null,
+                    'max_variant' => $maxVariant ? [
+                        'id' => $maxVariant->id,
+                        'name' => $maxVariant->title,
+                        'unit_price' => $maxVariant->unit_price,
+                        'discounted_percentage' => $maxVariant->discounted_percentage,
+                        'discounted_price' => $maxVariant->discounted_price ?? $maxVariant->unit_price,
+                    ] : null,
+                ],
             ];
         });
        
@@ -99,6 +145,33 @@ class ProductController extends Controller
     
     public function show($id)
     {
+        $uppermenuItems = NavigationMenu::where('active', 1)
+        ->where('navigation_placement', 'upper')
+        ->get(); 
+
+        $lowermenuitem = NavigationMenu::where('active', 1)
+        ->where('navigation_placement', 'lower')
+        ->get();
+
+        $logo = Logo::where('status', 1)
+        ->where('type', 'header') 
+        ->first(); 
+        
+        $topDestinations = Footer::where('type', 'Top Destination')
+                              ->where('status', 1)
+                              ->get();
+    
+        $informationLinks = Footer::where('type', 'Information')
+                            ->where('status', 1)
+                            ->get();
+
+        $followus = Footer::where('type', 'Follow Us')
+        ->where('status', 1)
+        ->get();
+
+        $payment_channels = Footer::where('type', 'payment_channels')
+        ->where('status', 1)
+        ->get();    
         $nbvterms = NbvTerm::all();
         $product = Product::findOrFail($id);
         $tagNames = $product->tag()->toArray();
@@ -131,7 +204,8 @@ class ProductController extends Controller
             $variant->quantity =  $cart  ? $cart->quantity : '0';
             return $variant;
         });
-        return view('user.products.show', compact('product','tag_name','gallery','nbvterms','variants','reviews',
+        return view('user.products.show', compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+        'followus','payment_channels','product','tag_name','gallery','nbvterms','variants','reviews',
         'totalReviews','averageRating','percentages','variantsWithType'));
     }
     public function storeReview(Request $request)
@@ -161,7 +235,6 @@ class ProductController extends Controller
     public function addCart(Request $request){
 
         $request->validate([
-            'user_id' => 'required|exists:users,id', 
             'variants' => 'required|array',
             'variants.*.product_variant_id' => 'required|exists:product_variants,id',
             'variants.*.quantity' => 'required|integer|min:1', 
@@ -176,7 +249,7 @@ class ProductController extends Controller
                 Cart::create([
                     'product_variant_id' => $variant['product_variant_id'],
                     'quantity' => $variant['quantity'],
-                    'user_id' => $request->user_id, 
+                    'user_id' => Auth::user()->id, 
                 ]);
             
             }

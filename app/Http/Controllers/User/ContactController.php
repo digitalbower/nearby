@@ -5,12 +5,43 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ContactInformation;
+use App\Models\Footer;
+use App\Models\Logo;
+use App\Models\NavigationMenu;
 
 class ContactController extends Controller
 {
     public function contactus()
     {
-        return view('user.contact');
+        $uppermenuItems = NavigationMenu::where('active', 1)
+        ->where('navigation_placement', 'upper')
+        ->get(); 
+
+        $lowermenuitem = NavigationMenu::where('active', 1)
+        ->where('navigation_placement', 'lower')
+        ->get();
+
+        $logo = Logo::where('status', 1)
+        ->where('type', 'header') 
+        ->first(); 
+        
+        $topDestinations = Footer::where('type', 'Top Destination')
+                              ->where('status', 1)
+                              ->get();
+    
+        $informationLinks = Footer::where('type', 'Information')
+                            ->where('status', 1)
+                            ->get();
+
+        $followus = Footer::where('type', 'Follow Us')
+        ->where('status', 1)
+        ->get();
+
+        $payment_channels = Footer::where('type', 'payment_channels')
+        ->where('status', 1)
+        ->get();    
+        return view('user.contact',compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+        'followus','payment_channels'));
     } 
 
     public function submit(Request $request)

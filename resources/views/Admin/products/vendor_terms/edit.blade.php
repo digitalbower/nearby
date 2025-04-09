@@ -4,7 +4,7 @@
   
     <div class="container mt-5">
         <div class="card shadow-lg p-4">
-            <h4 class="text-center mb-4">Add Vendor Terms</h4>
+            <h4 class="text-center mb-4">Edit Vendor Terms</h4>
 
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -48,6 +48,17 @@
 @endsection
 @push('scripts')
     <script src="{{ asset('assets/js/custom/js/vendor_terms.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+                $('#terms').summernote({
+                    height: 200,
+                    toolbar: [
+                        ['style', ['bold', 'italic', 'underline']],
+                        ['para', ['ul', 'ol', 'paragraph']]
+                    ]
+                });
+            });
+    </script>
 @endpush
 
 

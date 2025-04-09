@@ -1,5 +1,18 @@
 
 @extends('user.layouts.main')
+@push('styles')
+<link rel="stylesheet" href="{{asset('assets/css/custom/front/product.css')}}">
+<style>
+  #about  ul {
+    list-style: disc;
+    margin-left: 1.25rem;
+  }
+  #fine-print  ul {
+    list-style: disc;
+    margin-left: 1.25rem;
+  }
+</style>
+@endpush
 @section('content')
   <section class="w-full">
     <div class="container mx-auto py-10 px-4 lg:px-0 ">
@@ -134,47 +147,21 @@
                 </button>
               </div>
               <!-- Tab Contents -->
-              <style>
-                #about ul {
-                  list-style: disc;
-                  margin-left: 1.25rem;
-                }
-              </style>
+
               <div id="about" class="tab-content mt-4">
                {!! $product->about_description !!}
               </div>
               <div id="fine-print" class="tab-content hidden mt-4  bg-white">
                 <h3 class="text-xl font-bold text-gray-800 mb-4">Fine
                   Print</h3>
-                <ul class="list-disc text-sm lg:text-base list-inside space-y-2 text-gray-700">
-                  <li>{{$product->vendorTerms->terms}}</li>
-                  @foreach ($nbvterms as $nbvterm)
-                    <li>{{ $nbvterm->terms}}</li>
+                
+                  @foreach ($product->vendorTerms as $vendor_term)
+                    {!! $vendor_term->terms !!}
                   @endforeach
-                  {{-- <li>
-                    <strong class="text-gray-900">Eligibility:</strong> This
-                    offer is valid for new customers only.
-                  </li>
-                  <li>
-                    <strong class="text-gray-900">Non-Combining
-                      Policy:</strong> Cannot be combined with other
-                    promotions or discounts.
-                  </li>
-                  <li>
-                    <strong class="text-gray-900">Booking
-                      Requirements:</strong> Advance booking is required to
-                    redeem this offer.
-                  </li>
-                  <li>
-                    <strong class="text-gray-900">Usage
-                      Restrictions:</strong> Offer is limited to one per
-                    customer.
-                  </li>
-                  <li>
-                    <strong class="text-gray-900">Validity Period:</strong>
-                    Please check the specific terms for expiry dates.
-                  </li> --}}
-                </ul>
+                  @foreach ($nbvterms as $nbvterm)
+                    {!! $nbvterm->terms !!}
+                  @endforeach
+                
                 <div class="mt-6 bg-blue-100 text-blue-800 p-4 rounded-lg">
                   <i class="fas fa-info-circle text-blue-600 mr-2"></i>
                   <span>Please read the full terms and conditions carefully
@@ -350,9 +337,9 @@
                     <p class="text-gray-600">{{$product->productlocation_address}}</p>
                   </div>
                   <!-- Map Placeholder -->
-                  <div class="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
+                  {{-- <div class="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
                       <p class="text-gray-500">[Map Placeholder]</p>
-                  </div>
+                  </div> --}}
                   <!-- Contact Details -->
                   <div class="pb-4">
                     <h4 class="font-medium text-gray-900">Contact Us</h4>
@@ -383,7 +370,6 @@
         <!-- Options -->
           <form action="{{route('user.products.add_cart')}}" id="addCartForm" method="POST">
             @csrf
-            <input type="hidden" name="user_id" id="user_id" value="{{auth()->user()->id}}">
             <div class="space-y-4">
               <h2 class="md:text-2xl text-base font-bold text-gray-800 mb-0">
                 Choose a Variant
@@ -517,21 +503,19 @@
                 @endforeach
             
             </div>
-            @auth
+            <div class="space-y-4 mt-6">
             <!-- Continue Button -->
             <button
               class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
               Continue
             </button>
-            <button
+            <button type="button" onclick="checkAuthAndSubmit()"
             class="relative px-6 w-full py-3  bg-[#58af0838] hover:bg-[#4a910954] text-black font-semibold rounded-lg shadow-md  transition-transform transform  duration-300 ease-in-out"
             >
             <i class="fas fa-shopping-cart mr-2"></i>
             Add to Cart
-            <!-- Floating Animation Icon -->
-          
             </button>
-            @endauth
+              </div>
           </form>
         </div>
       </div>
@@ -539,10 +523,13 @@
   </section>
 @endsection
 @push('scripts')
+<script src="{{asset('assets/js/custom//front/product.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
 <script>
   const isUserLoggedIn = @json(auth()->check()); 
+ 
 
-  let reviews = [];
+      let reviews = [];
 
       let hasReviewed = false;
 
@@ -625,56 +612,58 @@
     }
 
       function displayReviews() {
-        const productId = document.getElementById("product_id").value;
-        const reviewList = document.getElementById("reviews-list");
-        reviewList.innerHTML = "";
+        if (isUserLoggedIn) {
+          const productId = document.getElementById("product_id").value;
+          const reviewList = document.getElementById("reviews-list");
+          reviewList.innerHTML = "";
 
-        fetch(`/user/products/show-review/${productId}`) 
-          .then(response => response.json())
-          .then(reviews => {
-            reviews.forEach(review => {
-              const reviewDiv = document.createElement("div");
-              reviewDiv.classList.add("p-2", "bg-white", "rounded-lg", "border", "border-gray-200", "space-y-4");
+          fetch(`/user/products/show-review/${productId}`) 
+            .then(response => response.json())
+            .then(reviews => {
+              reviews.forEach(review => {
+                const reviewDiv = document.createElement("div");
+                reviewDiv.classList.add("p-2", "bg-white", "rounded-lg", "border", "border-gray-200", "space-y-4");
 
-              const reviewHeader = document.createElement("div");
-              reviewHeader.classList.add("flex", "justify-between", "items-center", "mb-4");
+                const reviewHeader = document.createElement("div");
+                reviewHeader.classList.add("flex", "justify-between", "items-center", "mb-4");
 
-              const reviewerName = document.createElement("span");
-              reviewerName.classList.add("font-semibold", "text-lg", "text-gray-800");
-              reviewerName.textContent = review.review_title;
+                const reviewerName = document.createElement("span");
+                reviewerName.classList.add("font-semibold", "text-lg", "text-gray-800");
+                reviewerName.textContent = review.review_title;
 
-              const reviewDate = document.createElement("span");
-              reviewDate.classList.add("text-sm", "text-gray-500");
-              reviewDate.textContent = review.formatted_date;
+                const reviewDate = document.createElement("span");
+                reviewDate.classList.add("text-sm", "text-gray-500");
+                reviewDate.textContent = review.formatted_date;
 
-              reviewHeader.appendChild(reviewerName);
-              reviewHeader.appendChild(reviewDate);
+                reviewHeader.appendChild(reviewerName);
+                reviewHeader.appendChild(reviewDate);
 
-              const reviewRating = document.createElement("div");
-              reviewRating.classList.add("flex", "gap-1");
+                const reviewRating = document.createElement("div");
+                reviewRating.classList.add("flex", "gap-1");
 
-              for (let i = 0; i < 5; i++) {
-                const starIcon = document.createElement("i");
-                starIcon.classList.add("fas", "fa-star", i < review.review_rating ? "text-yellow-500" : "text-gray-300");
-                reviewRating.appendChild(starIcon);
-              }
+                for (let i = 0; i < 5; i++) {
+                  const starIcon = document.createElement("i");
+                  starIcon.classList.add("fas", "fa-star", i < review.review_rating ? "text-yellow-500" : "text-gray-300");
+                  reviewRating.appendChild(starIcon);
+                }
 
-              const reviewComment = document.createElement("p");
-              reviewComment.classList.add("text-sm", "text-gray-600");
-              reviewComment.textContent = review.review_description;
+                const reviewComment = document.createElement("p");
+                reviewComment.classList.add("text-sm", "text-gray-600");
+                reviewComment.textContent = review.review_description;
 
-              reviewDiv.appendChild(reviewHeader);
-              reviewDiv.appendChild(reviewRating);
-              reviewDiv.appendChild(reviewComment);
+                reviewDiv.appendChild(reviewHeader);
+                reviewDiv.appendChild(reviewRating);
+                reviewDiv.appendChild(reviewComment);
 
-              reviewList.appendChild(reviewDiv);
+                reviewList.appendChild(reviewDiv);
+              });
+
+              reviewList.classList.remove("hidden");
+            })
+            .catch(error => {
+              console.error("Error fetching reviews:", error);
             });
-
-            reviewList.classList.remove("hidden");
-          })
-          .catch(error => {
-            console.error("Error fetching reviews:", error);
-          });
+          }
         }
       function toggleReviews() {
         const reviewsList = document.getElementById("reviews-list");
@@ -792,51 +781,52 @@ function incrementQty(variantId) {
 quantityInput.value = currentValue + 1;
 }
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
 <script>
-  
+   function checkAuthAndSubmit() {
+        if (!isUserLoggedIn) {
+            const redirectUrl = "/user/login?redirect=" + encodeURIComponent(window.location.href);
+            window.location.href = redirectUrl;  
+        } else {
+            $("#addCartForm").valid();  
+            if ($("#addCartForm").valid()) {
+                document.getElementById('addCartForm').submit();  
+            }
+        }
+  }
   $(document).ready(function () { 
     var rules = {};
     var messages = {};
     var numVariants = $(".variant-quantity").length; 
     $(".variant-quantity").each(function (index) {
-        // Get the variant ID dynamically (assuming it exists in your form data)
-        var variant_id = $(this).data('variant-id'); // Use data attribute to store variant_id in each input
+        var variant_id = $(this).data('variant-id'); 
 
-        // Construct the unique name for each quantity field
         var quantityName = "variants[" + variant_id + "][quantity]";
 
-        // Set rules for this specific variant's quantity field
         rules[quantityName] = { required: true, min: 1 };
         
-        // Set custom error messages for this specific variant's quantity field
         messages[quantityName] = {
             required: "Minimum 1 quantity is required",
             min: "Minimum 1 quantity is required"
         };
     });
     
-    // Initialize validation on the form
     $("#addCartForm").validate({
-        rules: rules,    // Apply the dynamically generated rules
-        messages: messages,  // Apply the custom error messages
+        rules: rules,    
+        messages: messages,  
         errorPlacement: function (error, element) {
-            // Get the variant_id dynamically (assuming it's stored in data-variant-id)
             var variant_id = element.data('variant-id');
             
-            // Construct the custom error container ID
             var errorContainerId = "#quantity-error-" + variant_id;
 
-            // If the error container exists, show the error message there
             if ($(errorContainerId).length) {
-                $(errorContainerId).html(error); // Insert error message into custom container
-                $(errorContainerId).show(); // Show the error container
+                $(errorContainerId).html(error); 
+                $(errorContainerId).show(); 
             } else {
-                // Default behavior: Insert error message after the input element
                 error.insertAfter(element);
             }
         }
     });
   });
 </script>
+
 @endpush

@@ -25,12 +25,12 @@
                     <input type="text" name="name" class="form-control" id="name" value="{{$nbv_term->name}}">                
                 </div>
                 <div class="mb-3">
-                    <label for="terms" class="form-label">Terms</label>
-                    <textarea class="form-control" id="terms" name="terms">{{$nbv_term->terms}}</textarea>
-                </div>
-                <div class="mb-3">
                     <label for="type" class="form-label">Type</label>
                     <input type="text" name="type" class="form-control" id="type" value="{{ $nbv_term->type }}">                
+                </div>
+                <div class="mb-3">
+                    <label for="terms" class="form-label">Terms</label>
+                    <textarea class="form-control" id="terms" name="terms">{{$nbv_term->terms}}</textarea>
                 </div>
                 <button type="submit" class="btn btn-success">Update</button>
                 <a href="{{ route('admin.products.nbv_terms.index') }}" class="btn btn-secondary">Cancel</a>
@@ -40,5 +40,16 @@
 @endsection
 @push('scripts')
     <script src="{{ asset('assets/js/custom/js/nbv_terms.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+                $('#terms').summernote({
+                    height: 200,
+                    toolbar: [
+                        ['style', ['bold', 'italic', 'underline']],
+                        ['para', ['ul', 'ol', 'paragraph']]
+                    ]
+                });
+            });
+    </script>
 @endpush
 

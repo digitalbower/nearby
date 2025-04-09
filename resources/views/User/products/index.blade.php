@@ -1,4 +1,7 @@
 @extends('User.layouts.main')
+@push('styles')
+<link rel="stylesheet" href="{{asset('assets/css/custom/front/product.css')}}">
+@endpush
 @section('content')
   <div x-data="products()" x-init="fetchProducts()" class="container mx-auto   lg:pt-20 py-2 lg:px-0 px-4">
     <!-- Sidebar -->
@@ -355,6 +358,7 @@
   @endsection
   @push('scripts')
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <script src="{{asset('assets/js/custom//front/product.js')}}"></script>
   <script>
   function products() {
     return {
@@ -387,7 +391,6 @@
                 this.maxPrice = Math.max(...productMaxPrices); 
 
                 this.products = data.products.map(product => { 
-                 const firstVariant = product.variants?.[0] ?? {};
                  const productCoordinates = this.getLocationCoordinates(product.location);
                  const destinationCoordinates = this.extractCoordinates(product.productlocation_link);
 
@@ -411,9 +414,9 @@
                 min: parseFloat(product.discounted_price_range?.min ?? 0).toFixed(2),
                 max: parseFloat(product.discounted_price_range?.max ?? 0).toFixed(2),
               },
-              originalPrice: parseFloat(firstVariant.unit_price ?? 0),
-              discountedPrice: Number(firstVariant.discounted_price ?? 0),
-              discount: parseFloat(firstVariant.discounted_percentage ?? 0),
+              originalPrice: parseFloat(product.variants.min_variant.unit_price ?? 0),
+              discountedPrice: Number(product.variants.min_variant.discounted_price ?? 0),
+              discount: parseFloat( product.variants.min_variant.discounted_percentage ?? 0),
               tags: product.tags,
               coordinates: productCoordinates,  
               destinationCoordinates: destinationCoordinates, 
@@ -488,30 +491,31 @@
             return subcategories;
         },
         updateFilters() {
-                      // Ensure prices are numbers
           this.minPrice = Number(this.minPrice);
           this.maxPrice = Number(this.maxPrice);
-          
-          // Filter products by price range
           this.filteredByPrice = this.products.filter(product => {
-              // Ensure the price range is numeric
               const productMinPrice = Number(product.priceRange.min);
               const productMaxPrice = Number(product.priceRange.max);
-
-              // Check if the product's price range intersects with the selected price range
+              // Exclude products where:
+              // - The product's minimum price is greater than the selected maxPrice
+              // - The product's maximum price is less than the selected minPrice
               return (
-                  (productMinPrice <= this.maxPrice) &&  // Product's min price is less than or equal to max price
-                  (productMaxPrice >= this.minPrice)     // Product's max price is greater than or equal to min price
+              (productMinPrice >= this.minPrice) &&  
+              (productMaxPrice <= this.maxPrice)     
               );
-          });
-        
+              //If the price between min and max then use this 
+              // return (
+              //     (productMinPrice <= this.maxPrice) &&  
+              //     (productMaxPrice >= this.minPrice)     
+              // );
+            });
         },
         get filteredProducts() {
             if (!Array.isArray(this.filteredByPrice)) return []; 
             return this.filteredByPrice.filter(product => {
                 const categoryMatch = this.selectedCategories.length === 0 || this.selectedCategories.includes(String(product.category ?? ''));
                 const subCategoryMatch = this.selectedSubcategories.length === 0 || this.selectedSubcategories.includes(String(product.subcategory ?? ''));
-                const locationMatch = this.selectedLocations.length === 0 || this.selectedLocations.includes(String(product.location ?? ''));
+                const locationMatch = this.selectedLocations.length === 0 || this.selectedLocations.includes("All over UAE") || this.selectedLocations.includes(String(product.location ?? ''));
                 const giftableMatch = this.showGiftable ? Boolean(product.giftable) : true;
                 const discountMatch = product.discount >= Number(this.minDiscountPercentage);
                 const ratingMatch = this.selectedRating ? product.rating >= parseInt(this.selectedRating) : true;
