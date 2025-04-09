@@ -114,12 +114,20 @@
         </div>
       </form>
 
-      <!-- Cart -->
-      <a href="/cart.html" class="relative hidden md:block">
-        <i class="fas pr-1 text-[#58af0838] fa-shopping-cart w-6 h-6 text-gray-700"></i>
-        <span
-          class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
-      </a>
+      @php
+    $cartCount = \App\Models\Cart::getCartCount();
+@endphp
+
+<a href="{{ route('user.cart') }}" class="relative hidden md:block">
+    <i class="fas pr-1 text-[#58af0838] fa-shopping-cart w-6 h-6 text-gray-700"></i>
+    @if($cartCount > 0)
+        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+            {{ $cartCount }}
+        </span>
+    @endif
+</a>
+
+
     </div>
   </div>
 

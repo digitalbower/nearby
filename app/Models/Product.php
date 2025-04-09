@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\ProductVariant;
 
 class Product extends Model
 {
@@ -54,4 +55,10 @@ class Product extends Model
     {
         return $this->hasMany(Review::class)->where('status', 1);
     }
+
+        public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
+
 }

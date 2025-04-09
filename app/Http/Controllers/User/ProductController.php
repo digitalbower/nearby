@@ -10,6 +10,10 @@ use App\Models\NbvTerm;
 use App\Models\Product;
 use App\Models\Review;
 use Illuminate\Http\Request;
+use App\Models\ProductVariant;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+
 
 class ProductController extends Controller
 {
@@ -185,4 +189,50 @@ class ProductController extends Controller
     
         return redirect()->back()->with('success', 'New Promo code created successfully!');
     }
+
+
+
+    public function cart()
+    {
+        Cart::doesntHave('varient')->delete();
+
+        $cartItems = Cart::with('productVariant.product')->get();
+
+        $totalQuantity = 0;
+        $totalAmount = 0; 
+
+        $id = $cartItems->first()?->product_variant_id; 
+        $variant = ProductVariant::find($id);
+
+        $start_time = $variant->start_time;
+        $end_time = $variant->end_time;
+
+        $start = Carbon::parse($start_time);
+        $end = Carbon::parse($end_time);
+
+        
+        $totalDays = $start->diffInDays($end); 
+
+        $subtotal = $variant->discounted_price; 
+        $quantity = $cartItems->first()?->quantity;
+        $total = $subtotal * $quantity;
+
+
+       return view('user.cart', compact('cartItems', 'totalAmount', 'totalQuantity','totalDays','end','total'));
+    }
+
+    public function destroy($id)
+    {
+        $item = Cart::findOrFail($id);
+        $item->delete();
+
+        return redirect()->back()->with('success', 'Item removed from cart.');
+    }
+    
+    public function checkout()
+    {
+        return view('user.checkout'); 
+    }
+
+    
 }

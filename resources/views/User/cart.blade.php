@@ -398,202 +398,106 @@
       <i class="fas fa-shopping-cart mr-2"></i>
       Shopping Cart
     </h1>
-
+  
     <div class="grid gap-6 md:grid-cols-[2fr_1fr]">
       <!-- Product List -->
       <div class="space-y-6">
         <!-- Product 1 -->
-        <div class="border rounded-lg relative overflow-hidden shadow-lg">
-          <div class="p-3">
+        @foreach($cartItems as $item)
+    @php
+        $product = $item->varient?->checkout;
+    @endphp
+
+    @if ($product)
+    <div class="border rounded-lg relative overflow-hidden shadow-lg">
+        <div class="p-3">
             <div class="md:flex gap-3 md:space-y-0 space-y-4">
-              <div class="relative md:w-28 w-full h-[200px] md:h-28 max-h-[300px] rounded-lg overflow-hidden">
-                <img
-                  src="https://img.icons8.com/?size=100&id=103934&format=png&color=000000"
-                  alt="Experience Ultimate Relaxation with Spa Admission"
-                  class="w-full h-full object-cover"
-                />
-              </div>
-              <div class="flex-1">
-                <h3 class="font-semibold text-base lg:text-xl">Experience Ultimate Relaxation with Spa Admission</h3>
-                <p class="text-sm text-gray-500 mt-2">General Spa Admission for One Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium autem, </p>
-             
-              </div>
+                <div class="relative md:w-28 w-full h-[200px] md:h-28 max-h-[300px] rounded-lg overflow-hidden">
+                    <img
+                        src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-product.png') }}"
+                        alt="{{ $product->name }}"
+                        class="w-full h-full object-cover"
+                    />
+                </div>
+                <div class="flex-1">
+                    <h3 class="font-semibold text-base lg:text-xl">{{ $product->name }}</h3>
+                    <p class="text-sm text-gray-500 mt-2">{{ $product->short_description }}</p>
+                </div>
             </div>
+
             <div class="flex items-center justify-between mt-2">
-              <div class="flex items-center gap-4">
-                <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
-                  <!-- Decrement Button -->
-                  <button
-                    type="button"
-                    class="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-300"
-                    onclick="decrementQty()"
-                    aria-label="Decrease Quantity"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="w-4 h-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
-                    </svg>
-                  </button>
-        
-                  <!-- Quantity Display -->
-                  <input
-                    type="number"
-                    id="quantity"
-                    value="1"
-                    min="1"
-                    class="w-8 h-8 pl-4 text-center flex justify-center rounded-lg text-lg font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
-                    aria-label="Quantity"
-                  />
-        
-                  <!-- Increment Button -->
-                  <button
-                    type="button"
-                    class="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
-                    onclick="incrementQty()"
-                    aria-label="Increase Quantity"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="w-4 h-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
-                    </svg>
-                  </button>
+                <div class="flex items-center gap-4">
+                    <!-- Quantity Controls -->
+                    <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
+                        <button type="button"
+                            class="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white"
+                            onclick="decrementQty({{ $item->id }})">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
+                            </svg>
+                        </button>
+
+                        <input type="number" id="quantity-{{ $item->id }}" name="quantity"
+                            value="{{ $item->quantity }}"
+                            min="1"
+                            class="w-8 h-8 text-center text-lg font-semibold text-gray-700" readonly />
+
+                        <button type="button"
+                            class="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white"
+                            onclick="incrementQty({{ $item->id }})">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Delete Button -->
+                    <form method="POST" action="{{ route('user.destroy', $item->id) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="text-red-500 absolute top-5 right-5 hover:text-red-700 flex items-center">
+                            <i class="fas fa-trash-alt mr-2"></i>
+                        </button>
+                    </form>
                 </div>
-                <button class="text-red-500 absolute top-5 right-5 hover:text-red-700 flex items-center" onclick="confirmDelete()">
-                  <i class="fas fa-trash-alt mr-2"></i>
-                </button>
-              </div>
-              <div class="text-right flex justify-center gap-x-4 items-center">
-                <div class="text-4xl font-semibold text-gray-700">$42</div>
-                <div class="text-2xl text-gray-500 line-through">$60</div>
-              </div>
+
+                <!-- Price -->
+                <div class="text-right flex justify-center gap-x-4 items-center">
+                    <div class="text-4xl font-semibold text-gray-700">AED {{ $item->varient->discounted_price ?? $item->varient->unit_price }}</div>
+                    @if($item->varient->discounted_price && $item->varient->discounted_price < $item->varient->unit_price)
+                        <div class="text-2xl text-gray-500 line-through">AED {{ $item->varient->unit_price }}</div>
+                    @endif
+                </div>
             </div>
+
+            <!-- Timer -->
             <div class="bg-[#58af0838] rounded-lg w-full p-3 text-base my-2">
-              <div class="flex items-center gap-2 text-gray-800">
-                <i class="fas fa-clock"></i>
-                <span id="countdown-timer">Sale ends in 1 day 18:22:50</span>
-              </div>
+                <div class="flex items-center gap-2 text-gray-800">
+                    <i class="fas fa-clock"></i>
+                    <span id="countdown-timer" data-end-time="{{ $end->format('Y-m-d H:i:s') }}">Sale ends in  {{ $totalDays }} days 18:22:50</span>
+                </div>
             </div>
-         
+
+            <!-- Gift Option -->
             <label class="flex items-start gap-2">
-              <input type="checkbox" class="mt-1 w-4 h-4" />
-              <div>
-                <div class="font-medium flex items-center">
-                  <i class="fas fa-gift mr-2 text-gray-700"></i>
-                  Buy as a gift
+                <input type="checkbox" class="mt-1 w-4 h-4" />
+                <div>
+                    <div class="font-medium flex items-center">
+                        <i class="fas fa-gift mr-2 text-gray-700"></i>
+                        Buy as a gift
+                    </div>
+                    <div class="text-sm text-gray-500">Send or print gift voucher after purchase</div>
                 </div>
-                <div class="text-sm text-gray-500">Send or print gift voucher after purchase</div>
-              </div>
             </label>
-          </div>
         </div>
-        <div class="border rounded-lg relative overflow-hidden shadow-lg">
-          <div class="p-3">
-            <div class="md:flex gap-3 md:space-y-0 space-y-4">
-              <div class="relative md:w-28 w-full h-[200px] md:h-28 max-h-[300px] rounded-lg overflow-hidden">
-                <img
-                  src="https://img.icons8.com/?size=100&id=103935&format=png&color=000000"
-                  alt="Experience Ultimate Relaxation with Spa Admission"
-                  class="w-full h-full object-cover"
-                />
-              </div>
-              <div class="flex-1">
-                <h3 class="font-semibold text-base lg:text-xl">Experience Ultimate Relaxation with Spa Admission</h3>
-                <p class="text-sm text-gray-500 mt-2">General Spa Admission for One Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium autem, </p>
-             
-              </div>
-            </div>
-            <div class="flex items-center justify-between mt-2">
-              <div class="flex items-center gap-4">
-                <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
-                  <!-- Decrement Button -->
-                  <button
-                    type="button"
-                    class="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-300"
-                    onclick="decrementQty()"
-                    aria-label="Decrease Quantity"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="w-4 h-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
-                    </svg>
-                  </button>
-        
-                  <!-- Quantity Display -->
-                  <input
-                    type="number"
-                    id="quantity"
-                    value="1"
-                    min="1"
-                    class="w-8 h-8 pl-4 text-center flex justify-center rounded-lg text-lg font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
-                    aria-label="Quantity"
-                  />
-        
-                  <!-- Increment Button -->
-                  <button
-                    type="button"
-                    class="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
-                    onclick="incrementQty()"
-                    aria-label="Increase Quantity"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="w-4 h-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
-                    </svg>
-                  </button>
-                </div>
-                <button class="text-red-500 absolute top-5 right-5 hover:text-red-700 flex items-center" onclick="confirmDelete()">
-                  <i class="fas fa-trash-alt mr-2"></i>
-                </button>
-              </div>
-              <div class="text-right flex justify-center gap-x-4 items-center">
-                <div class="text-4xl font-semibold text-gray-700">$42</div>
-                <div class="text-2xl text-gray-500 line-through">$60</div>
-              </div>
-            </div>
-            <div class="bg-[#58af0838] rounded-lg w-full p-3 text-base my-2">
-              <div class="flex items-center gap-2 text-gray-800">
-                <i class="fas fa-clock"></i>
-                <span id="countdown-timer">Sale ends in 1 day 18:22:50</span>
-              </div>
-            </div>
-         
-            <label class="flex items-start gap-2">
-              <input type="checkbox" class="mt-1 w-4 h-4" />
-              <div>
-                <div class="font-medium flex items-center">
-                  <i class="fas fa-gift mr-2 text-gray-700"></i>
-                  Buy as a gift
-                </div>
-                <div class="text-sm text-gray-500">Send or print gift voucher after purchase</div>
-              </div>
-            </label>
-          </div>
-        </div>
-        
+    </div>
+    @endif
+@endforeach
+
+      
         <!-- Validation Message Popup -->
         <div id="validationPopup" class="hidden fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
           <div class="bg-white p-6 rounded-lg shadow-lg md:w-1/2 lg:w-1/3">
@@ -614,6 +518,39 @@
             </div>
           </div>
         </div>
+
+        <script>
+    function startCountdown(endTimeStr) {
+        const endTime = new Date(endTimeStr).getTime();
+        const timerEl = document.getElementById('countdown-timer');
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const distance = endTime - now;
+
+            if (distance < 0) {
+                timerEl.innerText = "Sale ended";
+                clearInterval(timerInterval);
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            timerEl.innerText = `Sale ends in ${days} day${days !== 1 ? 's' : ''} ${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        updateTimer(); // Initial call
+        const timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    const countdownEl = document.getElementById('countdown-timer');
+    if (countdownEl) {
+        startCountdown(countdownEl.dataset.endTime);
+    }
+</script>
         
         <script>
           function incrementQty() {
@@ -671,62 +608,58 @@
         <!-- Repeat Product 2 and Product 3 similar to Product 1 -->
       </div>
 
-      <!-- Order Summary -->
-      <div>
-        <div class="border rounded-lg shadow-sm p-6">
-          <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
-          <div class="space-y-2 lg:text-base text-sm">
-            <div class="flex justify-between lg:py-2">
-              <div>Subtotal</div>
-              <div class="font-medium">$216</div>
-            </div>
-            <div class="flex justify-between lg:py-2">
-              <div>Shipping</div>
-              <div class="text-gray-500">Calculated at checkout</div>
-            </div>
-            <div class="flex justify-between lg:py-2">
-              <div>Estimated Tax</div>
-              <div class="text-gray-500">Calculated at checkout</div>
-            </div>
-            <hr>
-            <div class="flex justify-between lg:py-2 font-semibold">
-              <div>Total</div>
-              <div class="text-gray-700">$216</div>
-            </div>
-          </div>
-       <a href="{{ route('home.checkout') }}">
-        <button class="w-full mt-6  px-9 py-3 bg-[#58af0838]  text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-          Proceed to Checkout
-        </button>
-       </a>
-          <div class="mt-4 text-center text-sm text-gray-500 flex items-center justify-center">
-            <i class="fas fa-lock mr-2"></i>
-            Secure Transaction
-          </div>
-          <hr class="my-4">
-          <div class="text-sm text-gray-500">
-            <h3 class="font-semibold mb-2">Accepted Payment Methods</h3>
-            <div class="flex gap-2">
-              <div class="w-10 h-6 bg-gray-200 rounded"></div>
-              <div class="w-10 h-6 bg-gray-200 rounded"></div>
-              <div class="w-10 h-6 bg-gray-200 rounded"></div>
-              <div class="w-10 h-6 bg-gray-200 rounded"></div>
-            </div>
-          </div>
-        </div>
-        <div class="border rounded-lg shadow-sm p-6 mt-6">
-          <h3 class="font-semibold mb-2">Need Help?</h3>
-          <ul class="text-sm text-gray-500 space-y-1">
-            <li>• View our return policy</li>
-            <li>• Check order status</li>
-            <li>• Shipping information</li>
-          </ul>
-        </div>
+     <!-- Order Summary -->
+<div>
+  <div class="border rounded-lg shadow-sm p-6">
+    <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
+    <div class="space-y-2 lg:text-base text-sm">
+      <div class="flex justify-between lg:py-2">
+        <div>Subtotal</div>
+        <div class="font-medium">AED {{ number_format($total) }}</div>
+      </div>
+      
+     
+      <hr>
+      <div class="flex justify-between lg:py-2 font-semibold">
+        <div>Total</div>
+        <div class="text-gray-700">AED {{ number_format($total) }}</div>
+      </div>
+    </div>
+
+    <a href="{{ route('user.checkout') }}">
+      <button class="w-full mt-6 px-9 py-3 bg-[#58af0838] text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+        Proceed to Checkout
+      </button>
+    </a>
+
+    <div class="mt-4 text-center text-sm text-gray-500 flex items-center justify-center">
+      <i class="fas fa-lock mr-2"></i>
+      Secure Transaction
+    </div>
+
+    <hr class="my-4">
+
+    <div class="text-sm text-gray-500">
+      <h3 class="font-semibold mb-2">Accepted Payment Methods</h3>
+      <div class="flex gap-2">
+        <div class="w-10 h-6 bg-gray-200 rounded"></div>
+        <div class="w-10 h-6 bg-gray-200 rounded"></div>
+        <div class="w-10 h-6 bg-gray-200 rounded"></div>
+        <div class="w-10 h-6 bg-gray-200 rounded"></div>
       </div>
     </div>
   </div>
- 
-  
+
+  <div class="border rounded-lg shadow-sm p-6 mt-6">
+    <h3 class="font-semibold mb-2">Need Help?</h3>
+    <ul class="text-sm text-gray-500 space-y-1">
+      <li>• View our return policy</li>
+      <li>• Check order status</li>
+      <li>• Shipping information</li>
+    </ul>
+  </div>
+</div>
+
   <script>
     function toggleFooterSection(sectionId) {
       const section = document.getElementById(sectionId);

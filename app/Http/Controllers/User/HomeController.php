@@ -69,15 +69,7 @@ class HomeController extends Controller
         return view('user.bookingconfirmation'); 
     } 
 
-    public function cart()
-    {dd(12);
-        return view('user.cart'); 
-    }
     
-    public function checkout()
-    {
-        return view('user.checkout'); 
-    }
 
     
 

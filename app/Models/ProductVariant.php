@@ -25,4 +25,10 @@ class ProductVariant extends Model
     {
         return $this->hasOne(Cart::class, 'product_variant_id', 'id');
     }
+
+    public function checkout()
+{
+    return $this->belongsTo(Product::class, 'product_id');
+}
+
 }

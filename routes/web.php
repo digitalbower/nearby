@@ -78,11 +78,13 @@ Route::prefix('user')->name('user.')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
         // ✅ E-commerce & Booking Routes
-        Route::prefix('home')->name('home.')->group(function () {
+       
             Route::get('/bookingconfirmation', [HomeController::class, 'bookingconfirmation'])->name('bookingconfirmation');
-            Route::get('/cart', [HomeController::class, 'cart'])->name('cart');
-            Route::get('/checkout', [HomeController::class, 'checkout'])->name('checkout');
-        });
+            Route::get('/cart', [UserProductController::class, 'cart'])->name('cart');
+            Route::get('/checkout', [UserProductController::class, 'checkout'])->name('checkout');
+            Route::delete('/cart/{id}', [UserProductController::class, 'destroy'])->name('destroy');
+
+      
 
         // ✅ Profile Management Routes
         Route::prefix('profile')->name('profile.')->group(function () {
