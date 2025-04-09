@@ -505,7 +505,7 @@
             </div>
             <div class="space-y-4 mt-6">
             <!-- Continue Button -->
-            <button
+            <button type="button"onclick="redirectToCart()" 
               class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
               Continue
             </button>
@@ -527,8 +527,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
 <script>
   const isUserLoggedIn = @json(auth()->check()); 
- 
 
+    function redirectToCart(){
+      window.location.href = "{{ route('user.cart') }}";
+    }
       let reviews = [];
 
       let hasReviewed = false;

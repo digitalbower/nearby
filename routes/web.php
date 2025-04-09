@@ -29,6 +29,8 @@ use App\Http\Controllers\Admin\Product\NbvTermController;
 use App\Http\Controllers\Admin\Product\ProductTypeController;
 use App\Http\Controllers\Admin\Product\PromoController;
 use App\Http\Controllers\Admin\Report\ReviewReportController;
+use App\Http\Controllers\MerchantController;
+use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\User\ProductController as UserProductController;
 use App\Http\Controllers\User\NewsletterController;
 use App\Http\Controllers\User\SpecialistRequestController;
@@ -42,9 +44,6 @@ Route::prefix('user')->name('user.')->group(function () {
         Route::get('/', [UserProductController::class, 'index'])->name('index');
         Route::get('/list', [UserProductController::class, 'getProducts'])->name('filter');
         Route::get('/{id}', [UserProductController::class, 'show'])->name('show');
-        Route::post('/store-review', [UserProductController::class, 'storeReview'])->name('store_review');
-        Route::get('/show-review/{id}', [UserProductController::class, 'showReview'])->name('show_review');
-        Route::post('/add-cart', [UserProductController::class, 'addCart'])->name('add_cart');
     });
 });
 
@@ -68,23 +67,27 @@ Route::prefix('user')->name('user.')->group(function () {
         Route::get('/signup', [AuthController::class, 'signup'])->name('signup');
         Route::post('/register', [AuthController::class, 'register'])->name('register');
         Route::post('/login', [AuthController::class, 'loginsubmit'])->name('login.submit');
-        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     });
 
     // ✅ Authenticated Routes (Only for Logged-in Users)
-    Route::middleware('auth')->group(function () {
+    Route::middleware('auth.custom')->group(function () {
         
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+        Route::prefix('products')->name('products.')->group(function () {
+            Route::post('/store-review', [UserProductController::class, 'storeReview'])->name('store_review');
+            Route::get('/show-review/{id}', [UserProductController::class, 'showReview'])->name('show_review');
+            Route::post('/add-cart', [UserProductController::class, 'addCart'])->name('add_cart');
+        });
         // ✅ E-commerce & Booking Routes
        
             Route::get('/bookingconfirmation', [HomeController::class, 'bookingconfirmation'])->name('bookingconfirmation');
             Route::get('/cart', [UserProductController::class, 'cart'])->name('cart');
-            Route::get('/checkout', [UserProductController::class, 'checkout'])->name('checkout');
             Route::delete('/cart/{id}', [UserProductController::class, 'destroy'])->name('destroy');
-
-      
+            Route::post('/proceed-checkout', [CheckoutController::class, 'proceedCheckout'])->name('proceed_checkout');
+            Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+            Route::get('/merchant', [MerchantController::class, 'merchant'])->name('merchant');
 
         // ✅ Profile Management Routes
         Route::prefix('profile')->name('profile.')->group(function () {
@@ -114,7 +117,7 @@ Route::prefix('user')->name('user.')->group(function () {
 Route::prefix('admin')->name('admin.')->group(function () {
     // Admin Authentication
     Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('login');
-    Route::post('login', [AdminAuthController::class, 'adminLogin'])->name('login');
+    Route::post('login', [AdminAuthController::class, 'adminLogin'])->name('login.post');
     Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
 
     // Admin Panel Routes (Requires Admin Middleware)
@@ -281,5 +284,3 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     });
 });
-
-

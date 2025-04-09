@@ -187,6 +187,7 @@
           </div>
         </aside>
 
+        @push('scripts')
         <script>
           const menuToggle = document.getElementById('menuToggle');
           const menuContent = document.getElementById('menuContent');
@@ -195,7 +196,7 @@
             menuContent.classList.toggle('hidden');
           });
         </script>
-
+        @endpush
         <main class="lg:col-span-4 lg:order-2 order-2 sm:col-span-3 h-full lg:p-10 py-4 relative px-4">
           <div class="swiper mySwiper w-full h-full">
             <div class="swiper-wrapper">
@@ -264,6 +265,7 @@
             </div>
             <div class="swiper-pagination"></div>
           </div>
+          @push('scripts')
           <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
           <script>
             // Initialize Swiper
@@ -311,9 +313,9 @@
               observer.observe(section);
             });
           </script>
-
+          @endpush
         </main>
-
+        @push('styles')
         <style>
           /* Keyframes for slide-in animations */
           @keyframes slideInTop {
@@ -349,7 +351,7 @@
             animation: slideInBottom 1s ease-out forwards;
           }
         </style>
-
+        @endpush
       </div>
     </div>
   </section>
@@ -482,7 +484,7 @@
       @endforeach
     </div>
   </div>
-
+  @push('scripts')
   <!-- Countdown Script -->
   <script>
     function updateCountdown() {
@@ -513,6 +515,7 @@
 
     updateCountdown();
   </script>
+  @endpush
 </section>
 
 
@@ -876,6 +879,7 @@
     </form>
   </div>
 </div>
+@endsection
 @push('scripts')
 <script>
   // Get modal and button elements
@@ -904,4 +908,3 @@
 
 
 @endpush
-@endsection
