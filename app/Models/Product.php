@@ -21,7 +21,7 @@ class Product extends Model
 
     public function vendorTerms(){
 
-        return $this->belongsTo(VendorTerm::class,'vendor_terms_id');
+        return $this->hasMany(VendorTerm::class,'id','vendor_terms_id');
     }
     public function vendor()
     {
