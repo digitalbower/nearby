@@ -13,6 +13,7 @@ use App\Models\NbvTerm;
 use App\Models\Product;
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -140,6 +141,33 @@ class ProductController extends Controller
     
     public function show($id)
     {
+        $uppermenuItems = NavigationMenu::where('active', 1)
+        ->where('navigation_placement', 'upper')
+        ->get(); 
+
+        $lowermenuitem = NavigationMenu::where('active', 1)
+        ->where('navigation_placement', 'lower')
+        ->get();
+
+        $logo = Logo::where('status', 1)
+        ->where('type', 'header') 
+        ->first(); 
+        
+        $topDestinations = Footer::where('type', 'Top Destination')
+                              ->where('status', 1)
+                              ->get();
+    
+        $informationLinks = Footer::where('type', 'Information')
+                            ->where('status', 1)
+                            ->get();
+
+        $followus = Footer::where('type', 'Follow Us')
+        ->where('status', 1)
+        ->get();
+
+        $payment_channels = Footer::where('type', 'payment_channels')
+        ->where('status', 1)
+        ->get();    
         $nbvterms = NbvTerm::all();
         $product = Product::findOrFail($id);
         $tagNames = $product->tag()->toArray();
@@ -172,7 +200,8 @@ class ProductController extends Controller
             $variant->quantity =  $cart  ? $cart->quantity : '0';
             return $variant;
         });
-        return view('user.products.show', compact('product','tag_name','gallery','nbvterms','variants','reviews',
+        return view('user.products.show', compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+        'followus','payment_channels','product','tag_name','gallery','nbvterms','variants','reviews',
         'totalReviews','averageRating','percentages','variantsWithType'));
     }
     public function storeReview(Request $request)
@@ -202,7 +231,6 @@ class ProductController extends Controller
     public function addCart(Request $request){
 
         $request->validate([
-            'user_id' => 'required|exists:users,id', 
             'variants' => 'required|array',
             'variants.*.product_variant_id' => 'required|exists:product_variants,id',
             'variants.*.quantity' => 'required|integer|min:1', 
@@ -217,7 +245,7 @@ class ProductController extends Controller
                 Cart::create([
                     'product_variant_id' => $variant['product_variant_id'],
                     'quantity' => $variant['quantity'],
-                    'user_id' => $request->user_id, 
+                    'user_id' => Auth::user()->id, 
                 ]);
             
             }
