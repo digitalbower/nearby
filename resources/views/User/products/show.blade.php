@@ -3,7 +3,11 @@
 @push('styles')
 <link rel="stylesheet" href="{{asset('assets/css/custom/front/product.css')}}">
 <style>
-  #about ul {
+  #about  ul {
+    list-style: disc;
+    margin-left: 1.25rem;
+  }
+  #fine-print  ul {
     list-style: disc;
     margin-left: 1.25rem;
   }
@@ -150,35 +154,14 @@
               <div id="fine-print" class="tab-content hidden mt-4  bg-white">
                 <h3 class="text-xl font-bold text-gray-800 mb-4">Fine
                   Print</h3>
-                <ul class="list-disc text-sm lg:text-base list-inside space-y-2 text-gray-700">
-                  <li>{{$product->vendorTerms->terms}}</li>
-                  @foreach ($nbvterms as $nbvterm)
-                    <li>{{ $nbvterm->terms}}</li>
+                
+                  @foreach ($product->vendorTerms as $vendor_term)
+                    {!! $vendor_term->terms !!}
                   @endforeach
-                  {{-- <li>
-                    <strong class="text-gray-900">Eligibility:</strong> This
-                    offer is valid for new customers only.
-                  </li>
-                  <li>
-                    <strong class="text-gray-900">Non-Combining
-                      Policy:</strong> Cannot be combined with other
-                    promotions or discounts.
-                  </li>
-                  <li>
-                    <strong class="text-gray-900">Booking
-                      Requirements:</strong> Advance booking is required to
-                    redeem this offer.
-                  </li>
-                  <li>
-                    <strong class="text-gray-900">Usage
-                      Restrictions:</strong> Offer is limited to one per
-                    customer.
-                  </li>
-                  <li>
-                    <strong class="text-gray-900">Validity Period:</strong>
-                    Please check the specific terms for expiry dates.
-                  </li> --}}
-                </ul>
+                  @foreach ($nbvterms as $nbvterm)
+                    {!! $nbvterm->terms !!}
+                  @endforeach
+                
                 <div class="mt-6 bg-blue-100 text-blue-800 p-4 rounded-lg">
                   <i class="fas fa-info-circle text-blue-600 mr-2"></i>
                   <span>Please read the full terms and conditions carefully
@@ -354,9 +337,9 @@
                     <p class="text-gray-600">{{$product->productlocation_address}}</p>
                   </div>
                   <!-- Map Placeholder -->
-                  <div class="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
+                  {{-- <div class="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
                       <p class="text-gray-500">[Map Placeholder]</p>
-                  </div>
+                  </div> --}}
                   <!-- Contact Details -->
                   <div class="pb-4">
                     <h4 class="font-medium text-gray-900">Contact Us</h4>
@@ -520,7 +503,7 @@
                 @endforeach
             
             </div>
-          
+            <div class="space-y-4 mt-6">
             <!-- Continue Button -->
             <button
               class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
@@ -531,10 +514,8 @@
             >
             <i class="fas fa-shopping-cart mr-2"></i>
             Add to Cart
-            <!-- Floating Animation Icon -->
-          
             </button>
-           
+              </div>
           </form>
         </div>
       </div>
@@ -542,6 +523,8 @@
   </section>
 @endsection
 @push('scripts')
+<script src="{{asset('assets/js/custom//front/product.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
 <script>
   const isUserLoggedIn = @json(auth()->check()); 
  
@@ -798,8 +781,6 @@ function incrementQty(variantId) {
 quantityInput.value = currentValue + 1;
 }
 </script>
-<script src="{{asset('assets/js/custom//front/product.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
 <script>
    function checkAuthAndSubmit() {
         if (!isUserLoggedIn) {
