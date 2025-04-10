@@ -33,6 +33,7 @@ use App\Http\Controllers\User\ProductController as UserProductController;
 use App\Http\Controllers\User\NewsletterController;
 use App\Http\Controllers\User\SpecialistRequestController;
 use App\Http\Controllers\User\ContactController;
+use App\Http\Controllers\User\StripePaymentController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
@@ -83,7 +84,10 @@ Route::prefix('user')->name('user.')->group(function () {
             Route::get('/cart', [UserProductController::class, 'cart'])->name('cart');
             Route::get('/checkout', [UserProductController::class, 'checkout'])->name('checkout');
             Route::delete('/cart/{id}', [UserProductController::class, 'destroy'])->name('destroy');
-
+            Route::get('/checkout', [StripePaymentController::class, 'checkout'])->name('stripe.checkout');
+            Route::post('/create-session', [StripePaymentController::class, 'session'])->name('stripe.session');
+            Route::get('/payment-success', [StripePaymentController::class, 'success'])->name('stripe.success');
+            Route::get('/payment-cancel', [StripePaymentController::class, 'cancel'])->name('stripe.cancel');
       
 
         // ✅ Profile Management Routes
