@@ -260,13 +260,40 @@ class ProductController extends Controller
          
         }
     
-        return redirect()->back()->with('success', 'New Promo code created successfully!');
+        return redirect()->back()->with('success', 'Add to Cart successfully!');
     }
 
 
 
     public function cart()
     {
+        $uppermenuItems = NavigationMenu::where('active', 1)
+        ->where('navigation_placement', 'upper')
+        ->get(); 
+
+        $lowermenuitem = NavigationMenu::where('active', 1)
+        ->where('navigation_placement', 'lower')
+        ->get();
+
+        $logo = Logo::where('status', 1)
+        ->where('type', 'header') 
+        ->first(); 
+        
+        $topDestinations = Footer::where('type', 'Top Destination')
+                              ->where('status', 1)
+                              ->get();
+    
+        $informationLinks = Footer::where('type', 'Information')
+                            ->where('status', 1)
+                            ->get();
+
+        $followus = Footer::where('type', 'Follow Us')
+        ->where('status', 1)
+        ->get();
+
+        $payment_channels = Footer::where('type', 'payment_channels')
+        ->where('status', 1)
+        ->get();    
         Cart::doesntHave('varient')->delete();
 
         $cartItems = Cart::with('productVariant.product')->get();
@@ -291,7 +318,8 @@ class ProductController extends Controller
         $total = $subtotal * $quantity;
 
 
-       return view('user.cart', compact('cartItems', 'totalAmount', 'totalQuantity','totalDays','end','total'));
+       return view('user.cart', compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+       'followus','payment_channels','cartItems', 'totalAmount', 'totalQuantity','totalDays','end','total'));
     }
 
     public function destroy($id)
@@ -301,11 +329,4 @@ class ProductController extends Controller
 
         return redirect()->back()->with('success', 'Item removed from cart.');
     }
-    
-    public function checkout()
-    {
-        return view('user.checkout'); 
-    }
-
-    
 }
