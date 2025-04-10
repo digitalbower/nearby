@@ -294,30 +294,39 @@ class ProductController extends Controller
         $payment_channels = Footer::where('type', 'payment_channels')
         ->where('status', 1)
         ->get();    
-        Cart::doesntHave('varient')->delete();
-
-        $cartItems = Cart::with('productVariant.product')->get();
-
-        $totalQuantity = 0;
-        $totalAmount = 0; 
-
-        $id = $cartItems->first()?->product_variant_id; 
-        $variant = ProductVariant::find($id);
-
-        $start_time = $variant->start_time;
-        $end_time = $variant->end_time;
-
-        $start = Carbon::parse($start_time);
-        $end = Carbon::parse($end_time);
+       
 
         
-        $totalDays = $start->diffInDays($end); 
+        
+        $cartItems = Cart::with('productVariant.checkout')->get();
 
-        $subtotal = $variant->discounted_price; 
-        $quantity = $cartItems->first()?->quantity;
-        $total = $subtotal * $quantity;
+    $totalQuantity = 0;
+    $totalAmount = 0;
+    $totalDays = 0;
+    $total = 0;
+    $start = null;
+    $end = null;
 
+    // Use first variant only for demo of time calculations
+    $firstVariant = $cartItems->first()?->productVariant;
 
+    if ($firstVariant && $firstVariant->timer_start_time && $firstVariant->timer_end_time) {
+        $start = Carbon::parse($firstVariant->timer_start_time);
+        $end = Carbon::parse($firstVariant->timer_end_time);
+        $totalDays = $start->diffInDays($end);
+    }
+
+    // Calculate total amount from all items
+    foreach ($cartItems as $item) {
+        $quantity = $item->quantity ?? 1;
+        $price = $item->productVariant?->discounted_price ?? $item->productVariant?->unit_price ?? 0;
+        $totalQuantity += $quantity;
+        $totalAmount += ($price * $quantity);
+    }
+        
+       
+        
+        
        return view('user.cart', compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
        'followus','payment_channels','cartItems', 'totalAmount', 'totalQuantity','totalDays','end','total'));
     }

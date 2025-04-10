@@ -156,107 +156,99 @@
         <div class="space-y-6">
           <!-- Product 1 -->
           @foreach($cartItems as $item)
-            @php
-                $product = $item->varient?->checkout;
-            @endphp
+    @php
+        $variant = $item->productVariant;
+        $product = $variant?->checkout;
+    @endphp
 
-            @if ($product)
-              <input type="hidden" name="booking_amount" value="{{number_format($total)}}">
-              <input type="hidden" name="discount_amount" value="{{$item->varient->sum('discounted_price');}}">
-              <input type="hidden" name="total_amount" value="{{number_format($total)}}">
-              <input type="hidden" name="payment_type" value="card">
-              <input type="hidden" name="orders[{{ $item->varient->id }}][product_variant_id]" value="{{ $item->varient->id }}" />
-              <input type="hidden" name="orders[{{ $item->varient->id }}][unit_price]" value="{{$item->varient->unit_price}}"/>
-              <input type="hidden" name="orders[{{ $item->varient->id }}][total_price]" value="{{  $item->varient->discounted_price }}"/>
-              <div class="border rounded-lg relative overflow-hidden shadow-lg">
-                <div class="p-3">
-                  <div class="md:flex gap-3 md:space-y-0 space-y-4">
-                    <div class="relative md:w-28 w-full h-[200px] md:h-28 max-h-[300px] rounded-lg overflow-hidden">
-                      <img
-                          src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-product.png') }}"
-                          alt="{{ $product->name }}"
-                          class="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="font-semibold text-base lg:text-xl">{{ $product->name }}</h3>
-                        <p class="text-sm text-gray-500 mt-2">{{ $product->short_description }}</p>
-                    </div>
-                  </div>
+    @if ($variant && $product)
+        
+        <input type="hidden" name="payment_type" value="card">
+        <input type="hidden" name="orders[{{ $variant->id }}][product_variant_id]" value="{{ $variant->id }}" />
+        <input type="hidden" name="orders[{{ $variant->id }}][unit_price]" value="{{ $variant->unit_price }}"/>
+        <input type="hidden" name="orders[{{ $variant->id }}][total_price]" value="{{ $variant->discounted_price }}"/>
 
-                  <div class="flex items-center justify-between mt-2">
-                    <div class="flex items-center gap-4">
-                        <!-- Quantity Controls -->
-                        <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
-                            <button type="button" 
-                                class="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white"
-                                onclick="decrementQty({{ $item->id }})">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
-                                      viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
-                                </svg>
-                            </button>
-
-                         
-
-                            <input type="number" id="quantity-{{ $item->id }}" name="orders[{{ $item->id }}][quantity]"
-                                value="{{ old('quantity',  $item->quantity ?? 0) }}"   
-                                min="1"
-                                class="w-8 h-8 text-center text-lg font-semibold text-gray-700" readonly />
-
-                            <button type="button"
-                                class="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white"
-                                onclick="incrementQty({{ $item->id }})">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
-                                      viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
-                                </svg>
-                            </button>
-                        </div>
-
-                        <!-- Delete Button -->
-                        {{-- <form method="POST" action="{{ route('user.destroy', $item->id) }}">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                class="text-red-500 absolute top-5 right-5 hover:text-red-700 flex items-center">
-                                <i class="fas fa-trash-alt mr-2"></i>
-                            </button>
-                        </form> --}}
-                    </div>
-
-                    <!-- Price -->
-                    <div class="text-right flex justify-center gap-x-4 items-center">
-                        <div class="text-4xl font-semibold text-gray-700">AED {{ $item->varient->discounted_price ?? $item->varient->unit_price }}</div>
-                        @if($item->varient->discounted_price && $item->varient->discounted_price < $item->varient->unit_price)
-                            <div class="text-2xl text-gray-500 line-through">AED {{ $item->varient->unit_price }}</div>
-                        @endif
-                    </div>
-                  </div>
-
-                  <!-- Timer -->
-                  <div class="bg-[#58af0838] rounded-lg w-full p-3 text-base my-2">
-                      <div class="flex items-center gap-2 text-gray-800">
-                          <i class="fas fa-clock"></i>
-                          <span id="countdown-timer" data-end-time="{{ $end->format('Y-m-d H:i:s') }}">Sale ends in  {{ $totalDays }} days 18:22:50</span>
-                      </div>
-                  </div>
-
-                  <!-- Gift Option -->
-                  <label class="flex items-start gap-2">
-                      <input type="checkbox" name="orders[{{ $item->varient->id }}][giftproduct]" class="mt-1 w-4 h-4" />
-                      <div>
-                          <div class="font-medium flex items-center">
-                              <i class="fas fa-gift mr-2 text-gray-700"></i>
-                              Buy as a gift
-                          </div>
-                          <div class="text-sm text-gray-500">Send or print gift voucher after purchase</div>
-                      </div>
-                  </label>
+        <div class="border rounded-lg relative overflow-hidden shadow-lg p-3 my-4">
+            <div class="md:flex gap-3">
+                <div class="md:w-28 w-full h-[200px] md:h-28">
+                    <img
+                        src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-product.png') }}"
+                        alt="{{ $product->name }}"
+                        class="w-full h-full object-cover rounded"
+                    />
                 </div>
-              </div>
+                <div class="flex-1">
+                    <h3 class="font-semibold text-base lg:text-xl">{{ $product->name }}</h3>
+                    <p class="text-sm text-gray-500 mt-2">{{ $product->short_description }}</p>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between mt-2">
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center space-x-1 bg-white rounded-xl border p-1">
+                        <button type="button" onclick="decrementQty({{ $item->id }})"
+                            class="w-8 h-8 flex justify-center items-center bg-gray-100 text-gray-600 rounded-l-md">
+                            -
+                        </button>
+
+                        <input type="number" id="quantity-{{ $item->id }}"
+                            name="orders[{{ $item->id }}][quantity]"
+                            value="{{ old('quantity', $item->quantity ?? 1) }}"
+                            class="w-10 text-center text-lg" readonly />
+
+                        <button type="button" onclick="incrementQty({{ $item->id }})"
+                            class="w-8 h-8 flex justify-center items-center bg-gray-100 text-gray-600 rounded-r-md">
+                            +
+                        </button>
+                    </div>
+                </div>
+
+                <div class="text-right">
+                @php
+    $quantity = $item->quantity ?? 1;
+    $unitPrice = $variant->unit_price;
+    $discountedPrice = $variant->discounted_price ?? $unitPrice;
+
+    $lineTotal = $quantity * $discountedPrice;
+    $originalTotal = $quantity * $unitPrice;
+@endphp
+<input type="hidden" name="discount_amount" value="{{$discountedPrice }}">
+<div class="text-2xl font-bold text-gray-700">
+    AED {{ number_format($lineTotal, 2) }}
+</div>
+
+<!-- Strikethrough Original Price -->
+@if ($discountedPrice < $unitPrice)
+    <div class="text-lg line-through text-gray-500">
+        AED {{ number_format($originalTotal, 2) }}
+    </div>
+@endif
+                </div>
+            </div>
+
+            @if ($end)
+                <div class="bg-yellow-100 rounded-lg w-full p-3 my-3 text-base">
+                    <div class="flex items-center gap-2 text-gray-800">
+                        <i class="fas fa-clock"></i>
+                        <span>Sale ends in {{ $totalDays }} days</span>
+                    </div>
+                </div>
             @endif
-          @endforeach
+
+            <label class="flex items-start gap-2 mt-2">
+            <input type="hidden" name="orders[{{ $item->id }}][giftproduct]" value="0" />
+                    <!-- Actual checkbox input -->
+                    <input type="checkbox" name="orders[{{ $item->id }}][giftproduct]" value="1" 
+                           {{ $item->giftproduct ? 'checked' : '' }} class="mt-1 w-4 h-4" />
+                <div>
+                    <div class="font-medium text-gray-800"><i class="fas fa-gift mr-2"></i>Buy as a gift</div>
+                    <div class="text-sm text-gray-500">Send or print gift voucher after purchase</div>
+                </div>
+            </label>
+        </div>
+    @endif
+@endforeach
+
 
         
           <!-- Validation Message Popup -->
@@ -284,21 +276,56 @@
         </div>
 
       <!-- Order Summary -->
+
+      @php
+    $originalTotal = 0;
+    $discountTotal = 0;
+@endphp
+
+@foreach ($cartItems as $item)
+    @php
+        $variant = $item->productVariant;
+        $quantity = $item->quantity ?? 1;
+
+        if ($variant) {
+            $unitPrice = $variant->unit_price ?? 0;
+            $discountedPrice = $variant->discounted_price ?? $unitPrice;
+
+            // Total before discount
+            $originalTotal += $quantity * $unitPrice;
+
+            // Total discount (per item * quantity)
+            $discountTotal += $quantity * ($unitPrice - $discountedPrice);
+        }
+    @endphp
+@endforeach
+
+@php
+    $finalTotal = $originalTotal - $discountTotal; 
+@endphp
+
+
+        <input type="hidden" name="booking_amount" value="{{ number_format($originalTotal) }}">
+        <input type="hidden" name="total_amount" value="{{ number_format($finalTotal) }}">
         <div>
-          <div class="border rounded-lg shadow-sm p-6">
-            <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
-            <div class="space-y-2 lg:text-base text-sm">
-              <div class="flex justify-between lg:py-2">
-                <div>Subtotal</div>
-                <div class="font-medium">AED {{ number_format($total) }}</div>
-              </div>
-          
-              <hr>
-              <div class="flex justify-between lg:py-2 font-semibold">
-                <div>Total</div>
-                <div class="text-gray-700">AED {{ number_format($total) }}</div>
-              </div>
-            </div>
+        <div class="border rounded-lg shadow-sm p-6">
+    <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
+    <div class="space-y-2 lg:text-base text-sm">
+        <div class="flex justify-between lg:py-2">
+            <div>Booking amount</div>
+            <div class="font-medium">AED {{ number_format($originalTotal, 2) }}</div>
+        </div>
+
+        <hr>
+
+        <div class="flex justify-between lg:py-2 font-semibold">
+            <div>Total</div>
+            <div class="text-gray-700">AED {{ number_format($finalTotal, 2) }}</div>
+        </div>
+    </div>
+</div>
+
+           
 
             <button type="submit" class="w-full mt-6 px-9 py-3 bg-[#58af0838] text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
                 Proceed to Checkout

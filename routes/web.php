@@ -89,6 +89,10 @@ Route::prefix('user')->name('user.')->group(function () {
             Route::post('/proceed-checkout', [CheckoutController::class, 'proceedCheckout'])->name('proceed_checkout');
             Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
             Route::get('/merchant', [MerchantController::class, 'merchant'])->name('merchant');
+            Route::get('/checkout', [StripePaymentController::class, 'checkout'])->name('stripe.checkout');
+            Route::post('/create-session', [StripePaymentController::class, 'session'])->name('stripe.session');
+            Route::get('/payment-success', [StripePaymentController::class, 'success'])->name('stripe.success');
+            Route::get('/payment-cancel', [StripePaymentController::class, 'cancel'])->name('stripe.cancel');
 
         // ✅ Profile Management Routes
         Route::prefix('profile')->name('profile.')->group(function () {

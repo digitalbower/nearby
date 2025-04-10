@@ -9,13 +9,13 @@ use App\Models\ProductVariant;
 
 class Cart extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable=['user_id','product_variant_id','quantity'];
+    protected $fillable = ['user_id', 'product_variant_id', 'quantity'];
 
     public $timestamps = true;
 
-    // Add this method for cart count
+    // Get cart count
     public static function getCartCount()
     {
         if (auth()->check()) {
@@ -24,24 +24,22 @@ class Cart extends Model
 
         return self::where('session_id', session()->getId())->count();
     }
-     
 
-    
-            public function varient()
-        {
-            return $this->belongsTo(ProductVariant::class, 'id');
-        }
-
-
-        
+    // Relationship with ProductVariant (withTrashed if using SoftDeletes)
     public function productVariant()
     {
-        return $this->belongsTo(ProductVariant::class, 'product_varient_id');
+        return $this->belongsTo(ProductVariant::class, 'product_variant_id')->withTrashed();
     }
-
+    // Shortcut to get product from variant
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->productVariant->product ?? null;
+    }
+
+    // Optional alias for Blade use
+    public function getVarientAttribute()
+    {
+        return $this->productVariant;
     }
         
 }

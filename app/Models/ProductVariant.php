@@ -27,8 +27,8 @@ class ProductVariant extends Model
     }
 
     public function checkout()
-{
-    return $this->belongsTo(Product::class, 'product_id');
-}
+    {
+        return $this->belongsTo(Product::class, 'product_id')->withTrashed();
+    }
 
 }

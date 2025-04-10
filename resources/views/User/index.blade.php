@@ -201,7 +201,7 @@
           <div class="swiper mySwiper w-full h-full">
             <div class="swiper-wrapper">
 
-            @foreach ($products as $product)
+    @foreach ($products as $product)
     <div class="swiper-slide">
         <div class="lg:flex w-full relative mb-10 items-center justify-center">
             <!-- Left Section (Top Animation) -->
