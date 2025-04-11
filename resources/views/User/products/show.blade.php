@@ -505,10 +505,12 @@
             </div>
             <div class="space-y-4 mt-6">
             <!-- Continue Button -->
+            @auth
             <button type="button"onclick="redirectToCart()" 
               class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
               Continue
             </button>
+            @endauth
             <button type="button" onclick="checkAuthAndSubmit()"
             class="relative px-6 w-full py-3  bg-[#58af0838] hover:bg-[#4a910954] text-black font-semibold rounded-lg shadow-md  transition-transform transform  duration-300 ease-in-out"
             >
