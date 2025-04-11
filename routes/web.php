@@ -90,6 +90,15 @@ Route::prefix('user')->name('user.')->group(function () {
             Route::delete('/cart/{id}', [UserProductController::class, 'destroy'])->name('destroy');
             Route::post('/proceed-checkout', [CheckoutController::class, 'proceedCheckout'])->name('proceed_checkout');
             Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+            Route::get('/paymentcheckout', [StripePaymentController::class, 'paymentcheckout'])->name('paymentcheckout');
+                Route::post('/create-checkout-session', [StripePaymentController::class, 'createSession'])->name('checkout.session');
+                Route::get('/success', function () {
+                    return 'Payment Success!';
+                })->name('checkout.success');
+                Route::get('/cancel', function () {
+                    return 'Payment Cancelled.';
+                })->name('checkout.cancel');
+
             Route::get('/checkout-items', [CheckoutController::class, 'getCheckoutItems'])->name('checkout-items');
             Route::post('/update-checkout', [CheckoutController::class, 'updateCheckout'])->name('update_checkout');
             Route::post('/remove-checkout-item', [CheckoutController::class, 'removeCheckoutItem']);    

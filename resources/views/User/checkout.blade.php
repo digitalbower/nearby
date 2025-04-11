@@ -672,7 +672,6 @@
       productList.insertAdjacentHTML("beforeend", newProducts);
     // Update countdown for all timers
     updateCountdownForTimers();
-
     // Hide Load More button if all products are visible
     if (visibleCount >= products.length) {
       loadMoreBtn.style.display = "none";
@@ -683,6 +682,7 @@
 
   // Function to update all timers
   function updateCountdownForTimers() {
+
   const timerElements = document.querySelectorAll('.timer');
 
   timerElements.forEach((timerElement) => {
@@ -733,8 +733,6 @@
     countdownElement.textContent = `Sale ends in ${days} day${days !== 1 ? 's' : ''} ${hours}:${minutes}:${seconds}`;
   }
 }
-
-
   document.addEventListener("DOMContentLoaded", () => {
     // Select all inputs with name like items[variant_id][quantity]
     const quantityInputs = document.querySelectorAll('input[name^="items["][name$="[quantity]"]');
@@ -769,8 +767,10 @@
     })
     .then(response => response.json())
     .then(data => {
+
       if (data.success) { 
         location.reload();
+
         console.log('Quantity updated successfully!');
       } else {
         // Handle errors
@@ -819,7 +819,9 @@
         // Optionally refresh or re-render products
         products = products.filter(p => p.id !== variantId);
         renderProducts();
+
         location.reload();
+
       } else {
         alert("Failed to delete item.");
       }
