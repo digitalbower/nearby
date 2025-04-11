@@ -150,31 +150,51 @@
             Join thousands of successful businesses reaching new heights with our platform.
           </p>
         </div>
-
-        <div class="backdrop-blur-sm  rounded-xl">
-          <div class="space-y-4 p-0">
-            <div class="grid gap-4 md:grid-cols-2">
-              <input type="text" placeholder="Business Name" class="bg-white p-2 rounded-md border py-3 text-gray-800" />
-              <input type="text" placeholder="Your Name" class="bg-white p-2 rounded-md border py-3 text-gray-800" />
-            </div>
-            <input type="email" placeholder="Email Address" class="bg-white p-2 rounded-md border py-3 text-gray-800 w-full" />
-            <input type="tel" placeholder="Phone Number" class="bg-white p-2 rounded-md border py-3 text-gray-800 w-full" />
-
-            <select class="bg-white p-2 rounded-md border py-3 text-gray-800 w-full">
-              <option value="tech">Technology</option>
-              <option value="retail">Retail</option>
-              <option value="service">Service</option>
-              <option value="food">Food & Beverage</option>
-            </select>
-
-            <button class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-              Start Free Trial
-            </button>
-
-            <p class="text-sm text-center text-gray-500">
-              No credit card required • 14-day free trial
-            </p>
+        @if (session('success'))
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <strong class="font-bold">Success!</strong>
+          <span class="block sm:inline">{{ session('success') }}</span>
+        </div>
+        @endif
+        @if ($errors->any())
+          <div class="alert alert-danger">
+              <ul>
+                  @foreach ($errors->all() as $error)
+                      <li>{{ $error }}</li>
+                  @endforeach
+              </ul>
           </div>
+        @endif
+        <div class="backdrop-blur-sm  rounded-xl">
+          <form action="{{route('user.merchant_store')}}" id="merchantForm" method="POST">
+            @csrf
+            <div class="space-y-4 p-0">
+              <div class="grid gap-4 md:grid-cols-2">
+                <div>
+                  <input type="text" name="business_name" placeholder="Business Name" class="bg-white p-2 rounded-md border py-3 text-gray-800" />
+                </div>
+                <div>
+                  <input type="text" name="name" placeholder="Your Name" class="bg-white p-2 rounded-md border py-3 text-gray-800" />
+                </div>
+              </div>
+              <input type="email" name="email" placeholder="Email Address" class="bg-white p-2 rounded-md border py-3 text-gray-800 w-full" />
+              <input type="tel" name="phone" placeholder="Phone Number" class="bg-white p-2 rounded-md border py-3 text-gray-800 w-full" />
+
+              <select name="category_id" class="bg-white p-2 rounded-md border py-3 text-gray-800 w-full">
+                @foreach ($categories as $category)
+                  <option value="{{$category->id}}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{$category->name}}</option>
+                @endforeach
+              </select>
+
+              <button class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                Start Free Trial
+              </button>
+           
+              <p class="text-sm text-center text-gray-500">
+                No credit card required • 14-day free trial
+              </p>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -395,6 +415,37 @@
         ) {
           dropdown.classList.add("hidden");
         }
+      });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#merchantForm").validate({
+          rules: {
+              business_name: { required: true},
+              name: { required: true},
+              email: { required: true,email:true},
+              category_id: { required: true},
+
+
+          },
+          messages: {
+            business_name: { required: "Business Name is required"},
+            name: { required: "Name is required"},
+            email: { required: "Email is required","email":"Please enter a valid email"},
+            category_id: { required: "Category is required"},
+          },
+          errorPlacement: function (error, element) {
+              error.addClass("text-red-500 text-sm mt-1 block w-full");
+              error.insertAfter(element);
+            },
+            highlight: function (element) {
+              $(element).addClass("border-red-500");
+            },
+            unhighlight: function (element) {
+              $(element).removeClass("border-red-500");
+            }
+        });
       });
     </script>
 @endpush

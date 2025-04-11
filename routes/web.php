@@ -29,7 +29,7 @@ use App\Http\Controllers\Admin\Product\NbvTermController;
 use App\Http\Controllers\Admin\Product\ProductTypeController;
 use App\Http\Controllers\Admin\Product\PromoController;
 use App\Http\Controllers\Admin\Report\ReviewReportController;
-use App\Http\Controllers\MerchantController;
+use App\Http\Controllers\User\MerchantController;
 use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\User\ProductController as UserProductController;
 use App\Http\Controllers\User\NewsletterController;
@@ -46,6 +46,8 @@ Route::prefix('user')->name('user.')->group(function () {
         Route::get('/list', [UserProductController::class, 'getProducts'])->name('filter');
         Route::get('/{id}', [UserProductController::class, 'show'])->name('show');
     });
+    Route::get('/merchant', [MerchantController::class, 'merchant'])->name('merchant');
+    Route::post('/merchant-store', [MerchantController::class, 'storeMerchant'])->name('merchant_store');
 });
 
 Route::post('/specialist', [SpecialistRequestController::class, 'submit'])->name('specialist.submit');
@@ -89,8 +91,21 @@ Route::prefix('user')->name('user.')->group(function () {
             Route::post('/proceed-checkout', [CheckoutController::class, 'proceedCheckout'])->name('proceed_checkout');
             Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
             Route::get('/merchant', [MerchantController::class, 'merchant'])->name('merchant');
-         
+            Route::get('/paymentcheckout', [StripePaymentController::class, 'paymentcheckout'])->name('paymentcheckout');
+                Route::post('/create-checkout-session', [StripePaymentController::class, 'createSession'])->name('checkout.session');
+                Route::get('/success', function () {
+                    return 'Payment Success!';
+                })->name('checkout.success');
+                Route::get('/cancel', function () {
+                    return 'Payment Cancelled.';
+                })->name('checkout.cancel');
+            Route::get('/checkout-items', [CheckoutController::class, 'getCheckoutItems'])->name('checkout-items');
+            Route::post('/update-checkout', [CheckoutController::class, 'updateCheckout'])->name('update_checkout');
+            Route::post('/remove-checkout-item', [CheckoutController::class, 'removeCheckoutItem']);    
 
+            Route::post('/apply-coupon', [CheckoutController::class, 'applyCoupon'])->name('apply_coupon'); 
+            Route::post('/checkout-booking', [CheckoutController::class, 'checkoutBooking'])->name('checkout_booking'); 
+            
         // ✅ Profile Management Routes
         Route::prefix('profile')->name('profile.')->group(function () {
             Route::get('/', [ProfileController::class, 'profile'])->name('index');

@@ -220,8 +220,10 @@ class ProductController extends Controller
     
         Review::create($request->all());
     
-        return response()->json(['message' => 'Review added successfully!']);
-    }
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Review added successfully!'
+        ]);    }
     public function showReview($product_id){
         $reviews = Review::where('product_id', $product_id)
         ->where('status', 1)

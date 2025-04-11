@@ -28,7 +28,7 @@
           </p>
         </div>
       </div>
-
+      <div id="flash-message" class="hidden p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg" role="alert"></div>
       <!-- Main Content -->
       <div class="lg:grid md:grid-cols-12 grid-cols-1 relative gap-10">
         <!-- Left Column -->
@@ -605,8 +605,8 @@
         })
         .then(response => response.json())
         .then(data => {
-            alert("Review added successfully!");
-            cancelReview();
+          showFlashMessage(data.message);
+          cancelReview();
             displayReviews(); 
         })
         .catch(error => {
@@ -614,7 +614,17 @@
             alert("There was an error adding the review. Please try again.");
         });
     }
+    function showFlashMessage(message) {
+      const flashMessage = document.getElementById("flash-message");
+      flashMessage.textContent = message;
+      flashMessage.classList.remove("hidden");
 
+      // Optional: Auto-hide after 4 seconds
+      setTimeout(() => {
+          flashMessage.classList.add("hidden");
+          flashMessage.textContent = "";
+      }, 4000);
+    }
       function displayReviews() {
         if (isUserLoggedIn) {
           const productId = document.getElementById("product_id").value;

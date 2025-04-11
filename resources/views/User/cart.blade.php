@@ -162,6 +162,7 @@
 
 @foreach($cartItems as $item)
     @php
+      
         $variant = $item->productVariant; 
         $product = $variant?->checkout;
         $discountedPrice = $variant->discounted_price; 
@@ -233,10 +234,12 @@
                 </div>
             @endif
            
-            <button class="text-red-500 absolute top-5 right-5 hover:text-red-700 flex items-center" 
-                onclick="confirmDelete({{ $item->id }})">
-                <i class="fas fa-trash-alt mr-2"></i>
-            </button>
+            <button 
+    class="text-red-500 absolute top-5 right-5 hover:text-red-700 flex items-center"
+    onclick="deleteCartItem({{ $item->id }})"
+>
+    <i class="fas fa-trash-alt mr-2"></i>
+</button>
 
             <label class="flex items-start gap-2 mt-2">
                 <input type="hidden" name="orders[{{ $item->id }}][giftproduct]" value="0" />
@@ -252,27 +255,42 @@
 @endforeach
 
 
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+<script>
+    function deleteCartItem(id) {
+        if (confirm("Are you sure you want to delete this item?")) {
+            fetch(`/cart/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Remove the cart item from DOM if needed
+                    document.getElementById(`cart-item-${id}`)?.remove();
+                    alert('Item deleted successfully');
+                    // Optionally refresh summary or totals
+                } else {
+                    alert('Failed to delete item');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Something went wrong');
+            });
+        }
+    }
+</script>
 
         
           <!-- Validation Message Popup -->
-          <div id="validationPopup" class="hidden fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-            <div class="bg-white p-6 rounded-lg shadow-lg md:w-1/2 lg:w-1/3">
-              <h3 class="text-xl font-semibold text-red-500">Invalid Quantity</h3>
-              <p class="text-sm text-gray-600">Please enter a valid quantity greater than 0.</p>
-              <button onclick="closeValidationPopup()" class="mt-4 bg-red-500 text-white p-2 rounded-lg w-full">Close</button>
-            </div>
-          </div>
+     
           
-          
-        <div id="deletePopup" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-            <div class="bg-white p-6 rounded-lg shadow-xl text-center">
-                <h2 class="text-lg font-semibold mb-4">Are you sure you want to delete this item?</h2>
-                <div class="flex justify-center gap-4">
-                    <button onclick="deleteItem()" class="bg-red-600 text-white px-4 py-2 rounded">Yes, Delete</button>
-                    <button onclick="closeDeletePopup()" class="bg-gray-300 text-gray-800 px-4 py-2 rounded">Cancel</button>
-                </div>
-            </div>
-        </div>
+       
     
           <!-- Repeat Product 2 and Product 3 similar to Product 1 -->
         </div>

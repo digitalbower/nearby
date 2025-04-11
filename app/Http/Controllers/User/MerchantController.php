@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Footer;
 use App\Models\Logo;
+use App\Models\Merchant;
 use App\Models\NavigationMenu;
 use Illuminate\Http\Request;
 
@@ -37,9 +40,19 @@ class MerchantController extends Controller
         $payment_channels = Footer::where('type', 'payment_channels')
         ->where('status', 1)
         ->get();  
+        $categories = Category::where('status',1)->get();
         return view('user.merchant',compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
-        'followus','payment_channels'));
+        'followus','payment_channels','categories'));
     }
+    public function storeMerchant(Request $request){
 
-
+        $request->validate([
+            'business_name' => 'required',
+            'name' => 'required',
+            'email' => 'required|email',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+        Merchant::create($request->all());
+        return redirect()->route('user.merchant')->with('success', 'Data created successfully!');
+    }
 }

@@ -73,5 +73,9 @@ public function countryCode()
 {
     return $this->belongsTo(Country::class, 'country_code_id');
 }
+public function checkout()
+{
+    return $this->hasMany(Checkout::class, 'user_id');
+}
 
 }
