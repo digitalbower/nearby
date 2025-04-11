@@ -10,5 +10,10 @@ class Checkout extends Model
 {
     use HasFactory,SoftDeletes;
 
-    protected $fillable=['user_id','booking_amount','promocode','discount_amount','total_amount','payment_type'];
+    protected $fillable=['user_id','booking_amount','promocode','discount_amount','total_amount','payment_type','vat'];
+
+    public function items(){
+
+        return $this->hasMany(CheckoutItem::class);
+    }
 }

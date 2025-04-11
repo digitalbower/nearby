@@ -165,15 +165,15 @@
         $variant = $item->productVariant; 
         $product = $variant?->checkout;
         $discountedPrice = $variant->discounted_price; 
-        $quantity = $variant->quantity
-        $totalprice += $discountedPrice * $quantity;
+        $quantity = $item->quantity;
+        $totalprice = $discountedPrice * $quantity;
     @endphp 
   
     @if ($variant && $product)
         <input type="hidden" name="payment_type" value="card">
         <input type="hidden" name="orders[{{ $item->id }}][product_variant_id]" value="{{ $variant->id }}" />
         <input type="hidden" name="orders[{{ $item->id }}][unit_price]" value="{{ $variant->discounted_price }}"/>
-        <input type="hidden" name="orders[{{ $item->id }}][unit_price]" value="{{ totalprice }}"/>
+        <input type="hidden" name="orders[{{ $item->id }}][total_price]" value="{{ $totalprice }}"/>
        
 
         <div class="border rounded-lg relative overflow-hidden shadow-lg p-3 my-4">
