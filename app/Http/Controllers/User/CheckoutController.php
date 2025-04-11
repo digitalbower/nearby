@@ -157,6 +157,10 @@ class CheckoutController extends Controller
 
                 $voucherSavings = $originalTotal - $bookingAmount; 
 
+                $vat = round($bookingAmount * 0.05, 2);
+        
+                $total = $bookingAmount + $vat;
+
                 $imagePath = $variant['product']['image'] ?? null;
 
                 $product_array[] = [
@@ -172,7 +176,7 @@ class CheckoutController extends Controller
                     'quantity' => $item->quantity,
                     'total_discount'=>number_format($voucherSavings, 2),
                     'total_unit_price'=>number_format($originalTotal, 2),
-                    'total_discounted_price'=>number_format($bookingAmount, 2),
+                    'bookingAmount'=>number_format($bookingAmount, 2),
                     'giftproduct'=>$item->giftproduct
                 ];
             }
@@ -208,26 +212,33 @@ class CheckoutController extends Controller
                 $item->save();
 
                 // Calculate full totals
-                $total_discounted_price = 0;
-                $total_unit_price = 0;
+                $bookingAmount = 0;
+                $originalTotal = 0;
     
                 foreach ($checkout->items as $cartItem) { 
-                    $total_discounted_price += $cartItem->variant->discounted_price * $cartItem->quantity;
-                    $total_unit_price += $cartItem->variant->unit_price * $cartItem->quantity;
+                    $bookingAmount += $cartItem->variant->discounted_price * $cartItem->quantity;
+                    $originalTotal += $cartItem->variant->unit_price * $cartItem->quantity;
                 }
                
-                $total_discount = $total_unit_price - $total_discounted_price;
-                $checkout->booking_amount = $total_unit_price;
-                $checkout->discount_amount = $total_discounted_price;
-                $checkout->total_amount = $total_discount;
+                $voucherSavings = $originalTotal - $bookingAmount;
+
+                $vat = round($bookingAmount * 0.05, 2);
+        
+                $total = $bookingAmount + $vat;
+
+                $checkout->booking_amount = $bookingAmount;
+                $checkout->vat =  $vat;
+                $checkout->total_amount =  $total;
                 $checkout->save();
+                
                 return response()->json([
                     'success' => true,
                     'discountedPrice' => $discountedPrice,
                     'unitPrice' => $unitPrice,
-                    'total_discounted_price' => $total_discounted_price,
-                    'total_unit_price' => $total_unit_price,
-                    'total_discount' => $total_discount,
+                    'voucherSavings'=>number_format($voucherSavings),
+                    'bookingAmount' => number_format($bookingAmount, 2),
+                    'vat' => number_format($vat, 2),
+                    'total' => number_format($total, 2),
                     'message' => 'Quantity updated successfully.'
                 ]);
             } else {
@@ -253,19 +264,25 @@ class CheckoutController extends Controller
 
                 $checkout->load('items.variant');
 
-                $total_discounted_price = 0;
-                $total_unit_price = 0;
+                $bookingAmount = 0;
+                $originalTotal = 0;
 
                 foreach ($checkout->items as $cartItem) {
-                    $total_discounted_price += $cartItem->variant->discounted_price * $cartItem->quantity;
-                    $total_unit_price += $cartItem->variant->unit_price * $cartItem->quantity;
+                    $bookingAmount += $cartItem->variant->discounted_price * $cartItem->quantity;
+                    $originalTotal += $cartItem->variant->unit_price * $cartItem->quantity;
                 }
     
-                $total_discount = $total_unit_price - $total_discounted_price;
+                $voucherSavings = $originalTotal - $bookingAmount;
+
+                $vat = round($bookingAmount * 0.05, 2);
+        
+                $total = $bookingAmount + $vat;
+
                 return response()->json(['success' => true,
-                    'total_discounted_price' => $total_discounted_price,
-                    'total_unit_price' => $total_unit_price,
-                    'total_discount' => $total_discount
+                        'voucherSavings'=>number_format($voucherSavings),
+                        'bookingAmount' => number_format($bookingAmount, 2),
+                        'vat' => number_format($vat, 2),
+                        'total' => number_format($total, 2),
                 ]);
             }
         }
@@ -281,19 +298,21 @@ class CheckoutController extends Controller
         $code = $request->input('promocode');
         $now = Carbon::now();
     
-        $coupon = Promo::where('promocode', $code)
+        $promo = Promo::where('promocode', $code)
             ->where('is_active', 1)
             ->whereDate('validity_from', '<=', $now)
             ->whereDate('validity_to', '>=', $now)
             ->where('status',1)
             ->first();
     
-        if (!$coupon) {
+        if (!$promo) {
             return back()->with('error', 'Invalid or expired promo code.');
         }
-    
-        // Store the coupon ID in session for later use
-        session()->put('applied_coupon_id', $coupon->id);
+        $user_id = Auth::user()->id;
+        $user = User::find($user_id); 
+        $checkout =  $user->user()->checkout()->with('items')->first();
+
+        session()->put('promocode', $promo->promocode);
     
         return back()->with('success', 'Promo code applied!');
     }

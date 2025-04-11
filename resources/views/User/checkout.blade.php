@@ -645,8 +645,8 @@
               <div class="bg-[#58af0838] rounded-lg w-full p-3 text-base my-2">
                 <div class="flex items-center gap-2 text-gray-800">
                   <i class="fas fa-clock"></i>
-                  <input type="hidden" class="timer" id="timer-${index}" value="${variant.end_time}">
-                  <span id="countdown-timer-${index}"></span>
+                  <input type="hidden" class="timer" data-variant-id="${variant.id}" value="${variant.end_time}">
+                  <span id="countdown-timer-${variant.id}"></span>
                 </div>
               </div>
             ` : '<br>'}
@@ -672,7 +672,7 @@
       productList.insertAdjacentHTML("beforeend", newProducts);
     // Update countdown for all timers
     updateCountdownForTimers();
-    
+
     // Hide Load More button if all products are visible
     if (visibleCount >= products.length) {
       loadMoreBtn.style.display = "none";
@@ -683,55 +683,57 @@
 
   // Function to update all timers
   function updateCountdownForTimers() {
-    // Loop through all the timer elements
-    const timerElements = document.querySelectorAll('.timer'); 
-    timerElements.forEach((timerElement, index) => { 
-      const endDateStr = timerElement.value;
+  const timerElements = document.querySelectorAll('.timer');
 
-      // Parse the date from the string
-      const endDate = new Date(endDateStr);
+  timerElements.forEach((timerElement) => {
+    const endDateStr = timerElement.value;
+    const variantId = timerElement.dataset.variantId;
 
-      if (isNaN(endDate)) {
-        console.error('Invalid date format:', endDateStr);
-        return;
-      }
+    const endDate = new Date(endDateStr);
+    if (isNaN(endDate)) {
+      console.error('Invalid end date:', endDateStr);
+      return;
+    }
 
-      console.log('Parsed endDate for timer:', endDate);  // Check if the date is valid
+    // Optional extra offset if needed:
+    endDate.setDate(endDate.getDate() + 1);
+    endDate.setHours(endDate.getHours() + 18);
+    endDate.setMinutes(endDate.getMinutes() + 22);
+    endDate.setSeconds(endDate.getSeconds() + 50);
 
-      // Add 1 day, 18 hours, 22 minutes, and 50 seconds to the parsed date
-      endDate.setDate(endDate.getDate() + 1); // Add 1 day
-      endDate.setHours(endDate.getHours() + 18); // Add 18 hours
-      endDate.setMinutes(endDate.getMinutes() + 22); // Add 22 minutes
-      endDate.setSeconds(endDate.getSeconds() + 50); // Add 50 seconds
+    updateCountdown(endDate, variantId); // First render
+    const timerInterval = setInterval(() => {
+      updateCountdown(endDate, variantId, timerInterval);
+    }, 1000);
+  });
+}
 
-      // Update the countdown every second
-      const timerInterval = setInterval(() => {
-        updateCountdown(endDate, index, timerInterval);
-      }, 1000);
-
-      updateCountdown(endDate, index); // Initial countdown render
-    });
-  }
 
   // Function to update the countdown timer
-  function updateCountdown(endDate, index, timerInterval) {
-    const now = new Date();
-    const timeDifference = endDate - now;
-
-    const countdownElement = document.getElementById(`countdown-timer-${index}`); 
-    
-    if (timeDifference <= 0) {
-      countdownElement.textContent = "Sale has ended!";
-      clearInterval(timerInterval); // Stop the interval when the countdown reaches 0
-    } else {
-      const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-
-      countdownElement.textContent = `Sale ends in ${days} day${days !== 1 ? 's' : ''} ${hours}:${minutes}:${seconds}`;
-    }
+  function updateCountdown(endDate, variantId, timerInterval = null) {
+  const countdownElement = document.getElementById(`countdown-timer-${variantId}`);
+  if (!countdownElement) {
+    console.warn(`Countdown element not found for variant ID ${variantId}`);
+    if (timerInterval) clearInterval(timerInterval);
+    return;
   }
+
+  const now = new Date();
+  const timeDifference = endDate - now;
+
+  if (timeDifference <= 0) {
+    countdownElement.textContent = "Sale has ended!";
+    if (timerInterval) clearInterval(timerInterval);
+  } else {
+    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+    countdownElement.textContent = `Sale ends in ${days} day${days !== 1 ? 's' : ''} ${hours}:${minutes}:${seconds}`;
+  }
+}
+
 
   document.addEventListener("DOMContentLoaded", () => {
     // Select all inputs with name like items[variant_id][quantity]
@@ -767,14 +769,8 @@
     })
     .then(response => response.json())
     .then(data => {
-      if (data.success) { console.log(data);
-        // document.getElementById(`discounted_price_${variantId}`).textContent = data.discountedPrice;
-        // document.getElementById(`unit_price_${variantId}`).textContent = data.unitPrice;
-        document.getElementById('total_unit_price').textContent = data.total_unit_price;
-        document.getElementById('total_discount').textContent = data.total_discount;
-        document.getElementById('total_discounted_price').textContent = data.total_discounted_price;
-
-        // Do something after successfully updating the cart
+      if (data.success) { 
+        location.reload();
         console.log('Quantity updated successfully!');
       } else {
         // Handle errors
@@ -823,9 +819,7 @@
         // Optionally refresh or re-render products
         products = products.filter(p => p.id !== variantId);
         renderProducts();
-        document.getElementById("total_unit_price").textContent = data.total_unit_price;
-        document.getElementById("total_discounted_price").textContent = data.total_discounted_price;
-        document.getElementById("total_discount").textContent = data.total_discount;
+        location.reload();
       } else {
         alert("Failed to delete item.");
       }
