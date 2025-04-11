@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Auth;
 class CheckoutController extends Controller
 {
 
-    public function proceedCheckout(Request $request){
+    public function proceedCheckout(Request $request){ 
+
         $request->validate([
             'orders' => 'required|array',
             'orders.*.product_variant_id' => 'required|exists:product_variants,id',

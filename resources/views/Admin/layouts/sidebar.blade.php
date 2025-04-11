@@ -96,11 +96,7 @@
                     </a>
                     <div class="collapse" id="home">
                     <ul class="nav nav-collapse">
-                        <li>
-                        <a href="{{ route('admin.hero-carousel.index') }}">
-                            <span class="sub-item">Hero Carousel Management</span>
-                        </a>
-                        </li>
+                       
                         <li>
                         <a href="{{ route('admin.categories.index') }}">
                             <span class="sub-item">Category Section Management</span>
@@ -119,26 +115,7 @@
                         </a>
                         </li>
 
-                        <li>
-                        <a href="{{ route('admin.quick.index') }}">
-                            <span class="sub-item">Quick Cards Section Management</span>
-                        </a>
-                        </li>
-                        <li>
-                        <a href="{{ route('admin.trending.index') }}">
-                            <span class="sub-item">Trending Section Management</span>
-                        </a>
-                        </li>
-                        <li>
-                        <a href="{{ route('admin.popular.index') }}">
-                            <span class="sub-item">Popular Section Management</span>
-                        </a>
-                        </li>
-                        <li>
-                        <a href="{{ route('admin.support.index') }}">
-                            <span class="sub-item">Support Section Management</span>
-                        </a>
-                        </li>
+                      
                     </ul>
                     </div>
                 </li>

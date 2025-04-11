@@ -157,16 +157,15 @@
           <!-- Product 1 -->
           @foreach($cartItems as $item)
     @php
-        $variant = $item->productVariant;
+        $variant = $item->productVariant; 
         $product = $variant?->checkout;
-    @endphp
-
+    @endphp 
+    
     @if ($variant && $product)
-        
         <input type="hidden" name="payment_type" value="card">
-        <input type="hidden" name="orders[{{ $variant->id }}][product_variant_id]" value="{{ $variant->id }}" />
-        <input type="hidden" name="orders[{{ $variant->id }}][unit_price]" value="{{ $variant->unit_price }}"/>
-        <input type="hidden" name="orders[{{ $variant->id }}][total_price]" value="{{ $variant->discounted_price }}"/>
+        <input type="hidden" name="orders[{{ $item->id }}][product_variant_id]" value="{{ $variant->id }}" />
+        <input type="hidden" name="orders[{{ $item->id }}][unit_price]" value="{{ $variant->unit_price }}"/>
+        <input type="hidden" name="orders[{{ $item->id }}][total_price]" value="{{ $variant->discounted_price }}"/>
 
         <div class="border rounded-lg relative overflow-hidden shadow-lg p-3 my-4">
             <div class="md:flex gap-3">
@@ -204,25 +203,26 @@
                 </div>
 
                 <div class="text-right">
-                @php
-    $quantity = $item->quantity ?? 1;
-    $unitPrice = $variant->unit_price;
-    $discountedPrice = $variant->discounted_price ?? $unitPrice;
+                    @php
+                        $quantity = $item->quantity ?? 1;
+                        $unitPrice = $variant->unit_price;
+                        $discountedPrice = $variant->discounted_price ?? $unitPrice;
 
-    $lineTotal = $quantity * $discountedPrice;
-    $originalTotal = $quantity * $unitPrice;
-@endphp
-<input type="hidden" name="discount_amount" value="{{$discountedPrice }}">
-<div class="text-2xl font-bold text-gray-700">
-    AED {{ number_format($lineTotal, 2) }}
-</div>
+                        $lineTotal = $quantity * $discountedPrice;
+                        $originalTotal = $quantity * $unitPrice;
+                    @endphp
 
-<!-- Strikethrough Original Price -->
-@if ($discountedPrice < $unitPrice)
-    <div class="text-lg line-through text-gray-500">
-        AED {{ number_format($originalTotal, 2) }}
-    </div>
-@endif
+                    <input type="hidden" name="discount_amount" value="{{ $discountedPrice }}">
+
+                    <div class="text-2xl font-bold text-gray-700">
+                        AED {{ number_format($lineTotal, 2) }}
+                    </div>
+
+                    @if ($discountedPrice < $unitPrice)
+                        <div class="text-lg line-through text-gray-500">
+                            AED {{ number_format($originalTotal, 2) }}
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -236,10 +236,9 @@
             @endif
 
             <label class="flex items-start gap-2 mt-2">
-            <input type="hidden" name="orders[{{ $item->id }}][giftproduct]" value="0" />
-                    <!-- Actual checkbox input -->
-                    <input type="checkbox" name="orders[{{ $item->id }}][giftproduct]" value="1" 
-                           {{ $item->giftproduct ? 'checked' : '' }} class="mt-1 w-4 h-4" />
+                <input type="hidden" name="orders[{{ $item->id }}][giftproduct]" value="0" />
+                <input type="checkbox" name="orders[{{ $item->id }}][giftproduct]" value="1" 
+                       {{ $item->giftproduct ? 'checked' : '' }} class="mt-1 w-4 h-4" />
                 <div>
                     <div class="font-medium text-gray-800"><i class="fas fa-gift mr-2"></i>Buy as a gift</div>
                     <div class="text-sm text-gray-500">Send or print gift voucher after purchase</div>
@@ -248,6 +247,7 @@
         </div>
     @endif
 @endforeach
+
 
 
         
