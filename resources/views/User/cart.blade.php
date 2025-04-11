@@ -164,12 +164,16 @@
     @php
         $variant = $item->productVariant; 
         $product = $variant?->checkout;
+        $discountedPrice = $variant->discounted_price; 
+        $quantity = $variant->quantity
+        $totalprice += $discountedPrice * $quantity;
     @endphp 
-    
+  
     @if ($variant && $product)
         <input type="hidden" name="payment_type" value="card">
         <input type="hidden" name="orders[{{ $item->id }}][product_variant_id]" value="{{ $variant->id }}" />
         <input type="hidden" name="orders[{{ $item->id }}][unit_price]" value="{{ $variant->discounted_price }}"/>
+        <input type="hidden" name="orders[{{ $item->id }}][unit_price]" value="{{ totalprice }}"/>
        
 
         <div class="border rounded-lg relative overflow-hidden shadow-lg p-3 my-4">
@@ -280,6 +284,7 @@
       @php
     $originalTotal = 0;
     $bookingAmount = 0;
+    
 
     foreach ($cartItems as $item) {
         $variant = $item->productVariant;
@@ -291,15 +296,15 @@
 
             $originalTotal += $unitPrice * $quantity;
             $bookingAmount += $discountedPrice * $quantity;
-            $totalprice += $discountedPrice * $quantity;
+           
         }
     }
 
     $voucherSavings = $originalTotal - $bookingAmount;
     $vat = round($bookingAmount * 0.05, 2);
     $total = $bookingAmount + $vat;
-@endphp
-<input type="hidden" name="totalprice" value="{{ $totalprice }}"/>
+@endphp 
+
 <input type="hidden" name="original_total" value="{{ $originalTotal }}">
 <input type="hidden" name="booking_amount" value="{{ $bookingAmount }}">
 <input type="hidden" name="voucher_savings" value="{{ $voucherSavings }}">
