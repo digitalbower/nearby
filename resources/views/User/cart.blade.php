@@ -155,7 +155,12 @@
         <!-- Product List -->
         <div class="space-y-6">
           <!-- Product 1 -->
-          @foreach($cartItems as $item)
+          @php
+    $end = true;
+    $totalDays = 2; // Replace with logic if needed, e.g., Carbon::parse($variant->sale_end_date)->diffInDays(now())
+@endphp
+
+@foreach($cartItems as $item)
     @php
         $variant = $item->productVariant; 
         $product = $variant?->checkout;
@@ -203,24 +208,13 @@
                 </div>
 
                 <div class="text-right">
-                    @php
-                        $quantity = $item->quantity ?? 1;
-                        $unitPrice = $variant->unit_price;
-                        $discountedPrice = $variant->discounted_price ?? $unitPrice;
-
-                        $lineTotal = $quantity * $discountedPrice;
-                        $originalTotal = $quantity * $unitPrice;
-                    @endphp
-
-                    <input type="hidden" name="discount_amount" value="{{ $discountedPrice }}">
-
                     <div class="text-2xl font-bold text-gray-700">
-                        AED {{ number_format($lineTotal, 2) }}
+                        AED {{ number_format($variant->discounted_price ?? $variant->unit_price, 2) }}
                     </div>
 
-                    @if ($discountedPrice < $unitPrice)
+                    @if ($variant->discounted_price && $variant->discounted_price < $variant->unit_price)
                         <div class="text-lg line-through text-gray-500">
-                            AED {{ number_format($originalTotal, 2) }}
+                            AED {{ number_format($variant->unit_price, 2) }}
                         </div>
                     @endif
                 </div>
@@ -234,6 +228,13 @@
                     </div>
                 </div>
             @endif
+           
+            <button class="text-red-500 absolute top-5 right-5 hover:text-red-700 flex items-center" 
+                onclick="confirmDelete({{ $item->id }})">
+                <i class="fas fa-trash-alt mr-2"></i>
+            </button>
+
+      
 
             <label class="flex items-start gap-2 mt-2">
                 <input type="hidden" name="orders[{{ $item->id }}][giftproduct]" value="0" />
@@ -277,13 +278,13 @@
 
       <!-- Order Summary -->
 
+      
+
       @php
     $originalTotal = 0;
-    $discountTotal = 0;
-@endphp
+    $bookingAmount = 0;
 
-@foreach ($cartItems as $item)
-    @php
+    foreach ($cartItems as $item) {
         $variant = $item->productVariant;
         $quantity = $item->quantity ?? 1;
 
@@ -291,37 +292,52 @@
             $unitPrice = $variant->unit_price ?? 0;
             $discountedPrice = $variant->discounted_price ?? $unitPrice;
 
-            // Total before discount
-            $originalTotal += $quantity * $unitPrice;
-
-            // Total discount (per item * quantity)
-            $discountTotal += $quantity * ($unitPrice - $discountedPrice);
+            $originalTotal += $unitPrice * $quantity;
+            $bookingAmount += $discountedPrice * $quantity;
         }
-    @endphp
-@endforeach
+    }
 
-@php
-    $finalTotal = $originalTotal - $discountTotal; 
+    $voucherSavings = $originalTotal - $bookingAmount;
+    $vat = round($bookingAmount * 0.05, 2);
+    $total = $bookingAmount + $vat;
 @endphp
 
 
-        <input type="hidden" name="booking_amount" value="{{ number_format($originalTotal) }}">
-        <input type="hidden" name="total_amount" value="{{ number_format($finalTotal) }}">
+<input type="hidden" name="booking_amount" value="{{ $bookingAmount }}">
+<input type="hidden" name="voucher_savings" value="{{ $voucherSavings }}">
+<input type="hidden" name="vat_amount" value="{{ $vat }}">
+<input type="hidden" name="total_amount" value="{{ $total }}">
         <div>
         <div class="border rounded-lg shadow-sm p-6">
     <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
     <div class="space-y-2 lg:text-base text-sm">
+    <div class="flex justify-between lg:py-2">
+            
+
         <div class="flex justify-between lg:py-2">
-            <div>Booking amount</div>
-            <div class="font-medium">AED {{ number_format($originalTotal, 2) }}</div>
+            <div>Booking Amount (after discount)</div>
+            <div class="font-medium text-green-700">AED {{ number_format($bookingAmount, 2) }}</div>
+        </div>
+
+        <div class="flex justify-between lg:py-2">
+            <div>Nearby Voucher Savings</div>
+            <div class="text-red-500">- AED {{ number_format($voucherSavings, 2) }}</div>
+        </div>
+
+        <div class="flex justify-between lg:py-2">
+            <div>VAT (5%)</div>
+            <div class="font-medium">AED {{ number_format($vat, 2) }}</div>
         </div>
 
         <hr>
 
         <div class="flex justify-between lg:py-2 font-semibold">
             <div>Total</div>
-            <div class="text-gray-700">AED {{ number_format($finalTotal, 2) }}</div>
+            <div class="text-gray-800">AED {{ number_format($total, 2) }}</div>
         </div>
+
+
+      
     </div>
 </div>
 
@@ -580,6 +596,7 @@
     validationPopup.classList.add('hidden');
   }
 
+  
   function confirmDelete() {
     const deletePopup = document.getElementById('deletePopup');
     deletePopup.classList.remove('hidden');
