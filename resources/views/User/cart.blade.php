@@ -169,8 +169,8 @@
     @if ($variant && $product)
         <input type="hidden" name="payment_type" value="card">
         <input type="hidden" name="orders[{{ $item->id }}][product_variant_id]" value="{{ $variant->id }}" />
-        <input type="hidden" name="orders[{{ $item->id }}][unit_price]" value="{{ $variant->unit_price }}"/>
-        <input type="hidden" name="orders[{{ $item->id }}][total_price]" value="{{ $variant->discounted_price }}"/>
+        <input type="hidden" name="orders[{{ $item->id }}][unit_price]" value="{{ $variant->discounted_price }}"/>
+       
 
         <div class="border rounded-lg relative overflow-hidden shadow-lg p-3 my-4">
             <div class="md:flex gap-3">
@@ -234,8 +234,6 @@
                 <i class="fas fa-trash-alt mr-2"></i>
             </button>
 
-      
-
             <label class="flex items-start gap-2 mt-2">
                 <input type="hidden" name="orders[{{ $item->id }}][giftproduct]" value="0" />
                 <input type="checkbox" name="orders[{{ $item->id }}][giftproduct]" value="1" 
@@ -261,17 +259,16 @@
             </div>
           </div>
           
-          <!-- Delete Confirmation Popup -->
-          <div id="deletePopup" class="hidden fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-            <div class="bg-white p-6 rounded-lg shadow-lg md:w-1/2 lg:w-1/3">
-              <h3 class="text-xl font-semibold text-red-500">Delete Item</h3>
-              <p class="text-sm text-gray-600">Are you sure you want to delete this item?</p>
-              <div class="mt-4 flex gap-4">
-                <button onclick="deleteItem()" class="bg-red-500 text-white p-2 rounded-lg w-1/2">Yes, Delete</button>
-                <button onclick="closeDeletePopup()" class="bg-gray-500 text-white p-2 rounded-lg w-1/2">Cancel</button>
-              </div>
+          
+        <div id="deletePopup" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+            <div class="bg-white p-6 rounded-lg shadow-xl text-center">
+                <h2 class="text-lg font-semibold mb-4">Are you sure you want to delete this item?</h2>
+                <div class="flex justify-center gap-4">
+                    <button onclick="deleteItem()" class="bg-red-600 text-white px-4 py-2 rounded">Yes, Delete</button>
+                    <button onclick="closeDeletePopup()" class="bg-gray-300 text-gray-800 px-4 py-2 rounded">Cancel</button>
+                </div>
             </div>
-          </div>
+        </div>
     
           <!-- Repeat Product 2 and Product 3 similar to Product 1 -->
         </div>
@@ -294,6 +291,7 @@
 
             $originalTotal += $unitPrice * $quantity;
             $bookingAmount += $discountedPrice * $quantity;
+            $totalprice += $discountedPrice * $quantity;
         }
     }
 
@@ -301,77 +299,50 @@
     $vat = round($bookingAmount * 0.05, 2);
     $total = $bookingAmount + $vat;
 @endphp
-
-
+<input type="hidden" name="totalprice" value="{{ $totalprice }}"/>
+<input type="hidden" name="original_total" value="{{ $originalTotal }}">
 <input type="hidden" name="booking_amount" value="{{ $bookingAmount }}">
 <input type="hidden" name="voucher_savings" value="{{ $voucherSavings }}">
 <input type="hidden" name="vat_amount" value="{{ $vat }}">
 <input type="hidden" name="total_amount" value="{{ $total }}">
-        <div>
-        <div class="border rounded-lg shadow-sm p-6">
+<div class="border rounded-lg shadow-sm p-6">
     <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
     <div class="space-y-2 lg:text-base text-sm">
-    <div class="flex justify-between lg:py-2">
-            
 
+        <!-- Booking Amount -->
         <div class="flex justify-between lg:py-2">
             <div>Booking Amount (after discount)</div>
             <div class="font-medium text-green-700">AED {{ number_format($bookingAmount, 2) }}</div>
         </div>
 
+        <!-- Nearby Voucher Savings -->
         <div class="flex justify-between lg:py-2">
             <div>Nearby Voucher Savings</div>
             <div class="text-red-500">- AED {{ number_format($voucherSavings, 2) }}</div>
         </div>
 
+        <!-- VAT -->
         <div class="flex justify-between lg:py-2">
             <div>VAT (5%)</div>
             <div class="font-medium">AED {{ number_format($vat, 2) }}</div>
         </div>
 
-        <hr>
+        <hr class="my-2 border-gray-300">
 
+        <!-- Total -->
         <div class="flex justify-between lg:py-2 font-semibold">
             <div>Total</div>
             <div class="text-gray-800">AED {{ number_format($total, 2) }}</div>
         </div>
 
-
-      
     </div>
-</div>
-
-           
-
-            <button type="submit" class="w-full mt-6 px-9 py-3 bg-[#58af0838] text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+    
+    <button type="submit" class="w-full mt-6 px-9 py-3 bg-[#58af0838] text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
                 Proceed to Checkout
               </button>
-            
-          
-            <div class="mt-4 text-center text-sm text-gray-500 flex items-center justify-center">
-              <i class="fas fa-lock mr-2"></i>
-              Secure Transaction
-            </div>
-            <hr class="my-4">
-            <div class="text-sm text-gray-500">
-              <h3 class="font-semibold mb-2">Accepted Payment Methods</h3>
-              <div class="flex gap-2">
-                <div class="w-10 h-6 bg-gray-200 rounded"></div>
-                <div class="w-10 h-6 bg-gray-200 rounded"></div>
-                <div class="w-10 h-6 bg-gray-200 rounded"></div>
-                <div class="w-10 h-6 bg-gray-200 rounded"></div>
-              </div>
-            </div>
-          </div>
-          <div class="border rounded-lg shadow-sm p-6 mt-6">
-            <h3 class="font-semibold mb-2">Need Help?</h3>
-            <ul class="text-sm text-gray-500 space-y-1">
-              <li>• View our return policy</li>
-              <li>• Check order status</li>
-              <li>• Shipping information</li>
-            </ul>
-          </div>
-        </div>
+</div>
+
+      </div>
       </div>
     </form>
   </div>
@@ -596,7 +567,6 @@
     validationPopup.classList.add('hidden');
   }
 
-  
   function confirmDelete() {
     const deletePopup = document.getElementById('deletePopup');
     deletePopup.classList.remove('hidden');
@@ -608,8 +578,11 @@
   }
 
   function deleteItem() {
-    alert('Item deleted successfully.');
-    closeDeletePopup();
+    if (deleteId) {
+      const form = document.getElementById('deleteForm');
+      form.action = `/cart/${deleteId}`; // adjust if route prefix differs
+      form.submit();
+    }
   }
 </script>
 
