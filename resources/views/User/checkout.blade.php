@@ -344,7 +344,7 @@
                 and that I have read the Privacy Statement.
               </p>
             </div>
-            <div class="mt-5">
+            {{-- <div class="mt-5">
               <button id="dropdownToggle" type="button" class="flex justify-between w-full items-center mb-4"
                 onclick="toggleDropdownA('dropdownContent', 'dropdownIcon')">
                 <span class="text-sm font-medium">Show Order Details</span>
@@ -372,7 +372,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> --}}
 
             <!-- Coupon Code Section -->
             <div class="mt-6">
@@ -509,7 +509,7 @@
           </div>
 
 
-          <div class="mt-5">
+          {{-- <div class="mt-5">
             <button type="button" class="flex justify-between w-full items-center mb-4" data-toggle="dropdownCheckout"
               data-target="dropdownCheckoutContent" data-icon="dropdownCheckoutIcon">
               <span class="text-sm font-medium">Show Order Details</span>
@@ -537,7 +537,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> --}}
 
               <!-- CouponOrder Code Section -->
               <div class="mt-6">

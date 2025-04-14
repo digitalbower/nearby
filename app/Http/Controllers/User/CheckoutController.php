@@ -99,7 +99,10 @@ class CheckoutController extends Controller
         ->where('status', 1)
         ->get();     
         $products = Checkout::with('items.variant')->where('user_id',Auth::user()->id)->get(); 
-       
+
+        if (!$products || count($products) == 0) {
+            return redirect()->route('user.products.index')->with('warning', 'Your checkout is empty.');
+        }
         $product_array = [];
 
         $bookingAmount = 0;
@@ -283,6 +286,11 @@ class CheckoutController extends Controller
                 $item->delete(); 
 
                 $checkout->load('items.variant');
+
+                if ($checkout->items->isEmpty()) {
+                    $checkout->delete();
+                    return response()->json(['success' => true, 'message' => 'Checkout and all items removed.']);
+                }
 
                 $bookingAmount = 0;
                 $originalTotal = 0;
