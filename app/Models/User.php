@@ -73,6 +73,11 @@ public function countryCode()
 {
     return $this->belongsTo(Country::class, 'country_code_id');
 }
+public function carts()
+{
+    return $this->hasMany(Cart::class, 'user_id');
+}
+
 public function checkout()
 {
     return $this->hasMany(Checkout::class, 'user_id');

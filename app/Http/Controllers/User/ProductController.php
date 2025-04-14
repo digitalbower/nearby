@@ -13,7 +13,6 @@ use App\Models\NbvTerm;
 use App\Models\Product;
 use App\Models\Review;
 use Illuminate\Http\Request;
-use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -197,16 +196,16 @@ class ProductController extends Controller
 
         $variants =  $product->variants; 
 
+        $user = Auth::user();
+
         $variantsWithType = $variants->map(function ($variant) {
             $typeName = $variant->types ? $variant->types->name : 'No Type Available';
             $variant->product_type = $typeName;
-            $cart = $variant->cart ? $variant->cart : null; 
-            $variant->quantity =  $cart  ? $cart->quantity : '0';
             return $variant;
         });
         return view('user.products.show', compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels','product','tag_name','gallery','nbvterms','variants','reviews',
-        'totalReviews','averageRating','percentages','variantsWithType'));
+        'totalReviews','averageRating','percentages','variantsWithType','user'));
     }
     public function storeReview(Request $request)
     {
@@ -246,7 +245,9 @@ class ProductController extends Controller
             'variants.*.quantity.min' => 'Add quantity with minimum value 1', 
         ]);
         foreach ($request->variants as $variant) {
-            $cart = Cart::where('product_variant_id',$variant['product_variant_id'])->first(); 
+            $cart = Cart::where('product_variant_id',$variant['product_variant_id'])
+                        ->where('user_id', Auth::id())
+                        ->first(); 
             if($cart == null){
                 Cart::create([
                     'product_variant_id' => $variant['product_variant_id'],
@@ -262,7 +263,7 @@ class ProductController extends Controller
          
         }
     
-        return redirect()->back()->with('success', 'Add to Cart successfully!');
+        return redirect()->back()->with('success', 'Added to cart successfully!');
     }
 
 
@@ -297,10 +298,10 @@ class ProductController extends Controller
         ->where('status', 1)
         ->get();    
        
-
+        $userId = Auth::id();
         
         
-        $cartItems = Cart::with('productVariant.checkout')->get();
+        $cartItems = Cart::with('productVariant.checkout')->where('user_id', $userId)->get();
 
     $totalQuantity = 0;
     $totalAmount = 0;

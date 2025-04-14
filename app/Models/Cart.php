@@ -41,5 +41,8 @@ class Cart extends Model
     {
         return $this->productVariant;
     }
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
         
 }

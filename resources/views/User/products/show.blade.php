@@ -433,10 +433,13 @@
                             </button>
                 
                             <!-- Quantity Display -->
+                            @php
+                            $cart = $user ? $user->carts()->where('product_variant_id', $variant->id)->first() : null;
+                            @endphp
                             <input
                               type="number" name="variants[{{ $variant->id }}][quantity]" data-variant-id="{{ $variant->id }}"
                               id="quantity_{{ $variant->id }}" 
-                              value="{{ old('quantity', $variant->cart->quantity ?? 0) }}"                               
+                              value="{{ old('quantity', $cart->quantity ?? 0) }}"                               
                               min="0"
                               class="w-12 h-8 pl-4 text-center flex justify-center rounded-lg text-lg font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 variant-quantity"
                               aria-label="Quantity" />
