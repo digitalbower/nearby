@@ -319,6 +319,16 @@
                 <span>Nearby Voucher Savings</span>
                 <span>AED {{ number_format($voucherSavings, 2) }}</span>
               </div>
+              @if (session('promocode'))
+              <div class="flex justify-between">
+                <span>Promocode Discount</span>
+                <span>{{ rtrim(rtrim(number_format($promo_discount, 2), '0'), '.') }}%</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Promocode Discount Amount</span>
+                <span>AED {{ number_format($promocode_discount_amount,2) }}</span>
+              </div>
+              @endif
               <div class="flex justify-between">
                 <span>VAT (5%)</span>
                 <span>AED {{ number_format($vat, 2) }}</span>
@@ -334,7 +344,7 @@
                 and that I have read the Privacy Statement.
               </p>
             </div>
-            <div class="mt-5">
+            {{-- <div class="mt-5">
               <button id="dropdownToggle" type="button" class="flex justify-between w-full items-center mb-4"
                 onclick="toggleDropdownA('dropdownContent', 'dropdownIcon')">
                 <span class="text-sm font-medium">Show Order Details</span>
@@ -362,21 +372,29 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> --}}
 
             <!-- Coupon Code Section -->
             <div class="mt-6">
-              <button id="couponToggle" class="flex justify-between w-full items-center mb-4"
+              <button type="button" id="couponToggle" class="flex justify-between w-full items-center mb-4"
                 onclick="toggleDropdown('couponContent', 'couponIcon')">
                 <span class="text-sm font-medium">Have a Coupon Code?</span>
                 <i id="couponIcon" class="fas fa-chevron-down"></i>
               </button>
+            
+              @php
+                $isPromoApplied = session('promocode') !== null;
+              @endphp
+            
               <div id="couponContent" class="hidden">
-                <input type="text" placeholder="Enter coupon code"
+                <input type="text" placeholder="Enter coupon code" id="promocode-mobile" name='promocode'
                   class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring focus:ring-blue-300 focus:outline-none mb-4" />
-                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow w-full">
+                <button type="button" onclick="applyCoupon()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow w-full">
                   Apply Coupon
                 </button>
+                @if ($isPromoApplied)
+                <p class="text-green-500 text-sm mt-2">Promo code <strong>{{ session('promocode') }}</strong> already applied.</p>
+                @endif
               </div>
             </div>
 
@@ -455,8 +473,18 @@
             <div class="flex justify-between text-groupon-green">
                 <span>Nearby Voucher Savings</span>
               <span>AED {{ number_format($voucherSavings, 2) }}</span>
-          </div>
-          <div class="flex justify-between">
+          </div> 
+          @if (session('promocode'))
+            <div class="flex justify-between">
+              <span>Promocode Discount</span>
+              <span>{{ rtrim(rtrim(number_format($promo_discount, 2), '0'), '.') }}%</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Promocode Discount Amount</span>
+              <span>AED {{ number_format($promocode_discount_amount,2) }}</span>
+            </div>
+            @endif
+            <div class="flex justify-between">
               <span>VAT (5%)</span>
               <span>AED {{ number_format($vat, 2) }}</span>
             </div>
@@ -473,8 +501,8 @@
           </div>
 
 
-          <div class="mt-5">
-            <button class="flex justify-between w-full items-center mb-4" data-toggle="dropdownCheckout"
+          {{-- <div class="mt-5">
+            <button type="button" class="flex justify-between w-full items-center mb-4" data-toggle="dropdownCheckout"
               data-target="dropdownCheckoutContent" data-icon="dropdownCheckoutIcon">
               <span class="text-sm font-medium">Show Order Details</span>
               <i id="dropdownCheckoutIcon" class="fas fa-chevron-down"></i>
@@ -501,25 +529,28 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> --}}
 
               <!-- CouponOrder Code Section -->
               <div class="mt-6">
-                <button class="flex justify-between w-full items-center mb-4" data-toggle="couponOrder"
+                <button  type="button" class="flex justify-between w-full items-center mb-4" data-toggle="couponOrder"
                   data-target="couponOrderContent" data-icon="couponOrderIcon">
                   <span class="text-sm font-medium">Have a CouponOrder Code?</span>
                   <i id="couponOrderIcon" class="fas fa-chevron-down"></i>
                 </button>
-                <form method="POST" action="{{route('user.apply_coupon')}}">
-                  @csrf
+                @php
+                  $isPromoApplied = session('promocode') !== null;
+                @endphp
                   <div id="couponOrderContent" class="hidden">
-                    <input type="text" placeholder="Enter couponOrder code" name="promocode"
+                    <input type="text" placeholder="Enter couponOrder code" name="promocode" id="promocode-desktop"
                       class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring focus:ring-blue-300 focus:outline-none mb-4" />
-                    <button type="submit" class="bg-[#58af0838]   text-black px-4 py-2 rounded-md shadow w-full">
+                    <button type="button" onclick="applyCoupon()"  class="bg-[#58af0838]   text-black px-4 py-2 rounded-md shadow w-full">
                       Apply Coupon
                     </button>
-                  </div>
-                </form>
+                    @if ($isPromoApplied)
+                    <p class="text-green-500 text-sm mt-2">Promo code <strong>{{ session('promocode') }}</strong> already applied.</p>
+                    @endif
+                </div>
           </div>
 
           <button
@@ -587,7 +618,7 @@
     const renderedCount = productList.querySelectorAll('.product-item').length;
     const newProducts = products
       .slice(renderedCount, visibleCount)
-      .map((variant, index) => {
+      .map((variant, index) => { 
         const total = variant.discounted_price * variant.quantity;
         return `
         <div class="border rounded-lg relative overflow-hidden shadow-lg product-item">
@@ -618,7 +649,7 @@
                     </svg>
                   </button>
                 </div>
-                <button class="text-red-500 absolute top-5 right-5 hover:text-red-700" onclick="confirmDelete(${variant.checkout_id})">
+                <button type="button" class="text-red-500 absolute top-5 right-5 hover:text-red-700" onclick="confirmDelete(${variant.id})">
                   <i class="fas fa-trash-alt"></i>
                 </button>
               </div>  
@@ -637,8 +668,8 @@
               <div class="bg-[#58af0838] rounded-lg w-full p-3 text-base my-2">
                 <div class="flex items-center gap-2 text-gray-800">
                   <i class="fas fa-clock"></i>
-                  <input type="hidden" class="timer" id="timer-${index}" value="${variant.end_time}">
-                  <span id="countdown-timer-${index}"></span>
+                  <input type="hidden" class="timer" data-variant-id="${variant.id}" value="${variant.end_time}">
+                  <span id="countdown-timer-${variant.id}"></span>
                 </div>
               </div>
             ` : '<br>'}
@@ -664,7 +695,6 @@
       productList.insertAdjacentHTML("beforeend", newProducts);
     // Update countdown for all timers
     updateCountdownForTimers();
-    
     // Hide Load More button if all products are visible
     if (visibleCount >= products.length) {
       loadMoreBtn.style.display = "none";
@@ -675,56 +705,57 @@
 
   // Function to update all timers
   function updateCountdownForTimers() {
-    // Loop through all the timer elements
-    const timerElements = document.querySelectorAll('.timer'); 
-    timerElements.forEach((timerElement, index) => { 
-      const endDateStr = timerElement.value;
 
-      // Parse the date from the string
-      const endDate = new Date(endDateStr);
+  const timerElements = document.querySelectorAll('.timer');
 
-      if (isNaN(endDate)) {
-        console.error('Invalid date format:', endDateStr);
-        return;
-      }
+  timerElements.forEach((timerElement) => {
+    const endDateStr = timerElement.value;
+    const variantId = timerElement.dataset.variantId;
 
-      console.log('Parsed endDate for timer:', endDate);  // Check if the date is valid
+    const endDate = new Date(endDateStr);
+    if (isNaN(endDate)) {
+      console.error('Invalid end date:', endDateStr);
+      return;
+    }
 
-      // Add 1 day, 18 hours, 22 minutes, and 50 seconds to the parsed date
-      endDate.setDate(endDate.getDate() + 1); // Add 1 day
-      endDate.setHours(endDate.getHours() + 18); // Add 18 hours
-      endDate.setMinutes(endDate.getMinutes() + 22); // Add 22 minutes
-      endDate.setSeconds(endDate.getSeconds() + 50); // Add 50 seconds
+    // Optional extra offset if needed:
+    endDate.setDate(endDate.getDate() + 1);
+    endDate.setHours(endDate.getHours() + 18);
+    endDate.setMinutes(endDate.getMinutes() + 22);
+    endDate.setSeconds(endDate.getSeconds() + 50);
 
-      // Update the countdown every second
-      const timerInterval = setInterval(() => {
-        updateCountdown(endDate, index, timerInterval);
-      }, 1000);
+    updateCountdown(endDate, variantId); // First render
+    const timerInterval = setInterval(() => {
+      updateCountdown(endDate, variantId, timerInterval);
+    }, 1000);
+  });
+}
 
-      updateCountdown(endDate, index); // Initial countdown render
-    });
-  }
 
   // Function to update the countdown timer
-  function updateCountdown(endDate, index, timerInterval) {
-    const now = new Date();
-    const timeDifference = endDate - now;
-
-    const countdownElement = document.getElementById(`countdown-timer-${index}`); 
-    
-    if (timeDifference <= 0) {
-      countdownElement.textContent = "Sale has ended!";
-      clearInterval(timerInterval); // Stop the interval when the countdown reaches 0
-    } else {
-      const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-
-      countdownElement.textContent = `Sale ends in ${days} day${days !== 1 ? 's' : ''} ${hours}:${minutes}:${seconds}`;
-    }
+  function updateCountdown(endDate, variantId, timerInterval = null) {
+  const countdownElement = document.getElementById(`countdown-timer-${variantId}`);
+  if (!countdownElement) {
+    console.warn(`Countdown element not found for variant ID ${variantId}`);
+    if (timerInterval) clearInterval(timerInterval);
+    return;
   }
 
+  const now = new Date();
+  const timeDifference = endDate - now;
+
+  if (timeDifference <= 0) {
+    countdownElement.textContent = "Sale has ended!";
+    if (timerInterval) clearInterval(timerInterval);
+  } else {
+    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+    countdownElement.textContent = `Sale ends in ${days} day${days !== 1 ? 's' : ''} ${hours}:${minutes}:${seconds}`;
+  }
+}
   document.addEventListener("DOMContentLoaded", () => {
     // Select all inputs with name like items[variant_id][quantity]
     const quantityInputs = document.querySelectorAll('input[name^="items["][name$="[quantity]"]');
@@ -759,14 +790,10 @@
     })
     .then(response => response.json())
     .then(data => {
-      if (data.success) { console.log(data);
-        // document.getElementById(`discounted_price_${variantId}`).textContent = data.discountedPrice;
-        // document.getElementById(`unit_price_${variantId}`).textContent = data.unitPrice;
-        document.getElementById('total_unit_price').textContent = data.total_unit_price;
-        document.getElementById('total_discount').textContent = data.total_discount;
-        document.getElementById('total_discounted_price').textContent = data.total_discounted_price;
 
-        // Do something after successfully updating the cart
+      if (data.success) { 
+        location.reload();
+
         console.log('Quantity updated successfully!');
       } else {
         // Handle errors
@@ -798,35 +825,107 @@
     updateCartQuantity(variantId, quantityInput.value); // Save quantity after increment
   }
   function confirmDelete(variantId) {
-  if (confirm("Are you sure you want to remove this item?")) {
-    fetch(`/user/remove-checkout-item`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-      },
-      body: JSON.stringify({
-        product_variant_id: variantId
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "Do you want to remove this item?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch(`/user/remove-checkout-item`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+        },
+        body: JSON.stringify({
+          product_variant_id: variantId
+        })
       })
-    })
-    .then(response => response.json())
-    .then(data => {
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Update products list
+          products = products.filter(p => p.id !== variantId);
+          renderProducts();
+
+          // Optional success message
+          Swal.fire(
+            'Deleted!',
+            'The item has been removed.',
+            'success'
+          ).then(() => {
+            location.reload(); // Reload after showing success
+          });
+
+        } else {
+          Swal.fire(
+            'Error!',
+            'Failed to delete item.',
+            'error'
+          );
+        }
+      })
+      .catch(error => {
+        console.error("Delete error:", error);
+        Swal.fire(
+          'Error!',
+          'Something went wrong.',
+          'error'
+        );
+      });
+    }
+  });
+}
+</script>
+<script>
+function applyCoupon() {
+  const mobileInput = document.getElementById("promocode-mobile");
+  const desktopInput = document.getElementById("promocode-desktop");
+
+  // Pick the visible input
+  const promoCode = !mobileInput.classList.contains('hidden') && mobileInput.offsetParent !== null
+    ? mobileInput.value.trim()
+    : desktopInput.value.trim();
+
+  if (!promoCode) {
+    Swal.fire('Oops!', 'Please enter a promo code.', 'warning');
+    return;
+  }
+
+  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
+  fetch("{{ route('user.apply_coupon') }}", {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRF-TOKEN": csrfToken,
+    },
+    body: JSON.stringify({ promocode: promoCode }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
       if (data.success) {
-        // Optionally refresh or re-render products
-        products = products.filter(p => p.id !== variantId);
-        renderProducts();
-        document.getElementById("total_unit_price").textContent = data.total_unit_price;
-        document.getElementById("total_discounted_price").textContent = data.total_discounted_price;
-        document.getElementById("total_discount").textContent = data.total_discount;
+        Swal.fire('Success', data.message, 'success').then(() => {
+          location.reload();
+        });
       } else {
-        alert("Failed to delete item.");
+        Swal.fire('Error', data.message, 'error');
       }
     })
-    .catch(error => {
-      console.error("Delete error:", error);
+    .catch((error) => {
+      console.error(error);
+      Swal.fire('Error', 'Something went wrong.', 'error');
     });
-  }
 }
+
+
+</script>
+<script>
+
 function contactInformation() {
   const isUserLoggedIn = @json(auth()->check());
 
@@ -978,8 +1077,10 @@ function contactInformation() {
 
 <script>
   function toggleDropdown(contentId, iconId) {
-    const content = document.getElementById(contentId);
-    const icon = document.getElementById(iconId);
+  const content = document.getElementById(contentId);
+  const icon = document.getElementById(iconId);
+
+  console.log(content, icon);  // Debugging to check if content and icon are correctly selected
 
     if (content.classList.contains("hidden")) {
       content.classList.remove("hidden");
@@ -1030,5 +1131,30 @@ function contactInformation() {
     new DropdownCheckoutToggle(`button[data-toggle="${button.getAttribute('data-toggle')}"]`);
   });
 </script>
+<script>
 
+document.addEventListener("DOMContentLoaded", function () {
+  const couponOrderToggle = document.getElementById('couponOrderToggle');
+  const couponOrderContent = document.getElementById('couponOrderContent');
+  const couponOrderIcon = document.getElementById('couponOrderIcon');
+
+  // Check if the button exists
+  if (couponOrderToggle) {
+    couponOrderToggle.addEventListener('click', function () {
+      // Toggle the visibility of the couponOrderContent
+      couponOrderContent.classList.toggle('hidden');
+      
+      // Toggle the icon (change from down to up chevron)
+      if (couponOrderContent.classList.contains('hidden')) {
+        couponOrderIcon.classList.remove('fa-chevron-up');
+        couponOrderIcon.classList.add('fa-chevron-down');
+      } else {
+        couponOrderIcon.classList.remove('fa-chevron-down');
+        couponOrderIcon.classList.add('fa-chevron-up');
+      }
+    });
+  }
+});
+
+</script>
 @endpush

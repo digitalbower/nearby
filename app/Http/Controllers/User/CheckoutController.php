@@ -50,7 +50,9 @@ class CheckoutController extends Controller
         );
         
         foreach ($request->orders as $order) { 
-            $item = CheckoutItem::where('product_variant_id',$order['product_variant_id'])->first(); 
+            $item = CheckoutItem::where('product_variant_id',$order['product_variant_id'])
+                    ->where('checkout_id', $checkoutOrder->id)
+                    ->first(); 
             if($item == null){
                 CheckoutItem::create([
                     'checkout_id'=>$checkoutOrder->id,
@@ -104,7 +106,10 @@ class CheckoutController extends Controller
         ->where('status', 1)
         ->get();     
         $products = Checkout::with('items.variant')->where('user_id',Auth::user()->id)->get(); 
-       
+
+        if (!$products || count($products) == 0) {
+            return redirect()->route('user.products.index')->with('warning', 'Your checkout is empty.');
+        }
         $product_array = [];
 
         $bookingAmount = 0;
@@ -112,6 +117,7 @@ class CheckoutController extends Controller
         $originalTotal = 0;
 
         
+        $promoCode = session('promocode');
 
         foreach ($products as $checkout) { 
             $count = count($checkout->items);
@@ -130,22 +136,35 @@ class CheckoutController extends Controller
         $voucherSavings = $originalTotal - $bookingAmount; 
 
         $vat = round($bookingAmount * 0.05, 2);
+
+        $promo_discount = 0;
+
+        $promocode_discount_amount = 0;
         
         $total = $bookingAmount + $vat;
 
+        if($promoCode){
+            $now = Carbon::now();
+            $promo = Promo::where('promocode', $promoCode)
+            ->whereDate('validity_from', '<=', $now)
+            ->whereDate('validity_to', '>=', $now)
+            ->where('status', 1)
+            ->first();
+
+            $promo_discount =$promo->discount;
+            $promocode_discount_amount = $bookingAmount * $promo_discount/100; 
+            $vat = $checkout->vat;
+            $total =$bookingAmount+(-$promocode_discount_amount)+$vat;
+        }
         return view('user.checkout',compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
-        'followus','payment_channels','count','bookingAmount','voucherSavings','vat','total')); 
+        'followus','payment_channels','count','bookingAmount','voucherSavings','vat','total','promo_discount',
+        'promocode_discount_amount','discountedPrice')); 
     }
     public function getCheckoutItems(){
         
         $products = Checkout::with('items.variant')->where('user_id',Auth::user()->id)->get();
         
         $product_array = [];
-
-        $bookingAmount = 0;
-
-        $originalTotal = 0;
-
 
         foreach ($products as $checkout) { 
           
@@ -155,15 +174,6 @@ class CheckoutController extends Controller
 
                 $discountedPrice = $variant['discounted_price'] * $item->quantity;
 
-                $unitPrice = $variant['unit_price'] * $item->quantity;
-
-                $bookingAmount += $discountedPrice;
-
-                $originalTotal += $unitPrice;
-                
-
-                $voucherSavings = $originalTotal - $bookingAmount; 
-
                 $imagePath = $variant['product']['image'] ?? null;
 
                 $product_array[] = [
@@ -172,14 +182,10 @@ class CheckoutController extends Controller
                     'title' => $variant['title'],
                     'short_description' => $variant['short_description'],
                     'discounted_price' => number_format($discountedPrice, 2),
-                    'unit_price' => number_format($unitPrice, 2),
                     'timer_flag' => $variant['timer_flag'],
                     'end_time' => $variant['end_time'],
                     'image' => $imagePath ? asset('storage/' . $imagePath) : 'https://via.placeholder.com/100',
                     'quantity' => $item->quantity,
-                    'total_discount'=>number_format($voucherSavings, 2),
-                    'total_unit_price'=>number_format($originalTotal, 2),
-                    'total_discounted_price'=>number_format($bookingAmount, 2),
                     'giftproduct'=>$item->giftproduct
                 ];
             }
@@ -200,7 +206,7 @@ class CheckoutController extends Controller
         $user_id = Auth::user()->id;
         $user = User::find($user_id); 
         $checkout =  $user->checkout()->with('items.variant')->first();
-    
+        $promoCode = session('promocode');
         if ($checkout && $checkout->items->isNotEmpty()) {
             $item = $checkout->items->where('product_variant_id', $variantId)->first();
     
@@ -215,26 +221,55 @@ class CheckoutController extends Controller
                 $item->save();
 
                 // Calculate full totals
-                $total_discounted_price = 0;
-                $total_unit_price = 0;
+                $bookingAmount = 0;
+                $originalTotal = 0;
     
                 foreach ($checkout->items as $cartItem) { 
-                    $total_discounted_price += $cartItem->variant->discounted_price * $cartItem->quantity;
-                    $total_unit_price += $cartItem->variant->unit_price * $cartItem->quantity;
+                    $bookingAmount += $cartItem->variant->discounted_price * $cartItem->quantity;
+                    $originalTotal += $cartItem->variant->unit_price * $cartItem->quantity;
                 }
                
-                $total_discount = $total_unit_price - $total_discounted_price;
-                $checkout->booking_amount = $total_unit_price;
-                $checkout->discount_amount = $total_discounted_price;
-                $checkout->total_amount = $total_discount;
+                $voucherSavings = $originalTotal - $bookingAmount;
+
+                $vat = round($bookingAmount * 0.05, 2);
+        
+                $total = $bookingAmount + $vat;
+
+                if($promoCode){
+                    $now = Carbon::now();
+                    $promo = Promo::where('promocode', $promoCode)
+                    ->whereDate('validity_from', '<=', $now)
+                    ->whereDate('validity_to', '>=', $now)
+                    ->where('status', 1)
+                    ->first();
+
+                    $promo_discount =$promo->discount;
+
+                    $promocode_discount_amount = $bookingAmount * $promo_discount/100; 
+
+                    $vat = $checkout->vat;
+
+                    $total =$bookingAmount+(-$promocode_discount_amount)+$vat;
+
+                    $checkout->promocode = $promoCode;
+                    
+                    $checkout->discount_amount = $promocode_discount_amount;
+                }
+                $checkout->booking_amount = $bookingAmount;
+                $checkout->vat =  $vat;
+                $checkout->total_amount =  $total;
                 $checkout->save();
+                
                 return response()->json([
                     'success' => true,
                     'discountedPrice' => $discountedPrice,
                     'unitPrice' => $unitPrice,
-                    'total_discounted_price' => $total_discounted_price,
-                    'total_unit_price' => $total_unit_price,
-                    'total_discount' => $total_discount,
+                    'voucherSavings'=>number_format($voucherSavings),
+                    'bookingAmount' => number_format($bookingAmount, 2),
+                    'vat' => number_format($vat, 2),
+                    'promo_discount'=>$promo_discount ?? '',
+                    'promocode_discount_amount'=>$promocode_discount_amount ?? '',
+                    'total' => number_format($total, 2),
                     'message' => 'Quantity updated successfully.'
                 ]);
             } else {
@@ -246,33 +281,48 @@ class CheckoutController extends Controller
     }
     public function removeCheckoutItem(Request $request)
     {
-        $checkout_id = $request->input('checkout_id');
+        $product_variant_id = $request->input('product_variant_id');
 
         $user_id = Auth::user()->id;
         $user = User::find($user_id); 
-        $checkout =  $user->user()->checkout()->with('items')->first();
+        $checkout =  $user->checkout()->with('items')->first();  
 
         if ($checkout) {
-            $item = $checkout->items->where('checkout_id', $checkout_id)->first();
-
+            $item = $checkout->items->where('product_variant_id', $product_variant_id)->first();
             if ($item) {
                 $item->delete(); 
 
                 $checkout->load('items.variant');
 
-                $total_discounted_price = 0;
-                $total_unit_price = 0;
+                if ($checkout->items->isEmpty()) {
+                    $checkout->delete();
+                    return response()->json(['success' => true, 'message' => 'Checkout and all items removed.']);
+                }
+
+                $bookingAmount = 0;
+                $originalTotal = 0;
 
                 foreach ($checkout->items as $cartItem) {
-                    $total_discounted_price += $cartItem->variant->discounted_price * $cartItem->quantity;
-                    $total_unit_price += $cartItem->variant->unit_price * $cartItem->quantity;
+                    $bookingAmount += $cartItem->variant->discounted_price * $cartItem->quantity;
+                    $originalTotal += $cartItem->variant->unit_price * $cartItem->quantity;
                 }
     
-                $total_discount = $total_unit_price - $total_discounted_price;
+                $voucherSavings = $originalTotal - $bookingAmount;
+
+                $vat = round($bookingAmount * 0.05, 2);
+        
+                $total = $bookingAmount + $vat;
+
+                $checkout->booking_amount = $bookingAmount;
+                $checkout->vat =  $vat;
+                $checkout->total_amount =  $total;
+                $checkout->save();
+
                 return response()->json(['success' => true,
-                    'total_discounted_price' => $total_discounted_price,
-                    'total_unit_price' => $total_unit_price,
-                    'total_discount' => $total_discount
+                        'voucherSavings'=>number_format($voucherSavings),
+                        'bookingAmount' => number_format($bookingAmount, 2),
+                        'vat' => number_format($vat, 2),
+                        'total' => number_format($total, 2),
                 ]);
             }
         }
@@ -287,22 +337,60 @@ class CheckoutController extends Controller
     
         $code = $request->input('promocode');
         $now = Carbon::now();
-    
-        $coupon = Promo::where('promocode', $code)
-            ->where('is_active', 1)
-            ->whereDate('validity_from', '<=', $now)
-            ->whereDate('validity_to', '>=', $now)
-            ->where('status',1)
-            ->first();
-    
-        if (!$coupon) {
-            return back()->with('error', 'Invalid or expired promo code.');
+        
+        if (session('promocode') && session('promocode') === $code) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Promo code already applied.'
+            ]);
         }
     
-        // Store the coupon ID in session for later use
-        session()->put('applied_coupon_id', $coupon->id);
+        $promo = Promo::where('promocode', $code)
+            ->whereDate('validity_from', '<=', $now)
+            ->whereDate('validity_to', '>=', $now)
+            ->where('status', 1)
+            ->first();
     
-        return back()->with('success', 'Promo code applied!');
+        if (!$promo) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid or expired promo code.'
+            ]);
+        }
+    
+        session()->put('promocode', $promo->promocode);
+        
+
+        $user_id = Auth::user()->id;
+        $user = User::find($user_id); 
+        $checkout =  $user->checkout()->with('items')->first(); 
+
+        if ($checkout) {
+
+            $bookingAmount = $checkout->booking_amount;
+            $promo_discount =$promo->discount;
+            $promocode_discount_amount = $bookingAmount * $promo_discount/100; 
+            $vat = $checkout->vat;
+            $finalAmount =$bookingAmount+(-$promocode_discount_amount)+$vat;
+
+            $checkout->promocode = $promo->promocode;
+            $checkout->discount_amount =  $promocode_discount_amount;
+            $checkout->total_amount =  $finalAmount;
+            $checkout->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Promo code applied!',
+                'promo_discount'=>$promo_discount,
+                'promocode_discount_amount' => number_format($promocode_discount_amount, 2),
+                'total' => number_format($finalAmount, 2)
+            ]);
+        }
+    
+        return response()->json([
+            'success' => true,
+            'message' => 'Promo code applied!'
+        ]);
     }
     public function checkoutBooking(Request $request){
     dd($request->all());
