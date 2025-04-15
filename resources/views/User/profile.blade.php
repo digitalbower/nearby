@@ -1,5 +1,5 @@
 <!-- Add this to the bottom of your CSS -->
-@extends('User.layouts.main')
+@extends('user.layouts.main')
 @push('styles')
 <style>
   .to-blue-500 {

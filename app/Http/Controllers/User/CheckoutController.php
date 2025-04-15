@@ -13,6 +13,13 @@ use App\Models\Promo;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Stripe\Stripe;
+use Stripe\Charge;
+use Stripe\Checkout\Session;
+use Illuminate\Support\Facades\DB;
+use Stripe\Token;
+use Stripe\Exception\ApiErrorException;
+
 
 
 class CheckoutController extends Controller
@@ -386,7 +393,28 @@ class CheckoutController extends Controller
         ]);
     }
     public function checkoutBooking(Request $request){
-        dd($request->all());
+    dd($request->all());
+        Stripe::setApiKey('sk_test_51RCiBxFE0ideOXuZh6wTWktSExMp3DhJ3d112CWRyf2RVuChJtlfQ9jiCzAIFkTQOjQfyxoHB1ws8SWRBWWOathR00s60hwqD4');
+
+       
+        Charge::create ([
+            "amount" => 10 * 100,
+            "currency" => "usd",
+            "source" => "tok_visa",
+            "description" => "Test payment from itsolutionstuff.com." 
+    ]);
+            
+    return back()
+            ->with('success', 'Payment successful!');
     }
+  
+    
+    
+         
+           
+     
+        
+    
+    
     
 }

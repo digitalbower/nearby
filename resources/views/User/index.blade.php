@@ -1,5 +1,5 @@
 
-@extends('User.layouts.main')
+@extends('user.layouts.main')
 @push('scripts')
 <script>
   tailwind.config = {

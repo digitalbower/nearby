@@ -1,4 +1,4 @@
-@extends('User.layouts.main')
+@extends('user.layouts.main')
 @push('styles')
 <style>
   .to-blue-500 {
@@ -449,15 +449,7 @@
         
             <div id="paymentDetails" class="mt-6"></div>
         
-            <button
-              class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 px-4 py-2 w-full mt-6 bg-[#58af0838] text-black">
-              <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="lock"
-                class="svg-inline--fa fa-lock mr-2" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path fill="currentColor"
-                  d="M144 144l0 48 160 0 0-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192l0-48C80 64.5 144.5 0 224 0s144 64.5 144 144l0 48 16 0c35.3 0 64 28.7 64 64l0 192c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 256c0-35.3 28.7-64 64-64l16 0z">
-                </path>
-              </svg>Complete Order
-            </button>
+           
             <p class="text-xs text-gray-500 text-center mt-4">
               By completing your purchase you agree to these <a href="#" class="text-blue-600 hover:underline">Terms of Service</a>.
             </p>
@@ -1005,45 +997,65 @@ function contactInformation() {
           </p>
         `;
         break;
+
       case "card":
         html = `
-          <div class="space-y-6">
-            <div>
-              <label for="cardNumber" class="block text-sm font-semibold text-gray-800">Card Number</label>
-              <div class="mt-2 relative rounded-lg border border-gray-300 focus-within:ring-2 focus-within:ring-[#000]">
-                <input type="text" id="cardNumber" class="block w-full px-4 py-3 text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] rounded-lg" placeholder="1234 5678 9012 3456">
-                <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
-                  <i class="fas fa-credit-card text-gray-500"></i>
+          <form id="stripePaymentForm" method="POST" action="{{ route('user.checkout.session') }}">
+            @csrf
+            <div class="space-y-6">
+              <div>
+                <label for="cardNumber" class="block text-sm font-semibold text-gray-800">Card Number</label>
+                <div class="mt-2 relative rounded-lg border border-gray-300 focus-within:ring-2 focus-within:ring-[#000]">
+                  <input type="text" id="cardNumber" name="cardnumber" class="block w-full px-4 py-3 text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] rounded-lg" placeholder="1234 5678 9012 3456" required>
+                  <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+                    <i class="fas fa-credit-card text-gray-500"></i>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label for="expDate" class="block text-sm font-semibold text-gray-800">Expiration Date</label>
-                <input type="text" id="expDate" class="mt-2 block w-full px-4 py-3 border text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] border-gray-300 rounded-lg" placeholder="MM / YY">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label for="expDate" class="block text-sm font-semibold text-gray-800">Expiration Date</label>
+                  <input type="text" id="expDate" name="expDate" class="mt-2 block w-full px-4 py-3 border text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] border-gray-300 rounded-lg" placeholder="MM / YY" required>
+                </div>
+                <div>
+                  <label for="cvv" class="block text-sm font-semibold text-gray-800">CVV</label>
+                  <input type="text" id="cvv" name="cvv" class="mt-2 block w-full px-4 py-3 border text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] border-gray-300 rounded-lg" placeholder="123" required>
+                </div>
               </div>
-              <div>
-                <label for="cvv" class="block text-sm font-semibold text-gray-800">CVV</label>
-                <input type="text" id="cvv" class="mt-2 block w-full px-4 py-3 border text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] border-gray-300 rounded-lg" placeholder="123">
-              </div>
+
+              <button type="submit"
+                class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium h-10 px-4 py-2 w-full mt-6 bg-[#58af0838] text-black shadow hover:shadow-md transition">
+                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="lock"
+                  class="svg-inline--fa fa-lock mr-2" role="img" xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 448 512" width="16" height="16">
+                  <path fill="currentColor"
+                    d="M144 144v48h160v-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192v-48C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64v192c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64h16z">
+                  </path>
+                </svg>
+                Complete Payment
+              </button>
             </div>
+          </form>
+        `;
+        break;
+
+      case "upi":
+        html = `
+          <div class="flex flex-col gap-1">
+            <label for="upiId" class="text-sm font-medium text-gray-700">UPI ID</label>
+            <input 
+              type="text" 
+              id="upiId" 
+              name="upiId"
+              class="mt-1 w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 hover:shadow-md transition-all duration-300" 
+              placeholder="yourname@upi" 
+              required
+            />
+            <button type="submit" class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-all">Submit UPI Payment</button>
           </div>
         `;
         break;
-      case "upi":
-        html = `
-        <div class="flex flex-col gap-1">
-<label for="upiId" class="text-sm font-medium text-gray-700">UPI ID</label>
-<input 
-type="text" 
-id="upiId" 
-class="mt-1 w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 hover:shadow-md transition-all duration-300" 
-placeholder="yourname@upi" 
-/>
-</div>
 
-        `;
-        break;
       default:
         html = "<p>Please select a payment method.</p>";
     }
@@ -1056,8 +1068,11 @@ placeholder="yourname@upi"
     }
   });
 
-  // Initialize with default payment method (card)
+  // Default method is "card"
   renderPaymentDetails("card");
+
+
+  
 </script>
 
 <script>
