@@ -1,4 +1,4 @@
-@extends('User.layouts.main')
+@extends('user.layouts.main')
 @push('styles')
 <link rel="stylesheet" href="{{asset('assets/css/custom/front/product.css')}}">
 @endpush

@@ -99,6 +99,13 @@ Route::prefix('user')->name('user.')->group(function () {
                 Route::get('/cancel', function () {
                     return 'Payment Cancelled.';
                 })->name('checkout.cancel');
+
+                Route::get('/payment/failure', function () {
+                    return view('user.paymentfailure');
+                })->name('user.paymentfailure');
+                
+                
+
             Route::get('/checkout-items', [CheckoutController::class, 'getCheckoutItems'])->name('checkout-items');
             Route::post('/update-checkout', [CheckoutController::class, 'updateCheckout'])->name('update_checkout');
             Route::post('/remove-checkout-item', [CheckoutController::class, 'removeCheckoutItem']);    
