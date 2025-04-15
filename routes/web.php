@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\CategoryUnitMasterController;
 use App\Http\Controllers\Admin\Product\NbvTermController;
 use App\Http\Controllers\Admin\Product\ProductTypeController;
 use App\Http\Controllers\Admin\Product\PromoController;
+use App\Http\Controllers\Admin\Product\SalesPersonController;
 use App\Http\Controllers\Admin\Report\ReviewReportController;
 use App\Http\Controllers\User\MerchantController;
 use App\Http\Controllers\User\CheckoutController;
@@ -164,6 +165,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/product_types/change-status', [ProductTypeController::class, 'changeTypeStatus'])->name('product_types.status');
             Route::resource('promos', PromoController::class);
             Route::post('/promos/change-status', [PromoController::class, 'changePromoStatus'])->name('promos.status');
+            Route::resource('sales_person', SalesPersonController::class);
+            Route::post('/sales_person/change-status', [SalesPersonController::class, 'changeSalesStatus'])->name('sales_person.status');
          
         });
         Route::prefix('reports')->name('reports.')->group(function () {

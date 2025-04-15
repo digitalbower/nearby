@@ -195,6 +195,17 @@
                         {{ old('categorycarousel', $product->categorycarousel) ? 'checked' : '' }}>
                         <label class="form-check-label">Category Carousel</label>
                     </div>
+                    <div class="mb-3">
+                        <label for="sales_person_id" class="form-label">Sales Person</label>
+                        <select class="form-control" name="sales_person_id">
+                            <option value="">Select Sales Person</option>
+                            @foreach ($persons as $person)
+                            <option value="{{ $person->id }}" {{ old('sales_person_id', $product->sales_person_id ?? '') == $person->id ? 'selected' : '' }}>
+                                    {{ $person->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-success">Update</button>
                 <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">Cancel</a>

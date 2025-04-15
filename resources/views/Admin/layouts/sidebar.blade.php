@@ -144,6 +144,11 @@
                             </a>
                         </li>
                         <li>
+                            <a href="{{route('admin.products.sales_person.index')}}">
+                                <span class="sub-item">Sales Person</span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="{{route('admin.products.index')}}">
                                 <span class="sub-item">Products</span>
                             </a>
