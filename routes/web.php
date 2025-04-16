@@ -36,6 +36,7 @@ use App\Http\Controllers\User\ProductController as UserProductController;
 use App\Http\Controllers\User\NewsletterController;
 use App\Http\Controllers\User\SpecialistRequestController;
 use App\Http\Controllers\User\ContactController;
+use App\Http\Controllers\User\DealsController;
 use App\Http\Controllers\User\StripePaymentController;
 
 
@@ -47,6 +48,8 @@ Route::prefix('user')->name('user.')->group(function () {
         Route::get('/list', [UserProductController::class, 'getProducts'])->name('filter');
         Route::get('/{id}', [UserProductController::class, 'show'])->name('show');
     });
+    Route::get('deals', [DealsController::class, 'index'])->name('deals.index');
+    Route::get('/deals/list', [DealsController::class, 'getDeals'])->name('deals.filter');
     Route::get('/merchant', [MerchantController::class, 'merchant'])->name('merchant');
     Route::post('/merchant-store', [MerchantController::class, 'storeMerchant'])->name('merchant_store');
 });
