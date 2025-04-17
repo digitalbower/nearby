@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Mail\BookingConfirmationEmail;
 use Illuminate\Http\Request;
 use App\Models\NavigationMenu;
 use App\Models\Logo;
@@ -10,6 +11,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Footer;
 use App\Models\Country;
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
@@ -97,12 +99,14 @@ class HomeController extends Controller
         'followus','payment_channels')); 
     } 
 
-    
-
-    
-
-    
-
+    public function bookingconfirmationEmail(){
+        $name = 'John Doe';
+        $variants = [
+            ['name' => 'Couple Package', 'id' => 1],
+            ['name' => 'Family Package', 'id' => 2],
+        ];
+        Mail::to('anjalykjoy@gmail.com')->send(new BookingConfirmationEmail($name, $variants));
+    }
 
     
 }

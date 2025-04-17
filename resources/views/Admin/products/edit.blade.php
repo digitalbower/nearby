@@ -148,7 +148,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="importantinfo" class="form-label">Important Info</label>
-                    <textarea name="importantinfo"  class="form-control" id="importantinfo">{{$product->importantinfo}}</textarea>
+                    <textarea name="importantinfo"  class="form-control" id="importantinfo">{!!$product->importantinfo!!}</textarea>
                 </div>
                 <div class="mb-3">
                     <label for="validity_from" class="form-label">Validity From</label> 
@@ -224,6 +224,13 @@
                      ['para', ['ul', 'ol', 'paragraph']]
                  ]
              });
+             $('#importantinfo').summernote({
+                height: 200,
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline']],
+                    ['para', ['ul', 'ol', 'paragraph']]
+                ]
+            });
          });
      </script>
 @endpush

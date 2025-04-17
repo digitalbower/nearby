@@ -205,7 +205,15 @@
                     ['para', ['ul', 'ol', 'paragraph']]
                 ]
             });
+            $('#importantinfo').summernote({
+                height: 200,
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline']],
+                    ['para', ['ul', 'ol', 'paragraph']]
+                ]
+            });
         });
+        
     </script>
 @endpush
 

@@ -10,6 +10,8 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Mail\Mailables\Attachment;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class BookingConfirmationEmail extends Mailable
 {
@@ -19,10 +21,11 @@ class BookingConfirmationEmail extends Mailable
      * Create a new message instance.
      */
     public $name;
-
-    public function __construct($name)
+    public $variants;
+    public function __construct($name,$variants)
     {
         $this->name = $name;
+        $this->variants =$variants;
     }
 
     /**
@@ -44,6 +47,8 @@ class BookingConfirmationEmail extends Mailable
             view: 'user.emails.booking_confirmation_email', 
             with: [
                 'name' => $this->name,
+                'variants' => $this->variants,
+                'isPdf' => true 
             ],
         );
     }
@@ -55,20 +60,37 @@ class BookingConfirmationEmail extends Mailable
      */
     public function attachments(): array
     {
-        $pdf = Pdf::loadView('user.pdf.booking_confirmation_attachment', [
-            'name' => $this->name,
-            // 'booking_id ' => $this->booking_id ,
-            // 'orderDate' => $this->created_date,
-            // 'items' => $this->items,
-        ]);
+        $attachments = [];
+        $dir = storage_path('app/public/attachments');
     
-        $pdfPath = storage_path("app/public/attachments/booking_attachment.pdf"); // Add booking_id with pdf name
-        $pdf->save($pdfPath);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
     
-        return [
-            Attachment::fromPath($pdfPath)
-                ->as('BookingConfirmation.pdf')
-                ->withMime('application/pdf'),
-        ];
+        foreach ($this->variants as $variant) {
+            try {
+                $fileName = 'booking_' . $variant['id']  . '.pdf';
+                $pdfPath = $dir . '/' . $fileName;
+    
+                $pdf = Pdf::loadView('user.pdf.booking_confirmation_attachment', [
+                    'name' => $this->name,
+                    'variant' => $variant,
+                ]);
+               
+                try {
+                    $pdf->save($pdfPath);
+                } catch (\Exception $e) {
+                    Log::error('PDF Save Failed:', $e->getMessage());
+                }
+                
+                $attachments[] = Attachment::fromPath($pdfPath)
+                    ->as($fileName)
+                    ->withMime('application/pdf');
+            } catch (\Exception $e) {
+                Log::error("PDF generation failed for variant ID {$variant['id']}: " . $e->getMessage());
+            }
+        }
+    
+        return $attachments;
     }
 }
