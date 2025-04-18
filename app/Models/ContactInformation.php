@@ -12,5 +12,5 @@ class ContactInformation extends Model
 
     protected $table = 'contact_messages';
 
-    protected $fillable = ['name', 'email', 'meassage'];
+    protected $fillable = ['name', 'email', 'message'];
 }

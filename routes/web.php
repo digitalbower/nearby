@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\CategoryUnitMasterController;
 use App\Http\Controllers\Admin\Product\NbvTermController;
 use App\Http\Controllers\Admin\Product\ProductTypeController;
 use App\Http\Controllers\Admin\Product\PromoController;
+use App\Http\Controllers\Admin\Product\SalesPersonController;
 use App\Http\Controllers\Admin\Report\ReviewReportController;
 use App\Http\Controllers\User\MerchantController;
 use App\Http\Controllers\User\CheckoutController;
@@ -35,6 +36,7 @@ use App\Http\Controllers\User\ProductController as UserProductController;
 use App\Http\Controllers\User\NewsletterController;
 use App\Http\Controllers\User\SpecialistRequestController;
 use App\Http\Controllers\User\ContactController;
+use App\Http\Controllers\User\DealsController;
 use App\Http\Controllers\User\StripePaymentController;
 
 
@@ -46,6 +48,8 @@ Route::prefix('user')->name('user.')->group(function () {
         Route::get('/list', [UserProductController::class, 'getProducts'])->name('filter');
         Route::get('/{id}', [UserProductController::class, 'show'])->name('show');
     });
+    Route::get('deals', [DealsController::class, 'index'])->name('deals.index');
+    Route::get('/deals/list', [DealsController::class, 'getDeals'])->name('deals.filter');
     Route::get('/merchant', [MerchantController::class, 'merchant'])->name('merchant');
     Route::post('/merchant-store', [MerchantController::class, 'storeMerchant'])->name('merchant_store');
 });
@@ -173,6 +177,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/product_types/change-status', [ProductTypeController::class, 'changeTypeStatus'])->name('product_types.status');
             Route::resource('promos', PromoController::class);
             Route::post('/promos/change-status', [PromoController::class, 'changePromoStatus'])->name('promos.status');
+            Route::resource('sales_person', SalesPersonController::class);
+            Route::post('/sales_person/change-status', [SalesPersonController::class, 'changeSalesStatus'])->name('sales_person.status');
          
         });
         Route::prefix('reports')->name('reports.')->group(function () {

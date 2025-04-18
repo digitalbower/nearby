@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Emirate;
 use App\Models\NbvTerm;
 use App\Models\Product;
+use App\Models\SalesPerson;
 use App\Models\Subcategory;
 use App\Models\Tags;
 use App\Models\Vendor;
@@ -39,8 +40,9 @@ class ProductController extends Controller
         $tags = Tags::where('status',1)->latest()->get();
         $terms = NbvTerm::where('status',1)->latest()->get();
         $emirates = Emirate::where('status',1)->latest()->get();
+        $persons = SalesPerson::where('status',1)->latest()->get();
         return view('admin.products.create')->with(['vendors'=>$vendors,'categories'=>$categories,
-        'tags'=>$tags,'terms'=>$terms,'emirates'=>$emirates]);
+        'tags'=>$tags,'terms'=>$terms,'emirates'=>$emirates,'persons'=>$persons]);
     }
 
     /**
@@ -118,6 +120,7 @@ class ProductController extends Controller
         $product->herocarousel = $request->has('herocarousel') ? 1 : 0;
         $product->trending = $request->has('trending') ? 1 : 0;
         $product->categorycarousel = $request->has('categorycarousel') ? 1 : 0;
+        $product->sales_person_id  = $request->sales_person_id;
         $product->save();
         return redirect()->route('admin.products.index')->with('success', 'New Product created successfully!');
     }
@@ -132,7 +135,9 @@ class ProductController extends Controller
         $tags = Tags::where('status',1)->latest()->get();
         $terms = NbvTerm::where('status',1)->latest()->get();
         $emirates = Emirate::where('status',1)->latest()->get();
-        return view('admin.products.edit')->with(['product'=>$product,'vendors'=>$vendors,'categories'=>$categories,'tags'=>$tags,'terms'=>$terms,'emirates'=>$emirates]);
+        $persons = SalesPerson::where('status',1)->latest()->get();
+        return view('admin.products.edit')->with(['product'=>$product,'vendors'=>$vendors,'categories'=>$categories,
+        'tags'=>$tags,'terms'=>$terms,'emirates'=>$emirates,'persons'=>$persons]);
 
     }
 
@@ -208,6 +213,7 @@ class ProductController extends Controller
         $product->herocarousel = $request->has('herocarousel') ? 1 : 0;
         $product->trending = $request->has('trending') ? 1 : 0;
         $product->categorycarousel = $request->has('categorycarousel') ? 1 : 0;
+        $product->sales_person_id  = $request->sales_person_id;
         if (!empty($galleryArray)) {
             $product->gallery = json_encode($galleryArray);
         }

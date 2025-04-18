@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ContactUsEmail;
 use Illuminate\Http\Request;
 use App\Models\ContactInformation;
 use App\Models\Footer;
 use App\Models\Logo;
 use App\Models\NavigationMenu;
+use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
@@ -53,6 +55,9 @@ class ContactController extends Controller
         ]);
 
         ContactInformation::create($request->only('name', 'email', 'message'));
+        $email = $request->email;
+        $name = $request->name;
+        Mail::to($email)->send(new ContactUsEmail($name));
 
         return back()->with('success', 'Thank you for contacting us! We will get back to you soon.');
     }

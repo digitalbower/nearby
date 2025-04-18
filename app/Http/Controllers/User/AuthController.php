@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Mail\RegistrationEmail;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -13,6 +14,7 @@ use App\Models\Country;
 use App\Models\Footer;
 use App\Models\Logo;
 use App\Models\NavigationMenu;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -140,7 +142,9 @@ class AuthController extends Controller
         ]);
 
         Session::flash('success', 'User registered successfully! You can now log in.');
-
+        $email = $request->email;
+        $name = $request->first_name;
+        Mail::to($email)->send(new RegistrationEmail($name));
         // Redirect to login page with success message
         return redirect()->route('user.login');
     }

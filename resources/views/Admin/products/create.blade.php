@@ -177,7 +177,17 @@
                         <label class="form-check-label">Category Carousel</label>
                     </div>
                 </div>
-                
+                <div class="mb-3">
+                    <label for="sales_person_id" class="form-label">Sales Person</label>
+                    <select class="form-control" name="sales_person_id">
+                        <option value="">Select Sales Person</option>
+                        @foreach ($persons as $person)
+                            <option value="{{ $person->id }}" {{ old('sales_person_id') == $person->id ? 'selected' : '' }}>
+                                {{ $person->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
                 <button type="submit" class="btn btn-success">Create</button>
                 <a href="{{ route('admin.products.vendor_terms.index') }}" class="btn btn-secondary">Cancel</a>
             </form>
@@ -195,7 +205,15 @@
                     ['para', ['ul', 'ol', 'paragraph']]
                 ]
             });
+            $('#importantinfo').summernote({
+                height: 200,
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline']],
+                    ['para', ['ul', 'ol', 'paragraph']]
+                ]
+            });
         });
+        
     </script>
 @endpush
 
