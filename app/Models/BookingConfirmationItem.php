@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class BookingConfirmationItem extends Model
 {
+
+    protected $table = 'booking_confirmation_items';
     protected $fillable = [
         'booking_confirmation_id',
         'product_varient_id',

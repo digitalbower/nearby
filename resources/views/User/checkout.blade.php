@@ -1,4 +1,22 @@
 @extends('user.layouts.main')
+@if(session('success'))
+    <div class="alert alert-success" style="color: white; background-color: green; padding: 10px; border-radius: 5px;">
+        <span>{{ session('success') }}</span>
+        <button type="button" class="close" style="background: none; border: none; color: white; font-size: 20px; float: right; cursor: pointer;" onclick="this.parentElement.style.display='none';">
+            &times;
+        </button>
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger" style="color: white; background-color: red; padding: 10px; border-radius: 5px;">
+        <span>{{ session('error') }}</span>
+        <button type="button" class="close" style="background: none; border: none; color: white; font-size: 20px; float: right; cursor: pointer;" onclick="this.parentElement.style.display='none';">
+            &times;
+        </button>
+    </div>
+@endif
+
 @push('styles')
 <style>
   .to-blue-500 {
@@ -209,7 +227,7 @@
 @endpush
 @section('content')
   <main class="flex-grow bg-[#58af0838]  px-4 lg:px-10 py-8">
-    <form method="POST" action="{{route('user.checkout_booking')}}" id="bookingForm">
+    <form method="POST" action="{{route('user.checkout_booking') }}" id="bookingForm">
       @csrf
     <div class="grid container mx-auto md:grid-cols-3 md:space-x-6">
         <div class="md:col-span-2  space-y-6 overflow-hidden">
@@ -417,37 +435,45 @@
         <div class="bg-white rounded-xl shadow p-4 px-4 lg:p-7 mx-auto">
           <h2 class="text-2xl font-semibold mb-6">Payment</h2>
           <div class="space-y-6">
-            <div class="space-y-4" id="paymentMethods">
-              <label class="flex items-center justify-between border rounded-lg p-2 lg:p-4 cursor-pointer">
-                <div class="flex items-center gap-2">
-                  <input type="radio" name="payment" value="gpay" class="text-[#000] focus:ring-[#000]" />
-                  <span>Google Pay</span>
+            <div class="space-y-4" id="paymentDetails">
+              {{-- <form id="stripePaymentForm" method="POST" action="{{ route('user.checkout.session') }}">
+                @csrf --}}
+                <div class="space-y-6">
+                  <input type="hidden" name="amount" value="{{ $total }}">
+                  <div>
+                    <label for="cardNumber" class="block text-sm font-semibold text-gray-800">Card Number</label>
+                    <div class="mt-2 relative rounded-lg border border-gray-300 focus-within:ring-2 focus-within:ring-[#000]">
+                      <input type="text" id="cardNumber" name="cardnumber" class="block w-full px-4 py-3 text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] rounded-lg" placeholder="1234 5678 9012 3456" required>
+                      <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+                        <i class="fas fa-credit-card text-gray-500"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-2 gap-4">
+                    <div>
+                      <label for="expDate" class="block text-sm font-semibold text-gray-800">Expiration Date</label>
+                      <input type="text" id="expDate" name="expDate" class="mt-2 block w-full px-4 py-3 border text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] border-gray-300 rounded-lg" placeholder="MM / YY" required>
+                    </div>
+                    <div>
+                      <label for="cvv" class="block text-sm font-semibold text-gray-800">CVV</label>
+                      <input type="text" id="cvv" name="cvv" class="mt-2 block w-full px-4 py-3 border text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] border-gray-300 rounded-lg" placeholder="123" required>
+                    </div>
+                  </div>
+    
+                  <button type="submit"
+                    class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium h-10 px-4 py-2 w-full mt-6 bg-[#58af0838] text-black shadow hover:shadow-md transition">
+                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="lock"
+                      class="svg-inline--fa fa-lock mr-2" role="img" xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 448 512" width="16" height="16">
+                      <path fill="currentColor"
+                        d="M144 144v48h160v-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192v-48C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64v192c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64h16z">
+                      </path>
+                    </svg>
+                    Complete Payment
+                  </button>
                 </div>
-                <i class="fab fa-google-pay text-2xl"></i>
-              </label>
-        
-              <label class="flex items-center justify-between border rounded-lg p-2 lg:p-4 cursor-pointer">
-                <div class="flex items-center gap-2">
-                  <input type="radio" name="payment" value="card" class="text-[#000] focus:ring-[#000]" checked />
-                  <span>Credit/Debit Card</span>
-                </div>
-                <div class="flex gap-2">
-                  <i class="fab fa-cc-visa text-blue-700 text-2xl"></i>
-                  <i class="fab fa-cc-mastercard text-2xl"></i>
-                  <i class="fab fa-cc-amex text-blue-500 text-2xl"></i>
-                </div>
-              </label>
-        
-              <label class="flex items-center justify-between border rounded-lg p-2 lg:p-4 cursor-pointer">
-                <div class="flex items-center gap-2">
-                  <input type="radio" name="payment" value="upi" class="text-[#000] focus:ring-[#000]" />
-                  <span>UPI</span>
-                </div>
-                <i class="fas fa-mobile-alt text-2xl"></i>
-              </label>
+              {{-- </form> --}}
             </div>
-        
-            <div id="paymentDetails" class="mt-6"></div>
         
            
             <p class="text-xs text-gray-500 text-center mt-4">
@@ -578,6 +604,42 @@
 @endsection
 
 @push('scripts')
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  const stripe = Stripe('{{ env('STRIPE_KEY') }}');
+  const elements = stripe.elements();
+  const card = elements.create('card');
+  card.mount('#card-element');
+
+  const form = document.getElementById('bookingForm');
+  form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const {clientSecret} = await fetch('{{ route('user.checkout_booking') }}', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': document.querySelector('[name="csrf-token"]').content,
+          },
+          body: JSON.stringify({amount: 1000}),
+      }).then((res) => res.json());
+
+      const {error, paymentIntent} = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+              card: card,
+              billing_details: {
+                  name: 'Cardholder Name',
+              },
+          },
+      });
+
+      if (error) {
+          console.error(error.message);
+      } else if (paymentIntent.status === 'succeeded') {
+          console.log('Payment succeeded');
+      }
+  });
+</script>
 <script>
  let products = [];
   let visibleCount = 2;
@@ -983,98 +1045,6 @@ function contactInformation() {
     }
   }
 </script>
-<script>
-  const paymentMethods = document.getElementById("paymentMethods");
-  const paymentDetails = document.getElementById("paymentDetails");
-
-  function renderPaymentDetails(method) {
-    let html = "";
-    switch (method) {
-      case "gpay":
-        html = `
-          <p class="text-sm text-gray-600 my-2">
-            Please complete the payment using Google Pay on your device.
-          </p>
-        `;
-        break;
-
-      case "card":
-        html = `
-          <form id="stripePaymentForm" method="POST" action="{{ route('user.checkout.session') }}">
-            @csrf
-            <div class="space-y-6">
-              <div>
-                <label for="cardNumber" class="block text-sm font-semibold text-gray-800">Card Number</label>
-                <div class="mt-2 relative rounded-lg border border-gray-300 focus-within:ring-2 focus-within:ring-[#000]">
-                  <input type="text" id="cardNumber" name="cardnumber" class="block w-full px-4 py-3 text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] rounded-lg" placeholder="1234 5678 9012 3456" required>
-                  <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
-                    <i class="fas fa-credit-card text-gray-500"></i>
-                  </div>
-                </div>
-              </div>
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <label for="expDate" class="block text-sm font-semibold text-gray-800">Expiration Date</label>
-                  <input type="text" id="expDate" name="expDate" class="mt-2 block w-full px-4 py-3 border text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] border-gray-300 rounded-lg" placeholder="MM / YY" required>
-                </div>
-                <div>
-                  <label for="cvv" class="block text-sm font-semibold text-gray-800">CVV</label>
-                  <input type="text" id="cvv" name="cvv" class="mt-2 block w-full px-4 py-3 border text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] border-gray-300 rounded-lg" placeholder="123" required>
-                </div>
-              </div>
-
-              <button type="submit"
-                class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium h-10 px-4 py-2 w-full mt-6 bg-[#58af0838] text-black shadow hover:shadow-md transition">
-                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="lock"
-                  class="svg-inline--fa fa-lock mr-2" role="img" xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 448 512" width="16" height="16">
-                  <path fill="currentColor"
-                    d="M144 144v48h160v-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192v-48C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64v192c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64h16z">
-                  </path>
-                </svg>
-                Complete Payment
-              </button>
-            </div>
-          </form>
-        `;
-        break;
-
-      case "upi":
-        html = `
-          <div class="flex flex-col gap-1">
-            <label for="upiId" class="text-sm font-medium text-gray-700">UPI ID</label>
-            <input 
-              type="text" 
-              id="upiId" 
-              name="upiId"
-              class="mt-1 w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 hover:shadow-md transition-all duration-300" 
-              placeholder="yourname@upi" 
-              required
-            />
-            <button type="submit" class="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-all">Submit UPI Payment</button>
-          </div>
-        `;
-        break;
-
-      default:
-        html = "<p>Please select a payment method.</p>";
-    }
-    paymentDetails.innerHTML = html;
-  }
-
-  paymentMethods.addEventListener("change", (e) => {
-    if (e.target.name === "payment") {
-      renderPaymentDetails(e.target.value);
-    }
-  });
-
-  // Default method is "card"
-  renderPaymentDetails("card");
-
-
-  
-</script>
-
 <script>
   function toggleDropdown(contentId, iconId) {
   const content = document.getElementById(contentId);

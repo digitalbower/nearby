@@ -19,6 +19,11 @@ use Stripe\Checkout\Session;
 use Illuminate\Support\Facades\DB;
 use Stripe\Token;
 use Stripe\Exception\ApiErrorException;
+use Stripe\PaymentIntent;
+use App\Models\Payment;
+use App\Models\BookingConfirmation;
+use App\Models\BookingConfirmationItem;
+use Exception;
 
 
 
@@ -393,27 +398,103 @@ class CheckoutController extends Controller
         ]);
     }
     public function checkoutBooking(Request $request){
-    dd($request->all());
-        Stripe::setApiKey('sk_test_51RCiBxFE0ideOXuZh6wTWktSExMp3DhJ3d112CWRyf2RVuChJtlfQ9jiCzAIFkTQOjQfyxoHB1ws8SWRBWWOathR00s60hwqD4');
+        DB::beginTransaction();
+        try {
+            Stripe::setApiKey(env('STRIPE_SECRET'));
+    
+            $user = auth()->user(); // Assuming user is authenticated
+    
+            // Convert amount to fils (Stripe requires smallest currency unit)
+            $amountInFils = round($request->total_amount * 100);
+    
+            // Create Stripe PaymentIntent
+            $paymentIntent = PaymentIntent::create([
+                'amount' => $amountInFils,
+                'currency' => 'aed',
+                'description' => 'Booking Payment',
+                'metadata' => [
+                    'user_id' => $user->id,
+                    'booking_amount' => $request->booking_amount,
+                    'vat' => $request->vat_amount,
+                ],
+            ]);
+    
+            // Save Payment Details
+            $payment = DB::table('payments')->insertGetId([
+                
+                'user_id' => $user->id,
+                'booking_amount' => $request->booking_amount,
+                'discount_amount' => $request->voucher_savings,
+                'total_amount' => $request->total_amount,
+                'payment_method' => 'stripe',
+                'payment_status' => 'completed',
+                'stripe_transaction_id' => $paymentIntent->id,
+                'payment_response' => json_encode($paymentIntent),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+    
+            // Create Booking Confirmation
+            $bookingConfirmationId = DB::table('booking_confirmations')->insertGetId([
+               
+                'booking_id' => uniqid('BOOK-'),
+                'user_id' => $user->id,
+                'booking_amount' => $request->booking_amount,
+                'discount_amount' => $request->voucher_savings,
+                'total_amount' => $request->total_amount,
+                'booking_status' => 'confirmed',
+                'booking_details' => json_encode($request->items),
+                'vat' => $request->vat_amount,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+    
+            // Save Booking Items
+            foreach ($request->items as $variantId => $item) {
+                DB::table('booking_confirmation_items')->insert([
+                    'booking_confirmation_id' => $bookingConfirmationId,
+                    'product_varient_id' => $variantId,
+                    'quantity' => $item['quantity'],
+                    'unit_price' => $item['unit_price'],
+                    'total_price' => $item['total_price'],
+                    'verification_number' => rand(100000, 999999),
+                    'verification_status' => 'pending',
+                    'giftproduct' => $item['giftproduct'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
 
-       
-        Charge::create ([
-            "amount" => 10 * 100,
-            "currency" => "usd",
-            "source" => "tok_visa",
-            "description" => "Test payment from itsolutionstuff.com." 
-    ]);
-            
-    return back()
-            ->with('success', 'Payment successful!');
-    }
-  
+                // Add entry to PurchasedProduct table
+        DB::table('purchased_products')->insert([
+            'booking_confirmation_id' => $bookingConfirmationId,
+            'product_variant_id' => $variantId,
+            'user_id' => $user->id,
+            'quantity' => $item['quantity'],
+            'unit_price' => $item['unit_price'],
+            'total_price' => $item['total_price'],
+            'verification_number' => rand(100000, 999999),
+            'verification_status' => 'pending',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     
     
-         
-           
-     
-        
+            // Clear Cart
+            DB::table('carts')->where('user_id', $user->id)->delete();
+    
+            DB::commit();
+    
+            return redirect()->route('user.bookingconfirmation')
+                ->with('success', 'Payment successful and booking confirmed!');
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Payment failed: ' . $e->getMessage());
+        }
+    } 
+
+    
     
     
     

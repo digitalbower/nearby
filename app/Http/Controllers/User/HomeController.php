@@ -10,6 +10,12 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Footer;
 use App\Models\Country;
+use App\Models\BookingConfirmation;
+use App\Models\BookingConfirmationItem;
+use App\Models\Payment;
+use App\Models\PurchasedProduct;
+use App\Models\ProductVariant;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -93,10 +99,60 @@ class HomeController extends Controller
         $payment_channels = Footer::where('type', 'payment_channels')
         ->where('status', 1)
         ->get();    
+
+        $user = auth()->user();
+
+        $bookingConfirmation = BookingConfirmation::where('user_id', auth()->id())
+        ->latest()
+        ->first();
+
+        $payment = Payment::where('user_id', auth()->id())
+        ->latest()
+        ->first();
+
+       
+        $product_items = ProductVariant::with('product_purchase')->get(); 
+
+        $userId = Auth::user()->id;
+
+        $checkout = \App\Models\Checkout::where('user_id', $userId)->latest()->first();
+
+        $checkoutData = null;
+
+        if ($checkout) {
+            $checkoutData = [
+                'total' => $checkout->total_amount,
+                'promo_code' => $checkout->promocode,
+                'discount' => $checkout->discount_amount,
+                'after_discount' => $checkout->total_amount - $checkout->discount_amount,
+            ];
+        }
+   
+
         return view('user.bookingconfirmation',compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
-        'followus','payment_channels')); 
+        'followus','payment_channels','user','bookingConfirmation','payment','product_items','checkoutData')); 
     } 
 
+
+    public function download($product_id)
+    {
+        // Retrieve the purchased product by ID
+        $purchased_product = PurchasedProduct::with('product')
+            ->where('id', $product_id)
+            ->firstOrFail();
+
+        // Check if the file exists (assuming the product has a downloadable file, e.g., voucher)
+        $filePath = storage_path('app/public/vouchers/' . $purchased_product->product->voucher_filename);
+
+        // If the file exists, return it as a download response
+        if (file_exists($filePath)) {
+            return response()->download($filePath, $purchased_product->product->voucher_filename);
+        }
+
+        // If file does not exist, return an error message
+        return back()->with('error', 'File not found.');
+    }
+      
     
 
     

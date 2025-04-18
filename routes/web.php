@@ -84,12 +84,13 @@ Route::prefix('user')->name('user.')->group(function () {
             Route::post('/add-cart', [UserProductController::class, 'addCart'])->name('add_cart');
         });
         // ✅ E-commerce & Booking Routes
-       
+        Route::get('/download/purchased-product/{product_id}', [HomeController::class, 'download'])->name('download.purchased_product');
             Route::get('/bookingconfirmation', [HomeController::class, 'bookingconfirmation'])->name('bookingconfirmation');
             Route::get('/cart', [UserProductController::class, 'cart'])->name('cart');
             Route::delete('/cart/{id}', [UserProductController::class, 'destroy'])->name('destroy');
             Route::post('/proceed-checkout', [CheckoutController::class, 'proceedCheckout'])->name('proceed_checkout');
             Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+            Route::get('/stripe', [CheckoutController::class, 'stripe'])->name('stripe');
             Route::get('/paymentcheckout', [StripePaymentController::class, 'paymentcheckout'])->name('paymentcheckout');
                 Route::post('/create-checkout-session', [StripePaymentController::class, 'createSession'])->name('checkout.session');
                 Route::get('/success', function () {
@@ -103,7 +104,7 @@ Route::prefix('user')->name('user.')->group(function () {
                 Route::get('/payment/failure', function () {
                     return view('user.paymentfailure');
                 })->name('user.paymentfailure');
-                
+                Route::post('/create-payment-intent', [CheckoutController::class, 'createIntent'])->name('stripe.intent');
                 
 
 

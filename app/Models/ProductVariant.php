@@ -31,4 +31,13 @@ class ProductVariant extends Model
         return $this->belongsTo(Product::class, 'product_id')->withTrashed();
     }
 
+    public function bookingConfirmationItems()
+{
+    return $this->hasMany(BookingConfirmationItem::class);
+}
+   public function product_purchase()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
+
 }

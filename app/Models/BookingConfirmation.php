@@ -36,4 +36,6 @@ class BookingConfirmation extends Model
     {
         return $this->hasMany(BookingConfirmationItem::class);
     }
+
+    
 }

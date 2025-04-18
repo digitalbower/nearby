@@ -61,4 +61,10 @@ class Product extends Model
         return $this->belongsTo(Product::class, 'product_id');
     }
 
+    public function productVariant()
+{
+    return $this->hasMany(ProductVariant::class, 'product_id');  // 'product_id' is the foreign key in 'product_variants' table
+    
+}
+
 }

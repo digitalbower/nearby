@@ -1,4 +1,22 @@
 @extends('User.layouts.main')
+@if(session('success'))
+    <div class="alert alert-success" style="color: white; background-color: green; padding: 10px; border-radius: 5px;">
+        <span>{{ session('success') }}</span>
+        <button type="button" class="close" style="background: none; border: none; color: white; font-size: 20px; float: right; cursor: pointer;" onclick="this.parentElement.style.display='none';">
+            &times;
+        </button>
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger" style="color: white; background-color: red; padding: 10px; border-radius: 5px;">
+        <span>{{ session('error') }}</span>
+        <button type="button" class="close" style="background: none; border: none; color: white; font-size: 20px; float: right; cursor: pointer;" onclick="this.parentElement.style.display='none';">
+            &times;
+        </button>
+    </div>
+@endif
+
 @push('styles')
   <style>
   .to-blue-500 {
@@ -125,28 +143,28 @@
         <!-- Test Center Details -->
         <div class="">
           <!-- User Details Section -->
-          <div class="mb-8 border-b border-gray-200 pb-3 ">
-            <h2 class="text-xl font-semibold text-gray-900 mb-2">User Information</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
-              <div>
-                <p class="text-sm text-gray-600">Full Name</p>
-                <p class="font-semibold text-gray-800">Shiva Thullapalli</p>
-              </div>
-              <div>
-                <p class="text-sm text-gray-600">Email Address</p>
-                <p class="font-semibold text-gray-800">shiva@example.com</p>
-              </div>
-              <div>
-                <p class="text-sm text-gray-600">Phone Number</p>
-                <p class="font-semibold text-gray-800">+91 9876543210</p>
-              </div>
-              <div>
-                <p class="text-sm text-gray-600">Shipping Address</p>
-                <p class="font-semibold text-gray-800">#3748, Phase - 6, Kukatpally, Hyderabad</p>
-              </div>
-            </div>
-          </div>
-        
+          <div class="mb-8 border-b border-gray-200 pb-3">
+    <h2 class="text-xl font-semibold text-gray-900 mb-2">User Information</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
+        <div>
+            <p class="text-sm text-gray-600">Full Name</p>
+            <p class="font-semibold text-gray-800">{{ $user->first_name }}</p>
+        </div>
+        <div>
+            <p class="text-sm text-gray-600">Email Address</p>
+            <p class="font-semibold text-gray-800">{{ $user->email }}</p>
+        </div>
+        <div>
+            <p class="text-sm text-gray-600">Phone Number</p>
+            <p class="font-semibold text-gray-800">{{ $user->phone ?? '-' }}</p>
+        </div>
+        <div>
+            <p class="text-sm text-gray-600">Shipping Address</p>
+            <p class="font-semibold text-gray-800">{{ $user->address ?? '-' }}</p>
+        </div>
+    </div>
+</div>
+
           <!-- Booking Confirmation Status -->
           <div class="mb-8">
             <h2 class="text-xl font-semibold text-gray-900 mb-2">Booking Confirmation</h2>
@@ -168,31 +186,31 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-1">
             <div>
               <p class="text-gray-800 text-sm">Booking ID</p>
-              <p class="font-semibold text-gray-800">EKAP7483750</p>
+              <p class="font-semibold text-gray-800">{{ $bookingConfirmation->booking_id }}</p>
             </div>
             <div class="text-right">
               <p class="text-gray-800 text-sm">Booked for</p>
-              <p class="font-semibold text-gray-800">Shiva Thullapalli</p>
+              <p class="font-semibold text-gray-800">{{ $user->first_name }}</p>
             </div>
           </div>
         
           <div class="flex items-center gap-2 text-gray-800 mb-8 border-b border-gray-200 pb-3">
-            <i class="far text-gray-900 fa-clock"></i>
-            <span>06:00 AM Sat, 08 Feb 2019</span>
-          </div>
+    <i class="far text-gray-900 fa-clock"></i>
+    <span>{{ \Carbon\Carbon::parse($bookingConfirmation->booking_time)->format('h:i A D, d M Y') }}</span>
+</div>
+
         
           <!-- Payment and Delivery Information -->
           <div class="mb-8">
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Payment & Delivery</h3>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Payment Status</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
               <div>
                 <p class="text-sm text-gray-600">Payment Status</p>
-                <p class="font-semibold text-green-600">Paid</p>
+                <p class="font-semibold {{ $payment->payment_status == 'completed' ? 'text-green-600' : 'text-red-600' }}">
+    {{ ucfirst($payment->payment_status) }}
+</p>
               </div>
-              <div>
-                <p class="text-sm text-gray-600">Delivery Status</p>
-                <p class="font-semibold text-yellow-500">Pending</p>
-              </div>
+             
             </div>
           </div>
         
@@ -279,86 +297,43 @@
                 }
               </script>
               @endpush
-              <div class="border rounded-lg overflow-hidden lg:shadow-lg">
-                <div class="p-3">
-                  <div class="flex gap-3">
-                    <div class="relative w-28 h-28 rounded-lg overflow-hidden">
-                      <img src="https://via.placeholder.com/100" alt="Experience Ultimate Relaxation with Spa Admission" class="w-full h-full object-cover">
-      
-                    </div>
-                    <div class="flex-1">
-                      <h3 class="font-semibold text-base lg:text-xl">Experience Ultimate Relaxation with Spa Admission</h3>
-                      <p class="text-sm text-gray-500 mt-0">General Spa Admission for One</p>
-                      <p class="text-sm text-gray-500 mt-2"><strong>Quentity</strong> 1</p>
-                      <p class="text-sm text-gray-500 mt-2"><strong>Date</strong> 01/04/2024</p>
-                    
-      
-                    </div>
-                  </div>
-                  <div class="flex items-center justify-between mt-2">
-                    <div class="flex items-center gap-4">
-                     
-                     
-                      <div class="flex items-center gap-x-4">
-                        <img src="/images/US-UK_Add_to_Apple_Wallet_RGB_101421.svg" class="w-28">
-                        <button
-                        class="px-2 py-2 text-xs bg-green-100 text-black rounded-lg hover:bg-green-200 transition duration-300 flex items-center">
-                        <i class="fas fa-download  text-sm mr-1 "> </i> Download
-                      </button>
-                     
-                      </div>
-                    </div>
-                    <div class="text-right flex justify-center gap-x-4 items-center">
-      
-                      <div class="text-4xl font-semibold text-gray-900">$42</div>
-                      <div class="text-2xl text-gray-500 line-through">$60</div>
-                    </div>
-                  </div>
-                 
-                  <hr class="my-2">
-                
-                </div>
-              </div>
-              <div class="border rounded-lg overflow-hidden lg:shadow-lg">
-                <div class="p-3">
-                  <div class="flex gap-3">
-                    <div class="relative w-28 h-28 rounded-lg overflow-hidden">
-                      <img src="https://via.placeholder.com/100" alt="Experience Ultimate Relaxation with Spa Admission" class="w-full h-full object-cover">
-      
-                    </div>
-                    <div class="flex-1">
-                      <h3 class="font-semibold text-base lg:text-xl">Experience Ultimate Relaxation with Spa Admission</h3>
-                      <p class="text-sm text-gray-500 mt-0">General Spa Admission for One</p>
-                      <p class="text-sm text-gray-500 mt-2"><strong>Quentity</strong> 1</p>
-                      <p class="text-sm text-gray-500 mt-2"><strong>Date</strong> 01/04/2024</p>
-                    
-      
-                    </div>
-                  </div>
-                  <div class="flex items-center justify-between mt-2">
-                    <div class="flex items-center gap-4">
-                     
-                     
-                      <div class="flex items-center gap-x-4">
-                        <img src="/images/US-UK_Add_to_Apple_Wallet_RGB_101421.svg" class="w-28">
-                        <button
-                        class="px-2 py-2 text-xs bg-green-100 text-black rounded-lg hover:bg-green-200 transition duration-300 flex items-center">
-                        <i class="fas fa-download  text-sm mr-1 "> </i> Download
-                      </button>
-                     
-                      </div>
-                    </div>
-                    <div class="text-right flex justify-center gap-x-4 items-center">
-      
-                      <div class="text-4xl font-semibold text-gray-900">$42</div>
-                      <div class="text-2xl text-gray-500 line-through">$60</div>
-                    </div>
-                  </div>
-                 
-                  <hr class="my-2">
-                
-                </div>
-              </div>
+             
+              @foreach ($product_items as $product_item)
+  <div class="border rounded-lg overflow-hidden lg:shadow-lg">
+    <div class="p-3">
+      <div class="flex gap-3">
+        <div class="relative w-28 h-28 rounded-lg overflow-hidden">
+          <img src="{{ asset($product_item->product->image) }}" alt="{{ $product_item->product->name }}" class="w-full h-full object-cover">
+        </div>
+        <div class="flex-1">
+          <h3 class="font-semibold text-base lg:text-xl">{{ $product_item->product->name }}</h3>
+          <p class="text-sm text-gray-500 mt-0">{{ $product_item->product->description }}</p>
+          <p class="text-sm text-gray-500 mt-2"><strong>Quantity:</strong> {{ $product_item->quantity }}</p>
+          <p class="text-sm text-gray-500 mt-2"><strong>Date:</strong> {{ \Carbon\Carbon::parse($product_item->created_at)->format('d/m/Y') }}</p>
+        </div>
+      </div>
+      <div class="flex items-center justify-between mt-2">
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-x-4">
+            <img src="/images/US-UK_Add_to_Apple_Wallet_RGB_101421.svg" class="w-28">
+            <form action="{{ route('user.download.purchased_product', ['product_id' => $product_item->id]) }}" method="GET">
+              <button type="submit" class="px-2 py-2 text-xs bg-green-100 text-black rounded-lg hover:bg-green-200 transition duration-300 flex items-center">
+                <i class="fas fa-download text-sm mr-1"></i> Download
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="text-right flex justify-center gap-x-4 items-center">
+          <div class="text-4xl font-semibold text-gray-900">${{ number_format($product_item->total_price, 2) }}</div>
+          <div class="text-2xl text-gray-500 line-through">${{ number_format($product_item->unit_price, 2) }}</div>
+        </div>
+      </div>
+      <hr class="my-2">
+    </div>
+  </div>
+@endforeach
+
+             
               <!-- Repeat Product 2 and Product 3 similar to Product 1 -->
             </div>
           </div>
@@ -474,45 +449,22 @@
           </div>
         
           <!-- Price Breakdown List -->
-          <ul class="space-y-5">
-            <li class="flex items-center justify-between text-base text-gray-700">
-              <div class="flex items-center space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m2 0a6 6 0 10-12 0 6 6 0 0012 0z" />
-                </svg>
-                <span>Complete Blood Picture (CBP)</span>
-              </div>
-              <span class="font-medium text-gray-800">₹1,500</span>
-            </li>
-            <li class="flex items-center justify-between text-base text-gray-700">
-              <div class="flex items-center space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5-6l3 3-3 3" />
-                </svg>
-                <span>Health care test</span>
-              </div>
-              <span class="font-medium text-gray-800">₹2,200</span>
-            </li>
-            <li class="flex items-center justify-between text-base text-gray-800">
-              <div class="flex items-center space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-3.333 0-5 1.667-5 5v5h10v-5c0-3.333-1.667-5-5-5zM7 16v2h10v-2" />
-                </svg>
-                <span>Home Collection</span>
-              </div>
-              <span class="font-medium text-gray-800">₹150</span>
-            </li>
-            <li class="flex items-center justify-between text-base text-gray-800">
-              <div class="flex items-center space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6M12 15V9m-4 4h8" />
-                </svg>
-                <span>Wallet Deduction</span>
-              </div>
-              <span class="font-medium text-gray-800">- ₹1,625</span>
-            </li>
-          </ul>
-        
+          @if($checkoutData)
+    <div class="checkout-summary p-4 bg-gray-100 rounded-lg shadow-md my-4">
+        <h2 class="text-xl font-semibold mb-3">Booking Summary</h2>
+        <ul class="space-y-2 text-sm">
+            <li><strong>Total:AED {{ number_format($checkoutData['total'], 2) }}</strong> </li>
+            <li><strong>Promo Code: {{ $checkoutData['promo_code'] ?? 'N/A' }}</strong> </li>
+            <li><strong>Discount: AED {{ number_format($checkoutData['discount'], 2) }}</strong> </li>
+            <li><strong>Amount After Discount: AED {{ number_format($checkoutData['after_discount'], 2) }}</strong> </li>
+        </ul>
+    </div>
+@else
+    <div class="checkout-summary p-4 bg-yellow-100 rounded-lg shadow-md my-4">
+        <p class="text-sm text-gray-700">No recent checkout details found.</p>
+    </div>
+@endif
+
           <!-- Coupon Section (New Table) -->
           <!-- <div class="mt-6">
             <h4 class="text-xl font-semibold text-gray-900 mb-5">Applied Coupons</h4>
@@ -544,80 +496,7 @@
           </div> -->
           
         
-          <!-- Total Amount -->
-          <div class="border-t pt-4 mt-6">
-            <div class="flex justify-between text-lg font-semibold text-gray-800">
-              <span>Total Amount Paid</span>
-              <span>₹2,225</span>
-            </div>
-          </div>
-        
-          <!-- Reschedule Button -->
-         
-        </div>
-                
-        <div class="py-6 bg-white sticky top-10 lg:h-screen  w-full rounded-xl shadow-sm lg:p-4 mb-8">
-          <!-- Email Confirmation -->
-          <div class="mb-8 ">
-              <p class="text-gray-800 mb-3">
-                  We've emailed your tickets to 
-                  <span class="font-semibold text-gray-900">katielewis@gmail.com</span>
-              </p>
-              
-              <!-- Share Button -->
-              <button onclick="shareBooking()" 
-                      class="inline-flex items-center text-gray-900 hover:text-cyan-700 transition-colors">
-                  <svg xmlns="http://www.w3.org/2000/svg" 
-                       class="h-5 w-5 mr-2" 
-                       fill="none" 
-                       viewBox="0 0 24 24" 
-                       stroke="currentColor">
-                      <path stroke-linecap="round" 
-                            stroke-linejoin="round" 
-                            stroke-width="2" 
-                            d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                  </svg>
-                  Share booking
-              </button>
-          </div>
-      
-          <!-- Main Content -->
-          <div class="">
-              <h1 class="text-2xl font-semibold text-gray-800 mb-6">Download or View Your Tickets</h1>
-              
-              <p class="text-gray-600 text-sm mb-6">
-                  You'll need either a digital copy on your mobile device or a printout of your tickets.
-              </p>
-      
-              <!-- Download Options -->
-              <div class="space-y-6">
-                  <!-- Apple Wallet Button -->
-                  <button onclick="addToAppleWallet()" 
-                          class="w-full flex items-center justify-center gap-2 bg-black text-white rounded-lg px-4 py-3 hover:bg-gray-800 transition-colors duration-200">
-                      <svg xmlns="http://www.w3.org/2000/svg" 
-                           class="h-5 w-5" 
-                           viewBox="0 0 24 24" 
-                           fill="currentColor">
-                          <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.09997 22C7.78997 22.05 6.79997 20.68 5.95997 19.47C4.24997 17 2.93997 12.45 4.69997 9.39C5.56997 7.87 7.12997 6.91 8.81997 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/>
-                      </svg>
-                      Add to Apple Wallet
-                  </button>
-      
-                  <!-- Download Tickets Button -->
-                  <button onclick="downloadTickets()" 
-                          class="w-full flex justify-center items-center gap-x-2 px-9 py-3 bg-[#58af0838]  text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-                      <svg xmlns="http://www.w3.org/2000/svg" 
-                           class="h-5 w-5" 
-                           fill="none" 
-                           viewBox="0 0 24 24" 
-                           stroke="currentColor">
-                          <path stroke-linecap="round" 
-                                stroke-linejoin="round" 
-                                stroke-width="2" 
-                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                      </svg>
-                      Download All Tickets
-                  </button>
+       
               </div>
           </div>
       </div>
