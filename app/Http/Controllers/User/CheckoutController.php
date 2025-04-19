@@ -136,7 +136,11 @@ class CheckoutController extends Controller
                 $bookingAmount += $discountedPrice;
 
                 $originalTotal += $unitPrice;
+
+               
             }
+
+            $order_id = $checkout->id;
         } 
         $voucherSavings = $originalTotal - $bookingAmount; 
 
@@ -161,9 +165,10 @@ class CheckoutController extends Controller
             $vat = $checkout->vat;
             $total =$bookingAmount+(-$promocode_discount_amount)+$vat;
         }
+
         return view('user.checkout',compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels','count','bookingAmount','voucherSavings','vat','total','promo_discount',
-        'promocode_discount_amount','discountedPrice')); 
+        'promocode_discount_amount','discountedPrice','order_id')); 
     }
     public function getCheckoutItems(){
         
@@ -398,6 +403,7 @@ class CheckoutController extends Controller
         ]);
     }
     public function checkoutBooking(Request $request){
+        
         DB::beginTransaction();
         try {
             Stripe::setApiKey(env('STRIPE_SECRET'));
@@ -421,7 +427,7 @@ class CheckoutController extends Controller
     
             // Save Payment Details
             $payment = DB::table('payments')->insertGetId([
-                
+                'order_id' => $request->order_id,
                 'user_id' => $user->id,
                 'booking_amount' => $request->booking_amount,
                 'discount_amount' => $request->voucher_savings,
@@ -436,7 +442,7 @@ class CheckoutController extends Controller
     
             // Create Booking Confirmation
             $bookingConfirmationId = DB::table('booking_confirmations')->insertGetId([
-               
+                'order_id' => $request->order_id,
                 'booking_id' => uniqid('BOOK-'),
                 'user_id' => $user->id,
                 'booking_amount' => $request->booking_amount,
@@ -479,9 +485,11 @@ class CheckoutController extends Controller
             'updated_at' => now(),
         ]);
     
-    
+           $order_id = $request->order_id;
             // Clear Cart
             DB::table('carts')->where('user_id', $user->id)->delete();
+            DB::table('checkout_items')->where('checkout_id', $order_id)->delete();
+            DB::table('checkouts')->where('id', $order_id)->delete();
     
             DB::commit();
     

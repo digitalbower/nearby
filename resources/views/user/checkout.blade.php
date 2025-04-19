@@ -487,6 +487,7 @@
       <input type="hidden" name="voucher_savings" value="{{ $voucherSavings }}">
       <input type="hidden" name="vat_amount" value="{{ $vat }}">
       <input type="hidden" name="total_amount" value="{{ $total }}">
+      <input type="hidden" name="order_id" value="{{ $order_id }}">
 
       <div class="md:mt-0 mt-4 md:block hidden mb-5 md:mb-0">
         <div class="bg-white rounded-xl shadow p-6 sticky top-4">
