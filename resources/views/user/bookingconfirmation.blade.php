@@ -1,4 +1,4 @@
-@extends('User.layouts.main')
+@extends('user.layouts.main')
 @if(session('success'))
     <div class="alert alert-success" style="color: white; background-color: green; padding: 10px; border-radius: 5px;">
         <span>{{ session('success') }}</span>
