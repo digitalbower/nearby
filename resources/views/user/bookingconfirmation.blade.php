@@ -8,6 +8,7 @@
     </div>
 @endif
 
+
 @if(session('error'))
     <div class="alert alert-danger" style="color: white; background-color: red; padding: 10px; border-radius: 5px;">
         <span>{{ session('error') }}</span>

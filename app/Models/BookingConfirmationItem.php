@@ -23,4 +23,17 @@ class BookingConfirmationItem extends Model
     {
         return $this->belongsTo(BookingConfirmation::class);
     }
+
+    public function productVariant()
+    {
+        return $this->belongsTo(ProductVariant::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    
+
 }

@@ -13,6 +13,7 @@ use App\Models\Footer;
 use App\Models\Logo;
 use App\Models\NavigationMenu;
 use Illuminate\Validation\ValidationException;
+use App\Models\BookingConfirmation;
 
 class ProfileController extends Controller
 {
@@ -49,8 +50,15 @@ class ProfileController extends Controller
         $countries = Country::all(); 
         $gender = Gender::all();
 
+        $bookingConfirmations = BookingConfirmation::with([
+            'items.productVariant.productBook'
+        ])
+        ->where('user_id', auth()->id()) // if needed to filter by logged-in user
+        ->latest()
+        ->get();
+
         return view('user.profile', compact('user','countries','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
-        'followus','payment_channels')); // Pass user data to the view
+        'followus','payment_channels','bookingConfirmations')); // Pass user data to the view
     }
 
     /**

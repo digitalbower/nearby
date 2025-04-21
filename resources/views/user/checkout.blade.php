@@ -443,20 +443,24 @@
                   <div>
                     <label for="cardNumber" class="block text-sm font-semibold text-gray-800">Card Number</label>
                     <div class="mt-2 relative rounded-lg border border-gray-300 focus-within:ring-2 focus-within:ring-[#000]">
-                      <input type="text" id="cardNumber" name="cardnumber" class="block w-full px-4 py-3 text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] rounded-lg" placeholder="1234 5678 9012 3456" required>
+                      <input type="text" id="cardNumber" name="cardnumber" maxlength="16" minlength="16" pattern="\d{12,19}" class="block w-full px-4 py-3 text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] rounded-lg" placeholder="1234 5678 9012 3456" required>
                       <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
                         <i class="fas fa-credit-card text-gray-500"></i>
                       </div>
+                      <div id="cardNumberError" class="text-sm text-red-600 mt-1 hidden">Please enter a valid card number (12–19 digits).</div>
                     </div>
                   </div>
                   <div class="grid grid-cols-2 gap-4">
                     <div>
                       <label for="expDate" class="block text-sm font-semibold text-gray-800">Expiration Date</label>
-                      <input type="text" id="expDate" name="expDate" class="mt-2 block w-full px-4 py-3 border text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] border-gray-300 rounded-lg" placeholder="MM / YY" required>
+                      <input type="text" id="expDate"  maxlength="7" pattern="(0[1-9]|1[0-2]) \/ \d{2}" name="expDate" class="mt-2 block w-full px-4 py-3 border text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] border-gray-300 rounded-lg" placeholder="MM / YY" required>
+                      <div id="expDateError" class="text-sm text-red-600 mt-1 hidden">Enter valid future date in MM / YY format</div>
                     </div>
+
                     <div>
                       <label for="cvv" class="block text-sm font-semibold text-gray-800">CVV</label>
-                      <input type="text" id="cvv" name="cvv" class="mt-2 block w-full px-4 py-3 border text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] border-gray-300 rounded-lg" placeholder="123" required>
+                      <input type="text" id="cvv" name="cvv"  maxlength="4" pattern="\d{3,4}" class="mt-2 block w-full px-4 py-3 border text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] border-gray-300 rounded-lg" placeholder="123" required>
+                      <div id="cvvError" class="text-sm text-red-600 mt-1 hidden">Enter a valid 3 or 4 digit CVV</div>
                     </div>
                   </div>
     
@@ -1128,4 +1132,86 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 </script>
+
+<script>
+document.getElementById('cvv').addEventListener('input', function (e) {
+    e.target.value = e.target.value.replace(/\D/g, ''); // Only digits
+});
+
+document.getElementById('bookingForm').addEventListener('submit', function (e) {
+    const cvvInput = document.getElementById('cvv');
+    const cvvError = document.getElementById('cvvError');
+    const cvv = cvvInput.value.trim();
+
+    if (!/^\d{3,4}$/.test(cvv)) {
+        e.preventDefault();
+        cvvError.classList.remove('hidden');
+    } else {
+        cvvError.classList.add('hidden');
+    }
+});
+</script>
+
+<script>
+document.getElementById('expDate').addEventListener('input', function (e) {
+    // Only allow digits and slash
+    e.target.value = e.target.value.replace(/[^0-9\/]/g, '');
+
+    // Auto-format MM / YY
+    let val = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/g, '');
+    if (val.length >= 2) {
+        e.target.value = val.substring(0, 2) + ' / ' + val.substring(2, 4);
+    }
+});
+
+document.getElementById('bookingForm').addEventListener('submit', function (e) {
+    const expInput = document.getElementById('expDate');
+    const errorEl = document.getElementById('expDateError');
+    const expVal = expInput.value.trim();
+
+    const match = expVal.match(/^(0[1-9]|1[0-2]) \/ (\d{2})$/);
+    if (!match) {
+        e.preventDefault();
+        errorEl.classList.remove('hidden');
+        return;
+    }
+
+    const inputMonth = parseInt(match[1], 10);
+    const inputYear = parseInt('20' + match[2], 10);
+
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1;
+    const currentYear = now.getFullYear();
+
+    if (inputYear < currentYear || (inputYear === currentYear && inputMonth < currentMonth)) {
+        e.preventDefault();
+        errorEl.classList.remove('hidden');
+    } else {
+        errorEl.classList.add('hidden');
+    }
+});
+</script>
+
+<script>
+document.getElementById('cardNumber').addEventListener('input', function (e) {
+    // Remove non-digits
+    e.target.value = e.target.value.replace(/\D/g, '');
+
+    // Optional: auto-insert spaces every 4 digits for display
+    // e.target.value = e.target.value.replace(/(.{4})/g, '$1 ').trim();
+});
+
+document.getElementById('bookingForm').addEventListener('submit', function (e) {
+    const cardNumber = document.getElementById('cardNumber').value;
+    const errorEl = document.getElementById('cardNumberError');
+
+    if (!/^\d{12,19}$/.test(cardNumber)) {
+        e.preventDefault();
+        errorEl.classList.remove('hidden');
+    } else {
+        errorEl.classList.add('hidden');
+    }
+});
+</script>
+
 @endpush

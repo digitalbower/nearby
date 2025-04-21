@@ -797,63 +797,75 @@
                 
                 <div class="space-y-6">
                   <!-- Booking Item 1 -->
-                  <div class="border  relative border-cyan-400 rounded-xl shadow-xs p-3 transition duration-300">
-                    <div class="flex gap-x-3 items-center mb-2">
-                      <span
-                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-                        <i class="fas fa-exclamation-circle mr-2"></i> Invoice
-                      </span>
-                      <div class="text-sm col-span-2  text-gray-600">
-                        <p><i class="fas fa-calendar-alt mr-2 text-cyan-500"></i><strong>date</strong> 16/12/21</p>
-                      </div>
-                    </div>
-                   
-                    <div class="flex flex-col md:flex-row gap-4">
-                      
-                      <div class="w-full md:w-20">
-                        <img src="/images/banner.png" alt="West Town 3rd Floor" class="w-full h-20 object-cover rounded-lg" />
-                      </div>
-                      <div class=" w-full">
-                        <div class="grid grid-cols-1 items-center md:grid-cols-3 gap-4">
-                          <div class="col-span-2">
-                            <h3 class="text-lg font-medium text-gray-800">Booking Request 35426</h3>
-                            <p class="text-sm text-gray-600">for West Town 3rd Floor Dorm</p>
-  
-                            
-                          </div>
-                         
-                           <div class="flex flex-col items-end top-2 right-4 absolute justify-end gap-3 mt-2 md:mt-0">
-                        <img src="/images/US-UK_Add_to_Apple_Wallet_RGB_101421.svg" class="w-28">
-  
-  
-                      </div>
-                        </div>
-                        <div class="w-full justify-between flex gap-x-3">
-                          <div class="w-full">
-                            <p class="mb-1 text-xs text-gray-500"><i
-                                class="fas fa-dollar-sign  mr-2 text-cyan-500"></i>Pay Amount: USD 1,234</p>
-                            <p class="text-xs text-gray-500"><i class="fas fa-users  mr-2 text-cyan-500"></i>Guests: 1
-                              (1 Guest, 0 Children, 0 Infants)</p>
-                          </div>
-                          <div class="flex w-full justify-end gap-x-3">
-                            <div class="mt-0 flex gap-2 justify-end">
-                              <button
-                              class="px-2 py-2 text-xs bg-cyan-100 text-cyan-700 rounded-lg hover:bg-cyan-200 transition duration-300 flex items-center">
-                              <i class="fas fa-envelope mr-1"></i> Resend Email
-                            </button>
-                            
-                              <button
-                                class="px-2 py-2 text-xs bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition duration-300 flex items-center">
-                                <i class="fas fa-times-circle mr-1"></i> cancel Booking
-                              </button>
-                              <button
-                                class="px-2 py-2 text-xs bg-green-100 text-black rounded-lg hover:bg-green-200 transition duration-300 flex items-center">
-                                <i class="fas fa-download  text-sm mr-1 "> </i> Download
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                  @foreach ($bookingConfirmations as $booking)
+  <div class="border relative border-cyan-400 rounded-xl shadow-xs p-3 transition duration-300">
+    <div class="flex gap-x-3 items-center mb-2">
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+        <i class="fas fa-exclamation-circle mr-2"></i> Invoice
+      </span>
+      <div class="text-sm col-span-2 text-gray-600">
+        <p>
+          <i class="fas fa-calendar-alt mr-2 text-cyan-500"></i>
+          <strong>date</strong> {{ $booking->created_at->format('d/m/y') }}
+        </p>
+      </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-4">
+      <div class="w-full md:w-20">
+        <img src="{{ $booking->items->first()?->productVariant?->productBook?->product_image ?? '/images/default.png' }}"
+          alt="{{ $booking->items->first()?->productVariant?->productBook?->name ?? 'Booking Image' }}"
+          class="w-full h-20 object-cover rounded-lg" />
+      </div>
+
+      <div class="w-full">
+        <div class="grid grid-cols-1 items-center md:grid-cols-3 gap-4">
+          <div class="col-span-2">
+            <h3 class="text-lg font-medium text-gray-800">Booking Request {{ $booking->booking_id }}</h3>
+            <p class="text-sm text-gray-600">
+              for {{ $booking->items->first()?->productVariant?->productBook?->name ?? 'N/A' }}
+            </p>
+          </div>
+
+          <div class="flex flex-col items-end top-2 right-4 absolute justify-end gap-3 mt-2 md:mt-0">
+            <img src="/images/US-UK_Add_to_Apple_Wallet_RGB_101421.svg" class="w-28">
+          </div>
+        </div>
+
+        <div class="w-full justify-between flex gap-x-3">
+          <div class="w-full">
+            <p class="mb-1 text-xs text-gray-500">
+              <i class="fas fa-dollar-sign mr-2 text-cyan-500"></i>
+              Pay Amount: USD {{ number_format($booking->total_amount, 2) }}
+            </p>
+            <p class="text-xs text-gray-500">
+              <i class="fas fa-users mr-2 text-cyan-500"></i>
+              Guests: 1 (1 Guest, 0 Children, 0 Infants)
+            </p>
+          </div>
+
+          <div class="flex w-full justify-end gap-x-3">
+            <div class="mt-0 flex gap-2 justify-end">
+              <button
+                class="px-2 py-2 text-xs bg-cyan-100 text-cyan-700 rounded-lg hover:bg-cyan-200 transition duration-300 flex items-center">
+                <i class="fas fa-envelope mr-1"></i> Resend Email
+              </button>
+              <button
+                class="px-2 py-2 text-xs bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition duration-300 flex items-center">
+                <i class="fas fa-times-circle mr-1"></i> Cancel Booking
+              </button>
+              <button
+                class="px-2 py-2 text-xs bg-green-100 text-black rounded-lg hover:bg-green-200 transition duration-300 flex items-center">
+                <i class="fas fa-download text-sm mr-1"></i> Download
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+@endforeach
+
                       
                       <!-- Right side icons -->
                      
