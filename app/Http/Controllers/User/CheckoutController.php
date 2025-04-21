@@ -467,7 +467,7 @@ class CheckoutController extends Controller
                     'unit_price' => $item['unit_price'],
                     'total_price' => $item['total_price'],
                     'verification_number' => rand(100000, 999999),
-                    'verification_status' => 'confirmed',
+                    'verification_status' => 'completed',
                     'giftproduct' => $item['giftproduct'],
                     'created_at' => now(),
                     'updated_at' => now(),
@@ -481,7 +481,7 @@ class CheckoutController extends Controller
                     'unit_price' => $item['unit_price'],
                     'total_price' => $item['total_price'],
                     'verification_number' => rand(100000, 999999),
-                    'verification_status' => 'confirmed',
+                    'verification_status' => 'verified',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
