@@ -30,73 +30,36 @@
       <p>We're excited to provide you with the voucher you've chosen. Below you'll find all the details you need to redeem your offer. Please keep this ticket handy and enjoy your experience.</p>
       <p>
         <strong> Voucher Summary</strong></p>
-      <p> Voucher Number: [Ticket Number]</p>
-      <p>Guest Name: [Your Name]</p>
-      <p>Email: [Your Email Address]</p>
-      <p>Platform/Website: [NearbyVouchers]</p>
-      <p><strong> Date : [Date] only for dated products</strong></p>
-      <p>Valid From: [Start Date]</p>
-      <p>Valid Until: [End Date]</p>
-      <p>Full filled by: [Vender Name]</p>
+      <p> Voucher Number: {{$variant['voucher_number']}}</p>
+      <p>Guest Name: {{$variant['guest_name']}}</p>
+      <p>Email: {{$variant['email']}}</p>
+      <p>Platform/Website: NearbyVouchers</p>
+      {{-- <p><strong> Date : [Date] only for dated products</strong></p> --}}
+      <p>Valid From: {{$variant['validity_from']}}</p>
+      <p>Valid Until: {{$variant['validity_to']}}</p>
+      <p>Full filled by: {{$variant['vendor']}}</p>
         
-      <h3 style="color: red">Verification Number: [OTP]</h3>
+      <h3 style="color: red">Verification Number: {{$variant['verification_number']}}</h3>
       <p style="color: red">Do not share this on Phone</p>
       <div class="section-title" style=" font-weight: bold;
       margin-top: 30px;
       margin-bottom: 10px;
       font-size: 18px;
       color: #000;">📜 Voucher Details:</div>
-      <ol>
-        <li>Below are the specifics of what is covered and not covered by your voucher:</li>
-        <ol>
-          <li>Included:</li>
-          <ul>
-            <li>[item 1]</li>
-            <li>item 2</li>
-          </ul>
-          <li>Excluded:</li>
-          <ul>
-            <li>[item 1]</li>
-            <li>item 2</li>
-          </ul>
-        </ol>
-      </ol>
+      {!! $variant['voucher_details'] !!}
       <div class="section-title" style="font-weight: bold;
       margin-top: 30px;
       margin-bottom: 10px;
       font-size: 18px;
       color: #000;">Important Details:</div>
-      <ol>
-        <li>Confirmation Email: Please ensure you have a printout or digital version of this confirmation email for verification at the time of use.</li>
-        <li>Non-Dated Products: For non-dated products, advance slot booking is required. Please contact us using the contact number or email provided above to schedule your slot.</li>
-        <ul>
-          <li>Phone: [Operator Contact Number]</li>
-          <li>Email: [Operator Contact Email]</li>
-          <li>Operating Hours: [Operating Hours]</li>
-        </ul>
-       <li> Dated Bookings: For products with a specific date, please verify your booking by calling us before traveling to confirm your reservation.</li>
-       <ul>
-          <li>Phone: [Operator Contact Number]</li>
-          <li>Email: [Operator Contact Email]</li>
-          <li>Operating Hours: [Operating Hours]</li>
-        </ul>
-      </ol>
+        {!! $variant['importantinfo'] !!}
 
       <div class="section-title" style=" font-weight: bold;
       margin-top: 30px;
       margin-bottom: 10px;
       font-size: 18px;
       color: #000;">Voucher Terms and Conditions:</div>
-      <ol>
-        <li>Voucher Validity: Valid for 90 days from the date of purchase. Please redeem within this period.</li>
-        <li>Redemption Instructions: Present a printout or digital version of this email at the time of purchase or service. Follow any additional instructions provided.</li>
-        <li>Usage: The voucher is valid only for the items mentioned in the voucher details. Any items not mentioned or excluded are not included with this voucher.</li>
-        <li>Restrictions: Cannot be combined with other promotions or discounts.</li>
-        <li>Refunds and Exchanges: Non-refundable and cannot be exchanged for cash or credit. Void if not used within the validity period.</li>
-        <li>Lost or Stolen Vouchers: We are not responsible for lost or stolen vouchers. Ensure you keep your voucher details and OTP secure.</li>
-        <li>Modification and Termination: No modifications are possible after purchase. In unforeseen situations such as weather, natural calamity, or traveler security-related issues, if the operator cancels or closes the deal, vouchers not redeemed will be eligible for a refund. Refunds will be issued within 14 working days to the original payment method. Notifications of cancellations and refunds will be sent via email.</li>
-        <li>Dispute Resolution: For any disputes, please contact us at <a href="mailto:support@nearbyvouchers.com">support@nearbyvouchers.com.</a> Our office hours are Monday to Friday, 9 AM to 5 PM.</li>
-      </ol>
+      {!! $variant['nbv_terms'] !!}
 
       <div class="section-title" style=" font-weight: bold;
       margin-top: 30px;

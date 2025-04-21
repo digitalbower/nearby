@@ -88,8 +88,8 @@
 
       <div class="section-title">✨ Your Order Summary:</div>
       <div class="order-summary">
-        <p>Order Date: {{ $orderDate ?? '[Order Date]' }}</p>
-        <p>Order Number:{{ $orderNumber ?? '[Order Number]' }}</p>
+        <p>Order Date: {{ $order_date ?? '[Order Date]' }}</p>
+        <p>Order Number:{{ $order_number ?? '[Order Number]' }}</p>
       </div>
 
       <p style="font-style: italic">🛒 Items Purchased:</p>
@@ -103,39 +103,27 @@
           </tr>
         </thead>
         <tbody>
+          @foreach ($items as $item)
+            <tr>
+              <td>{{$item['product_variant']}}</td>
+              <td>{{$item['quantity']}}</td>
+              <td>AED {{$item['unit_price']}}</td>
+              <td>AED {{$item['total_price']}}</td>
+            </tr>
+          @endforeach         
           <tr>
-            <td>Sample Product</td>
-            <td>2</td>
-            <td>AED 100.00</td>
-            <td>AED 200.00</td>
-          </tr>
-          <tr>
             <td></td>
             <td></td>
             <td></td>
-            <td>Grand Total: AED 575.00</td>
+            <td>Grand Total: AED {{$grand_total}}</td>
           </tr>
         </tbody>
       </table>
       <div class="section-title">📜 Important Details:</div>
-      <ol>
-        <li>Confirmation Email: Please ensure you have a printout or digital version of this confirmation email for verification at the time of use.</li>
-        <li>Non-Dated Products: For non-dated products, advance slot booking is required. Please contact us using the contact number or email provided above to schedule your slot.</li>
-        <li>Dated Bookings: For products with a specific date, please verify your booking by calling us before traveling to confirm your reservation.</li>
-      </ol>
+      {!! $importantinfo !!}
 
       <div class="section-title">📋 Near By Vouchers Terms and Conditions:</div>
-      <ol>
-        <li>Voucher Validity: Valid for 90 days from the date of purchase. Please redeem within this period.</li>
-        <li>Redemption Instructions: Present a printout or digital version of this email at the time of purchase or service. Follow any additional instructions provided.</li>
-        <li>Usage: The voucher is valid only for the items mentioned in the voucher details. Any items not mentioned or excluded are not included with this voucher.</li>
-        <li>Restrictions: Cannot be combined with other promotions or discounts.</li>
-        <li>Refunds and Exchanges: Non-refundable and cannot be exchanged for cash or credit. Void if not used within the validity period.</li>
-        <li>Lost or Stolen Vouchers: We are not responsible for lost or stolen vouchers. Ensure you keep your voucher details and OTP secure.</li>
-        <li>Modification and Termination: No modifications are possible after purchase. In unforeseen situations such as weather, natural calamity, or traveler security-related issues, if the operator cancels or closes the deal, vouchers not redeemed will be eligible for a refund. Refunds will be issued within 14 working days to the original payment method. Notifications of cancellations and refunds will be sent via email.</li>
-        <li>Dispute Resolution: For any disputes, please contact us at <a href="mailto:support@nearbyvouchers.com">support@nearbyvouchers.com.</a> Our office hours are Monday to Friday, 9 AM to 5 PM.</li>
-      </ol>
-
+      {!! $nbv_terms !!}
       <div class="section-title">🔄 NearBy Vouchers Refund & Exchange Policy:</div>
       <ol>
         <li>Non-Refundable: All vouchers are non-refundable. Once purchased, vouchers cannot be returned or exchanged for cash or credit.</li>

@@ -155,11 +155,6 @@
         <!-- Product List -->
         <div class="space-y-6">
           <!-- Product 1 -->
-          @php
-    $end = true;
-    $totalDays = 2; // Replace with logic if needed, e.g., Carbon::parse($variant->sale_end_date)->diffInDays(now())
-@endphp
-
 @foreach($cartItems as $item)
     @php
       
@@ -187,7 +182,8 @@
                     />
                 </div>
                 <div class="flex-1">
-                    <h3 class="font-semibold text-base lg:text-xl">{{ $product->name }}</h3>
+                    <h3 class="font-semibold text-base lg:text-xl">{{$variant->title}}</h3>
+                    <p class="text-sm text-gray-500 mt-2">{{ $product->name }}</p>
                     <p class="text-sm text-gray-500 mt-2">{{ $product->short_description }}</p>
                 </div>
             </div>
@@ -225,11 +221,12 @@
                 </div>
             </div>
 
-            @if ($end)
+            @if ($variant->timer_flag === 1)
                 <div class="bg-yellow-100 rounded-lg w-full p-3 my-3 text-base">
                     <div class="flex items-center gap-2 text-gray-800">
                         <i class="fas fa-clock"></i>
-                        <span>Sale ends in {{ $totalDays }} days</span>
+                        <input type="hidden" class="timer" data-variant-id="{{ $item->id }}" value="{{$variant->end_time}}">
+                        <span id="countdown-timer-{{ $item->id }}"></span>
                     </div>
                 </div>
             @endif
@@ -522,36 +519,59 @@
 </script>
 
 <script>
-  function startCountdown(endTimeStr) {
-    const endTime = new Date(endTimeStr).getTime();
-    const timerEl = document.getElementById('countdown-timer');
-    const timerInterval = setInterval(updateTimer, 1000);
-    function updateTimer() {
-        const now = new Date().getTime();
-        const distance = endTime - now;
+   document.addEventListener("DOMContentLoaded", () => {
+    updateCountdownForTimers();
+   });
+   function updateCountdownForTimers() {
 
-        if (distance < 0) {
-            timerEl.innerText = "Sale ended";
-            clearInterval(timerInterval);
-            return;
-        }
+const timerElements = document.querySelectorAll('.timer');
 
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+timerElements.forEach((timerElement) => {
+  const endDateStr = timerElement.value;
+  const variantId = timerElement.dataset.variantId;
 
-        timerEl.innerText = `Sale ends in ${days} day${days !== 1 ? 's' : ''} ${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    }
-
-    updateTimer(); // Initial call
-    
+  const endDate = new Date(endDateStr);
+  if (isNaN(endDate)) {
+    console.error('Invalid end date:', endDateStr);
+    return;
   }
 
-  const countdownEl = document.getElementById('countdown-timer');
-  if (countdownEl) {
-      startCountdown(countdownEl.dataset.endTime);
+  // Optional extra offset if needed:
+  endDate.setDate(endDate.getDate() + 1);
+  endDate.setHours(endDate.getHours() + 18);
+  endDate.setMinutes(endDate.getMinutes() + 22);
+  endDate.setSeconds(endDate.getSeconds() + 50);
+
+  updateCountdown(endDate, variantId); // First render
+  const timerInterval = setInterval(() => {
+    updateCountdown(endDate, variantId, timerInterval);
+  }, 1000);
+});
+}
+  // Function to update the countdown timer
+  function updateCountdown(endDate, variantId, timerInterval = null) {
+  const countdownElement = document.getElementById(`countdown-timer-${variantId}`);
+  if (!countdownElement) {
+    console.warn(`Countdown element not found for variant ID ${variantId}`);
+    if (timerInterval) clearInterval(timerInterval);
+    return;
   }
+
+  const now = new Date();
+  const timeDifference = endDate - now;
+
+  if (timeDifference <= 0) {
+    countdownElement.textContent = "Sale has ended!";
+    if (timerInterval) clearInterval(timerInterval);
+  } else {
+    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+    countdownElement.textContent = `Sale ends in ${days} day${days !== 1 ? 's' : ''} ${hours}:${minutes}:${seconds}`;
+  }
+}
 </script>
 
 <script>

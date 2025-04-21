@@ -231,7 +231,7 @@
       @csrf
     <div class="grid container mx-auto md:grid-cols-3 md:space-x-6">
         <div class="md:col-span-2  space-y-6 overflow-hidden">
-          <div class="bg-[#58af0838]  rounded-xl px-4 p-2 lg:p-7">
+          {{-- <div class="bg-[#58af0838]  rounded-xl px-4 p-2 lg:p-7">
             <div class="flex items-center justify-between flex-wrap gap-4">
               <div>
                 <p class="font-medium">Item was added to cart</p>
@@ -244,7 +244,7 @@
                 Continue Shopping
               </button>
             </div>
-          </div>
+          </div> --}}
 
           <div class="bg-white rounded-xl py-6 px-2 lg:px-8 lg:py-10">
             <h2 class="text-2xl font-semibold mb-2 lg:mb-6 text-gray-800">
@@ -692,6 +692,7 @@
               </div>
               <div class="flex-1">
                 <h3 class="font-semibold text-base lg:text-xl">${variant.title}</h3>
+                <p class="text-sm text-gray-500 mt-2">${variant.product_name}</p>
                 <p class="text-sm text-gray-500 mt-2">${variant.short_description}</p>
               </div>
             </div>
