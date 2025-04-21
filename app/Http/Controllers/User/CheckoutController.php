@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Mail\BookingConfirmationEmail;
 use Illuminate\Http\Request;
 use App\Models\Checkout;
 use App\Models\CheckoutItem;
@@ -23,9 +24,10 @@ use Stripe\PaymentIntent;
 use App\Models\Payment;
 use App\Models\BookingConfirmation;
 use App\Models\BookingConfirmationItem;
+use App\Models\ProductVariant;
+use App\Models\PurchasedProduct;
 use Exception;
-
-
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
@@ -189,6 +191,7 @@ class CheckoutController extends Controller
                 $product_array[] = [
                     'id' => $variant['id'],
                     'checkout_id' => $checkout->id,
+                    'product_name'=>$variant['product']['name'],
                     'title' => $variant['title'],
                     'short_description' => $variant['short_description'],
                     'discounted_price' => number_format($discountedPrice, 2),
@@ -464,33 +467,77 @@ class CheckoutController extends Controller
                     'unit_price' => $item['unit_price'],
                     'total_price' => $item['total_price'],
                     'verification_number' => rand(100000, 999999),
-                    'verification_status' => 'pending',
+                    'verification_status' => 'completed',
                     'giftproduct' => $item['giftproduct'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+                // Add entry to PurchasedProduct table
+                DB::table('purchased_products')->insert([
+                    'booking_confirmation_id' => $bookingConfirmationId,
+                    'product_variant_id' => $variantId,
+                    'user_id' => $user->id,
+                    'quantity' => $item['quantity'],
+                    'unit_price' => $item['unit_price'],
+                    'total_price' => $item['total_price'],
+                    'verification_number' => rand(100000, 999999),
+                    'verification_status' => 'verified',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
             }
 
-                // Add entry to PurchasedProduct table
-        DB::table('purchased_products')->insert([
-            'booking_confirmation_id' => $bookingConfirmationId,
-            'product_variant_id' => $variantId,
-            'user_id' => $user->id,
-            'quantity' => $item['quantity'],
-            'unit_price' => $item['unit_price'],
-            'total_price' => $item['total_price'],
-            'verification_number' => rand(100000, 999999),
-            'verification_status' => 'pending',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+     
     
            $order_id = $request->order_id;
             // Clear Cart
             DB::table('carts')->where('user_id', $user->id)->delete();
             DB::table('checkout_items')->where('checkout_id', $order_id)->delete();
             DB::table('checkouts')->where('id', $order_id)->delete();
-    
+
+            $variants = [];
+            $booking = BookingConfirmation::find($bookingConfirmationId);
+            $order_date = $booking->created_at->format('Y-m-d');
+            $order_number = $booking->booking_id;
+            $grand_total = $booking->total_amount;
+          
+
+
+            $items = [];
+            $importantinfo = null;
+            $nbv_terms = null;
+            foreach ($booking->items as $booking_item) { 
+                $product_variant = ProductVariant::find($booking_item['product_varient_id']);
+                 $items[] = [
+                 'product_variant'=>$product_variant->title,
+                    'quantity' => $booking_item['quantity'],
+                    'unit_price' => $booking_item['unit_price'],
+                    'total_price' => $booking_item['total_price'],
+                ];
+                if ($product_variant->product) {
+                    $importantinfo = $product_variant->product->importantinfo ?? null;
+                    $nbv_terms = $product_variant->product->nbvTerms->terms ?? null;
+                }
+            }
+            foreach ($booking->items as $booking_item) { 
+                $product_variant = ProductVariant::find($booking_item->product_varient_id);
+                $variants[] = [
+                    'product_variant_id'=>$booking_item->product_varient_id,
+                    'voucher_number' => $booking->booking_id, 
+                    'guest_name'   =>$user->first_name .' '. $user->last_name,
+                    'email'=>$user->email,
+                    'verification_number'=>$booking_item->verification_number,
+                    'voucher_details'=> $product_variant->product->about_description,
+                    'importantinfo'=>$product_variant->product->importantinfo,
+                    'validity_from'=> $product_variant->product->validity_from,
+                    'validity_to'=> $product_variant->product->validity_to,
+                    'vendor'=> $product_variant->product->vendor->name,
+                    'nbv_terms'=> $product_variant->product->nbvTerms->terms,
+                ];
+            }
+
+            Mail::to($user->email)->send(new BookingConfirmationEmail($user->first_name,$order_date,$order_number,$grand_total,$importantinfo, $nbv_terms,$items,$variants));
+
             DB::commit();
     
             return redirect()->route('user.bookingconfirmation')

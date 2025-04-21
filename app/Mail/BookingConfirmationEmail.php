@@ -22,9 +22,21 @@ class BookingConfirmationEmail extends Mailable
      */
     public $name;
     public $variants;
-    public function __construct($name,$variants)
+    public $order_date;
+    public $order_number; 
+    public $grand_total;
+    public $importantinfo;
+    public $nbv_terms;
+    public $items;
+    public function __construct($name, $order_date, $order_number, $grand_total,$importantinfo, $nbv_terms, $items,$variants)
     {
         $this->name = $name;
+        $this->order_date=$order_date;
+        $this->order_number=$order_number;
+        $this->grand_total=$grand_total;
+        $this->importantinfo=$importantinfo;
+        $this->nbv_terms =$nbv_terms;
+        $this->items = $items;
         $this->variants =$variants;
     }
 
@@ -47,8 +59,13 @@ class BookingConfirmationEmail extends Mailable
             view: 'user.emails.booking_confirmation_email', 
             with: [
                 'name' => $this->name,
+                'order_date'=>$this->order_date,
+                'order_number'=>$this->order_number,
+                'grand_total'=>$this->grand_total,
+                'importantinfo'=>$this->importantinfo,
+                'nbv_terms'=>$this->nbv_terms,
+                'items'=>$this->items,
                 'variants' => $this->variants,
-                'isPdf' => true 
             ],
         );
     }
@@ -66,10 +83,9 @@ class BookingConfirmationEmail extends Mailable
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
         }
-    
         foreach ($this->variants as $variant) {
             try {
-                $fileName = 'booking_' . $variant['id']  . '.pdf';
+                $fileName = 'booking_' . $variant['product_variant_id'] . '_' . date('Ymd_His') . '.pdf';
                 $pdfPath = $dir . '/' . $fileName;
     
                 $pdf = Pdf::loadView('user.pdf.booking_confirmation_attachment', [
@@ -87,7 +103,7 @@ class BookingConfirmationEmail extends Mailable
                     ->as($fileName)
                     ->withMime('application/pdf');
             } catch (\Exception $e) {
-                Log::error("PDF generation failed for variant ID {$variant['id']}: " . $e->getMessage());
+                Log::error("PDF generation failed for variant ID {$variant['product_variant_id']}: " . $e->getMessage());
             }
         }
     

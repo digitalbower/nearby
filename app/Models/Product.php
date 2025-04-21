@@ -24,6 +24,10 @@ class Product extends Model
 
         return $this->hasMany(VendorTerm::class,'id','vendor_terms_id');
     }
+    public function nbvTerms(){
+
+        return $this->belongsTo(NbvTerm::class,'nbv_terms_id');
+    }
     public function vendor()
     {
         return $this->belongsTo(Vendor::class, 'vendor_id');
