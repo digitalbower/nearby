@@ -560,28 +560,29 @@
 
 
 
- @foreach($carouselCategories as $product)
-  @php
-    $reviews =  $product->reviews; 
-    $totalRatings = $reviews->sum('review_rating');
-    $totalReviews = $reviews->count();
-    $averageRating = $totalReviews > 0 ? $totalRatings / $totalReviews : 0;
-    $averageRating = number_format($averageRating, 1);
-    $variants = $product->variants ?? collect([]);
 
-    $minVariant = $variants->isNotEmpty() ? $variants->sortBy('unit_price')->first() : null;
-
-    $originalPrice = number_format($minVariant->unit_price ?? 0);
-    $discountedPrice = number_format($minVariant->discounted_price ?? 0);
-    $timer =  $minVariant->timer_flag;
-    $endTime =$minVariant->end_time;
-    $variantId = $minVariant->id;
-    $discountedPercentage = number_format($minVariant->discounted_percentage);
-  @endphp
  <section class="bg-white lg:p-4  lg:py-20 py-10 ">
   <div class="container mx-auto lg:px-0 px-4">
     <h2 class="lg:text-3xl text-base font-bold text-black mb-3">Popular on </h2>
     <div class="owl-carousel1  owl-carousel owl-theme">
+      @foreach($carouselCategories as $product)
+      @php
+        $reviews =  $product->reviews; 
+        $totalRatings = $reviews->sum('review_rating');
+        $totalReviews = $reviews->count();
+        $averageRating = $totalReviews > 0 ? $totalRatings / $totalReviews : 0;
+        $averageRating = number_format($averageRating, 1);
+        $variants = $product->variants ?? collect([]);
+    
+        $minVariant = $variants->isNotEmpty() ? $variants->sortBy('unit_price')->first() : null;
+    
+        $originalPrice = number_format($minVariant->unit_price ?? 0);
+        $discountedPrice = number_format($minVariant->discounted_price ?? 0);
+        $timer =  $minVariant->timer_flag;
+        $endTime =$minVariant->end_time;
+        $variantId = $minVariant->id;
+        $discountedPercentage = number_format($minVariant->discounted_percentage);
+      @endphp
       <div class="item">
         <a href="{{ url('/user/products/' . $product->id) }}">
           <div
@@ -708,11 +709,11 @@
 
         </a>
       </div>
-
+      @endforeach
     </div>
   </div>
 </section>
-@endforeach
+
 
 
   <section class="bg-[#58af0838] text-black  lg:px-0  lg:py-20 py-10 px-4 lg:px-0">
