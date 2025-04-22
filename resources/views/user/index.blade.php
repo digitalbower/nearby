@@ -596,10 +596,10 @@
 
 
               <!-- Discount Badge -->
-              <div class=" w-full flex items-center justify-center text-[#fe8500] text-2xl p-2 font-bold ">
-                <div class=" flex items-center mt-1">
-                  <img src="{{ asset('images/discount_7939803.png') }}" class="w-8" /> <span
-                    class="ml-0.5 text-base text-black">{{$discountedPercentage}} %</span>
+              <div class="w-full flex items-center justify-between text-[#fe8500] text-2xl p-2 font-bold">
+                <div class="flex items-center mt-1">
+                  <img src="{{ asset('images/discount_7939803.png') }}" class="w-8" />
+                  <span class="ml-0.5 text-base text-black">{{ $discountedPercentage}}%</span>
                 </div>
                 @if ($timer === 1)
                 <div
