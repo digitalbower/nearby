@@ -433,11 +433,11 @@
 
             $originalPrice = number_format($minVariant->unit_price ?? 0);
             $discountedPrice = number_format($minVariant->discounted_price ?? 0);
-            $timer =  $minVariant->timer_flag;
-            $endTime =$minVariant->end_time;
-            $variantId = $minVariant->id;
-            $discountedPercentage = number_format($minVariant->discounted_percentage);
-        @endphp
+            $timer =  $minVariant ? $minVariant->timer_flag : null;
+            $endTime =$minVariant ? $minVariant->end_time : null;
+            $variantId = $minVariant ? $minVariant->id : null;
+            $discountedPercentage = $minVariant ? number_format($minVariant->discounted_percentage) : null;
+            @endphp
         <div class="item">
           <a href="{{ url('/user/products/' . $product->id) }}">
             <div class="rounded-lg hover:shadow-xl hover:border-[#58af0838] shadow-lg h-full hover:shadow-xl  border bg-white shadow-lg overflow-hidden transition-transform duration-300"
@@ -578,10 +578,10 @@
     
         $originalPrice = number_format($minVariant->unit_price ?? 0);
         $discountedPrice = number_format($minVariant->discounted_price ?? 0);
-        $timer =  $minVariant->timer_flag;
-        $endTime =$minVariant->end_time;
-        $variantId = $minVariant->id;
-        $discountedPercentage = number_format($minVariant->discounted_percentage);
+          $timer =  $minVariant ? $minVariant->timer_flag : null;
+            $endTime =$minVariant ? $minVariant->end_time : null;
+            $variantId = $minVariant ? $minVariant->id : null;
+            $discountedPercentage = $minVariant ? number_format($minVariant->discounted_percentage) : null;
       @endphp
       <div class="item">
         <a href="{{ url('/user/products/' . $product->id) }}">
