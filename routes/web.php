@@ -88,7 +88,9 @@ Route::prefix('user')->name('user.')->group(function () {
             Route::post('/add-cart', [UserProductController::class, 'addCart'])->name('add_cart');
         });
         // ✅ E-commerce & Booking Routes
-        Route::get('/download/purchased-product/{product_id}', [HomeController::class, 'download'])->name('download.purchased_product');
+        // web.php
+        Route::get('/item/{item}/download-pdf', [HomeController::class, 'downloadPdfItem'])
+        ->name('booking.item.download');
             Route::get('/bookingconfirmation', [HomeController::class, 'bookingconfirmation'])->name('bookingconfirmation');
             Route::get('/cart', [UserProductController::class, 'cart'])->name('cart');
             Route::delete('/cart/{id}', [UserProductController::class, 'destroy'])->name('destroy');

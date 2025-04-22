@@ -20,7 +20,8 @@ use App\Models\Promo;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class HomeController extends Controller
 {
@@ -147,29 +148,26 @@ class HomeController extends Controller
    
 
         return view('user.bookingconfirmation',compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
-        'followus','payment_channels','user','bookingConfirmation','payment','booking','checkoutData','promo_discount')); 
+        'followus','payment_channels','user','bookingConfirmation','payment','booking','checkoutData')); 
     } 
+     
 
-
-
-    public function download($product_id)
+    public function downloadPdfItem($itemId)
     {
-        // Retrieve the purchased product by ID
-        $purchased_product = PurchasedProduct::with('product')
-            ->where('id', $product_id)
-            ->firstOrFail();
+        // Load the item with its product
+        $item = BookingConfirmationItem::with('variant.product')
+                 ->findOrFail($itemId);
 
-        // Check if the file exists (assuming the product has a downloadable file, e.g., voucher)
-        $filePath = storage_path('app/public/vouchers/' . $purchased_product->product->voucher_filename);
+        // Generate PDF from the Blade view
+        $pdf = Pdf::loadView('user.generate_pdf', compact('item'));
 
-        // If the file exists, return it as a download response
-        if (file_exists($filePath)) {
-            return response()->download($filePath, $purchased_product->product->voucher_filename);
-        }
-
-        // If file does not exist, return an error message
-        return back()->with('error', 'File not found.');
+        // Offer it as a download
+        return $pdf->download('booking_item_'.$item->id.'.pdf');
     }
+
+
+   
+
 
     
 }

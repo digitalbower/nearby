@@ -243,11 +243,19 @@
         <div class="flex items-center gap-4">
           <div class="flex items-center gap-x-4">
             {{-- <img src="/images/US-UK_Add_to_Apple_Wallet_RGB_101421.svg" class="w-28"> --}}
-            <form action="{{ route('user.download.purchased_product', ['product_id' => $product_item->id]) }}" method="GET">
-              <button type="submit" class="px-2 py-2 text-xs bg-green-100 text-black rounded-lg hover:bg-green-200 transition duration-300 flex items-center">
-                <i class="fas fa-download text-sm mr-1"></i> Download
-              </button>
-            </form>
+           
+  <div class="border rounded-lg overflow-hidden lg:shadow-lg mb-4">
+    <!-- … your existing item HTML … -->
+
+    <a href="{{ route('user.booking.item.download', $product_item->id) }}"
+       class="mt-4 inline-flex items-center px-3 py-2 bg-green-100 text-black rounded-lg hover:bg-green-200 transition">
+      <i class="fas fa-download mr-1"></i> Download PDF
+    </a>
+  </div>
+
+
+
+
           </div>
         </div>
         <div class="text-right flex justify-center gap-x-4 items-center">
@@ -671,4 +679,34 @@
     }
   });
 </script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+  $(function(){
+    $('.download-pdf').click(function(){
+      // grab the URL from this button's data attribute
+      const url = $(this).data('url');
+
+      $.ajax({
+        type: 'GET',
+        url: url,
+        xhrFields: { responseType: 'blob' },
+        success: function(blob) {
+          const downloadUrl = window.URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+          const link = document.createElement('a');
+          link.href = downloadUrl;
+          link.download = 'booking_item_' + Date.now() + '.pdf';
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          window.URL.revokeObjectURL(downloadUrl);
+        },
+        error: function(err) {
+          console.error('PDF download error:', err);
+        }
+      });
+    });
+  });
+</script>
+
 @endpush
