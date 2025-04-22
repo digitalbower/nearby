@@ -23,9 +23,9 @@
                     <tr>
                         <th>#</th>
                         <th>Product</th>
+                        <th>Vendor</th>
                         <th>Category</th>
                         <th>Sub Category</th>
-                        <th>Vendor</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
