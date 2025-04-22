@@ -224,91 +224,17 @@
             <div class="space-y-6">
               <!-- Product 1 -->
         
-              
-              <!-- Validation Message Popup -->
-              <div id="validationPopup" class="hidden fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-                <div class="bg-white p-6 rounded-lg shadow-lg md:w-1/2 lg:w-1/3">
-                  <h3 class="text-xl font-semibold text-red-500">Invalid Quantity</h3>
-                  <p class="text-sm text-gray-600">Please enter a valid quantity greater than 0.</p>
-                  <button onclick="closeValidationPopup()" class="mt-4 bg-red-500 text-white p-2 rounded-lg w-full">Close</button>
-                </div>
-              </div>
-              
-              <!-- Delete Confirmation Popup -->
-              <div id="deletePopup" class="hidden fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-                <div class="bg-white p-6 rounded-lg shadow-lg md:w-1/2 lg:w-1/3">
-                  <h3 class="text-xl font-semibold text-red-500">Delete Item</h3>
-                  <p class="text-sm text-gray-600">Are you sure you want to delete this item?</p>
-                  <div class="mt-4 flex gap-4">
-                    <button onclick="deleteItem()" class="bg-red-500 text-white p-2 rounded-lg w-1/2">Yes, Delete</button>
-                    <button onclick="closeDeletePopup()" class="bg-gray-500 text-white p-2 rounded-lg w-1/2">Cancel</button>
-                  </div>
-                </div>
-              </div>
-              @push('scripts')
-              <script>
-                function incrementQty() {
-                  const quantityInput = document.getElementById('quantity');
-                  const currentValue = parseInt(quantityInput.value);
-                  if (!isNaN(currentValue)) {
-                    quantityInput.value = currentValue + 1;
-                    hideValidationMessage();
-                  }
-                }
-              
-                function decrementQty() {
-                  const quantityInput = document.getElementById('quantity');
-                  const currentValue = parseInt(quantityInput.value);
-                  if (!isNaN(currentValue) && currentValue > 1) {
-                    quantityInput.value = currentValue - 1;
-                    hideValidationMessage();
-                  } else {
-                    showValidationMessage();
-                  }
-                }
-              
-                function showValidationMessage() {
-                  const validationPopup = document.getElementById('validationPopup');
-                  validationPopup.classList.remove('hidden');
-                }
-              
-                function hideValidationMessage() {
-                  const validationPopup = document.getElementById('validationPopup');
-                  validationPopup.classList.add('hidden');
-                }
-              
-                function closeValidationPopup() {
-                  const validationPopup = document.getElementById('validationPopup');
-                  validationPopup.classList.add('hidden');
-                }
-              
-                function confirmDelete() {
-                  const deletePopup = document.getElementById('deletePopup');
-                  deletePopup.classList.remove('hidden');
-                }
-              
-                function closeDeletePopup() {
-                  const deletePopup = document.getElementById('deletePopup');
-                  deletePopup.classList.add('hidden');
-                }
-              
-                function deleteItem() {
-                  alert('Item deleted successfully.');
-                  closeDeletePopup();
-                }
-              </script>
-              @endpush
-             
-              @foreach ($product_items as $product_item)
+              @foreach ($booking->items as $product_item)
   <div class="border rounded-lg overflow-hidden lg:shadow-lg">
     <div class="p-3">
       <div class="flex gap-3">
         <div class="relative w-28 h-28 rounded-lg overflow-hidden">
-          <img src="{{ asset($product_item->product->image) }}" alt="{{ $product_item->product->name }}" class="w-full h-full object-cover">
+          <img src="{{ asset('storage/' . $product_item->variant->product->image) }}" alt="{{ $product_item->variant->product->name }}" class="w-full h-full object-cover">
         </div>
         <div class="flex-1">
-          <h3 class="font-semibold text-base lg:text-xl">{{ $product_item->product->name }}</h3>
-          <p class="text-sm text-gray-500 mt-0">{{ $product_item->product->description }}</p>
+          <h3 class="font-semibold text-base lg:text-xl">{{ $product_item->variant->product->name }}</h3>
+          <p class="text-sm text-gray-500 mt-0">{{ $product_item->variant->title }}</p>
+          <p class="text-sm text-gray-500 mt-0">{{ $product_item->variant->product->short_description }}</p>
           <p class="text-sm text-gray-500 mt-2"><strong>Quantity:</strong> {{ $product_item->quantity }}</p>
           <p class="text-sm text-gray-500 mt-2"><strong>Date:</strong> {{ \Carbon\Carbon::parse($product_item->created_at)->format('d/m/Y') }}</p>
         </div>
@@ -316,7 +242,7 @@
       <div class="flex items-center justify-between mt-2">
         <div class="flex items-center gap-4">
           <div class="flex items-center gap-x-4">
-            <img src="/images/US-UK_Add_to_Apple_Wallet_RGB_101421.svg" class="w-28">
+            {{-- <img src="/images/US-UK_Add_to_Apple_Wallet_RGB_101421.svg" class="w-28"> --}}
             <form action="{{ route('user.download.purchased_product', ['product_id' => $product_item->id]) }}" method="GET">
               <button type="submit" class="px-2 py-2 text-xs bg-green-100 text-black rounded-lg hover:bg-green-200 transition duration-300 flex items-center">
                 <i class="fas fa-download text-sm mr-1"></i> Download
@@ -325,8 +251,8 @@
           </div>
         </div>
         <div class="text-right flex justify-center gap-x-4 items-center">
-          <div class="text-4xl font-semibold text-gray-900">${{ number_format($product_item->total_price, 2) }}</div>
-          <div class="text-2xl text-gray-500 line-through">${{ number_format($product_item->unit_price, 2) }}</div>
+          <div class="text-4xl font-semibold text-gray-900">${{ number_format($product_item->unit_price, 2) }}</div>
+          <div class="text-2xl text-gray-500 line-through">${{ number_format($product_item->variant->unit_price, 2) }}</div>
         </div>
       </div>
       <hr class="my-2">
@@ -448,9 +374,47 @@
             </h3>
           
           </div>
-        
+          <ul class="space-y-5">
+            <li class="flex items-center justify-between text-base text-gray-700">
+              <div class="flex items-center space-x-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m2 0a6 6 0 10-12 0 6 6 0 0012 0z" />
+                </svg>
+                <span>Booking Amount</span>
+              </div>
+              <span class="font-medium text-gray-800">AED {{ number_format($booking->booking_amount, 2) }}</span>
+            </li>
+            <li class="flex items-center justify-between text-base text-gray-800">
+              <div class="flex items-center space-x-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6M12 15V9m-4 4h8" />
+                </svg>
+                <span>Promocode Discount</span>
+              </div>
+              <span class="font-medium text-gray-800"> {{$promo_discount  ?? 'N/A' }}</span>
+            </li>
+            <li class="flex items-center justify-between text-base text-gray-700">
+              <div class="flex items-center space-x-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5-6l3 3-3 3" />
+                </svg>
+                <span>Discount Amount</span>
+              </div>
+              <span class="font-medium text-gray-800">AED {{ number_format($booking->discount_amount, 2) }}</span>
+            </li>
+            <li class="flex items-center justify-between text-base text-gray-800">
+              <div class="flex items-center space-x-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-3.333 0-5 1.667-5 5v5h10v-5c0-3.333-1.667-5-5-5zM7 16v2h10v-2" />
+                </svg>
+                <span>Amount After Discount</span>
+              </div>
+              <span class="font-medium text-gray-800"> AED {{ number_format($booking->total_amount, 2) }}</span>
+            </li>
+
+          </ul>
           <!-- Price Breakdown List -->
-          @if($checkoutData)
+          {{-- @if($checkoutData)
     <div class="checkout-summary p-4 bg-gray-100 rounded-lg shadow-md my-4">
         <h2 class="text-xl font-semibold mb-3">Booking Summary</h2>
         <ul class="space-y-2 text-sm">
@@ -464,7 +428,7 @@
     <div class="checkout-summary p-4 bg-yellow-100 rounded-lg shadow-md my-4">
         <p class="text-sm text-gray-700">No recent checkout details found.</p>
     </div>
-@endif
+@endif --}}
 
           <!-- Coupon Section (New Table) -->
           <!-- <div class="mt-6">
@@ -495,7 +459,13 @@
               </tbody>
             </table>
           </div> -->
-          
+             <!-- Total Amount -->
+             <div class="border-t pt-4 mt-6">
+              <div class="flex justify-between text-lg font-semibold text-gray-800">
+                <span>Total Amount Paid</span>
+                <span>AED {{ number_format($booking->total_amount, 2) }}</span>
+              </div>
+            </div>
         
        
               </div>

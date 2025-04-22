@@ -16,6 +16,8 @@ use App\Models\BookingConfirmationItem;
 use App\Models\Payment;
 use App\Models\PurchasedProduct;
 use App\Models\ProductVariant;
+use App\Models\Promo;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -114,7 +116,19 @@ class HomeController extends Controller
         ->first();
 
        
-        $product_items = ProductVariant::with('product_purchase')->get(); 
+        $booking = BookingConfirmation::with('items.variant.product')->find($bookingConfirmation->id);  
+        
+        $promoCode = session('promocode');
+        if($promoCode){
+            $now = Carbon::now();
+            $promo = Promo::where('promocode', $promoCode)
+            ->whereDate('validity_from', '<=', $now)
+            ->whereDate('validity_to', '>=', $now)
+            ->where('status', 1)
+            ->first();
+
+            $promo_discount =$promo->discount;
+        }
 
         $userId = Auth::user()->id;
 
@@ -133,7 +147,7 @@ class HomeController extends Controller
    
 
         return view('user.bookingconfirmation',compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
-        'followus','payment_channels','user','bookingConfirmation','payment','product_items','checkoutData')); 
+        'followus','payment_channels','user','bookingConfirmation','payment','booking','checkoutData','promo_discount')); 
     } 
 
 
@@ -156,17 +170,6 @@ class HomeController extends Controller
         // If file does not exist, return an error message
         return back()->with('error', 'File not found.');
     }
-      
-    
-    public function bookingconfirmationEmail(){
-        $name = 'John Doe';
-        $variants = [
-            ['name' => 'Couple Package', 'id' => 1],
-            ['name' => 'Family Package', 'id' => 2],
-        ];
-        Mail::to('anjalykjoy@gmail.com')->send(new BookingConfirmationEmail($name, $variants));
-    }
-
 
     
 }

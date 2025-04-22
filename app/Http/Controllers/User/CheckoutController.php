@@ -24,6 +24,7 @@ use Stripe\PaymentIntent;
 use App\Models\Payment;
 use App\Models\BookingConfirmation;
 use App\Models\BookingConfirmationItem;
+use App\Models\Cart;
 use App\Models\ProductVariant;
 use App\Models\PurchasedProduct;
 use Exception;
@@ -491,9 +492,9 @@ class CheckoutController extends Controller
     
            $order_id = $request->order_id;
             // Clear Cart
-            DB::table('carts')->where('user_id', $user->id)->delete();
-            DB::table('checkout_items')->where('checkout_id', $order_id)->delete();
-            DB::table('checkouts')->where('id', $order_id)->delete();
+            Cart::where('user_id', $user->id)->delete();
+            CheckoutItem::where('checkout_id', $order_id)->delete();
+            Checkout::where('id', $order_id)->delete();
 
             $variants = [];
             $booking = BookingConfirmation::find($bookingConfirmationId);
