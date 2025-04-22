@@ -55,7 +55,7 @@ Route::prefix('user')->name('user.')->group(function () {
 });
 
 Route::post('/specialist', [SpecialistRequestController::class, 'submit'])->name('specialist.submit');
-Route::get('contactus', [ContactController::class, 'contactus'])->name('contactus');
+Route::get('/contactus', [ContactController::class, 'contactus'])->name('contactus');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contactus.submit');
 
 
