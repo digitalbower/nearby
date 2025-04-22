@@ -235,8 +235,16 @@ class ProductController extends Controller
     }
     public function addCart(Request $request){
 
+        $filteredVariants = collect($request->input('variants', []))
+        ->filter(function ($item) {
+            return isset($item['quantity']) && (int) $item['quantity'] > 0;
+        })
+        ->toArray();
+
+        $request->merge(['variants' => $filteredVariants]);
+
         $request->validate([
-            'variants' => 'required|array',
+            'variants' => 'required|array|min:1', 
             'variants.*.product_variant_id' => 'required|exists:product_variants,id',
             'variants.*.quantity' => 'required|integer|min:1', 
         ],
@@ -262,7 +270,9 @@ class ProductController extends Controller
             }
          
         }
-    
+        if ($request->input('redirect_to_cart') == "1") {
+            return redirect()->route('user.cart');
+        }
         return redirect()->back()->with('success', 'Added to cart successfully!');
     }
 

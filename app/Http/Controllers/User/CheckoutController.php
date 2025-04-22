@@ -168,10 +168,34 @@ class CheckoutController extends Controller
             $vat = $checkout->vat;
             $total =$bookingAmount+(-$promocode_discount_amount)+$vat;
         }
+      
+    
+        $user = Auth::user();
+        $isPromoApplied = false;
+    
+        if ($promoCode ) {
+            $checkout = Checkout::where('user_id', $user->id)
+                            ->where('promocode', $promoCode)
+                            ->latest()
+                            ->first();
+    
+            if ($checkout) {
+                $isConfirmed = BookingConfirmation::where('order_id', $checkout->id)->exists();
+    
+                if ($isConfirmed) {
+                    session()->forget('promocode');
+                } else {
+                    $isPromoApplied = true;
+                }
+            } else {
+                session()->forget('promocode');
+            }
+        }
 
+    
         return view('user.checkout',compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels','count','bookingAmount','voucherSavings','vat','total','promo_discount',
-        'promocode_discount_amount','discountedPrice','order_id')); 
+        'promocode_discount_amount','discountedPrice','order_id','isPromoApplied')); 
     }
     public function getCheckoutItems(){
         
@@ -412,7 +436,7 @@ class CheckoutController extends Controller
         try {
             Stripe::setApiKey(env('STRIPE_SECRET'));
     
-            $user = auth()->user(); // Assuming user is authenticated
+            $user = Auth::user(); // Assuming user is authenticated
     
             // Convert amount to fils (Stripe requires smallest currency unit)
             $amountInFils = round($request->total_amount * 100);

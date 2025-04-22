@@ -105,13 +105,13 @@ class HomeController extends Controller
         ->where('status', 1)
         ->get();    
 
-        $user = auth()->user();
+        $user = Auth::user();
 
-        $bookingConfirmation = BookingConfirmation::where('user_id', auth()->id())
+        $bookingConfirmation = BookingConfirmation::where('user_id', $user->id)
         ->latest()
         ->first();
 
-        $payment = Payment::where('user_id', auth()->id())
+        $payment = Payment::where('user_id', $user->id)
         ->latest()
         ->first();
 
@@ -119,6 +119,7 @@ class HomeController extends Controller
         $booking = BookingConfirmation::with('items.variant.product')->find($bookingConfirmation->id);  
         
         $promoCode = session('promocode');
+        $promo_discount = null;
         if($promoCode){
             $now = Carbon::now();
             $promo = Promo::where('promocode', $promoCode)

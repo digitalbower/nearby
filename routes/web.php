@@ -17,7 +17,7 @@ use App\Http\Controllers\Admin\Product\ProductVariantController;
 use App\Http\Controllers\Admin\LocationScopeController;
 use App\Http\Controllers\Admin\FooterController;
 use App\Http\Controllers\Admin\HeroCarouselController;
-use App\Http\Controllers\Admin\SubcategoryController;
+use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\QuickCardController;
 use App\Http\Controllers\Admin\TrendingProductController;
@@ -247,12 +247,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
        
 
         Route::prefix('subcategories')->name('subcategories.')->group(function () {
-            Route::get('/', [SubcategoryController::class, 'index'])->name('index');
-            Route::get('/create', [SubcategoryController::class, 'create'])->name('create');
-            Route::post('/', [SubcategoryController::class, 'store'])->name('store');
-            Route::get('/{id}/edit', [SubcategoryController::class, 'edit'])->name('edit');
-            Route::post('/{id}', [SubcategoryController::class, 'update'])->name('update');
-            Route::delete('/{id}', [SubcategoryController::class, 'destroy'])->name('destroy');
+            Route::get('/', [SubCategoryController::class, 'index'])->name('index');
+            Route::get('/create', [SubCategoryController::class, 'create'])->name('create');
+            Route::post('/', [SubCategoryController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [SubCategoryController::class, 'edit'])->name('edit');
+            Route::post('/{id}', [SubCategoryController::class, 'update'])->name('update');
+            Route::delete('/{id}', [SubCategoryController::class, 'destroy'])->name('destroy');
         });
 
         Route::prefix('quick')->name('quick.')->group(function () {

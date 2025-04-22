@@ -504,12 +504,14 @@
                   </div>
                 </div>
                 @endforeach
-            
+                <input type="hidden" name="redirect_to_cart" id="redirect_to_cart" value="0" />
+
             </div>
             <div class="space-y-4 mt-6">
+              <div id="variant-error-msg" class="hidden text-red-500 text-sm font-medium mt-2"></div>
             <!-- Continue Button -->
             @auth
-            <button type="button"onclick="redirectToCart()" 
+            <button type="button" onclick="submitAndRedirectToCart()" 
               class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
               Continue
             </button>
@@ -531,11 +533,48 @@
 <script src="{{asset('assets/js/custom//front/product.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
 <script>
-  const isUserLoggedIn = @json(auth()->check()); 
+const isUserLoggedIn = @json(auth()->check());
 
-    function redirectToCart(){
-      window.location.href = "{{ route('user.cart') }}";
+function isAnyVariantSelected() {
+    let isValid = false;
+    document.querySelectorAll('.variant-quantity').forEach(input => {
+        const qty = parseInt(input.value);
+        if (!isNaN(qty) && qty > 0) {
+            isValid = true;
+        }
+    });
+
+    const errorMsg = document.getElementById('variant-error-msg');
+    if (!isValid) {
+        errorMsg.textContent = "Please select at least one variant.";
+        errorMsg.classList.remove('hidden');
+    } else {
+        errorMsg.classList.add('hidden');
     }
+
+    return isValid;
+}
+
+function checkAuthAndSubmit() { 
+    if (!isUserLoggedIn) {
+        const redirectUrl = "/user/login?redirect=" + encodeURIComponent(window.location.href);
+        window.location.href = redirectUrl;
+    } else {
+        if (isAnyVariantSelected()) {
+            document.getElementById('addCartForm').submit(); 
+        }
+    }
+}
+function submitAndRedirectToCart() {
+    if (isAnyVariantSelected()) {
+        document.getElementById('redirect_to_cart').value = "1";
+
+        document.getElementById('addCartForm').submit();
+    }
+}
+
+</script>
+<script>
       let reviews = [];
 
       let hasReviewed = false;
@@ -798,7 +837,7 @@ function incrementQty(variantId) {
 quantityInput.value = currentValue + 1;
 }
 </script>
-<script>
+{{-- <script>
    function checkAuthAndSubmit() {
         if (!isUserLoggedIn) {
             const redirectUrl = "/user/login?redirect=" + encodeURIComponent(window.location.href);
@@ -844,6 +883,6 @@ quantityInput.value = currentValue + 1;
         }
     });
   });
-</script>
+</script> --}}
 
 @endpush
