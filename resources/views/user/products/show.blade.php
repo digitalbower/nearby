@@ -16,18 +16,7 @@
 @section('content')
   <section class="w-full">
     <div class="container mx-auto py-10 px-4 lg:px-0 ">
-      <!-- Promo Banner -->
-      <div
-        class="flex items-center p-4 mb-8 w-auto px-9 py-3 bg-[#58af0838]  text-gray-800 font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-        <i class="fas fa-tag text-2xl mr-3"></i>
-        <div>
-          <p class="lg:text-2xl text-lg font-semibold">Extra $13.8 off</p>
-          <p class="lg:text-base font-medium text-base">
-            Promo <span class=" font-semibold text-lg">EARLYBIRD24</span> ends in: 
-            <span id="countdown" class="font-medium text-base"></span>
-          </p>
-        </div>
-      </div>
+
       <div id="flash-message" class="hidden p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg" role="alert"></div>
       <!-- Main Content -->
       <div class="lg:grid md:grid-cols-12 grid-cols-1 relative gap-10">
@@ -52,13 +41,25 @@
               class="bg-black text-white px-2 md:px-4 py-2 rounded-full text-xs md:text-sm flex items-center gap-2">
               <i class="fas fa-fire"></i> {{$tag_name}}
             </span>
-            <span
-              class="bg-yellow-100 text-yellow-800 px-2 md:px-4 py-2 rounded-full text-xs md:text-sm flex items-center gap-2">
-              <i class="fas fa-star"></i> Best Rated
-            </span>
+            @if($averageRating >= 4.5)
+              <span
+                class="bg-yellow-100 text-yellow-800 px-2 md:px-4 py-2 rounded-full text-xs md:text-sm flex items-center gap-2">
+                <i class="fas fa-star"></i> Best Rated
+              </span>
+            @endif
+            @php
+              $totalBookings = $product->getTotalBookingCount();
+            @endphp
             <span
               class="bg-[#4a910954] text-black px-2 md:px-4 py-2 rounded-full text-xs md:text-sm flex items-center gap-2">
-              <i class="fas fa-shopping-cart"></i> 10,000+ Bought
+              <i class="fas fa-shopping-cart"></i>    
+              @if ($totalBookings === 0)
+                0 bought
+              @elseif ($totalBookings === 1)
+                1 bought
+              @else
+                {{ $totalBookings - 1 }}+ bought
+              @endif
             </span>
           </div>
           <div class="relative overflow-hidden">
@@ -486,7 +487,18 @@
                           <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
                           <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                         </svg>
-                        <span class="font-medium">10,000+ booked</span>
+                        @php
+                          $total_booking_count = $variant->getBookingCountBasedOnvariant();
+                        @endphp
+                        <span class="font-medium">
+                          @if ($total_booking_count === 0)
+                              0 booked
+                          @elseif ($total_booking_count === 1)
+                              1 booked
+                          @else
+                              {{ $total_booking_count - 1 }}+ booked
+                          @endif
+                        </span>
                       </span>
                       <span class="flex items-center gap-1">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -731,32 +743,6 @@ function submitAndRedirectToCart() {
     });
 </script>
 <script>
-   // Set the target date for the promo end time
-   const promoEndDate = new Date("2024-12-31T23:59:59");
-
-// Function to calculate and display the countdown
-function updateCountdown() {
-  const now = new Date();
-  const timeRemaining = promoEndDate - now;
-
-  if (timeRemaining <= 0) {
-    document.getElementById("countdown").textContent = "Promo ended!";
-    return;
-  }
-
-  const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-  // Update the countdown text
-  document.getElementById("countdown").textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-}
-
-// Initialize the countdown and set it to update every second
-updateCountdown();
-setInterval(updateCountdown, 1000);
-// Splide.js Initialization
 document.addEventListener("DOMContentLoaded", function () {
   // Main Slider
   var mainSlider = new Splide("#main-slider", {
