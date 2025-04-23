@@ -573,8 +573,13 @@
             return `$${parseFloat(value).toFixed(2)}`;
         },
         init() {
-        this.fetchProducts();
-        }
+            const urlParams = new URLSearchParams(window.location.search);
+            const selectedCategory = urlParams.get('category');
+            if (selectedCategory) {
+                this.selectedCategories.push(selectedCategory);
+            }
+            this.fetchProducts();
+          }   
     }
 }
 </script>
