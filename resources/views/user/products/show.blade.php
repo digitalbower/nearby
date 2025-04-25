@@ -345,9 +345,9 @@
                   <div class="pb-4">
                     <h4 class="font-medium text-gray-900">Contact Us</h4>
                     <p class="text-gray-600">
-                      Phone: <a href="tel:+1234567890" class="text-gray-800 hover:underline">{{$product->product_support_phone}}</a><br>
-                      Email: <a href="mailto:{{$product->product_support_email}}"
-                        class="text-gray-800 hover:underline">{{$product->product_support_email}}</a>
+                      Phone: <a href="tel:+1234567890" class="text-gray-800 hover:underline">{{$product->vendor->phone}}</a><br>
+                      Email: <a href="mailto:{{$product->vendor->email}}"
+                        class="text-gray-800 hover:underline">{{$product->vendor->email}}</a>
                     </p>
                   </div>
                   <!-- Directions Button -->
@@ -391,14 +391,7 @@
                     <h3 class="tracking-tight text-base lg:text-2xl font-bold">{{$variant->title}}</h3>
                     <div class="gap-x-4 flex items-center">
                       <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="lucide lucide-bed h-5 w-5 text-gray-800">
-                          <path d="M2 4v16"></path>
-                          <path d="M2 8h18a2 2 0 0 1 2 2v10"></path>
-                          <path d="M2 17h20"></path>
-                          <path d="M6 8v9"></path>
-                        </svg>
+                       {!! $variant->product_variant_icon !!}
                       </div>
                       <p class="text-sm text-muted-foreground flex items-center gap-2">
                         <span>{{$variant->short_description}}</span>
@@ -417,8 +410,8 @@
                             data-v0-t="badge">-{{$variant->discounted_percentage}}%</div>
                         </div>
                         <div class="flex items-center gap-2">
-                          <span class="text-3xl font-bold text-primary">${{$variant->discounted_price}}</span>
-                          <span class="text-sm text-muted-foreground">/{{$variant->types->product_type}}</span>
+                          <span class="text-3xl font-bold text-primary" style="font-size: 1.375rem;">AED {{$variant->discounted_price}}</span>
+                          <span class="text-sm text-muted-foreground">/{{$unit_type}}</span>
                 
                           <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
                             <!-- Decrement Button -->
@@ -473,7 +466,7 @@
                     <span id="quantity-error-{{$variant->id}}"></span>
                     <div
                       class="text-xs  bg-[#58af0838] rounded-md p-2 text-black flex gap-x-4 items-center rounded-lg p-3">
-                      <p class="font-medium">{{$variant->short_info}}</p>
+                      <p class="font-medium">{!! $variant->short_info !!}</p>
                       <p class="text-primary font-semibold">Learn more</p>
                     </div>
                 
@@ -501,14 +494,7 @@
                         </span>
                       </span>
                       <span class="flex items-center gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="lucide lucide-calendar h-4 w-4 text-purple-500">
-                          <path d="M8 2v4"></path>
-                          <path d="M16 2v4"></path>
-                          <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-                          <path d="M3 10h18"></path>
-                        </svg>
+                        {!! $variant->short_legend_icon !!}
                         <span class="font-medium">{{$variant->short_legend}}</span>
                       </span>
                     </div>
@@ -522,12 +508,12 @@
             <div class="space-y-4 mt-6">
               <div id="variant-error-msg" class="hidden text-red-500 text-sm font-medium mt-2"></div>
             <!-- Continue Button -->
-            @auth
+            {{-- @auth
             <button type="button" onclick="submitAndRedirectToCart()" 
               class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
               Continue
             </button>
-            @endauth
+            @endauth --}}
             <button type="button" onclick="checkAuthAndSubmit()"
             class="relative px-6 w-full py-3  bg-[#58af0838] hover:bg-[#4a910954] text-black font-semibold rounded-lg shadow-md  transition-transform transform  duration-300 ease-in-out"
             >

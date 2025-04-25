@@ -25,4 +25,8 @@ public function products()
 {
     return $this->hasMany(Product::class);
 }
+public function categoryType(){
+
+    return $this->hasOne(CategoryUnitMaster::class);
+}
 }
