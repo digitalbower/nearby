@@ -133,7 +133,7 @@
 
                 <!-- Action Buttons -->
                 <div class="flex justify-end space-x-4 pt-4">
-                    <button type="button" data-bs-dismiss="modal">
+                    <button type="button"  onclick="closeModal()"
                         class="px-5 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 shadow-md transition">
                         Cancel 
                     </button>
