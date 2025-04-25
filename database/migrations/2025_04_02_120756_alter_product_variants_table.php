@@ -27,7 +27,7 @@ return new class extends Migration
         Schema::table('product_variants', function (Blueprint $table) {
             $table->dropColumn('short_legend');
             $table->dropColumn('short_info');
-            $table->dropForeign('product_type_id');
+            $table->dropForeign(['product_type_id']);
             $table->dropColumn('product_type_id');
         });
     }

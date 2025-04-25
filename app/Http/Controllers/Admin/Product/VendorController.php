@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Product;
 use App\Http\Controllers\Controller;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class VendorController extends Controller
 {
@@ -33,11 +34,15 @@ class VendorController extends Controller
         $request->validate([
             'name' => 'required|min:3',
             'email' => 'required|email',
+            'password' => 'required|string|min:6|confirmed',
             'phone' => 'required',
             'validityfrom' => 'required',
             'validityto' => 'required',
         ]);
-        Vendor::create($request->all());
+
+        $data = $request->all();
+        $data['password'] = Hash::make($request->password);
+        Vendor::create($data); 
         return redirect()->route('admin.products.vendors.index')->with('success', 'New Vendor created successfully!');
 
     }
@@ -57,11 +62,14 @@ class VendorController extends Controller
         $request->validate([
             'name' => 'required|min:3',
             'email' => 'required|email',
+            'password' => 'required|string|min:6|confirmed',
             'phone' => 'required',
             'validityfrom' => 'required',
             'validityto' => 'required',
         ]);
-        $vendor->update($request->all());
+        $data = $request->all();
+        $data['password'] = Hash::make($request->password);
+        $vendor->update($data);
         return redirect()->route('admin.products.vendors.index')->with('success', 'Vendor updated successfully!');
 
     }

@@ -2,15 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Vendor extends Model
+class Vendor extends Authenticatable
 {
-    use HasFactory,SoftDeletes;
+    protected $guard = 'vendor'; 
+    
+    protected $table = 'vendors';
 
-    protected $fillable = ['name','email','phone','validityfrom','validityto','status'];
+    use Notifiable,SoftDeletes;
+
+    protected $fillable = ['name','email','password','phone','validityfrom','validityto','status'];
+
+    protected $hidden = [
+        'password'
+    ];
 
     protected $dates = ['deleted_at'];
 
