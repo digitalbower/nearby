@@ -1,17 +1,17 @@
 $(document).ready(function () {
     $("#variantForm").validate({
-        ignore: '',
+        ignore: [],
         rules: {
-            product_id: { required: true},
-            product_type_id: { required: true},
+            product_id: { required: true },
+            product_type_id: { required: true },
             title: { required: true },
             short_description: { required: true },
             product_variant_icon: { required: true },
             short_legend_icon: { required: true },
             short_legend: { required: true },
             short_info: {
-                required: function() {
-                  return $('#short_info').summernote('isEmpty');
+                required: function () {
+                  return quill.getText().trim().length === 0; 
                 }
             },
             unit_price: { required: true },
@@ -22,27 +22,31 @@ $(document).ready(function () {
             validity_to: { required: true },
         },
         messages: {
-            product_id: { required: "Product is required"},
-            product_type_id: { required: "Product type is required"},
-            title: { required: "Title is required"},
-            short_description: { required: "Short Description is required"},
+            product_id: { required: "Product is required" },
+            product_type_id: { required: "Product type is required" },
+            title: { required: "Title is required" },
+            short_description: { required: "Short Description is required" },
             product_variant_icon: { required: "Product Variant Icon is required" },
             short_legend_icon: { required: "Short legend icon is required" },
             short_legend: { required: "Short Legend is required" },
             short_info: { required: "Short Info is required" },
-            unit_price:{ required: "Unit Price is required"},
-            unit_type_id: { required: "Unit Type is required"},
-            discounted_price: { required: "Discounted Price is required"},
-            available_quantity: { required: "Available quantity is required"},
-            validity_from:{ required: "Validity from is required"},
-            validity_to: { required: "Validity to is required"},
+            unit_price: { required: "Unit Price is required" },
+            unit_type_id: { required: "Unit Type is required" },
+            discounted_price: { required: "Discounted Price is required" },
+            available_quantity: { required: "Available quantity is required" },
+            validity_from: { required: "Validity from is required" },
+            validity_to: { required: "Validity to is required" },
         },
         errorPlacement: function (error, element) {
             if (element.attr("id") === "short_info") {
-                error.insertAfter(".note-editor"); 
+                error.insertAfter("#editor"); 
             } else {
                 error.insertAfter(element);
             }
+        },
+        submitHandler: function (form) {
+            $('#short_info').val(quill.root.innerHTML);
+            form.submit();
         }
     });
     $('.toggle-status').change(function () {

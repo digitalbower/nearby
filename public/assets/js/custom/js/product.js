@@ -33,6 +33,13 @@ $(document).ready(function () {
                 tags_id: {
                     required: true
                 }, 
+                importantinfo:{
+                    required: function (textarea) {
+                        // Get Summernote content
+                        var editorContent = $('#importantinfo').summernote('isEmpty');
+                        return editorContent;
+                    }
+                },
                 about_description: {
                     required: function (textarea) {
                         // Get Summernote content
@@ -66,6 +73,7 @@ $(document).ready(function () {
                 name: { required: "Product name is required" },
                 short_description: { required: "Short Description is required" },
                 tags_id: { required: "Please select tag" },
+                importantinfo: { required: "Important Info is required" },
                 about_description: { required: "About Description is required" },
                 image: {
                     required: "Please upload image.",
@@ -81,7 +89,9 @@ $(document).ready(function () {
             errorPlacement: function (error, element) {
                 if (element.attr("name") === "about_description") {
                     $("#about_description").next('.note-editor').after(error);
-                } else if (element.attr("name") === "gallery[]") {
+                }  else if (element.attr("name") === "importantinfo") {
+                    $("#importantinfo").next('.note-editor').after(error);
+                }else if (element.attr("name") === "gallery[]") {
                     $("#images-error").text(error.text()).show();
                 } 
                 else if (element.attr("name") === "image") {
@@ -111,6 +121,13 @@ $(document).ready(function () {
             tags_id: {
                 required: true
             },
+            importantinfo:{
+                required: function (textarea) {
+                    // Get Summernote content
+                    var editorContent = $('#importantinfo').summernote('isEmpty');
+                    return editorContent;
+                }
+            },
             about_description: {
                 required: function (textarea) {
                     // Get Summernote content
@@ -138,6 +155,7 @@ $(document).ready(function () {
             name: { required: "Product name is required" },
             short_description: { required: "Short Description is required" },
             tags: { required: "Please select tag" },
+            importantinfo: { required: "Important Info is required" },
             about_description: { required: "About Description is required" },
             'gallery[]': {
                 extension: "Only JPG, JPEG, PNG, and GIF files are allowed.",
@@ -148,6 +166,8 @@ $(document).ready(function () {
             if (element.attr("name") === "about_description") {
                 // Place error message below the Summernote editor
                 $("#about_description").next('.note-editor').after(error);
+            }else if (element.attr("name") === "importantinfo") {
+                $("#importantinfo").next('.note-editor').after(error);
             } else if (element.attr("name") === "gallery[]") {
                 $("#images-error").show().text(error.text());
             } else {
