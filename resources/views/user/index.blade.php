@@ -168,22 +168,28 @@
           <div id="menuContent" class="hidden md:block p-4">
             <h2 class="hidden lg:block text-2xl ml-5 font-bold mb-6 text-gray-700">Categories</h2>
             <nav class="space-y-2 ml-5">
-    @foreach ($categories as $category)
-        <a href="{{ url('/category/' . $category->code) }}"
-           class="flex items-center justify-between py-3 px-4 rounded hover:bg-white/40 transition-colors duration-200 text-gray-700">
-            <div class="flex items-center gap-3">
-                <i class="{{ $category->categoryicon }} h-5 w-5"></i>
-                <span class="font-medium">{{ strtoupper($category->name) }}</span>
+              @foreach ($categories as $category)
+              <a href="{{ url('/user/products') }}?category={{ urlencode($category->name) }}"
+                    class="flex items-center justify-between py-3 px-4 rounded hover:bg-white/40 transition-colors duration-200 text-gray-700">
+                      <div class="flex items-center gap-3">
+                          <i class="{{ $category->categoryicon }} h-5 w-5"></i>
+                          <span class="font-medium">{{ strtoupper($category->name) }}</span>
+                      </div>
+                      <div class="flex items-center">
+                          <i class="fas fa-chevron-right h-4 w-4 ml-2"></i>
+                      </div>
+                      
+                  </a>
+              @endforeach
+            </nav>
+            <div class="mt-8 pt-6 ml-5 border-t border-white/20">
+              <a href="{{ url('/user/products') }}"
+                class="inline-flex rounded-lg p-2 px-3 items-center text-gray-700 hover:bg-white/40 transition-colors duration-200 text-gray-700 font-medium  transition-all">
+                ALL CATEGORIES
+                <i
+                  class="fas fa-chevron-right h-4 w-4 ml-1 transition-transform transform group-hover:translate-x-1"></i>
+              </a>
             </div>
-            <div class="flex items-center">
-                <i class="fas fa-chevron-right h-4 w-4 ml-2"></i>
-            </div>
-        </a>
-    @endforeach
-</nav>
-
-           
-
           </div>
         </aside>
 
@@ -263,7 +269,7 @@
                 </div>
               </div>
             </div>
-          
+            <div class="swiper-pagination"></div>
           </div>
           @push('scripts')
           <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -408,17 +414,34 @@
   <section class="bg-[#58af0838] lg:pt-20 py-10 lg:px-4 from-cyan-50 to-blue">
   <div class="mb-8 container mb-10 mx-auto px-4 lg:px-0">
     <div class="flex justify-between items-center mb-4">
-      <h2 class="lg:text-3xl text-base font-bold text-black">
-        Trending Today in UAE
-      </h2>
+      <h2 class="lg:text-3xl text-base font-bold text-black">Trending
+         Today in  
+          UAE</h2>
     </div>
 
-    <div class="owl-carousel1 owl-carousel owl-theme">
-      @foreach($trendingProducts as $product)
+      <div class="owl-carousel1 owl-carousel owl-theme">
+        @foreach($trendingProducts as $product)
+        @php
+             $reviews =  $product->reviews; 
+            $totalRatings = $reviews->sum('review_rating');
+            $totalReviews = $reviews->count();
+            $averageRating = $totalReviews > 0 ? $totalRatings / $totalReviews : 0;
+            $averageRating = number_format($averageRating, 1);
+            $variants = $product->variants ?? collect([]);
+
+            $minVariant = $variants->isNotEmpty() ? $variants->sortBy('unit_price')->first() : null;
+
+            $originalPrice = number_format($minVariant->unit_price ?? 0);
+            $discountedPrice = number_format($minVariant->discounted_price ?? 0);
+            $timer =  $minVariant ? $minVariant->timer_flag : null;
+            $endTime =$minVariant ? $minVariant->end_time : null;
+            $variantId = $minVariant ? $minVariant->id : null;
+            $discountedPercentage = $minVariant ? number_format($minVariant->discounted_percentage) : null;
+            @endphp
         <div class="item">
-          <a href="{{ url('/product/' . $product->id) }}">
-            <div class="rounded-lg hover:shadow-xl shadow-lg h-full border bg-white overflow-hidden transition-transform duration-300">
-              
+          <a href="{{ url('/user/products/' . $product->id) }}">
+            <div class="rounded-lg hover:shadow-xl hover:border-[#58af0838] shadow-lg h-full hover:shadow-xl  border bg-white shadow-lg overflow-hidden transition-transform duration-300"
+              data-v0-t="card">
               <!-- Product Image -->
               <div class="relative">
                 <img alt="{{ $product->name }}" class="w-full h-48 object-cover"
@@ -428,29 +451,76 @@
                 <div class="w-full flex items-center justify-between text-[#fe8500] text-2xl p-2 font-bold">
                   <div class="flex items-center mt-1">
                     <img src="{{ asset('images/discount_7939803.png') }}" class="w-8" />
-                    <span class="ml-0.5 text-base text-black">50% OFF</span>
+                    <span class="ml-0.5 text-base text-black">{{ $discountedPercentage}}%</span>
                   </div>
-                  <div class="flex items-center ml-auto py-0 rounded-md px-2 gap-x-1 text-[#000] font-semibold">
-                    <img src="{{ asset('images/clock_4241462.png') }}" class="w-8 h-9 pr-1" />
+                  @if ($timer === 1)
+                  <div
+                    class="flex items-center ml-auto py-0 rounded-md px-2 gap-x-1 text-[#000] font-semibold countdown-timer" data-endtime="{{ $endTime  }}">
+                    <span class="text-sm flex mt-1 text-red-400">
+                    <img src="{{ asset('images/clock_4241462.png') }}" class="w-8 h-9 pr-1" /></span>
                     <div class="flex items-center gap-x-1 text-center">
                       <div class="flex flex-col items-center w-4">
-                        <span class="block text-sm font-semibold mt-1" id="days">3</span>
+                        <span class="block text-sm font-semibold mt-1" id="days-{{ $variantId }}">0</span>
                       </div>
                       <div class="text-red-500 text-base">:</div>
                       <div class="flex flex-col items-center w-4">
-                        <span class="block text-sm font-semibold mt-1" id="hours">18</span>
+                        <span class="block text-sm font-semibold mt-1" id="hours-{{ $variantId }}">00</span>
                       </div>
                       <div class="text-red-500 text-base">:</div>
                       <div class="flex flex-col items-center w-4">
-                        <span class="block text-sm font-semibold mt-1" id="minutes">43</span>
+                        <span class="block text-sm font-semibold mt-1" id="minutes-{{ $variantId }}">00</span>
                       </div>
                       <div class="text-red-500 text-base">:</div>
                       <div class="flex flex-col items-center w-4">
-                        <span class="block text-sm font-semibold mt-1" id="seconds">21</span>
+                        <span class="block text-sm font-semibold mt-1" id="seconds-{{ $variantId }}">00</span>
                       </div>
                     </div>
                   </div>
+                  @endif
                 </div>
+                @push('scripts')
+                <script>
+                  document.addEventListener('DOMContentLoaded', function () {
+                    const timers = document.querySelectorAll('.countdown-timer:not(.cloned)');
+
+                    timers.forEach(timer => {
+                      const endTimeStr = timer.dataset.endtime;
+                      const endTime = new Date(endTimeStr);
+
+                      // Get variant ID from one of the span IDs (e.g., "days-123")
+                      const variantId = timer.querySelector('span[id^="days-"]').id.split('-')[1];
+
+                      const daysEl = document.getElementById(`days-${variantId}`);
+                      const hoursEl = document.getElementById(`hours-${variantId}`);
+                      const minutesEl = document.getElementById(`minutes-${variantId}`);
+                      const secondsEl = document.getElementById(`seconds-${variantId}`);
+
+                      function update() {
+                        const now = new Date();
+                        const diff = endTime - now;
+
+                        if (diff <= 0) {
+                          daysEl.textContent = hoursEl.textContent = minutesEl.textContent = secondsEl.textContent = '00';
+                          return;
+                        }
+
+                        const days = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+                        const hours = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                        const minutes = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                        const seconds = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+
+                        daysEl.textContent = days;
+                        hoursEl.textContent = hours;
+                        minutesEl.textContent = minutes;
+                        secondsEl.textContent = seconds;
+                      }
+
+                      update();
+                      setInterval(update, 1000);
+                    });
+                  });
+                </script>
+                @endpush
               </div>
 
               <!-- Product Details -->
@@ -459,22 +529,24 @@
 
                 <div class="flex items-center text-sm text-gray-500 gap-1">
                   <i class="fas fa-map-marker-alt"></i>
-                  <span>{{ $product->location ?? 'UAE' }}</span>
+                  <span>{{ $product->emirate->name ?? 'UAE' }}</span>
                 </div>
 
                 <div class="flex items-center gap-0">
-                  <span class="text-yellow-500">★★★★☆</span>
-                  <span class="text-sm text-gray-500">{{ number_format($product->rating, 1) }} (1,244)</span>
+                  @for ($i = 0; $i < 5; $i++)
+                  <i class="fas fa-star {{ $i < floor($averageRating) ? 'text-yellow-500' : 'text-gray-300' }}"></i>
+                 @endfor
+                  <span class="text-sm text-gray-500">{{$averageRating}} ({{$totalReviews}})</span>
                 </div>
 
-                <p class="text-gray-700 text-sm leading-relaxed line-clamp-2">
+                <p class="text-gray-700 text-sm leading-relaxed">
                   {{ Str::limit($product->short_description, 100) }}
                 </p>
 
                 <div class="flex justify-between items-center">
                   <div class="flex items-center space-x-4">
-                    <span class="text-3xl font-semibold text-gray-800">${{ $product->price }}</span>
-                    <span class="text-lg text-gray-400 line-through">${{ $product->old_price }}</span>
+                    <span class="text-3xl font-semibold text-gray-800" style="font-size: 1.375rem;">AED {{  $discountedPrice  }}</span>
+                    <span class="text-lg text-gray-400 line-through" style="font-size: 1.375rem;">AED {{  $originalPrice  }}</span>
                   </div>
                 </div>
               </div>
@@ -484,119 +556,164 @@
       @endforeach
     </div>
   </div>
-  @push('scripts')
-  <!-- Countdown Script -->
-  <script>
-    function updateCountdown() {
-      const endDate = new Date(new Date().getTime() + 3 * 24 * 60 * 60 * 1000); // 3 days
-      const days = document.getElementById('days');
-      const hours = document.getElementById('hours');
-      const minutes = document.getElementById('minutes');
-      const seconds = document.getElementById('seconds');
-
-      function updateTimer() {
-        const now = new Date();
-        const timeDiff = endDate - now;
-
-        if (timeDiff <= 0) {
-          days.textContent = hours.textContent = minutes.textContent = seconds.textContent = '00';
-          return;
-        }
-
-        days.textContent = String(Math.floor(timeDiff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-        hours.textContent = String(Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-        minutes.textContent = String(Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-        seconds.textContent = String(Math.floor((timeDiff % (1000 * 60)) / 1000)).padStart(2, '0');
-      }
-
-      updateTimer();
-      setInterval(updateTimer, 1000);
-    }
-
-    updateCountdown();
-  </script>
-  @endpush
 </section>
 
 
 
- @foreach($carouselCategories as $category)
-  <section class="bg-[#58af0838] relative lg:py-20 py-10">
+
+ <section class="bg-white lg:p-4  lg:py-20 py-10 ">
   <div class="container mx-auto lg:px-0 px-4">
+    <h2 class="lg:text-3xl text-base font-bold text-black mb-3">Popular on </h2>
+    <div class="owl-carousel1  owl-carousel owl-theme">
+      @foreach($carouselCategories as $product)
+      @php
+        $reviews =  $product->reviews; 
+        $totalRatings = $reviews->sum('review_rating');
+        $totalReviews = $reviews->count();
+        $averageRating = $totalReviews > 0 ? $totalRatings / $totalReviews : 0;
+        $averageRating = number_format($averageRating, 1);
+        $variants = $product->variants ?? collect([]);
     
-    <!-- Section Title -->
-    <h2 class="lg:text-3xl text-base font-bold text-black mb-3">Popular on</h2>
+        $minVariant = $variants->isNotEmpty() ? $variants->sortBy('unit_price')->first() : null;
+    
+        $originalPrice = number_format($minVariant->unit_price ?? 0);
+        $discountedPrice = number_format($minVariant->discounted_price ?? 0);
+          $timer =  $minVariant ? $minVariant->timer_flag : null;
+            $endTime =$minVariant ? $minVariant->end_time : null;
+            $variantId = $minVariant ? $minVariant->id : null;
+            $discountedPercentage = $minVariant ? number_format($minVariant->discounted_percentage) : null;
+      @endphp
+      <div class="item">
+        <a href="{{ url('/user/products/' . $product->id) }}">
+          <div
+            class="rounded-lg hover:shadow-xl hover:border-[#58af0838] shadow-lg h-full hover:shadow-xl  border bg-white shadow-lg overflow-hidden transition-transform duration-300 "
+            data-v0-t="card">
+            <!-- Image with Wave Shape -->
 
-    <!-- Owl Carousel -->
-    <div class="owl-carousel owl-theme owl-carousel1">
-     
-        <div class="item">
-          <a href="{{ url('/category/' . strtolower($category->code)) }}">
-            <div class="rounded-lg hover:shadow-xl hover:border-[#58af0838] shadow-lg h-full border bg-white overflow-hidden transition-transform duration-300">
-              
-              <!-- Category Image -->
-              <div class="relative">
-                <img alt="{{ $category->name }}" class="w-full h-48 object-cover"
-                     src="{{ asset('storage/' . $category->image) }}" />
+            <div class="relative">
+              <img alt="{{ $product->name }}" class="w-full h-48 object-cover"
+                src="{{ asset('storage/' . $product->image) }}">
 
-                <!-- Discount Badge -->
-                <div class="w-full flex items-center justify-center text-[#fe8500] text-2xl p-2 font-bold">
-                  <div class="flex items-center mt-1">
-                    <img src="{{ asset('images/discount_7939803.png') }}" class="w-8" />
-                    <span class="ml-0.5 text-base text-black">50% OFF</span>
-                  </div>
 
-                  <div class="items-center ml-auto py-0 px-2 flex gap-x-1 text-[#000] font-semibold">
-                    <span class="text-sm flex mt-1 text-red-400">
-                      <img src="{{ asset('images/clock_4241462.png') }}" class="w-8 h-9 pr-1" />
-                    </span>
-                    <div class="flex items-center text-center gap-1">
-                      <span class="text-sm font-semibold" id="days">3</span>
-                      <span class="text-red-500">:</span>
-                      <span class="text-sm font-semibold" id="hours">18</span>
-                      <span class="text-red-500">:</span>
-                      <span class="text-sm font-semibold" id="minutes">43</span>
-                      <span class="text-red-500">:</span>
-                      <span class="text-sm font-semibold" id="seconds">21</span>
+
+              <!-- Discount Badge -->
+              <div class="w-full flex items-center justify-between text-[#fe8500] text-2xl p-2 font-bold">
+                <div class="flex items-center mt-1">
+                  <img src="{{ asset('images/discount_7939803.png') }}" class="w-8" />
+                  <span class="ml-0.5 text-base text-black">{{ $discountedPercentage}}%</span>
+                </div>
+                @if ($timer === 1)
+                <div
+                  class="flex items-center ml-auto py-0 rounded-md px-2 gap-x-1 text-[#000] font-semibold countdown-timer" data-endtime="{{ $endTime  }}">
+                  <span class="text-sm flex mt-1 text-red-400">
+                  <img src="{{ asset('images/clock_4241462.png') }}" class="w-8 h-9 pr-1" /></span>
+                  <div class="flex items-center gap-x-1 text-center">
+                    <div class="flex flex-col items-center w-4">
+                      <span class="block text-sm font-semibold mt-1" id="days-{{ $variantId }}">0</span>
+                    </div>
+                    <div class="text-red-500 text-base">:</div>
+                    <div class="flex flex-col items-center w-4">
+                      <span class="block text-sm font-semibold mt-1" id="hours-{{ $variantId }}">00</span>
+                    </div>
+                    <div class="text-red-500 text-base">:</div>
+                    <div class="flex flex-col items-center w-4">
+                      <span class="block text-sm font-semibold mt-1" id="minutes-{{ $variantId }}">00</span>
+                    </div>
+                    <div class="text-red-500 text-base">:</div>
+                    <div class="flex flex-col items-center w-4">
+                      <span class="block text-sm font-semibold mt-1" id="seconds-{{ $variantId }}">00</span>
                     </div>
                   </div>
                 </div>
+                @endif
               </div>
+              @push('scripts')
+              <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                  const timers = document.querySelectorAll('.countdown-timer:not(.cloned)');
 
-              <!-- Category Info -->
-              <div class="px-4 pb-4 space-y-2 mt-1 relative z-50">
-                <h3 class="text-xl font-semibold leading-tight">
-                  {{ $category->name }}
-                </h3>
+                  timers.forEach(timer => {
+                    const endTimeStr = timer.dataset.endtime;
+                    const endTime = new Date(endTimeStr);
 
-                <div class="flex items-center text-sm text-gray-500 gap-1">
-                  <i class="fas fa-map-marker-alt"></i>
-                  <span>UAE</span>
-                </div>
+                    // Get variant ID from one of the span IDs (e.g., "days-123")
+                    const variantId = timer.querySelector('span[id^="days-"]').id.split('-')[1];
 
-                <div class="flex items-center gap-0">
-                  <span class="text-yellow-500">★★★★☆</span>
-                  <span class="text-sm text-gray-500">4.8 (1,244)</span>
-                </div>
+                    const daysEl = document.getElementById(`days-${variantId}`);
+                    const hoursEl = document.getElementById(`hours-${variantId}`);
+                    const minutesEl = document.getElementById(`minutes-${variantId}`);
+                    const secondsEl = document.getElementById(`seconds-${variantId}`);
 
-                <p class="text-gray-700 text-sm leading-relaxed">
-                  Discover amazing offers and experiences in {{ $category->name }} category.
-                </p>
+                    function update() {
+                      const now = new Date();
+                      const diff = endTime - now;
 
-                <div class="flex justify-between items-center">
-                  <div class="flex items-center space-x-4">
-                    <span class="text-3xl font-semibold text-gray-800">AED 19.99</span>
-                    <span class="text-lg text-gray-400 line-through">AED 79.29</span>
-                  </div>
-                </div>
-              </div>
+                      if (diff <= 0) {
+                        daysEl.textContent = hoursEl.textContent = minutesEl.textContent = secondsEl.textContent = '00';
+                        return;
+                      }
+
+                      const days = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+                      const hours = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                      const minutes = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                      const seconds = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+
+                      daysEl.textContent = days;
+                      hoursEl.textContent = hours;
+                      minutesEl.textContent = minutes;
+                      secondsEl.textContent = seconds;
+                    }
+
+                    update();
+                    setInterval(update, 1000);
+                  });
+                });
+              </script>
+              @endpush
             </div>
-        </div>
-    
+
+            <!-- Content Section -->
+            <div class="px-4 pb-4 space-y-2 mt-1 relative z-50">
+              <h3 class="text-xl font-semibold leading-tight">
+                {{ $product->name }}
+              </h3>
+
+              <div class="flex items-center text-sm text-gray-500 gap-1">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>{{$product->emirate->name}}</span>
+              </div>
+              <div class="flex items-center gap-0">
+                @for ($i = 0; $i < 5; $i++)
+                  <i class="fas fa-star {{ $i < floor($averageRating) ? 'text-yellow-500' : 'text-gray-300' }}"></i>
+                @endfor
+                <span class="text-sm text-gray-500">{{$averageRating}}
+                  ({{$totalReviews}})</span>
+              </div>
+              <p class="text-gray-700 text-sm leading-relaxed">{{$product->short_description}}
+              </p>
+
+              <div class="flex justify-between items-center">
+                <!-- Price Section -->
+                <div class="flex items-center space-x-4">
+                  <span class="text-3xl font-semibold text-gray-800" style="font-size: 1.375rem;">AED {{$discountedPrice}}</span>
+                  <span class="text-lg text-gray-400 line-through" style="font-size: 1.375rem;">AED {{$originalPrice}}</span>
+                </div>
+
+              </div>
+
+              <!-- Coupon Code Section -->
+
+            </div>
+
+          </div>
+
+        </a>
+      </div>
+      @endforeach
     </div>
   </div>
 </section>
-@endforeach
+
 
 
   <section class="bg-[#58af0838] text-black  lg:px-0  lg:py-20 py-10 px-4 lg:px-0">
