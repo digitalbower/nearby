@@ -17,6 +17,7 @@
     },
   });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
  <!--   Core JS Files   -->
  <script src="{{asset('assets/js/core/jquery-3.7.1.min.js')}}"></script>
  <script src="{{asset('assets/js/core/popper.min.js')}}"></script>

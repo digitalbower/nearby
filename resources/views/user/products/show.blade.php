@@ -11,6 +11,11 @@
     list-style: disc;
     margin-left: 1.25rem;
   }
+  a {
+    background-color: transparent !important;
+    color: blue !important;
+  }
+</style>
 </style>
 @endpush
 @section('content')

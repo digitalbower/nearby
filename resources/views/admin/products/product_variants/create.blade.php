@@ -75,7 +75,8 @@
                 </div>
                 <div class="mb-3">
                     <label for="short_info" class="form-label">Short Info</label>
-                    <textarea class="form-control" id="short_info" name="short_info">{{old('short_info')}}</textarea>
+                    <div id="editor" style="height: 200px;">{{old('short_info')}}</div>
+                    <input type="hidden" name="short_info" id="short_info">
                 </div>
                 <div class="mb-3">
                     <label for="unit_price" class="form-label">Unit Price</label>
@@ -133,17 +134,16 @@
 @endsection
 @push('scripts')
     <script src="{{ asset('assets/js/custom/js/product_variant.js') }}"></script>
-    
-    <script>   
-        $(document).ready(function() {
-            $('#short_info').summernote({
-                height: 200,
-                toolbar: [
-                    ['style', ['bold', 'italic', 'underline']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['insert', ['link']]
-                ]
-            });
+    <script>  
+        var quill = new Quill('#editor', {
+          theme: 'snow',
+          modules: {
+            toolbar: [
+              ['bold', 'italic', 'underline'],
+              [{ list: 'ordered' }, { list: 'bullet' }],
+              ['link']
+            ]
+          }
         });
         
     </script>
