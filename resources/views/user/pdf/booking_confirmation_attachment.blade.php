@@ -3,11 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <title>Booking Confirmation</title>
-</head>
-<body style="font-family: Arial, sans-serif;
-      background-color: #f6f9fb;
+  <style>
+    @page {
+      margin: 120px 50px 100px 50px;
+    }
+    body {
+      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;">
+      padding: 0;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: -60px; 
+      left: 0;
+      right: 0;
+      height: 50px;
+      background: #DDE4E6;
+      padding: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
   <div class="email-wrapper" style="max-width: 700px;
       margin: 0 auto;
       background-color: #ffffff;
@@ -79,16 +99,9 @@
       <p>Best regards,<br>
       <strong>The NearBy Vouchers Team</strong></p>
     </div>
-
-    <!-- Footer -->
-    <div class="footer" style="background: #DDE4E6;
-            padding: 20px;
-            font-size: 12px;
-            text-align: center;
-            color: #777;
-            margin-top: 20px;">
-      © nearbyvouchers.com 2024, All rights reserved.
-    </div>
+  </div>
+  <div class="footer">
+      © nearbyvouchers.com {{ date('Y') }}, All rights reserved.
   </div>
 </body>
 </html>

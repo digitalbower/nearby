@@ -16,18 +16,7 @@
 @section('content')
   <section class="w-full">
     <div class="container mx-auto py-10 px-4 lg:px-0 ">
-      <!-- Promo Banner -->
-      <div
-        class="flex items-center p-4 mb-8 w-auto px-9 py-3 bg-[#58af0838]  text-gray-800 font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-        <i class="fas fa-tag text-2xl mr-3"></i>
-        <div>
-          <p class="lg:text-2xl text-lg font-semibold">Extra $13.8 off</p>
-          <p class="lg:text-base font-medium text-base">
-            Promo <span class=" font-semibold text-lg">EARLYBIRD24</span> ends in: 
-            <span id="countdown" class="font-medium text-base"></span>
-          </p>
-        </div>
-      </div>
+
       <div id="flash-message" class="hidden p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg" role="alert"></div>
       <!-- Main Content -->
       <div class="lg:grid md:grid-cols-12 grid-cols-1 relative gap-10">
@@ -52,13 +41,25 @@
               class="bg-black text-white px-2 md:px-4 py-2 rounded-full text-xs md:text-sm flex items-center gap-2">
               <i class="fas fa-fire"></i> {{$tag_name}}
             </span>
-            <span
-              class="bg-yellow-100 text-yellow-800 px-2 md:px-4 py-2 rounded-full text-xs md:text-sm flex items-center gap-2">
-              <i class="fas fa-star"></i> Best Rated
-            </span>
+            @if($averageRating >= 4.5)
+              <span
+                class="bg-yellow-100 text-yellow-800 px-2 md:px-4 py-2 rounded-full text-xs md:text-sm flex items-center gap-2">
+                <i class="fas fa-star"></i> Best Rated
+              </span>
+            @endif
+            @php
+              $totalBookings = $product->getTotalBookingCount();
+            @endphp
             <span
               class="bg-[#4a910954] text-black px-2 md:px-4 py-2 rounded-full text-xs md:text-sm flex items-center gap-2">
-              <i class="fas fa-shopping-cart"></i> 10,000+ Bought
+              <i class="fas fa-shopping-cart"></i>    
+              @if ($totalBookings === 0)
+                0 bought
+              @elseif ($totalBookings === 1)
+                1 bought
+              @else
+                {{ $totalBookings - 1 }}+ bought
+              @endif
             </span>
           </div>
           <div class="relative overflow-hidden">
@@ -344,9 +345,9 @@
                   <div class="pb-4">
                     <h4 class="font-medium text-gray-900">Contact Us</h4>
                     <p class="text-gray-600">
-                      Phone: <a href="tel:+1234567890" class="text-gray-800 hover:underline">{{$product->product_support_phone}}</a><br>
-                      Email: <a href="mailto:{{$product->product_support_email}}"
-                        class="text-gray-800 hover:underline">{{$product->product_support_email}}</a>
+                      Phone: <a href="tel:+1234567890" class="text-gray-800 hover:underline">{{$product->vendor->phone}}</a><br>
+                      Email: <a href="mailto:{{$product->vendor->email}}"
+                        class="text-gray-800 hover:underline">{{$product->vendor->email}}</a>
                     </p>
                   </div>
                   <!-- Directions Button -->
@@ -390,14 +391,7 @@
                     <h3 class="tracking-tight text-base lg:text-2xl font-bold">{{$variant->title}}</h3>
                     <div class="gap-x-4 flex items-center">
                       <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="lucide lucide-bed h-5 w-5 text-gray-800">
-                          <path d="M2 4v16"></path>
-                          <path d="M2 8h18a2 2 0 0 1 2 2v10"></path>
-                          <path d="M2 17h20"></path>
-                          <path d="M6 8v9"></path>
-                        </svg>
+                       {!! $variant->product_variant_icon !!}
                       </div>
                       <p class="text-sm text-muted-foreground flex items-center gap-2">
                         <span>{{$variant->short_description}}</span>
@@ -416,8 +410,8 @@
                             data-v0-t="badge">-{{$variant->discounted_percentage}}%</div>
                         </div>
                         <div class="flex items-center gap-2">
-                          <span class="text-3xl font-bold text-primary">${{$variant->discounted_price}}</span>
-                          <span class="text-sm text-muted-foreground">/{{$variant->types->product_type}}</span>
+                          <span class="text-3xl font-bold text-primary" style="font-size: 1.375rem;">AED {{$variant->discounted_price}}</span>
+                          <span class="text-sm text-muted-foreground">/{{$unit_type}}</span>
                 
                           <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
                             <!-- Decrement Button -->
@@ -472,7 +466,7 @@
                     <span id="quantity-error-{{$variant->id}}"></span>
                     <div
                       class="text-xs  bg-[#58af0838] rounded-md p-2 text-black flex gap-x-4 items-center rounded-lg p-3">
-                      <p class="font-medium">{{$variant->short_info}}</p>
+                      <p class="font-medium">{!! $variant->short_info !!}</p>
                       <p class="text-primary font-semibold">Learn more</p>
                     </div>
                 
@@ -486,17 +480,21 @@
                           <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
                           <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                         </svg>
-                        <span class="font-medium">10,000+ booked</span>
+                        @php
+                          $total_booking_count = $variant->getBookingCountBasedOnvariant();
+                        @endphp
+                        <span class="font-medium">
+                          @if ($total_booking_count === 0)
+                              0 booked
+                          @elseif ($total_booking_count === 1)
+                              1 booked
+                          @else
+                              {{ $total_booking_count - 1 }}+ booked
+                          @endif
+                        </span>
                       </span>
                       <span class="flex items-center gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="lucide lucide-calendar h-4 w-4 text-purple-500">
-                          <path d="M8 2v4"></path>
-                          <path d="M16 2v4"></path>
-                          <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-                          <path d="M3 10h18"></path>
-                        </svg>
+                        {!! $variant->short_legend_icon !!}
                         <span class="font-medium">{{$variant->short_legend}}</span>
                       </span>
                     </div>
@@ -510,12 +508,12 @@
             <div class="space-y-4 mt-6">
               <div id="variant-error-msg" class="hidden text-red-500 text-sm font-medium mt-2"></div>
             <!-- Continue Button -->
-            @auth
+            {{-- @auth
             <button type="button" onclick="submitAndRedirectToCart()" 
               class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
               Continue
             </button>
-            @endauth
+            @endauth --}}
             <button type="button" onclick="checkAuthAndSubmit()"
             class="relative px-6 w-full py-3  bg-[#58af0838] hover:bg-[#4a910954] text-black font-semibold rounded-lg shadow-md  transition-transform transform  duration-300 ease-in-out"
             >
@@ -731,32 +729,6 @@ function submitAndRedirectToCart() {
     });
 </script>
 <script>
-   // Set the target date for the promo end time
-   const promoEndDate = new Date("2024-12-31T23:59:59");
-
-// Function to calculate and display the countdown
-function updateCountdown() {
-  const now = new Date();
-  const timeRemaining = promoEndDate - now;
-
-  if (timeRemaining <= 0) {
-    document.getElementById("countdown").textContent = "Promo ended!";
-    return;
-  }
-
-  const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-  // Update the countdown text
-  document.getElementById("countdown").textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-}
-
-// Initialize the countdown and set it to update every second
-updateCountdown();
-setInterval(updateCountdown, 1000);
-// Splide.js Initialization
 document.addEventListener("DOMContentLoaded", function () {
   // Main Slider
   var mainSlider = new Splide("#main-slider", {

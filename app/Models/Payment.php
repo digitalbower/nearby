@@ -31,4 +31,7 @@ class Payment extends Model
     {
         return $this->hasOne(BookingConfirmation::class, 'order_id', 'order_id');
     }
+    public function payment(){
+        return $this->belongsTo(Payment::class);
+    }
 }

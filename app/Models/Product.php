@@ -70,5 +70,10 @@ class Product extends Model
     return $this->hasMany(ProductVariant::class, 'product_id');  // 'product_id' is the foreign key in 'product_variants' table
     
 }
-
+public function getTotalBookingCount()
+{
+    return $this->variants->sum(function ($variant) {
+        return $variant->bookingConfirmationItems->where('verification_status','completed')->sum('quantity');
+    });
+}
 }

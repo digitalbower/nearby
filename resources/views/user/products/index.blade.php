@@ -15,7 +15,7 @@
         <span class="md:block hidden" x-text="showFilter ? 'Hide Filter' : 'Show Filter'"></span>
       </button>
 
-      <span class="md:text-xl text-sm font-bold text-gray-800 tracking-wide" x-text="sortedProducts.length + ' Deals Found'">
+      <span class="md:text-xl text-sm font-bold text-gray-800 tracking-wide" x-text="sortedProducts.length + ' Products Found'">
         <!-- Replace `filteredDeals` with actual deals count dynamically -->
       </span>
       </div>
@@ -318,17 +318,17 @@
                     <span x-text="'(' + product.total_reviews.toLocaleString() + ')'" class="text-sm text-gray-600 mr-2"></span>
                   
                     
-                    <span x-text="product.distance + ' mi'" class="text-sm text-gray-600"></span>
+                    {{-- <span x-text="product.distance + ' mi'" class="text-sm text-gray-600"></span> --}}
                   </div>
                 <p class="text-gray-700 text-sm mb-2 leading-relaxed" x-text="product.short_description"></p>
                   <div class="flex items-center justify-between">
                     <div>
-                      <span x-text="'$' + product.discountedPrice.toFixed(2)" class="text-xl font-bold"></span>
-                      <span x-text="'$' + product.originalPrice" class="text-sm text-gray-500 line-through ml-1"></span>
+                      <span x-text="'AED ' + product.discountedPrice.toFixed(2)" class="text-xl font-bold"></span>
+                      <span x-text="'AED ' + product.originalPrice" class="text-sm text-gray-500 line-through ml-1"></span>
                       <p x-show="product.code" x-text="'with code ' + product.code" class="text-xs text-gray-600"></p>
                     </div>
                     <span x-text="'-' + product.discount + '%'"
-                      class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-2 rounded"></span>
+                      class="bg-green-100 text-green-800 text-sm font-semibold px-2 py-2 rounded"></span>
                   </div>
                 </div>
               </div>
@@ -570,11 +570,16 @@
             return this.openSections === section;
         },
         formatPrice(value) {
-            return `$${parseFloat(value).toFixed(2)}`;
+            return `AED ${parseFloat(value).toFixed(2)}`;
         },
         init() {
-        this.fetchProducts();
-        }
+            const urlParams = new URLSearchParams(window.location.search);
+            const selectedCategory = urlParams.get('category');
+            if (selectedCategory) {
+                this.selectedCategories.push(selectedCategory);
+            }
+            this.fetchProducts();
+          }   
     }
 }
 </script>

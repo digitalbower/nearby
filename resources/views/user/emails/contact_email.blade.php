@@ -82,7 +82,7 @@
 
     <!-- Footer -->
     <div class="footer">
-      © nearbyvouchers.com 2024, All rights Reserved
+      © nearbyvouchers.com {{ date('Y') }}, All rights Reserved
     </div>
   </div>
 </body>

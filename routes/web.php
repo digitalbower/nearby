@@ -5,6 +5,7 @@ use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\AuthController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\Admin\Auth\AuthController as AdminAuthController;
+use App\Http\Controllers\Vendor\Auth\AuthController as VendorAuthController;
 use App\Http\Controllers\Admin\Product\CompanyTermController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LogoController;
@@ -38,7 +39,9 @@ use App\Http\Controllers\User\SpecialistRequestController;
 use App\Http\Controllers\User\ContactController;
 use App\Http\Controllers\User\DealsController;
 use App\Http\Controllers\User\StripePaymentController;
-
+use App\Http\Controllers\Vendor\BookingManagementController;
+use App\Http\Controllers\Vendor\PaymentManagementController;
+use App\Http\Controllers\Vendor\ReportManagementController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::post('/subscribe', [NewsletterController::class, 'subscribe'])->name('subscribe');
@@ -55,7 +58,7 @@ Route::prefix('user')->name('user.')->group(function () {
 });
 
 Route::post('/specialist', [SpecialistRequestController::class, 'submit'])->name('specialist.submit');
-Route::get('contactus', [ContactController::class, 'contactus'])->name('contactus');
+Route::get('/contactus', [ContactController::class, 'contactus'])->name('contactus');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contactus.submit');
 
 
@@ -126,9 +129,21 @@ Route::prefix('user')->name('user.')->group(function () {
             Route::post('/update-password', [ProfileController::class, 'updatePassword'])->name('updatepassword');
         });
     });
+});
 
-    
+Route::prefix('vendor')->name('vendor.')->group(function () {
+    Route::get('/login', [VendorAuthController::class, 'showVendorLogin'])->name('login');
+    Route::post('/login', [VendorAuthController::class, 'login'])->name('login.submit');
 
+    Route::middleware(['auth.vendor'])->group(function () {
+        Route::get('booking', [BookingManagementController::class, 'index'])->name('booking');
+        Route::post('approve-booking', [BookingManagementController::class, 'approveBooking'])->name('approve_booking');
+        Route::get('booking-history', [BookingManagementController::class, 'bookingHistory'])->name('booking_history');
+        Route::get('payment', [PaymentManagementController::class, 'index'])->name('payment');
+        Route::get('report', [ReportManagementController::class, 'index'])->name('report');
+        Route::get('/report/download-pdf/{id}', [ReportManagementController::class, 'reportDownload'])->name('report.download_pdf');
+        Route::post('logout', [VendorAuthController::class, 'logout'])->name('logout');
+    });
 });
 
 

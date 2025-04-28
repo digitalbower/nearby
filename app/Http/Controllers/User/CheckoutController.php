@@ -504,6 +504,7 @@ class CheckoutController extends Controller
     
             // Create Booking Confirmation
             $bookingConfirmationId = DB::table('booking_confirmations')->insertGetId([
+                'payment_id'=>$payment,
                 'order_id' => $request->order_id,
                 'booking_id' => uniqid('BOOK-'),
                 'user_id' => $user->id,
@@ -526,7 +527,7 @@ class CheckoutController extends Controller
                     'unit_price' => $item['unit_price'],
                     'total_price' => $item['total_price'],
                     'verification_number' => rand(100000, 999999),
-                    'verification_status' => 'completed',
+                    'verification_status' => 'pending',
                     'giftproduct' => $item['giftproduct'],
                     'created_at' => now(),
                     'updated_at' => now(),

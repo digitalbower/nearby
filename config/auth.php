@@ -44,6 +44,10 @@ return [
             'driver' => 'session',
             'provider' => 'admins', // Make sure to configure the correct provider here
         ],
+        'vendor' => [
+            'driver' => 'session',
+            'provider' => 'vendors', 
+        ],
     ],
 
     /*
@@ -72,7 +76,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class, // Your Admin model
         ],
-
+        'vendors' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Vendor::class, // Your Vendor model
+        ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

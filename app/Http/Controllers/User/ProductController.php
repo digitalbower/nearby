@@ -197,15 +197,15 @@ class ProductController extends Controller
         $variants =  $product->variants;  
 
         $user = Auth::user();
-
-        $variantsWithType = $variants->map(function ($variant) {
-            $typeName = $variant->types ? $variant->types->name : 'No Type Available';
-            $variant->product_type = $typeName;
-            return $variant;
-        });
+        $unit_type = $product->category->categoryType->unitType->unit_type;
+        // $variantsWithType = $variants->map(function ($variant) {
+        //     $typeName = $variant->types ? $variant->types->name : 'No Type Available';
+        //     $variant->product_type = $typeName;
+        //     return $variant;
+        // });
         return view('user.products.show', compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels','product','tag_name','gallery','nbvterms','variants','reviews',
-        'totalReviews','averageRating','percentages','variantsWithType','user'));
+        'totalReviews','averageRating','percentages','unit_type','user'));
     }
     public function storeReview(Request $request)
     {
@@ -273,7 +273,7 @@ class ProductController extends Controller
         if ($request->input('redirect_to_cart') == "1") {
             return redirect()->route('user.cart');
         }
-        return redirect()->back()->with('success', 'Added to cart successfully!');
+        return redirect('user/cart')->with('success', 'Added to cart successfully!');
     }
 
 
@@ -345,7 +345,7 @@ class ProductController extends Controller
     }
 
     public function destroy($id)
-    { dd(12);
+    { 
         $item = Cart::findOrFail($id);
         $item->delete();
 
