@@ -430,29 +430,63 @@ class CheckoutController extends Controller
             'message' => 'Promo code applied!'
         ]);
     }
+
+    public function createpaymentintent(Request $request){
+    dd($request->all());
+    Stripe::setApiKey(env('STRIPE_SECRET'));
+    
+    $user = Auth::user(); // Assuming user is authenticated
+
+    // Convert amount to fils (Stripe requires smallest currency unit)
+    $amountInFils = round($request->total_amount * 100);
+
+    // Create Stripe PaymentIntent
+    $paymentIntent = PaymentIntent::create([
+        'amount' => $amountInFils,
+        'currency' => 'aed',
+        'automatic_payment_methods' => ['enabled' => true],
+
+        'description' => 'Booking Payment',
+        'metadata' => [
+            'user_id' => $user->id,
+            'booking_amount' => $request->booking_amount,
+            'vat' => $request->vat_amount,
+        ],
+    ]); dd($paymentIntent);
+
+    if ($paymentIntent->status === 'requires_payment_method') {
+        return response()->json([
+            'success' => false,
+            'requires_action' => true,
+            'payment_intent_client_secret' => $paymentIntent->client_secret,
+            'payment_intent_id' => $paymentIntent->id,
+        ]);
+    }
+}
+
     public function checkoutBooking(Request $request){
-        
+      
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
         DB::beginTransaction();
         try {
-            Stripe::setApiKey(env('STRIPE_SECRET'));
-    
-            $user = Auth::user(); // Assuming user is authenticated
-    
-            // Convert amount to fils (Stripe requires smallest currency unit)
-            $amountInFils = round($request->total_amount * 100);
-    
-            // Create Stripe PaymentIntent
-            $paymentIntent = PaymentIntent::create([
-                'amount' => $amountInFils,
+           
+            $intent = PaymentIntent::create([
+                'amount' => $request->amount, // Must be in smallest currency unit (like paise/fils)
                 'currency' => 'aed',
-                'description' => 'Booking Payment',
-                'metadata' => [
-                    'user_id' => $user->id,
-                    'booking_amount' => $request->booking_amount,
-                    'vat' => $request->vat_amount,
+                'payment_method' => $request->payment_method_id,
+                'confirmation_method' => 'manual',
+                'confirm' => false,
+                'automatic_payment_methods' => [
+                    'enabled' => true,
+                    'allow_redirects' => 'always',
                 ],
             ]);
-    
+
+   
+   
+
+    if ($paymentIntent->status === 'succeeded') {
             // Save Payment Details
             $payment = DB::table('payments')->insertGetId([
                 'order_id' => $request->order_id,
@@ -461,7 +495,7 @@ class CheckoutController extends Controller
                 'discount_amount' => $request->voucher_savings,
                 'total_amount' => $request->total_amount,
                 'payment_method' => 'stripe',
-                'payment_status' => 'completed',
+                //'payment_status' => 'completed',
                 'stripe_transaction_id' => $paymentIntent->id,
                 'payment_response' => json_encode($paymentIntent),
                 'created_at' => now(),
@@ -567,7 +601,10 @@ class CheckoutController extends Controller
     
             return redirect()->route('user.bookingconfirmation')
                 ->with('success', 'Payment successful and booking confirmed!');
-    
+        }
+        else {
+            return back()->with('error', 'Payment not successful.');
+        }
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Payment failed: ' . $e->getMessage());

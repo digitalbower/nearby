@@ -46,7 +46,7 @@ class HomeController extends Controller
         $carouselCategories = Product::where('status', 1)
         ->where('categorycarousel', 1)
         ->with('category')
-        ->get();
+        ->get(); 
 
         $topDestinations = Footer::where('type', 'Top Destination')
                               ->where('status', 1)

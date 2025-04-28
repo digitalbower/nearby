@@ -227,8 +227,9 @@
 @endpush
 @section('content')
   <main class="flex-grow bg-[#58af0838]  px-4 lg:px-10 py-8">
-    <form method="POST" action="{{route('user.checkout_booking') }}" id="bookingForm">
-      @csrf
+ 
+   
+    
     <div class="grid container mx-auto md:grid-cols-3 md:space-x-6">
         <div class="md:col-span-2  space-y-6 overflow-hidden">
           {{-- <div class="bg-[#58af0838]  rounded-xl px-4 p-2 lg:p-7">
@@ -432,61 +433,147 @@
             </p>
           </div>
         </div>
-        <div class="bg-white rounded-xl shadow p-4 px-4 lg:p-7 mx-auto">
-          <h2 class="text-2xl font-semibold mb-6">Payment</h2>
-          <div class="space-y-6">
-            <div class="space-y-4" id="paymentDetails">
-              {{-- <form id="stripePaymentForm" method="POST" action="{{ route('user.checkout.session') }}">
-                @csrf --}}
-                <div class="space-y-6">
-                  <input type="hidden" name="amount" value="{{ $total }}">
-                  <div>
-                    <label for="cardNumber" class="block text-sm font-semibold text-gray-800">Card Number</label>
-                    <div class="mt-2 relative rounded-lg border border-gray-300 focus-within:ring-2 focus-within:ring-[#000]">
-                      <input type="text" id="cardNumber" name="cardnumber" maxlength="16" minlength="16" pattern="\d{12,19}" class="block w-full px-4 py-3 text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] rounded-lg" placeholder="1234 5678 9012 3456" required>
-                      <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
-                        <i class="fas fa-credit-card text-gray-500"></i>
-                      </div>
-                      <div id="cardNumberError" class="text-sm text-red-600 mt-1 hidden">Please enter a valid card number (12–19 digits).</div>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-2 gap-4">
-                    <div>
-                      <label for="expDate" class="block text-sm font-semibold text-gray-800">Expiration Date</label>
-                      <input type="text" id="expDate"  maxlength="7" pattern="(0[1-9]|1[0-2]) \/ \d{2}" name="expDate" class="mt-2 block w-full px-4 py-3 border text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] border-gray-300 rounded-lg" placeholder="MM / YY" required>
-                      <div id="expDateError" class="text-sm text-red-600 mt-1 hidden">Enter valid future date in MM / YY format</div>
-                    </div>
+     <!-- Include Stripe.js -->
 
-                    <div>
-                      <label for="cvv" class="block text-sm font-semibold text-gray-800">CVV</label>
-                      <input type="text" id="cvv" name="cvv"  maxlength="4" pattern="\d{3,4}" class="mt-2 block w-full px-4 py-3 border text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] border-gray-300 rounded-lg" placeholder="123" required>
-                      <div id="cvvError" class="text-sm text-red-600 mt-1 hidden">Enter a valid 3 or 4 digit CVV</div>
-                    </div>
-                  </div>
-    
-                  <button type="submit"
-                    class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium h-10 px-4 py-2 w-full mt-6 bg-[#58af0838] text-black shadow hover:shadow-md transition">
-                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="lock"
-                      class="svg-inline--fa fa-lock mr-2" role="img" xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 448 512" width="16" height="16">
-                      <path fill="currentColor"
-                        d="M144 144v48h160v-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192v-48C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64v192c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64h16z">
-                      </path>
-                    </svg>
-                    Complete Payment
-                  </button>
-                </div>
-              {{-- </form> --}}
-            </div>
-        
-           
-            <p class="text-xs text-gray-500 text-center mt-4">
-              By completing your purchase you agree to these <a href="#" class="text-blue-600 hover:underline">Terms of Service</a>.
-            </p>
-          </div>
-        </div>
-    
-      </div>
+
+
+
+
+     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+<div id="error-message" class="text-red-800 font-semibold mt-3"></div>
+
+<form id="multiStepForm" onsubmit="return false;">
+    <label class="text-lg font-semibold text-gray-800">Card Information</label>
+    <div id="card-element" class="w-full mt-1 p-2 border rounded"></div>
+    <div id="card-errors" role="alert" class="text-red-500 text-sm mt-1"></div>
+
+    <!-- Hidden Inputs -->
+    <input type="hidden" id="name" value="{{ auth()->user()->firstname }}">
+    <input type="hidden" id="plan" value="basic">
+    <input type="hidden" id="duration" value="1">
+    <input type="hidden" id="billingprice" value="1000"> <!-- AED 10 -->
+
+    <!-- Button -->
+    <button type="submit" id="submit" class="mt-3 w-full rounded-lg bg-blue-600 hover:bg-blue-700 py-3 text-white font-semibold">
+        Pay & Subscribe
+    </button>
+</form>
+
+<!-- Optional loading spinner -->
+<div id="loadingIndicator" class="hidden text-blue-600 mt-2">Processing...</div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const stripe = Stripe("{{ env('STRIPE_KEY') }}");
+    const elements = stripe.elements();
+    const cardElement = elements.create('card', { hidePostalCode: true });
+    cardElement.mount("#card-element");
+
+    const form = document.getElementById("multiStepForm");
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        document.getElementById("loadingIndicator").classList.remove("hidden");
+
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+            // 1. Get Setup Intent
+            const setupRes = await fetch('/api/stripe/create-setup-intent', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            });
+            const setupData = await setupRes.json();
+            if (!setupData.clientSecret) throw new Error(setupData.error || 'Failed to initialize setup intent');
+
+            // 2. Confirm Card Setup
+            const { setupIntent, error: setupError } = await stripe.confirmCardSetup(setupData.clientSecret, {
+                payment_method: {
+                    card: cardElement,
+                    billing_details: {
+                        name: document.getElementById("name").value
+                    }
+                }
+            });
+
+            if (setupError || setupIntent.status !== 'succeeded') throw new Error('Card setup failed');
+
+            // 3. Create Payment Intent
+            const paymentRes = await fetch('/api/stripe/create-payment-intent', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    amount: document.getElementById("billingprice").value,
+                    payment_method_id: setupIntent.payment_method
+                })
+            });
+            const paymentData = await paymentRes.json();
+
+            // 4. Handle 3D Secure if required
+            if (paymentData.requires_action) {
+                const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(paymentData.payment_intent_client_secret);
+                if (confirmError || paymentIntent.status !== 'succeeded') throw new Error('3D Secure failed');
+                await completeSubscription(paymentIntent.id, setupIntent.payment_method, setupIntent.id);
+            } else if (paymentData.payment_intent?.status === 'succeeded') {
+                await completeSubscription(paymentData.payment_intent.id, setupIntent.payment_method, setupIntent.id);
+            } else {
+                throw new Error('Unexpected payment status');
+            }
+
+        } catch (err) {
+            handleStripeError(err);
+        } finally {
+            document.getElementById("loadingIndicator").classList.add("hidden");
+        }
+    });
+
+    async function completeSubscription(paymentIntentId, paymentMethodId, setupIntentId) {
+        try {
+            const response = await fetch("/api/stripe/subscribe", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    setup_intent_id: setupIntentId,
+                    payment_intent_id: paymentIntentId,
+                    payment_method_id: paymentMethodId,
+                    plan: document.getElementById("plan").value,
+                    duration: document.getElementById("duration").value,
+                    price: document.getElementById("billingprice").value
+                })
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert("Payment successful!");
+                window.location.href = "/subscription"; // redirect
+            } else {
+                alert("Subscription failed: " + result.error);
+            }
+        } catch (err) {
+            alert("Subscription error: " + err.message);
+        }
+    }
+
+    function handleStripeError(error) {
+        const msg = error.message || "Something went wrong. Please try again.";
+        document.getElementById("error-message").textContent = msg;
+        console.error("Stripe Error:", msg);
+    }
+});
+</script>
+
+
       <input type="hidden" name="booking_amount" value="{{ $bookingAmount }}">
       <input type="hidden" name="voucher_savings" value="{{ $voucherSavings }}">
       <input type="hidden" name="vat_amount" value="{{ $vat }}">
@@ -603,7 +690,7 @@
 
       </div>
     </div>
-      </form>
+     
   </main>
 
 @endsection
@@ -611,40 +698,81 @@
 @push('scripts')
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-  const stripe = Stripe('{{ env('STRIPE_KEY') }}');
-  const elements = stripe.elements();
-  const card = elements.create('card');
-  card.mount('#card-element');
+  document.addEventListener("DOMContentLoaded", function () {
+    const stripe = Stripe('{{ env("STRIPE_KEY") }}');
+    const elements = stripe.elements();
 
-  const form = document.getElementById('bookingForm');
-  form.addEventListener('submit', async (event) => {
-      event.preventDefault();
+    const cardNumber = elements.create('cardNumber');
+    cardNumber.mount('#cardNumber');
 
-      const {clientSecret} = await fetch('{{ route('user.checkout_booking') }}', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-              'X-CSRF-TOKEN': document.querySelector('[name="csrf-token"]').content,
-          },
-          body: JSON.stringify({amount: 1000}),
-      }).then((res) => res.json());
+    const cardExpiry = elements.create('cardExpiry');
+    cardExpiry.mount('#expDate');
 
-      const {error, paymentIntent} = await stripe.confirmCardPayment(clientSecret, {
-          payment_method: {
-              card: card,
-              billing_details: {
-                  name: 'Cardholder Name',
-              },
-          },
-      });
+    const cardCvc = elements.create('cardCvc');
+    cardCvc.mount('#cvv');
 
-      if (error) {
-          console.error(error.message);
-      } else if (paymentIntent.status === 'succeeded') {
-          console.log('Payment succeeded');
-      }
+    const form = document.getElementById('bookingForm');
+    console.log("Booking form found:", form);
+
+    if (!form) {
+        alert("Booking form not found!");
+        return;
+    }
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        alert("Submitting form...");
+
+        try {
+            const response = await fetch('/stripe/create-setup-intent', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('[name="csrf-token"]').content,
+                },
+                body: JSON.stringify({
+                    amount: 100, // Example amount in smallest currency unit
+                }),
+            });
+
+            const resultJson = await response.json();
+            console.log("Response from createPaymentIntent:", resultJson);
+
+            if (!resultJson.clientSecret) {
+                alert("Payment Intent creation failed: " + resultJson.message);
+                return;
+            }
+
+            const clientSecret = resultJson.clientSecret;
+
+            const result = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: cardNumber,
+                    billing_details: {
+                        name: 'Customer Name'
+                    }
+                }
+            });
+
+            console.log("Stripe confirmCardPayment result:", result);
+
+            if (result.error) {
+                alert("Stripe Error: " + result.error.message);
+            } else if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
+                alert("Payment successful!");
+                window.location.href = `/user/checkout_booking?payment_intent=${result.paymentIntent.id}`;
+            } else {
+                alert("Payment did not succeed: Unknown reason.");
+            }
+
+        } catch (error) {
+            console.error("Error during Stripe payment:", error);
+            alert("Unexpected error: " + error.message);
+        }
+    });
   });
 </script>
+
 <script>
  let products = [];
   let visibleCount = 2;

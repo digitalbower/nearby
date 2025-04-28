@@ -172,7 +172,7 @@ class ProductController extends Controller
         ->where('status', 1)
         ->get();    
         $nbvterms = NbvTerm::all();
-        $product = Product::findOrFail($id);
+        $product = Product::findOrFail($id); 
         $tagNames = $product->tag()->toArray();
         $tag_name = implode(', ', $tagNames); 
         $gallery = json_decode($product->gallery, true);
@@ -194,7 +194,7 @@ class ProductController extends Controller
             $percentages[$rating] = $totalReviews > 0 ? ($count / $totalReviews) * 100 : 0;
         }
 
-        $variants =  $product->variants; 
+        $variants =  $product->variants;  
 
         $user = Auth::user();
 

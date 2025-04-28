@@ -25,9 +25,14 @@
             </div>
 
             <div class="form-group">
-                <label for="icon">Icon</label>
-                <input type="text" name="icon" class="form-control">
-            </div>
+            <label for="icon">Icon</label>
+            <select name="icon" class="form-control" required>
+                <option value="fa fa-credit-card">Payment Release</option>
+                <option value="fa fa-user-tie">Vendor</option>
+                <option value="fa fa-address-book">Contact</option>
+            </select>
+        </div>
+
 
             <div class="form-group">
                 <label for="type">Type</label>

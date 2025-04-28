@@ -263,7 +263,7 @@
                 </div>
               </div>
             </div>
-            <div class="swiper-pagination"></div>
+          
           </div>
           @push('scripts')
           <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -468,7 +468,7 @@
                 </div>
 
                 <p class="text-gray-700 text-sm leading-relaxed line-clamp-2">
-                  {{ Str::limit($product->description, 100) }}
+                  {{ Str::limit($product->short_description, 100) }}
                 </p>
 
                 <div class="flex justify-between items-center">

@@ -97,14 +97,10 @@ Route::prefix('user')->name('user.')->group(function () {
             Route::post('/proceed-checkout', [CheckoutController::class, 'proceedCheckout'])->name('proceed_checkout');
             Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
             Route::get('/stripe', [CheckoutController::class, 'stripe'])->name('stripe');
-            Route::get('/paymentcheckout', [StripePaymentController::class, 'paymentcheckout'])->name('paymentcheckout');
-                Route::post('/create-checkout-session', [StripePaymentController::class, 'createSession'])->name('checkout.session');
-                Route::get('/success', function () {
-                    return 'Payment Success!';
-                })->name('checkout.success');
-                Route::get('/cancel', function () {
-                    return 'Payment Cancelled.';
-                })->name('checkout.cancel');
+            // routes/web.php
+            Route::get('/booking-confirmation', [CheckoutController::class, 'confirmation'])->name('user.bookingconfirmation');
+            Route::post('/createpaymentintent', [CheckoutController::class, 'createpaymentintent'])->name('createpaymentintent');
+            
 
 
                 Route::get('/payment/failure', function () {

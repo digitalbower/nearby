@@ -32,8 +32,32 @@
                 <label>Link (optional):</label>
                 <input type="text" name="link" class="form-control">
 
-                <label>Icon Class (optional):</label>
-                <input type="text" name="icon" class="form-control">
+                <div class="form-group">
+    <label>Select Icon</label>
+    <select name="icon" class="form-control" required>
+        <option value="">-- Select Icon --</option>
+
+        <!-- Social Media Icons -->
+        <option value="fab fa-facebook text-white">Facebook</option>
+        <option value="fab fa-instagram text-white">Instagram</option>
+        <option value="fab fa-twitter text-white">Twitter</option>
+        <option value="fab fa-youtube text-white">YouTube</option>
+        <option value="fab fa-linkedin text-white">LinkedIn</option>
+        <option value="fab fa-pinterest text-white">Pinterest</option>
+
+        <!-- Payment Channel Icons -->
+        <option value="fa fa-cc-visa">Visa</option>
+        <option value="fa fa-cc-mastercard">Mastercard</option>
+        <option value="fa fa-cc-amex">Amex</option>
+        <option value="fa fa-cc-discover">Discover</option>
+        <option value="fa fa-credit-card">Credit Card</option>
+        <option value="fa fa-university">Bank Transfer</option>
+        <option value="fa fa-money-check-alt">Rupay</option>
+
+    </select>
+</div>
+
+
 
                 <label>Status:</label>
                 <select name="status" class="form-control">

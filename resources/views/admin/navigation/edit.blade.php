@@ -27,10 +27,17 @@
             </div>
 
             <div class="form-group">
-                <label for="icon">Icon</label>
-                <input type="text" name="icon" class="form-control" value="{{ $navigationMenu->icon }}">
-            </div>
+            <label for="icon">Icon</label>
+            <select name="icon" class="form-control" required>
+                <option value="fa fa-credit-card" {{ $navigationMenu->icon == 'fa fa-credit-card' ? 'selected' : '' }}>Payment Release</option>
+                <option value="fa fa-user-tie" {{ $navigationMenu->icon == 'fa fa-user-tie' ? 'selected' : '' }}>Vendor</option>
+                <option value="fa fa-address-book" {{ $navigationMenu->icon == 'fa fa-address-book' ? 'selected' : '' }}>Contact</option>
+            </select>
+        </div>
 
+
+
+            
             <div class="form-group">
                 <label for="type">Type</label>
                 <select name="navigation_placement" class="form-control" required>
