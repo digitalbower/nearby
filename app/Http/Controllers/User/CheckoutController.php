@@ -431,38 +431,7 @@ class CheckoutController extends Controller
         ]);
     }
 
-    public function createpaymentintent(Request $request){
-    dd($request->all());
-    Stripe::setApiKey(env('STRIPE_SECRET'));
-    
-    $user = Auth::user(); // Assuming user is authenticated
-
-    // Convert amount to fils (Stripe requires smallest currency unit)
-    $amountInFils = round($request->total_amount * 100);
-
-    // Create Stripe PaymentIntent
-    $paymentIntent = PaymentIntent::create([
-        'amount' => $amountInFils,
-        'currency' => 'aed',
-        'automatic_payment_methods' => ['enabled' => true],
-
-        'description' => 'Booking Payment',
-        'metadata' => [
-            'user_id' => $user->id,
-            'booking_amount' => $request->booking_amount,
-            'vat' => $request->vat_amount,
-        ],
-    ]); dd($paymentIntent);
-
-    if ($paymentIntent->status === 'requires_payment_method') {
-        return response()->json([
-            'success' => false,
-            'requires_action' => true,
-            'payment_intent_client_secret' => $paymentIntent->client_secret,
-            'payment_intent_id' => $paymentIntent->id,
-        ]);
-    }
-}
+  
 
     public function checkoutBooking(Request $request){
       
