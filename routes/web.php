@@ -96,7 +96,8 @@ Route::prefix('user')->name('user.')->group(function () {
         ->name('booking.item.download');
             Route::get('/bookingconfirmation', [HomeController::class, 'bookingconfirmation'])->name('bookingconfirmation');
             Route::get('/cart', [UserProductController::class, 'cart'])->name('cart');
-            Route::delete('/cart/{id}', [UserProductController::class, 'destroy'])->name('destroy');
+            Route::delete('/cart', [UserProductController::class, 'destroy'])->name('destroy');
+            Route::post('/update-cart', [UserProductController::class, 'updateCart'])->name('update_cart');
             Route::post('/proceed-checkout', [CheckoutController::class, 'proceedCheckout'])->name('proceed_checkout');
             Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
             Route::get('/stripe', [CheckoutController::class, 'stripe'])->name('stripe');

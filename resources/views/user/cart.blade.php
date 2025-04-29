@@ -196,10 +196,10 @@
                             -
                         </button>
 
-                        <input type="number" id="quantity-{{ $item->id }}"
+                        <input type="number" id="quantity_{{ $item->id }}"
                             name="orders[{{ $item->id }}][quantity]"
                             value="{{ old('quantity', $item->quantity ?? 1) }}"
-                            class="w-10 text-center text-lg" readonly />
+                            class="w-10 text-center text-lg" />
 
                         <button type="button" onclick="incrementQty({{ $item->id }})"
                             class="w-8 h-8 flex justify-center items-center bg-gray-100 text-gray-600 rounded-r-md">
@@ -231,9 +231,8 @@
                 </div>
             @endif
            
-            <button 
-    class="text-red-500 absolute top-5 right-5 hover:text-red-700 flex items-center"
-    onclick="deleteCartItem({{ $item->id }})"
+            <button type="button"
+    class="text-red-500 absolute top-5 right-5 hover:text-red-700 flex items-center" onclick="confirmDelete({{ $item->id }})"
 >
     <i class="fas fa-trash-alt mr-2"></i>
 </button>
@@ -254,34 +253,7 @@
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<script>
-    function deleteCartItem(id) {
-        if (confirm("Are you sure you want to delete this item?")) {
-            fetch(`/cart/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    // Remove the cart item from DOM if needed
-                    document.getElementById(`cart-item-${id}`)?.remove();
-                    alert('Item deleted successfully');
-                    // Optionally refresh summary or totals
-                } else {
-                    alert('Failed to delete item');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Something went wrong');
-            });
-        }
-    }
-</script>
+
 
         
           <!-- Validation Message Popup -->
@@ -575,24 +547,54 @@ timerElements.forEach((timerElement) => {
 </script>
 
 <script>
-  function incrementQty() {
-    const quantityInput = document.getElementById('quantity');
-    const currentValue = parseInt(quantityInput.value);
-    if (!isNaN(currentValue)) {
-      quantityInput.value = currentValue + 1;
-      hideValidationMessage();
+  // Function to update the cart on the server
+  function updateCartQuantity(Id, quantity) {
+    fetch(`/user/update-cart`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content'), // Laravel CSRF token
+      },
+      body: JSON.stringify({
+        id: Id,
+        quantity: quantity,
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+
+      if (data.success) { 
+        location.reload();
+
+        console.log('Quantity updated successfully!');
+      } else {
+        // Handle errors
+        console.error('Failed to update quantity');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  }
+
+  // Function to decrement the quantity
+  function decrementQty(Id) {
+    const quantityInput = document.getElementById('quantity_' + Id); 
+    let currentValue = parseInt(quantityInput.value);
+
+    if (currentValue > 1) { // Prevent decrementing below 1 (if you don't want 0 quantities)
+      quantityInput.value = currentValue - 1;
+      updateCartQuantity(Id, quantityInput.value); // Save quantity after decrement
     }
   }
 
-  function decrementQty() {
-    const quantityInput = document.getElementById('quantity');
-    const currentValue = parseInt(quantityInput.value);
-    if (!isNaN(currentValue) && currentValue > 1) {
-      quantityInput.value = currentValue - 1;
-      hideValidationMessage();
-    } else {
-      showValidationMessage();
-    }
+  // Function to increment the quantity
+  function incrementQty(Id) {
+    const quantityInput = document.getElementById('quantity_' + Id);
+    let currentValue = parseInt(quantityInput.value) || 0; // Ensure a valid number
+
+    quantityInput.value = currentValue + 1; // Increment quantity
+    updateCartQuantity(Id, quantityInput.value); // Save quantity after increment
   }
 
   function showValidationMessage() {
@@ -609,24 +611,58 @@ timerElements.forEach((timerElement) => {
     const validationPopup = document.getElementById('validationPopup');
     validationPopup.classList.add('hidden');
   }
+  function confirmDelete(itemId) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "Do you want to remove this item?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch(`/user/cart`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+        },
+        body: JSON.stringify({
+          id: itemId
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Optional success message
+          Swal.fire(
+            'Deleted!',
+            'The cart item has been removed.',
+            'success'
+          ).then(() => {
+            location.reload(); // Reload after showing success
+          });
 
-  function confirmDelete() {
-    const deletePopup = document.getElementById('deletePopup');
-    deletePopup.classList.remove('hidden');
-  }
-
-  function closeDeletePopup() {
-    const deletePopup = document.getElementById('deletePopup');
-    deletePopup.classList.add('hidden');
-  }
-
-  function deleteItem() {
-    if (deleteId) {
-      const form = document.getElementById('deleteForm');
-      form.action = `/cart/${deleteId}`; // adjust if route prefix differs
-      form.submit();
+        } else {
+          Swal.fire(
+            'Error!',
+            'Failed to delete item.',
+            'error'
+          );
+        }
+      })
+      .catch(error => {
+        console.error("Delete error:", error);
+        Swal.fire(
+          'Error!',
+          'Something went wrong.',
+          'error'
+        );
+      });
     }
-  }
+  });
+}
 </script>
 
 @endpush

@@ -67,9 +67,32 @@ class HomeController extends Controller
                           ->where('status', 1)
                           ->get();                
 
-            $products = Product::where('status', 1)
-            ->where('herocarousel', 1)
-            ->get();    
+                          $products = Product::where('status', 1)
+                          ->with(['variants', 'reviews'])
+                          ->where('herocarousel', 1)
+                          ->get()
+                          ->map(function ($product) {
+                            $reviews =  $product->reviews; 
+                            $totalRatings = $reviews->sum('review_rating');
+                            $product->total_review = $reviews->count();
+                            $averageRating = $product->total_review > 0 ? $totalRatings / $product->total_review : 0;
+                            $product->average_rating = number_format($averageRating, 1);
+                            $minVariant = $product->variants->sortBy('unit_price')->first();
+                      
+                              if ($minVariant) {
+                                  $product->min_discounted_price = $minVariant->discounted_price;
+                                  $product->min_original_price = $minVariant->unit_price;
+                                  $product->min_discounted_percentage = number_format($minVariant->discounted_percentage);
+                              } else {
+                                  // Fallbacks if no variant found
+                                  $product->min_discounted_price = null;
+                                  $product->min_original_price = null;
+                                  $product->min_discounted_percentage = null;
+                              }
+                      
+                              return $product;
+                          });
+                          
            
             $countryCodes = Country::all(); 
 
