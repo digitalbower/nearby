@@ -77,7 +77,7 @@
                         <a href="{{ route('admin.locations.index') }}">
                             <span class="sub-item">Location Scope Management</span>
                         </a>
-                        </li>
+                        </li> 
                         <li>
                         <a href="{{ route('admin.footer.index') }}">
                             <span class="sub-item">Footer Management</span>
@@ -184,6 +184,11 @@
                                 <span class="sub-item">Review Report</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="{{route('admin.commission.commission')}}">
+                                <span class="sub-item">Commission Listing</span>
+                            </a>
+                        </li> 
                     </ul>
                     </div>
                 </li>

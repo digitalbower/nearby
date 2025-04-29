@@ -28,6 +28,23 @@
 </div>
 
 
+       <div class="mb-3">
+            <label class="form-label">Markup (%)</label>
+            <input type="text" class="form-control" name="markup" required>
+        </div>
+
+
+        <div class="mb-3">
+            <label class="form-label">commission (%)</label>
+            <input type="text" class="form-control" name="commission" required>
+        </div>
+
+        
+
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" name="enable_homecarousel" value="1">
+            <label class="form-check-label">Show in Home Carousel</label>
+        </div>
 
         <div class="mb-3 form-check">
             <input type="checkbox" class="form-check-input" name="status" value="1">

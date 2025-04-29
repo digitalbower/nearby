@@ -13,6 +13,8 @@ class Category extends Model
     'code',
     'categoryicon',
     'status',
+    'markup',
+    'commission',
     'enable_homecarousel'];
 
     public function subcategories()

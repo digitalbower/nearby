@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\Product\VendorController;
 use App\Http\Controllers\Admin\Product\VendorTermController;
 use App\Http\Controllers\Admin\NavigationMenuController;
 use App\Http\Controllers\Admin\Product\ProductVariantController;
+use App\Http\Controllers\Admin\CommissionController;;
 
 use App\Http\Controllers\Admin\LocationScopeController;
 use App\Http\Controllers\Admin\FooterController;
@@ -42,6 +43,7 @@ use App\Http\Controllers\User\StripePaymentController;
 use App\Http\Controllers\Vendor\BookingManagementController;
 use App\Http\Controllers\Vendor\PaymentManagementController;
 use App\Http\Controllers\Vendor\ReportManagementController;
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::post('/subscribe', [NewsletterController::class, 'subscribe'])->name('subscribe');
@@ -323,7 +325,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/{categoryUnitMaster}', [CategoryUnitMasterController::class, 'destroy'])->name('destroy'); 
     });
       
-     
+    Route::prefix('commission')->name('commission.')->group(function () {
+        Route::get('/', [CommissionController::class, 'commission'])->name('commission');
+       });
 
 
 

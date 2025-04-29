@@ -66,6 +66,8 @@ class ProductVariantController extends Controller
             'available_quantity' => 'required',
             'validity_from' => 'required',
             'validity_to' => 'required',
+            'markup' => 'required',
+            'agreement_unit_price'=> 'required',
         ]);
         $data = $request->all(); 
         if (isset($data['unit_price']) && isset($data['discounted_price']) && $data['unit_price'] > 0) {
@@ -120,6 +122,8 @@ class ProductVariantController extends Controller
             'available_quantity' => 'required',
             'validity_from' => 'required',
             'validity_to' => 'required',
+            'markup' => 'required',
+            'agreement_unit_price'=> 'required',
         ]);
         $data = $request->all(); 
         if ($request->timer_flag == 0) { 

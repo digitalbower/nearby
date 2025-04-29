@@ -79,7 +79,7 @@
                     <input type="hidden" name="short_info" id="short_info">
                 </div>
                 <div class="mb-3">
-                    <label for="unit_price" class="form-label">Unit Price</label>
+                    <label for="unit_price" class="form-label">Market Unit Price</label>
                     <input type="text" class="form-control" id="unit_price" name="unit_price" value="{{old('unit_price') }}">
                 </div>
                 <div class="mb-3">
@@ -89,9 +89,26 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="discounted_price" class="form-label">Discounted Price</label>
+                    <label for="discounted_price" class="form-label">Selling Unit Price</label>
                     <input type="text" class="form-control" id="discounted_price" name="discounted_price" value="{{old('discounted_price') }}">
                 </div>
+
+                <div class="mb-3">
+                    <label for="discounted_price" class="form-label">Market Unit Price</label>
+                    <input type="text" class="form-control" id="discounted_price" name="discounted_price" value="{{old('discounted_price') }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="markup" class="form-label">Markup (%)</label>
+                    <input type="text" class="form-control" id="markup" name="markup" value="{{old('markup') }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="agreement_unit_price" class="form-label">Agreement Unit Price</label>
+                    <input type="text" class="form-control" id="agreement_unit_price" name="agreement_unit_price" value="{{old('agreement_unit_price') }}">
+                </div>
+
+               
                 <div class="mb-3">
                     <label for="available_quantity" class="form-label">Available Quantity</label>
                     <input type="number" class="form-control" id="available_quantity" name="available_quantity" value="{{old('available_quantity') }}">

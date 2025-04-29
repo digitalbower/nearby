@@ -29,11 +29,13 @@ class CategoryController extends Controller
      * Store a newly created category in storage.
      */
     public function store(Request $request)
-    {
+    { dd($request->all());
         $request->validate([
             'name' => 'required|string|max:255',
             'categoryicon' => 'required|string',
             'status' => 'required|boolean',
+            'markup' => 'required',
+            'commission' => 'required',
             'enable_homecarousel' => 'required|boolean'
         ]);
 
@@ -41,6 +43,8 @@ class CategoryController extends Controller
         
         Category::create([
             'name' => $request->name,
+            'commission' => $request->commission,
+            'markup' => $request->markup,
             'code' => $uniqueCode,
             'categoryicon' => $request->categoryicon,
             'status' => $request->status,
@@ -54,7 +58,7 @@ class CategoryController extends Controller
      * Show the form for editing the specified category.
      */
     public function edit(Category $category)
-    {
+    { 
         return view('admin.categories.edit', compact('category'));
     }
 
@@ -62,11 +66,13 @@ class CategoryController extends Controller
      * Update the specified category in storage.
      */
     public function update(Request $request, Category $category)
-    {
+    { 
         $request->validate([
             'name' => 'required|string|max:255',
             'categoryicon' => 'required|string',
             'status' => 'required|boolean',
+            'commission' => 'required',
+            'markup' => 'required',
             'enable_homecarousel' => 'required|boolean'
         ]);
 

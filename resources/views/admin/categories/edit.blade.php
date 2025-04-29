@@ -27,6 +27,15 @@
         </select>
     </div>
 
+    <div class="mb-3">
+            <label class="form-label">Markup (%)</label>
+            <input type="text" class="form-control" name="markup" value="{{ $category->markup }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Commission (%)</label>
+            <input type="text" class="form-control" name="commission" value="{{ $category->commission }}" required>
+        </div>
 
         <div class="mb-3 form-check">
             <input type="checkbox" class="form-check-input" name="status" value="1" {{ $category->status ? 'checked' : '' }}>
