@@ -343,12 +343,32 @@ class ProductController extends Controller
        return view('user.cart', compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
        'followus','payment_channels','cartItems', 'totalAmount', 'totalQuantity','totalDays','end','total'));
     }
-
-    public function destroy($id)
+    public function updateCart(Request $request)
+    {
+        $id = $request->input('id');
+        $quantity = $request->input('quantity');
+    
+        $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]); 
+        $cart = Cart::find($id);
+        if ($cart) {
+            $cart->quantity =$quantity;
+            $cart->save();
+            return response()->json(['success' => true, 'message' => 'Cart item quantity updated.']);
+        }
+        else {
+            return response()->json(['success' => false, 'message' => 'Item not found.'], 404);
+        }
+    }
+    public function destroy(Request $request)
     { 
-        $item = Cart::findOrFail($id);
-        $item->delete();
-
-        return redirect()->back()->with('success', 'Item removed from cart.');
+        $item = Cart::find($request->id); 
+        if ($item) {
+            $item->delete();
+            return response()->json(['success' => true, 'message' => 'Cart item removed.']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Item not found.'], 404);
+        }
     }
 }

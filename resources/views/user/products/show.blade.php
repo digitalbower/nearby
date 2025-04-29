@@ -13,7 +13,6 @@
   }
   a {
     background-color: transparent !important;
-    color: blue !important;
   }
 </style>
 </style>

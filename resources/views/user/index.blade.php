@@ -1,70 +1,5 @@
 
 @extends('user.layouts.main')
-@push('scripts')
-<script>
-  tailwind.config = {
-    darkMode: "class",
-    theme: {
-      extend: {
-        colors: {
-          primary: {
-            50: "#f0f9ff",
-            100: "#e0f2fe",
-            200: "#bae6fd",
-            300: "#7dd3fc",
-            400: "#38bdf8",
-            500: "#0ea5e9",
-            600: "#0284c7",
-            700: "#0369a1",
-            800: "#075985",
-            900: "#0c4a6e",
-            950: "#0b2e4f",
-          },
-          background: "#ffffff",
-          foreground: "#000000",
-          muted: "#f3f4f6",
-          "muted-foreground": "#6b7280",
-          accent: "#fbbf24",
-          "accent-foreground": "#000000",
-        },
-      },
-      fontFamily: {
-        body: ["Poppins", "sans-serif"],  /* Set Poppins as the body font */
-        sans: [
-          "Arial",
-          "ui-sans-serif",
-          "system-ui",
-          "-apple-system",
-          "system-ui",
-          "Segoe UI",
-          "Roboto",
-          "Helvetica Neue",
-          "Arial",
-          "Noto Sans",
-          "sans-serif",
-          "Apple Color Emoji",
-          "Segoe UI Emoji",
-          "Segoe UI Symbol",
-          "Noto Color Emoji",
-        ],
-      },
-    },
-  };
-</script>
-
-<script>
-  window.onscroll = function() {
-    const header = document.getElementById('header');
-    const sticky = header.offsetTop;
-
-    if (window.pageYOffset > sticky) {
-      header.classList.add('fixed-header');
-    } else {
-      header.classList.remove('fixed-header');
-    }
-  };
-</script>
-@endpush
 @push('styles')
 <style>
   .to-blue-500 {
@@ -108,27 +43,6 @@
     border-radius: 50%;
     cursor: pointer;
   }
-
-  .swiper-pagination-bullet-active {
-    background-color: #2b3147 !important;
-    backdrop-filter: blur(10px);
-  }
-
-  .swiper-pagination {
-    color: #fff !important;
-    overflow: visible;
-    bottom: 10px !important;
-    z-index: 999999;
-  }
-
-  .swiper-pagination-bullet {
-
-    border-radius: 10px !important;
-    width: 60px !important;
-    height: 4px !important;
-  }
-</style>
-<style>
   .fixed-header {
      position: fixed;
      top: 0;
@@ -139,6 +53,212 @@
     
      z-index: 10;
      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+   }
+
+         /* Keyframes for slide-in animations */
+         @keyframes slideInTop {
+           0% {
+             transform: translateY(-100px);
+             opacity: 0;
+           }
+
+           100% {
+             transform: translateY(0);
+             opacity: 1;
+           }
+         }
+
+         @keyframes slideInBottom {
+           0% {
+             transform: translateY(100px);
+             opacity: 0;
+           }
+
+           100% {
+             transform: translateY(0);
+             opacity: 1;
+           }
+         }
+
+         /* Apply animations */
+         .animate-slideInTop {
+           animation: slideInTop 1s ease-out forwards;
+         }
+
+         .animate-slideInBottom {
+           animation: slideInBottom 1s ease-out forwards;
+         }
+     
+         .to-blue-500 {
+           --tw-gradient-to: #3b82f6 var(--tw-gradient-to-position);
+         }
+       
+         /* Update the body to use the Poppins font */
+         body {
+           font-family: 'Poppins', sans-serif;
+           font-weight: 400;
+         }
+       
+         .owl-stage-outer {
+           padding: 3px 0px;
+         }
+       
+         .w-8 {
+           width: 40px !important;
+         }
+       
+       
+       
+       
+         .bg-gradient-to-r {
+           background-image: linear-gradient(to right, var(--tw-gradient-stops));
+         }
+       
+         .bg-custom {
+           background: linear-gradient(135deg, #2b3147 0%, #1a1f2e 100%);
+         }
+       
+         .product-card {
+           background: linear-gradient(135deg, #3a4259 0%, #2b3147 100%);
+         }
+       
+         .color-dot {
+           width: 16px;
+           background-color: #000;
+           color: #000;
+           height: 16px;
+           border-radius: 50%;
+           cursor: pointer;
+         }
+       
+         .swiper-pagination-bullet-active {
+           background-color: #2b3147 !important;
+           backdrop-filter: blur(10px);
+         }
+       
+         .swiper-pagination {
+           color: #fff !important;
+           overflow: visible;
+           bottom: 10px !important;
+           z-index: 999999;
+         }
+       
+         .swiper-pagination-bullet {
+       
+           border-radius: 10px !important;
+           width: 60px !important;
+           height: 4px !important;
+         }
+       </style>
+        <style>
+          /* Custom Styles for Owl Carousel */
+          .owl-carousel {
+            position: relative;
+          }
+      
+          /* Center Left and Right Navigation Buttons */
+          .owl-prev,
+          .owl-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+      
+      
+            height: 50px;
+      
+            border-radius: 100% !important;
+            background-color: #fff !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+          }
+      
+          /* Adjust button positions */
+          .owl-prev {
+            right: 80px;
+            top: -45px;
+      
+          }
+      
+          .owl-prev,
+          .owl-next span {
+            font-size: 40px !important;
+            line-height: 40px !important;
+            color: #000 !important;
+          }
+      
+          .owl-next {
+            right: 10px;
+            top: -45px;
+          }
+      
+          /* Hover effect for buttons */
+          .owl-prev:hover,
+          .owl-next:hover {
+            background-color: #00bcd4;
+            /* Cyan */
+            color: white;
+          }
+      
+          /* Custom icon size adjustment */
+          .custom-left-icon,
+          .custom-right-icon {
+            width: 24px !important;
+            border-radius: 100%;
+            height: 24px !important;
+            color: #fff !important;
+            background-size: cover;
+            display: inline-block;
+          }
+      
+          /* Custom icons (you can add your own image or SVG) */
+          .custom-left-icon {
+            background-image: url('path-to-your-left-arrow-icon.svg');
+            /* Replace with your custom left icon */
+          }
+      
+          .owl-carousel .owl-dots.disabled,
+          .owl-carousel .owl-nav.disabled {
+            display: block;
+          }
+      
+          .custom-right-icon {
+            background-image: url('path-to-your-right-arrow-icon.svg');
+            /* Replace with your custom right icon */
+          }
+      
+          @media (max-width: 768px) {
+      
+            .owl-prev,
+            .owl-next {
+              width: 40px;
+              height: 40px;
+            }
+      
+            .owl-prev {
+              right: 60px;
+      
+      
+            }
+      
+            .owl-prev {
+              top: -35px;
+      
+            }
+      
+            .owl-next {
+      
+              top: -35px;
+            }
+      
+            .owl-prev,
+            .owl-next span {
+              font-size: 25px !important;
+            }
    }
    </style>
    
@@ -193,16 +313,7 @@
           </div>
         </aside>
 
-        @push('scripts')
-        <script>
-          const menuToggle = document.getElementById('menuToggle');
-          const menuContent = document.getElementById('menuContent');
 
-          menuToggle.addEventListener('click', () => {
-            menuContent.classList.toggle('hidden');
-          });
-        </script>
-        @endpush
         <main class="lg:col-span-4 lg:order-2 order-2 sm:col-span-3 h-full lg:p-10 py-4 relative px-4">
           <div class="swiper mySwiper w-full h-full">
             <div class="swiper-wrapper">
@@ -231,8 +342,10 @@
                         {{ $product->productlocation_address ?? 'Dubai, UAE' }}
                     </h2>
                     <div class="flex items-center space-x-2 text-gray-600">
-                        <span class="text-yellow-400 text-2xl">★★★★☆</span>
-                        <span class="text-sm">(4.8 / 1,234 reviews)</span> {{-- Hardcoded for now --}}
+                        @for ($i = 0; $i < 5; $i++)
+                        <span class="fas fa-star {{ $i < floor($product->average_rating) ? 'text-yellow-400' : 'text-gray-300' }}"></span>
+                        @endfor
+                        <span class="text-sm">({{ $product->average_rating}} / {{$product->total_review}} reviews)</span> 
                     </div>
                 </div>
 
@@ -242,22 +355,24 @@
 
                 <div class="flex items-center space-x-4">
                     <span class="text-3xl font-bold text-red-600">
-                        {{ $product->sale_price ?? '$19.99' }} {{-- Replace with real pricing logic --}}
+                       AED  {{$product->min_discounted_price  }} 
                     </span>
                     <span class="text-xl text-gray-400 line-through">
-                        {{ $product->original_price ?? '$79.29' }} {{-- Replace with real original price --}}
+                      AED  {{ $product->min_original_price   }} 
                     </span>
                 </div>
 
                 <span class="text-lg text-green-600 font-semibold">
-                    {{ isset($product->sale_price, $product->original_price) ? '-' . round((($product->original_price - $product->sale_price) / $product->original_price) * 100) . '%' : '-75%' }}
+                    {{ $product->min_discounted_percentage }} %
                 </span>
 
                 <div>
+                  <a href="{{route('user.products.show',$product->id)}}">
                     <button
-                        class="w-auto px-9 py-3 bg-[#58af0838] text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:bg-[#4a910954]">
-                        ADD TO CART
+                      class="w-auto px-9 py-3 bg-[#58af0838] text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:bg-[#4a910954]">
+                      VIEW MORE
                     </button>
+                  </a>
                 </div>
             </div>
         </div>
@@ -271,93 +386,7 @@
             </div>
             <div class="swiper-pagination"></div>
           </div>
-          @push('scripts')
-          <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-          <script>
-            // Initialize Swiper
-            var swiper = new Swiper(".mySwiper", {
-              loop: true,
-              autoplay: {
-                delay: 3000,
-                disableOnInteraction: false,
-              },
-              pagination: {
-                el: ".swiper-pagination",
-                clickable: true,
-              },
-              navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-              },
-            });
-
-            // IntersectionObserver to trigger animations when sections are in view
-            const observerOptions = {
-              root: null, // Observing within the viewport
-              rootMargin: "0px",
-              threshold: 0.5, // Trigger when 50% of the element is in view
-            };
-
-            const sections = document.querySelectorAll('#left-section, #right-section');
-
-            const animateSectionInView = (entries, observer) => {
-              entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                  if (entry.target.id === 'left-section') {
-                    entry.target.classList.add('animate-slideInTop'); // Trigger top animation for left section
-                  } else if (entry.target.id === 'right-section') {
-                    entry.target.classList.add('animate-slideInBottom'); // Trigger bottom animation for right section
-                  }
-                  observer.unobserve(entry.target);
-                }
-              });
-            };
-
-            const observer = new IntersectionObserver(animateSectionInView, observerOptions);
-
-            sections.forEach(section => {
-              observer.observe(section);
-            });
-          </script>
-          @endpush
         </main>
-        @push('styles')
-        <style>
-          /* Keyframes for slide-in animations */
-          @keyframes slideInTop {
-            0% {
-              transform: translateY(-100px);
-              opacity: 0;
-            }
-
-            100% {
-              transform: translateY(0);
-              opacity: 1;
-            }
-          }
-
-          @keyframes slideInBottom {
-            0% {
-              transform: translateY(100px);
-              opacity: 0;
-            }
-
-            100% {
-              transform: translateY(0);
-              opacity: 1;
-            }
-          }
-
-          /* Apply animations */
-          .animate-slideInTop {
-            animation: slideInTop 1s ease-out forwards;
-          }
-
-          .animate-slideInBottom {
-            animation: slideInBottom 1s ease-out forwards;
-          }
-        </style>
-        @endpush
       </div>
     </div>
   </section>
@@ -478,49 +507,6 @@
                   </div>
                   @endif
                 </div>
-                @push('scripts')
-                <script>
-                  document.addEventListener('DOMContentLoaded', function () {
-                    const timers = document.querySelectorAll('.countdown-timer:not(.cloned)');
-
-                    timers.forEach(timer => {
-                      const endTimeStr = timer.dataset.endtime;
-                      const endTime = new Date(endTimeStr);
-
-                      // Get variant ID from one of the span IDs (e.g., "days-123")
-                      const variantId = timer.querySelector('span[id^="days-"]').id.split('-')[1];
-
-                      const daysEl = document.getElementById(`days-${variantId}`);
-                      const hoursEl = document.getElementById(`hours-${variantId}`);
-                      const minutesEl = document.getElementById(`minutes-${variantId}`);
-                      const secondsEl = document.getElementById(`seconds-${variantId}`);
-
-                      function update() {
-                        const now = new Date();
-                        const diff = endTime - now;
-
-                        if (diff <= 0) {
-                          daysEl.textContent = hoursEl.textContent = minutesEl.textContent = secondsEl.textContent = '00';
-                          return;
-                        }
-
-                        const days = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-                        const hours = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-                        const minutes = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                        const seconds = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
-
-                        daysEl.textContent = days;
-                        hoursEl.textContent = hours;
-                        minutesEl.textContent = minutes;
-                        secondsEl.textContent = seconds;
-                      }
-
-                      update();
-                      setInterval(update, 1000);
-                    });
-                  });
-                </script>
-                @endpush
               </div>
 
               <!-- Product Details -->
@@ -627,49 +613,6 @@
                 </div>
                 @endif
               </div>
-              @push('scripts')
-              <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                  const timers = document.querySelectorAll('.countdown-timer:not(.cloned)');
-
-                  timers.forEach(timer => {
-                    const endTimeStr = timer.dataset.endtime;
-                    const endTime = new Date(endTimeStr);
-
-                    // Get variant ID from one of the span IDs (e.g., "days-123")
-                    const variantId = timer.querySelector('span[id^="days-"]').id.split('-')[1];
-
-                    const daysEl = document.getElementById(`days-${variantId}`);
-                    const hoursEl = document.getElementById(`hours-${variantId}`);
-                    const minutesEl = document.getElementById(`minutes-${variantId}`);
-                    const secondsEl = document.getElementById(`seconds-${variantId}`);
-
-                    function update() {
-                      const now = new Date();
-                      const diff = endTime - now;
-
-                      if (diff <= 0) {
-                        daysEl.textContent = hoursEl.textContent = minutesEl.textContent = secondsEl.textContent = '00';
-                        return;
-                      }
-
-                      const days = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-                      const hours = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-                      const minutes = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                      const seconds = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
-
-                      daysEl.textContent = days;
-                      hoursEl.textContent = hours;
-                      minutesEl.textContent = minutes;
-                      secondsEl.textContent = seconds;
-                    }
-
-                    update();
-                    setInterval(update, 1000);
-                  });
-                });
-              </script>
-              @endpush
             </div>
 
             <!-- Content Section -->
@@ -763,169 +706,6 @@
   </form>
 </section>
 
-@push('scripts')
- 
-<script>
-  function toggleFooterSection(sectionId) {
-    const section = document.getElementById(sectionId);
-    const icon = document.getElementById(`${sectionId}-icon`);
-    if (section.classList.contains('hidden')) {
-      section.classList.remove('hidden');
-      icon.classList.remove('fa-chevron-down');
-      icon.classList.add('fa-chevron-up');
-    } else {
-      section.classList.add('hidden');
-      icon.classList.remove('fa-chevron-up');
-      icon.classList.add('fa-chevron-down');
-    }
-  }
-</script><script>
-    $(document).ready(function () {
-      $(".owl-carousel").owlCarousel({
-        items: 1,
-        loop: true,
-        margin: 16,
-        nav: true,  // Enable navigation
-        dots: true, // Enable dots pagination
-        autoplay: false,
-        autoplayTimeout: 3000,
-        responsive: {
-          0: {
-            items: 1
-          },
-          600: {
-            items: 2
-          },
-          1000: {
-            nav: true,
-            items: 4
-          }
-        }
-      });
-    });
-    $(document).ready(function () {
-      $(".owl-carousel1").owlCarousel({
-        items: 1,
-        loop: true,
-        margin: 16,
-        nav: true,  // Enable navigation
-        dots: true, // Enable dots pagination
-        autoplay: false,
-        autoplayTimeout: 3000,
-        responsive: {
-          0: {
-            items: 1
-          },
-          600: {
-            items: 2
-          },
-          1000: {
-            items: 4,
-            nav: true
-          }
-        }
-      });
-    });
-  </script>
-
-
-<script>
-  const toggle = document.getElementById("mobile-menu-toggle");
-  const menu = document.getElementById("mobile-menu"); // Ensure this matches the id in the HTML
-  toggle.addEventListener("click", () => {
-    menu.classList.toggle("hidden");
-  });
-</script>
-
-<script>
-  const dropdown = document.getElementById("dropdown");
-
-  function showDropdown() {
-    dropdown.classList.remove("hidden");
-  }
-
-  function toggleDropdown() {
-    dropdown.classList.toggle("hidden");
-  }
-
-  // Hide dropdown when clicking outside
-  document.addEventListener("click", (event) => {
-    if (
-      !event.target.closest("#dropdown") &&
-      !event.target.closest("#search-input") &&
-      !event.target.closest("button")
-    ) {
-      dropdown.classList.add("hidden");
-    }
-  });
-</script>
-@endpush
-  @push('styles')
-  <style>
-    .to-blue-500 {
-      --tw-gradient-to: #3b82f6 var(--tw-gradient-to-position);
-    }
-  
-    /* Update the body to use the Poppins font */
-    body {
-      font-family: 'Poppins', sans-serif;
-      font-weight: 400;
-    }
-  
-    .owl-stage-outer {
-      padding: 3px 0px;
-    }
-  
-    .w-8 {
-      width: 40px !important;
-    }
-  
-  
-  
-  
-    .bg-gradient-to-r {
-      background-image: linear-gradient(to right, var(--tw-gradient-stops));
-    }
-  
-    .bg-custom {
-      background: linear-gradient(135deg, #2b3147 0%, #1a1f2e 100%);
-    }
-  
-    .product-card {
-      background: linear-gradient(135deg, #3a4259 0%, #2b3147 100%);
-    }
-  
-    .color-dot {
-      width: 16px;
-      background-color: #000;
-      color: #000;
-      height: 16px;
-      border-radius: 50%;
-      cursor: pointer;
-    }
-  
-    .swiper-pagination-bullet-active {
-      background-color: #2b3147 !important;
-      backdrop-filter: blur(10px);
-    }
-  
-    .swiper-pagination {
-      color: #fff !important;
-      overflow: visible;
-      bottom: 10px !important;
-      z-index: 999999;
-    }
-  
-    .swiper-pagination-bullet {
-  
-      border-radius: 10px !important;
-      width: 60px !important;
-      height: 4px !important;
-    }
-  </style>
-  
-  
-  @endpush
 
   
 <!-- Modal Structure -->
@@ -998,6 +778,246 @@
 </div>
 @endsection
 @push('scripts')
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          primary: {
+            50: "#f0f9ff",
+            100: "#e0f2fe",
+            200: "#bae6fd",
+            300: "#7dd3fc",
+            400: "#38bdf8",
+            500: "#0ea5e9",
+            600: "#0284c7",
+            700: "#0369a1",
+            800: "#075985",
+            900: "#0c4a6e",
+            950: "#0b2e4f",
+          },
+          background: "#ffffff",
+          foreground: "#000000",
+          muted: "#f3f4f6",
+          "muted-foreground": "#6b7280",
+          accent: "#fbbf24",
+          "accent-foreground": "#000000",
+        },
+      },
+      fontFamily: {
+        body: ["Poppins", "sans-serif"],  /* Set Poppins as the body font */
+        sans: [
+          "Arial",
+          "ui-sans-serif",
+          "system-ui",
+          "-apple-system",
+          "system-ui",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica Neue",
+          "Arial",
+          "Noto Sans",
+          "sans-serif",
+          "Apple Color Emoji",
+          "Segoe UI Emoji",
+          "Segoe UI Symbol",
+          "Noto Color Emoji",
+        ],
+      },
+    },
+  };
+</script>
+
+<script>
+  const menuToggle = document.getElementById('menuToggle');
+  const menuContent = document.getElementById('menuContent');
+
+  menuToggle.addEventListener('click', () => {
+    menuContent.classList.toggle('hidden');
+  });
+</script>
+
+<script>
+  window.onscroll = function() {
+    const header = document.getElementById('header');
+    const sticky = header.offsetTop;
+
+    if (window.pageYOffset > sticky) {
+      header.classList.add('fixed-header');
+    } else {
+      header.classList.remove('fixed-header');
+    }
+  };
+</script>
+<script>
+            // Initialize Swiper
+            var swiper = new Swiper(".mySwiper", {
+              loop: true,
+              autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+              },
+              pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+              },
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+              },
+            });
+
+            // IntersectionObserver to trigger animations when sections are in view
+            const observerOptions = {
+              root: null, // Observing within the viewport
+              rootMargin: "0px",
+              threshold: 0.5, // Trigger when 50% of the element is in view
+            };
+
+            const sections = document.querySelectorAll('#left-section, #right-section');
+
+            const animateSectionInView = (entries, observer) => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  if (entry.target.id === 'left-section') {
+                    entry.target.classList.add('animate-slideInTop'); // Trigger top animation for left section
+                  } else if (entry.target.id === 'right-section') {
+                    entry.target.classList.add('animate-slideInBottom'); // Trigger bottom animation for right section
+                  }
+                  observer.unobserve(entry.target);
+                }
+              });
+            };
+
+            const observer = new IntersectionObserver(animateSectionInView, observerOptions);
+
+            sections.forEach(section => {
+              observer.observe(section);
+            });
+</script>
+<script>
+  function toggleFooterSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    const icon = document.getElementById(`${sectionId}-icon`);
+    if (section.classList.contains('hidden')) {
+      section.classList.remove('hidden');
+      icon.classList.remove('fa-chevron-down');
+      icon.classList.add('fa-chevron-up');
+    } else {
+      section.classList.add('hidden');
+      icon.classList.remove('fa-chevron-up');
+      icon.classList.add('fa-chevron-down');
+    }
+  }
+</script>
+  <script>
+function initCountdownTimers() {
+  const timers = document.querySelectorAll('.countdown-timer:not(.cloned)');
+
+  timers.forEach(timer => {
+    const endTimeStr = timer.dataset.endtime;
+    const endTime = new Date(endTimeStr);
+
+    const daysEl = timer.querySelector('[id^="days-"]');
+    const hoursEl = timer.querySelector('[id^="hours-"]');
+    const minutesEl = timer.querySelector('[id^="minutes-"]');
+    const secondsEl = timer.querySelector('[id^="seconds-"]');
+
+    function update() {
+      const now = new Date();
+      const diff = endTime - now;
+
+      if (diff <= 0) {
+        daysEl.textContent = '00';
+        hoursEl.textContent = '00';
+        minutesEl.textContent = '00';
+        secondsEl.textContent = '00';
+        return;
+      }
+
+      const days = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+      const hours = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+      const minutes = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+      const seconds = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+
+      daysEl.textContent = days;
+      hoursEl.textContent = hours;
+      minutesEl.textContent = minutes;
+      secondsEl.textContent = seconds;
+    }
+
+    update();
+    setInterval(update, 1000);
+
+    timer.classList.add('cloned');
+  });
+}
+
+$(document).ready(function () {
+  $(".owl-carousel, .owl-carousel1").owlCarousel({
+    items: 1,
+    loop: true,
+    margin: 16,
+    nav: true,
+    dots: true,
+    autoplay: false,
+    autoplayTimeout: 3000,
+    responsive: {
+      0: {
+        items: 1
+      },
+      600: {
+        items: 2
+      },
+      1000: {
+        items: 4
+      }
+    },
+    onInitialized: function () {
+      initCountdownTimers(); // run once after carousel is loaded
+    },
+    onChanged: function () {
+      setTimeout(initCountdownTimers, 50); // run after slide change (use timeout to allow DOM to update)
+    }
+  });
+
+  // Also run on page load
+  initCountdownTimers();
+});
+</script>
+
+<script>
+  const toggle = document.getElementById("mobile-menu-toggle");
+  const menu = document.getElementById("mobile-menu"); // Ensure this matches the id in the HTML
+  toggle.addEventListener("click", () => {
+    menu.classList.toggle("hidden");
+  });
+</script>
+
+<script>
+  const dropdown = document.getElementById("dropdown");
+
+  function showDropdown() {
+    dropdown.classList.remove("hidden");
+  }
+
+  function toggleDropdown() {
+    dropdown.classList.toggle("hidden");
+  }
+
+  // Hide dropdown when clicking outside
+  document.addEventListener("click", (event) => {
+    if (
+      !event.target.closest("#dropdown") &&
+      !event.target.closest("#search-input") &&
+      !event.target.closest("button")
+    ) {
+      dropdown.classList.add("hidden");
+    }
+  });
+</script>
+
 <script>
   // Get modal and button elements
   const openModalButton = document.getElementById('openModalButton');
