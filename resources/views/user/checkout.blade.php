@@ -209,8 +209,6 @@
 @endpush
 @section('content')
   <main class="flex-grow bg-[#58af0838]  px-4 lg:px-10 py-8">
-    <form method="POST" action="{{route('user.checkout_booking') }}" id="bookingForm">
-      @csrf
     <div class="grid container mx-auto md:grid-cols-3 md:space-x-6">
         <div class="md:col-span-2  space-y-6 overflow-hidden">
           {{-- <div class="bg-[#58af0838]  rounded-xl px-4 p-2 lg:p-7">
@@ -399,7 +397,7 @@
             </div>
 
             <button
-              class="md:inline-flex hidden items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 h-10 px-4 py-2 w-full mt-6 bg-[#58af0838]  text-black">
+              class="md:inline-flex hidden items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 h-10 px-4 py-2 w-full mt-6 bg-[#58af0838]  text-black pay-now-button">
               <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="lock"
                 class="svg-inline--fa fa-lock mr-2" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                 <path fill="currentColor"
@@ -418,47 +416,54 @@
           <h2 class="text-2xl font-semibold mb-6">Payment</h2>
           <div class="space-y-6">
             <div class="space-y-4" id="paymentDetails">
-              {{-- <form id="stripePaymentForm" method="POST" action="{{ route('user.checkout.session') }}">
-                @csrf --}}
-                <div class="space-y-6">
-                  <input type="hidden" name="amount" value="{{ $total }}">
-                  <div>
-                    <label for="cardNumber" class="block text-sm font-semibold text-gray-800">Card Number</label>
-                    <div class="mt-2 relative rounded-lg border border-gray-300 focus-within:ring-2 focus-within:ring-[#000]">
-                      <input type="text" id="cardNumber" name="cardnumber" maxlength="16" minlength="16" pattern="\d{12,19}" class="block w-full px-4 py-3 text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] rounded-lg" placeholder="1234 5678 9012 3456" required>
-                      <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
-                        <i class="fas fa-credit-card text-gray-500"></i>
-                      </div>
-                      <div id="cardNumberError" class="text-sm text-red-600 mt-1 hidden">Please enter a valid card number (12–19 digits).</div>
-                    </div>
+              <div class="space-y-6">
+                <input type="hidden" name="amount" id="amount" value="{{ $total }}">
+              
+                <!-- Card Number -->
+                <div>
+                  <label for="cardNumber" class="block text-sm font-semibold text-gray-800">Card Number</label>
+                  <div class="mt-2 relative rounded-lg border border-gray-300 focus-within:ring-2 focus-within:ring-[#000] px-4 py-3" id="card-number-element">
+                    <!-- Stripe will mount card number here -->
                   </div>
-                  <div class="grid grid-cols-2 gap-4">
-                    <div>
-                      <label for="expDate" class="block text-sm font-semibold text-gray-800">Expiration Date</label>
-                      <input type="text" id="expDate"  maxlength="7" pattern="(0[1-9]|1[0-2]) \/ \d{2}" name="expDate" class="mt-2 block w-full px-4 py-3 border text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] border-gray-300 rounded-lg" placeholder="MM / YY" required>
-                      <div id="expDateError" class="text-sm text-red-600 mt-1 hidden">Enter valid future date in MM / YY format</div>
-                    </div>
-
-                    <div>
-                      <label for="cvv" class="block text-sm font-semibold text-gray-800">CVV</label>
-                      <input type="text" id="cvv" name="cvv"  maxlength="4" pattern="\d{3,4}" class="mt-2 block w-full px-4 py-3 border text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#000] border-gray-300 rounded-lg" placeholder="123" required>
-                      <div id="cvvError" class="text-sm text-red-600 mt-1 hidden">Enter a valid 3 or 4 digit CVV</div>
-                    </div>
+                  <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+                    <i class="fas fa-credit-card text-gray-500"></i>
                   </div>
-    
-                  <button type="submit"
-                    class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium h-10 px-4 py-2 w-full mt-6 bg-[#58af0838] text-black shadow hover:shadow-md transition">
-                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="lock"
-                      class="svg-inline--fa fa-lock mr-2" role="img" xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 448 512" width="16" height="16">
-                      <path fill="currentColor"
-                        d="M144 144v48h160v-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192v-48C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64v192c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64h16z">
-                      </path>
-                    </svg>
-                    Complete Payment
-                  </button>
+                  <div id="cardNumberError" class="text-sm text-red-600 mt-1 hidden">Please enter a valid card number.</div>
                 </div>
-              {{-- </form> --}}
+              
+                <!-- Expiry and CVV -->
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label for="expDate" class="block text-sm font-semibold text-gray-800">Expiration Date</label>
+                    <div class="mt-2 px-4 py-3 border border-gray-300 rounded-lg" id="card-expiry-element">
+                      <!-- Stripe will mount expiry here -->
+                    </div>
+                    <div id="expDateError" class="text-sm text-red-600 mt-1 hidden">Invalid expiration date.</div>
+                  </div>
+              
+                  <div>
+                    <label for="cvv" class="block text-sm font-semibold text-gray-800">CVV</label>
+                    <div class="mt-2 px-4 py-3 border border-gray-300 rounded-lg" id="card-cvc-element">
+                      <!-- Stripe will mount CVV here -->
+                    </div>
+                    <div id="cvvError" class="text-sm text-red-600 mt-1 hidden">Invalid CVV.</div>
+                  </div>
+                </div>
+              
+                <!-- Submit -->
+                <button
+                  class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium h-10 px-4 py-2 w-full mt-6 bg-[#58af0838] text-black shadow hover:shadow-md transition pay-now-button">
+                  <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="lock"
+                    class="svg-inline--fa fa-lock mr-2" role="img" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512" width="16" height="16">
+                    <path fill="currentColor"
+                      d="M144 144v48h160v-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192v-48C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64v192c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64h16z">
+                    </path>
+                  </svg>
+                  Complete Payment
+                </button>
+              </div>
+                <div id="card-errors" class="text-red-600 mt-2 text-sm hidden"></div>
             </div>
         
            
@@ -469,11 +474,11 @@
         </div>
     
       </div>
-      <input type="hidden" name="booking_amount" value="{{ $bookingAmount }}">
-      <input type="hidden" name="voucher_savings" value="{{ $voucherSavings }}">
-      <input type="hidden" name="vat_amount" value="{{ $vat }}">
-      <input type="hidden" name="total_amount" value="{{ $total }}">
-      <input type="hidden" name="order_id" value="{{ $order_id }}">
+      <input type="hidden" name="booking_amount" id="booking_amount" value="{{ $bookingAmount }}">
+      <input type="hidden" name="voucher_savings" id="voucher_savings" value="{{ $voucherSavings }}">
+      <input type="hidden" name="vat_amount" id="vat_amount" value="{{ $vat }}">
+      <input type="hidden" name="total_amount" id="total_amount" value="{{ $total }}">
+      <input type="hidden" name="order_id" id="order_id" value="{{ $order_id }}">
 
       <div class="md:mt-0 mt-4 md:block hidden mb-5 md:mb-0">
         <div class="bg-white rounded-xl shadow p-6 sticky top-4">
@@ -567,7 +572,7 @@
           </div>
 
           <button
-            class="md:inline-flex hidden items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 h-10 px-4 py-2 w-full mt-6 bg-[#58af0838]  text-black">
+            class="md:inline-flex hidden items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 h-10 px-4 py-2 w-full mt-6 bg-[#58af0838]  text-black pay-now-button">
             <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="lock"
               class="svg-inline--fa fa-lock mr-2" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
               <path fill="currentColor"
@@ -585,48 +590,191 @@
 
       </div>
     </div>
-      </form>
+    
   </main>
 
 @endsection
-
-@push('scripts')
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-  const stripe = Stripe('{{ env('STRIPE_KEY') }}');
+  const stripePublicKey = "{{ env('STRIPE_KEY') }}";  // Note the quotes
+
+</script>
+
+<script>
+ document.addEventListener("DOMContentLoaded", function () {
+  const stripe = Stripe(stripePublicKey);
   const elements = stripe.elements();
-  const card = elements.create('card');
-  card.mount('#card-element');
+  const style = {
+    base: {
+      fontSize: '14px',
+      color: '#1f2937',
+      fontFamily: 'inherit',
+      '::placeholder': { color: '#9ca3af' },
+    },
+    invalid: { color: '#ef4444' },
+  };
 
-  const form = document.getElementById('bookingForm');
-  form.addEventListener('submit', async (event) => {
-      event.preventDefault();
+  const cardNumber = elements.create('cardNumber', { style });
+  const cardExpiry = elements.create('cardExpiry', { style });
+  const cardCvc = elements.create('cardCvc', { style });
 
-      const {clientSecret} = await fetch('{{ route('user.checkout_booking') }}', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-              'X-CSRF-TOKEN': document.querySelector('[name="csrf-token"]').content,
-          },
-          body: JSON.stringify({amount: 1000}),
-      }).then((res) => res.json());
+  cardNumber.mount('#card-number-element');
+  cardExpiry.mount('#card-expiry-element');
+  cardCvc.mount('#card-cvc-element');
 
-      const {error, paymentIntent} = await stripe.confirmCardPayment(clientSecret, {
-          payment_method: {
-              card: card,
-              billing_details: {
-                  name: 'Cardholder Name',
-              },
-          },
+  function clearErrorOnInputChange(element) {
+  element.on('change', function(event) {
+    const errorElement = document.getElementById("card-errors");
+    if (event.error) {
+      errorElement.textContent = event.error.message;
+      errorElement.classList.remove("hidden");
+    } else {
+      errorElement.textContent = "";
+      errorElement.classList.add("hidden");
+    }
+  });
+}
+
+clearErrorOnInputChange(cardNumber);
+clearErrorOnInputChange(cardExpiry);
+clearErrorOnInputChange(cardCvc);
+
+
+  async function handlePayment() {
+    const amountElement = document.getElementById("amount");
+    const orderIdElement = document.getElementById("order_id");
+    const bookingAmountElement = document.getElementById("booking_amount");
+    const voucherSavingsElement = document.getElementById("voucher_savings");
+    const totalAmountElement = document.getElementById("total_amount");
+    const vatAmountElement = document.getElementById("vat_amount");
+
+    // Check if the required elements exist
+    if (!amountElement || !orderIdElement || !bookingAmountElement || !voucherSavingsElement || !totalAmountElement || !vatAmountElement) {
+        showError("Please enter card details");
+        return;
+    }
+
+    const amount = amountElement.value;
+    const order_id = orderIdElement.value;
+    const booking_amount = bookingAmountElement.value;
+    const voucher_savings = voucherSavingsElement.value;
+    const total_amount = totalAmountElement.value;
+    const vat_amount = vatAmountElement.value;
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
+      showError("Invalid amount.");
+      return;
+    }
+    if (!order_id) {
+      showError("Order ID is missing.");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/stripe/create-payment-intent", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": csrfToken,
+        },
+        body: JSON.stringify({ amount: Math.round(parseFloat(amount) * 100) })
       });
 
-      if (error) {
-          console.error(error.message);
-      } else if (paymentIntent.status === 'succeeded') {
-          console.log('Payment succeeded');
+      const { client_secret } = await res.json();
+      if (!client_secret) throw new Error("No client secret received.");
+
+      const { paymentIntent, error } = await stripe.confirmCardPayment(client_secret, {
+        payment_method: {
+          card: cardNumber,
+          billing_details: { name }
+        }
+      });
+
+      if (error || paymentIntent.status !== "succeeded") {
+        throw new Error(error?.message || "Payment failed.");
       }
+
+      if (paymentIntent.status === "succeeded") {
+        const items = collectItems();
+        const finalizeRes = await fetch("/api/stripe/finalize-booking", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": csrfToken,
+          },
+          body: JSON.stringify({
+            payment_intent_id: paymentIntent.id,
+            order_id,
+            booking_amount,
+            voucher_savings,
+            total_amount,
+            vat_amount,
+            items,
+          })
+        });
+
+        const result = await finalizeRes.json();
+        if (result.success) {
+          console.log("Booking complete!");
+          window.location.href = "/user/bookingconfirmation";
+        } else {
+          showError("Booking failed: " + result.error);
+        }
+      }
+
+    } catch (err) {
+      console.error("Payment error:", err);
+      showError(err.message);
+    }
+  }
+
+  function showError(message) {
+    console.log("Showing error:", message); 
+    const errorElement = document.getElementById("card-errors");
+    if (!errorElement) return console.error("Missing #card-errors element in HTML");
+    errorElement.textContent = message;
+    errorElement.classList.remove("hidden");
+  }
+
+  // Add the 'async' keyword here
+  document.querySelectorAll(".pay-now-button").forEach(button => {
+    button.addEventListener("click", async (event) => { 
+      event.preventDefault();
+       handlePayment();  
+    });
   });
+});
+
+function collectItems() {
+  const itemInputs = document.querySelectorAll("[id^='quantity_']");
+  const items = {};
+
+  itemInputs.forEach((input) => {
+    const variantId = input.dataset.variantId;
+    const quantity = parseInt(input.value, 10);
+    const unitPrice = parseFloat(
+      document.querySelector(`input[name="items[${variantId}][unit_price]"]`).value
+    );
+    const totalPrice = parseFloat(
+      document.querySelector(`input[name="items[${variantId}][total_price]"]`).value
+    );
+    const giftCheckbox = document.querySelector(`input[name="items[${variantId}][giftproduct]"]:checked`);
+    const giftproduct = giftCheckbox ? 1 : 0;
+
+    items[variantId] = {
+      quantity,
+      unit_price: unitPrice,
+      total_price: totalPrice,
+      giftproduct,
+    };
+  });
+
+  return items;
+}
+
 </script>
+@push('scripts')
 <script>
  let products = [];
   let visibleCount = 2;
@@ -648,20 +796,6 @@
     });
 
     renderProducts(); // Initial render
- 
-    document.getElementById("bookingForm").addEventListener("submit", function (e) {
-        // Prevent instant submit
-        e.preventDefault();
-
-        // Render all remaining products
-        visibleCount = products.length;
-        renderProducts();
-
-        // Wait for DOM update to finish, then submit
-        setTimeout(() => {
-          this.submit();
-        }, 50); // Small delay to ensure rendering is complete
-      });
   });
   function renderProducts() { 
     const renderedCount = productList.querySelectorAll('.product-item').length;
@@ -1008,6 +1142,9 @@ function contactInformation() {
   }
 
   // Hide dropdown when clicking outside
+  document.addEventListener("DOMContentLoaded", () => {
+  const dropdown = document.getElementById("dropdown");
+
   document.addEventListener("click", (event) => {
     if (
       !event.target.closest("#dropdown") &&
@@ -1017,6 +1154,7 @@ function contactInformation() {
       dropdown.classList.add("hidden");
     }
   });
+});
 </script>
 <script>
   function toggleFooterSection(sectionId) {
@@ -1116,85 +1254,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </script>
 
-<script>
-document.getElementById('cvv').addEventListener('input', function (e) {
-    e.target.value = e.target.value.replace(/\D/g, ''); // Only digits
-});
-
-document.getElementById('bookingForm').addEventListener('submit', function (e) {
-    const cvvInput = document.getElementById('cvv');
-    const cvvError = document.getElementById('cvvError');
-    const cvv = cvvInput.value.trim();
-
-    if (!/^\d{3,4}$/.test(cvv)) {
-        e.preventDefault();
-        cvvError.classList.remove('hidden');
-    } else {
-        cvvError.classList.add('hidden');
-    }
-});
-</script>
-
-<script>
-document.getElementById('expDate').addEventListener('input', function (e) {
-    // Only allow digits and slash
-    e.target.value = e.target.value.replace(/[^0-9\/]/g, '');
-
-    // Auto-format MM / YY
-    let val = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/g, '');
-    if (val.length >= 2) {
-        e.target.value = val.substring(0, 2) + ' / ' + val.substring(2, 4);
-    }
-});
-
-document.getElementById('bookingForm').addEventListener('submit', function (e) {
-    const expInput = document.getElementById('expDate');
-    const errorEl = document.getElementById('expDateError');
-    const expVal = expInput.value.trim();
-
-    const match = expVal.match(/^(0[1-9]|1[0-2]) \/ (\d{2})$/);
-    if (!match) {
-        e.preventDefault();
-        errorEl.classList.remove('hidden');
-        return;
-    }
-
-    const inputMonth = parseInt(match[1], 10);
-    const inputYear = parseInt('20' + match[2], 10);
-
-    const now = new Date();
-    const currentMonth = now.getMonth() + 1;
-    const currentYear = now.getFullYear();
-
-    if (inputYear < currentYear || (inputYear === currentYear && inputMonth < currentMonth)) {
-        e.preventDefault();
-        errorEl.classList.remove('hidden');
-    } else {
-        errorEl.classList.add('hidden');
-    }
-});
-</script>
-
-<script>
-document.getElementById('cardNumber').addEventListener('input', function (e) {
-    // Remove non-digits
-    e.target.value = e.target.value.replace(/\D/g, '');
-
-    // Optional: auto-insert spaces every 4 digits for display
-    // e.target.value = e.target.value.replace(/(.{4})/g, '$1 ').trim();
-});
-
-document.getElementById('bookingForm').addEventListener('submit', function (e) {
-    const cardNumber = document.getElementById('cardNumber').value;
-    const errorEl = document.getElementById('cardNumberError');
-
-    if (!/^\d{12,19}$/.test(cardNumber)) {
-        e.preventDefault();
-        errorEl.classList.remove('hidden');
-    } else {
-        errorEl.classList.add('hidden');
-    }
-});
-</script>
 
 @endpush

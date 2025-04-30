@@ -104,7 +104,7 @@ Route::prefix('user')->name('user.')->group(function () {
             Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
             Route::get('/stripe', [CheckoutController::class, 'stripe'])->name('stripe');
             // routes/web.php
-            Route::get('/booking-confirmation', [CheckoutController::class, 'confirmation'])->name('user.bookingconfirmation');
+            // Route::get('/booking-confirmation', [CheckoutController::class, 'confirmation'])->name('user.bookingconfirmation');
             Route::post('/createpaymentintent', [CheckoutController::class, 'createpaymentintent'])->name('createpaymentintent');
             
 
