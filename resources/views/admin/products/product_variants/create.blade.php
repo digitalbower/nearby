@@ -88,26 +88,32 @@
                         <option value="">Select Unit Types</option>
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label for="discounted_price" class="form-label">Selling Unit Price</label>
-                    <input type="text" class="form-control" id="discounted_price" name="discounted_price" value="{{old('discounted_price') }}">
-                </div>
+             
 
-                <div class="mb-3">
-                    <label for="discounted_price" class="form-label">Market Unit Price</label>
-                    <input type="text" class="form-control" id="discounted_price" name="discounted_price" value="{{old('discounted_price') }}">
-                </div>
+               
+
+               
 
                 <div class="mb-3">
                     <label for="markup" class="form-label">Markup (%)</label>
-                    <input type="text" class="form-control" id="markup" name="markup" value="{{old('markup') }}">
+                    <input type="text" id="markup" name="markup" class="form-control" value="{{ old('markup') }}">
+                   <input type="hidden" id="category_markup_limit" value="{{ $categoryMarkup }}">
+                    <div id="markup-error" class="text-danger mt-1" style="display: none;"></div>
                 </div>
+               
 
                 <div class="mb-3">
                     <label for="agreement_unit_price" class="form-label">Agreement Unit Price</label>
                     <input type="text" class="form-control" id="agreement_unit_price" name="agreement_unit_price" value="{{old('agreement_unit_price') }}">
                 </div>
 
+                    <div class="mb-3">
+        <label for="discounted_price" class="form-label">Selling Unit Price</label>
+        <input type="text" class="form-control" id="discounted_price" name="discounted_price" value="{{ old('discounted_price') }}" readonly>
+        @error('discounted_price')
+        <div class="text-danger mt-1">{{ $message }}</div>
+    @enderror
+    </div>
                
                 <div class="mb-3">
                     <label for="available_quantity" class="form-label">Available Quantity</label>
@@ -164,6 +170,70 @@
         });
         
     </script>
+    <script>
+      
+      document.addEventListener('DOMContentLoaded', function () {
+    const markupInput = document.getElementById('markup');
+    const markupError = document.getElementById('markup-error');
+    const form = document.querySelector('form');
+    const maxMarkupInput = document.getElementById('category_markup_limit');
+
+    if (!markupInput || !markupError || !form || !maxMarkupInput) {
+        console.warn('Some elements not found. Validation script may not work.');
+        return;
+    }
+
+    const maxMarkup = parseFloat(maxMarkupInput.value);
+
+    form.addEventListener('submit', function (e) {
+        const enteredMarkup = parseFloat(markupInput.value);
+
+        if (!isNaN(enteredMarkup) && enteredMarkup > maxMarkup) {
+            e.preventDefault();
+            markupError.style.display = 'block';
+            markupError.textContent = `Markup cannot exceed ${maxMarkup}%.`;
+        } else {
+            markupError.style.display = 'none';
+        }
+    });
+});
+
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const unitPrice = document.getElementById('unit_price'); // Agreement Price
+    const markup = document.getElementById('markup');
+    const discountedPrice = document.getElementById('discounted_price');
+    const priceError = document.getElementById('price-error');
+    const form = document.querySelector('form');
+
+    function calculateSellingPrice() {
+        const agreementPrice = parseFloat(unitPrice.value);
+        const markupValue = parseFloat(markup.value);
+
+        if (!isNaN(agreementPrice) && !isNaN(markupValue)) {
+            let calculatedPrice = agreementPrice + ((agreementPrice * markupValue) / 100);
+            calculatedPrice = calculatedPrice.toFixed(2);
+            discountedPrice.value = calculatedPrice;
+            priceError.style.display = 'none'; // optional validation logic
+        }
+    }
+
+    unitPrice.addEventListener('input', calculateSellingPrice);
+    markup.addEventListener('input', calculateSellingPrice);
+
+    form.addEventListener('submit', function (e) {
+        // Optional validation if needed
+        if (discountedPrice.value === '') {
+            e.preventDefault();
+            priceError.style.display = 'block';
+            priceError.textContent = "Selling Unit Price is required.";
+        }
+    });
+});
+</script>
+
 @endpush
 
 

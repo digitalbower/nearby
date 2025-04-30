@@ -15,18 +15,24 @@
       <div class="flex gap-4">
 @auth
     <!-- ✅ Show Dropdown for Logged-in Users -->
-    <div class="relative group">
-        <button class="flex items-center text-black">
-            <i class="fas fa-user-circle pr-1 text-cyan-900"></i> {{auth()->user()->first_name}}
-        </button>
-        <div class="absolute hidden group-hover:block bg-white shadow-md rounded-lg mt-2 w-40">
-            <a href="{{ route('home.index') }}" class="block px-4 py-2 text-black hover:bg-gray-200">Dashboard</a>
-            <form method="POST" action="{{ route('user.logout') }}" class="block">
-                @csrf
-                <button type="submit" class="w-full text-left px-4 py-2 text-black hover:bg-gray-200">Logout</button>
-            </form>
-        </div>
+    <div x-data="{ open: false }" class="relative">
+    <button @click="open = !open" class="flex items-center text-black">
+        <i class="fas fa-user-circle pr-1 text-cyan-900"></i> {{ auth()->user()->first_name }}
+    </button>
+
+    <div
+        x-show="open"
+        @click.away="open = false"
+        class="absolute bg-white shadow-md rounded-lg mt-2 w-40 z-50"
+        x-cloak
+    >
+        <a href="{{ route('home.index') }}" class="block px-4 py-2 text-black hover:bg-gray-200">Dashboard</a>
+        <form method="POST" action="{{ route('user.logout') }}" class="block">
+            @csrf
+            <button type="submit" class="w-full text-left px-4 py-2 text-black hover:bg-gray-200">Logout</button>
+        </form>
     </div>
+</div>
 @else
     <!-- ✅ Show Sign In and Sign Up for Guests -->
     <a href="{{ route('user.login') }}" class="text-black flex items-center">
