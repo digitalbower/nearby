@@ -91,11 +91,7 @@ class ProductVariantController extends Controller
             'agreement_unit_price'=> 'required',
         ]);
 
-        if ($validator->fails()) {
-            return back()
-                ->withErrors($validator)
-                ->withInput();
-        }
+       
 
         $data = $request->all(); 
         if (isset($data['unit_price']) && isset($data['discounted_price']) && $data['unit_price'] > 0) {
