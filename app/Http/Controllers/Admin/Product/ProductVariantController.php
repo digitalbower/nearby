@@ -58,6 +58,7 @@ class ProductVariantController extends Controller
      */
     public function store(Request $request)
     {
+        $categoryMarkupLimit = (float) $request->input('category_markup_limit');
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'product_type_id' => 'required|exists:product_types,id',
@@ -69,13 +70,32 @@ class ProductVariantController extends Controller
             'short_info' => 'required',
             'unit_price' => 'required',
             'unit_type_id' => 'required',
-            'discounted_price' => 'required',
+            'discounted_price' => ['required','numeric','min:0',
+           function ($attribute, $value, $fail) use ($request) {
+        if ($request->filled('unit_price') && (float) $value > (float) $request->unit_price) {
+            $fail("The Selling Unit Price may not be greater than Market Unit Price.");
+        }
+    }
+  ],
             'available_quantity' => 'required',
             'validity_from' => 'required',
             'validity_to' => 'required',
-            'markup' => 'required',
+            'markup' => ['required','numeric','min:0',
+            function ($attribute, $value, $fail) use ($categoryMarkupLimit) {
+                if ((float) $value > $categoryMarkupLimit) {
+                    $fail("The $attribute may not be greater than {$categoryMarkupLimit}%.");
+                }
+            },
+        ],
             'agreement_unit_price'=> 'required',
         ]);
+
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
         $data = $request->all(); 
         if (isset($data['unit_price']) && isset($data['discounted_price']) && $data['unit_price'] > 0) {
             $data['discounted_percentage'] = (($data['unit_price'] - $data['discounted_price']) / $data['unit_price']) * 100;

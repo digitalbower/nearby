@@ -95,11 +95,15 @@
                
 
                 <div class="mb-3">
-                    <label for="markup" class="form-label">Markup (%)</label>
-                    <input type="text" id="markup" name="markup" class="form-control" value="{{ old('markup') }}">
-                   <input type="hidden" id="category_markup_limit" value="{{ $categoryMarkup }}">
-                    <div id="markup-error" class="text-danger mt-1" style="display: none;"></div>
-                </div>
+    <label for="markup" class="form-label">Markup (%)</label>
+    <input type="text" id="markup" name="markup" class="form-control @error('markup') is-invalid @enderror" value="{{ old('markup') }}">
+    <input type="hidden" id="category_markup_limit" name="category_markup_limit" value="{{ $categoryMarkup }}">
+    
+    @error('markup')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
+
                
 
                 <div class="mb-3">
@@ -170,61 +174,38 @@
         });
         
     </script>
-    <script>
-      
-      document.addEventListener('DOMContentLoaded', function () {
-    const markupInput = document.getElementById('markup');
-    const markupError = document.getElementById('markup-error');
-    const form = document.querySelector('form');
-    const maxMarkupInput = document.getElementById('category_markup_limit');
+   
 
-    if (!markupInput || !markupError || !form || !maxMarkupInput) {
-        console.warn('Some elements not found. Validation script may not work.');
-        return;
-    }
-
-    const maxMarkup = parseFloat(maxMarkupInput.value);
-
-    form.addEventListener('submit', function (e) {
-        const enteredMarkup = parseFloat(markupInput.value);
-
-        if (!isNaN(enteredMarkup) && enteredMarkup > maxMarkup) {
-            e.preventDefault();
-            markupError.style.display = 'block';
-            markupError.textContent = `Markup cannot exceed ${maxMarkup}%.`;
-        } else {
-            markupError.style.display = 'none';
-        }
-    });
-});
-
-</script>
-
-<script>
+   <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const unitPrice = document.getElementById('unit_price'); // Agreement Price
+    const unitPrice = document.getElementById('unit_price');
+    const agreementPrice = document.getElementById('agreement_unit_price');
     const markup = document.getElementById('markup');
     const discountedPrice = document.getElementById('discounted_price');
     const priceError = document.getElementById('price-error');
     const form = document.querySelector('form');
 
     function calculateSellingPrice() {
-        const agreementPrice = parseFloat(unitPrice.value);
+        const unit = parseFloat(unitPrice.value);
+        const agreement = parseFloat(agreementPrice.value);
         const markupValue = parseFloat(markup.value);
 
-        if (!isNaN(agreementPrice) && !isNaN(markupValue)) {
-            let calculatedPrice = agreementPrice + ((agreementPrice * markupValue) / 100);
-            calculatedPrice = calculatedPrice.toFixed(2);
+        // Only calculate if all 3 values are valid numbers
+        if (!isNaN(unit) && !isNaN(agreement) && !isNaN(markupValue)) {
+            const calculatedPrice = (agreement + ((agreement * markupValue) / 100)).toFixed(2);
             discountedPrice.value = calculatedPrice;
-            priceError.style.display = 'none'; // optional validation logic
+            priceError.style.display = 'none';
+        } else {
+            discountedPrice.value = '';
         }
     }
 
-    unitPrice.addEventListener('input', calculateSellingPrice);
-    markup.addEventListener('input', calculateSellingPrice);
+    // Trigger calculation only after input is finished (on blur)
+    unitPrice.addEventListener('blur', calculateSellingPrice);
+    agreementPrice.addEventListener('blur', calculateSellingPrice);
+    markup.addEventListener('blur', calculateSellingPrice);
 
     form.addEventListener('submit', function (e) {
-        // Optional validation if needed
         if (discountedPrice.value === '') {
             e.preventDefault();
             priceError.style.display = 'block';
@@ -233,6 +214,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+
 
 @endpush
 

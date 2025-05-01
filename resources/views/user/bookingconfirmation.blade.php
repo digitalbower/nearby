@@ -1,22 +1,6 @@
 @extends('user.layouts.main')
-@if(session('success'))
-    <div class="alert alert-success" style="color: white; background-color: green; padding: 10px; border-radius: 5px;">
-        <span>{{ session('success') }}</span>
-        <button type="button" class="close" style="background: none; border: none; color: white; font-size: 20px; float: right; cursor: pointer;" onclick="this.parentElement.style.display='none';">
-            &times;
-        </button>
-    </div>
-@endif
 
 
-@if(session('error'))
-    <div class="alert alert-danger" style="color: white; background-color: red; padding: 10px; border-radius: 5px;">
-        <span>{{ session('error') }}</span>
-        <button type="button" class="close" style="background: none; border: none; color: white; font-size: 20px; float: right; cursor: pointer;" onclick="this.parentElement.style.display='none';">
-            &times;
-        </button>
-    </div>
-@endif
 
 @push('styles')
   <style>
