@@ -332,6 +332,7 @@
                 <span>AED {{ number_format($vat, 2) }}</span>
               </div>
               <hr />
+              
               <div class="flex justify-between font-semibold">
                 <span>Total</span>
                 <span>AED {{ number_format($total, 2) }}</span>

@@ -27,7 +27,8 @@ class ProductVariantController extends Controller
                   });
         })
         ->get();
-    
+      
+
         return view('admin.products.product_variants.index')->with(['variants'=>$variants]);
     }
 
@@ -41,9 +42,15 @@ class ProductVariantController extends Controller
             $query->where('status', 1);
         })
         ->where('status', 1) 
-        ->get();
+        ->get(); 
         $types = ProductType::where('status', 1)->get();
-        return view('admin.products.product_variants.create')->with(['products'=>$products,'types'=>$types]);
+        $firstProduct = $products->first();
+
+        $categoryMarkup = 0;
+        if ($firstProduct) {
+            $categoryMarkup = \App\Models\Category::find($firstProduct->category_id)->markup ?? 0;
+        } 
+        return view('admin.products.product_variants.create')->with(['products'=>$products,'types'=>$types,'categoryMarkup'=>$categoryMarkup]);
     }
 
     /**

@@ -410,6 +410,17 @@
               </div>
               <span class="font-medium text-gray-800">AED {{ number_format($booking->discount_amount, 2) }}</span>
             </li>
+
+            <li class="flex items-center justify-between text-base text-gray-700">
+              <div class="flex items-center space-x-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5-6l3 3-3 3" />
+                </svg>
+                <span>Vat</span>
+              </div>
+              <span class="font-medium text-gray-800">AED {{ number_format($booking->vat, 2) }}</span>
+            </li>
+
             <li class="flex items-center justify-between text-base text-gray-800">
               <div class="flex items-center space-x-3">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -468,12 +479,7 @@
             </table>
           </div> -->
              <!-- Total Amount -->
-             <div class="border-t pt-4 mt-6">
-              <div class="flex justify-between text-lg font-semibold text-gray-800">
-                <span>Total Amount Paid</span>
-                <span>AED {{ number_format($booking->total_amount, 2) }}</span>
-              </div>
-            </div>
+           
         
        
               </div>

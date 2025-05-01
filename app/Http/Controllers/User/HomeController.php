@@ -228,7 +228,7 @@ class HomeController extends Controller
                 'after_discount' => $checkout->total_amount - $checkout->discount_amount,
             ];
         }
-   
+
 
         return view('user.bookingconfirmation',compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels','user','bookingConfirmation','payment','booking','checkoutData')); 
