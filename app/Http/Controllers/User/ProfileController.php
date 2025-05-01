@@ -14,6 +14,7 @@ use App\Models\Logo;
 use App\Models\NavigationMenu;
 use Illuminate\Validation\ValidationException;
 use App\Models\BookingConfirmation;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -50,12 +51,21 @@ class ProfileController extends Controller
         $countries = Country::all(); 
         $gender = Gender::all();
 
-        $bookingConfirmations = BookingConfirmation::with([
-            'items.productVariant.productBook'
-        ])
-        ->where('user_id', auth()->id()) // if needed to filter by logged-in user
-        ->latest()
-        ->get();
+        $userId = Auth::id();
+
+        // Get items only for the logged-in user, joining to booking_confirmations table to verify user_id
+        $bookingConfirmations = DB::table('booking_confirmation_items as bci')
+            ->join('booking_confirmations as bc', 'bci.booking_confirmation_id', '=', 'bc.id')
+            ->where('bc.user_id', $userId)
+            ->select(
+                'bci.*',
+                'bc.booking_id',
+                'bc.created_at as booking_created_at',
+                'bc.total_amount'
+            )
+            ->orderByDesc('bci.created_at')
+            ->get();
+    
 
         return view('user.profile', compact('user','countries','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels','bookingConfirmations')); // Pass user data to the view
