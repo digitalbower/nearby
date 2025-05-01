@@ -1,4 +1,3 @@
-{{-- resources/views/generate_pdf.blade.php --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>

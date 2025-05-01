@@ -55,25 +55,40 @@ class ProductController extends Controller
     }
 
     public function getProducts() {
-        
+
+        $today = Carbon::today();
+
         $query = Product::with('vendor')
-        ->whereHas('vendor', function ($query) {
-            $query->where('status', 1);
-        });
+        ->whereHas('vendor', function ($q) use ($today) {
+            $q->where('status', 1)
+              ->whereDate('validityfrom', '<=', $today)
+              ->whereDate('validityto', '>=', $today);
+        })
+        ->whereDate('validity_from', '<=', $today)
+        ->whereDate('validity_to', '>=', $today);
+
         $categories = Category::where('status', 1)
         ->with(['subcategories' => function ($query) {
             $query->select('id', 'category_id', 'name');
         }])
         ->get(['id', 'name']);
         $locations = Emirate::where('status',1) ->get(['id', 'name']);
-        $products = $query->get()->map(function ($product) {
-            $variants = $product->variants ?? collect([]);
-
-            $minVariant = $variants->isNotEmpty() ? $variants->sortBy('unit_price')->first() : null;
-            $maxVariant = $variants->isNotEmpty() ? $variants->sortByDesc('unit_price')->first() : null;
-
-            $minVariantPrice = $minVariant ? $minVariant->unit_price : $product->unit_price;
-            $maxVariantPrice = $maxVariant ? $maxVariant->unit_price : $product->unit_price;
+        $products = $query->get()->map(function ($product) use ($today) {
+            $variants = ($product->variants ?? collect([]))->filter(function ($variant) use ($today) {
+                return 
+                       Carbon::parse($variant->validity_from)->lte($today) &&
+                       Carbon::parse($variant->validity_to)->gte($today);
+            });
+        
+            if ($variants->isEmpty()) {
+                return null;
+            }
+        
+            $minVariant = $variants->sortBy('unit_price')->first();
+            $maxVariant = $variants->sortByDesc('unit_price')->first();
+        
+            $minVariantPrice = $minVariant->unit_price;
+            $maxVariantPrice = $maxVariant->unit_price;
     
             // Get min and max discounted prices from variants
             $minDiscountedVariant = $variants->whereNotNull('discounted_price')->sortBy('discounted_price')->first();
@@ -82,7 +97,6 @@ class ProductController extends Controller
             // If discounted prices exist, use the min and max discounted prices, otherwise fall back to unit prices
             $minDiscountedPrice = $minDiscountedVariant ? $minDiscountedVariant->discounted_price : $minVariantPrice;
             $maxDiscountedPrice = $maxDiscountedVariant ? $maxDiscountedVariant->discounted_price : $maxVariantPrice;
-            
             $tagNames = $product->tag()->toArray();
             $tag_name = implode(', ', $tagNames); 
             $reviews = $product->reviews;
@@ -116,27 +130,26 @@ class ProductController extends Controller
                 'giftable' => $product->giftable,
                 'productlocation_link' => $product->productlocation_link,
                 'variants' => [
-                    'min_variant' => $minVariant ? [
+                    'min_variant' => [
                         'id' => $minVariant->id,
                         'name' => $minVariant->title,
                         'unit_price' => $minVariant->unit_price,
                         'discounted_percentage' => $minVariant->discounted_percentage,
                         'discounted_price' => $minVariant->discounted_price ?? $minVariant->unit_price,
-                    ] : null,
-                    'max_variant' => $maxVariant ? [
+                    ],
+                    'max_variant' => [
                         'id' => $maxVariant->id,
                         'name' => $maxVariant->title,
                         'unit_price' => $maxVariant->unit_price,
                         'discounted_percentage' => $maxVariant->discounted_percentage,
                         'discounted_price' => $maxVariant->discounted_price ?? $maxVariant->unit_price,
-                    ] : null,
+                    ],
                 ],
             ];
-        });
-       
+        })->filter(); 
     
         return response()->json([
-            'products' => $products,
+            'products' => $products->filter()->values(),
             'categories' => $categories,
             'locations'=>$locations
         ]);

@@ -131,6 +131,10 @@ class StripController extends Controller
         }
         foreach ($booking->items as $booking_item) { 
             $product_variant = ProductVariant::find($booking_item->product_varient_id);
+            $order_date = $booking->created_at->copy(); 
+            $validity = $product_variant->types->validity;
+            $valid_until = $order_date->copy()->addDays($validity);
+            
             $variants[] = [
                 'product_variant_id'=>$booking_item->product_varient_id,
                 'voucher_number' => $booking->booking_id, 
@@ -139,8 +143,8 @@ class StripController extends Controller
                 'verification_number'=>$booking_item->verification_number,
                 'voucher_details'=> $product_variant->product->about_description,
                 'importantinfo'=>$product_variant->product->importantinfo,
-                'validity_from'=> $product_variant->product->validity_from,
-                'validity_to'=> $product_variant->product->validity_to,
+                'validity_from' => $order_date->format('Y-m-d'),
+                'validity_to' => $valid_until->format('Y-m-d'),
                 'vendor'=> $product_variant->product->vendor->name,
                 'nbv_terms'=> $product_variant->product->nbvTerms->terms,
             ];
