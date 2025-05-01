@@ -28,6 +28,7 @@ class HomeController extends Controller
 
     public function index()
     {
+        $today = Carbon::today();
 
         $uppermenuItems = NavigationMenu::where('active', 1)
         ->where('navigation_placement', 'upper')
@@ -43,18 +44,57 @@ class HomeController extends Controller
 
         $categories = Category::where('status', 1)->get();
 
-        $carouselCategories = Product::where('status', 1)
+        $carouselCategories = Product::with(['vendor', 'variants', 'reviews'])
+        ->whereHas('vendor', function ($q) use ($today) {
+            $q->where('status', 1)
+            ->whereDate('validityfrom', '<=', $today)
+            ->whereDate('validityto', '>=', $today);
+        })
+        ->whereDate('validity_from', '<=', $today)
+        ->whereDate('validity_to', '>=', $today)
         ->where('categorycarousel', 1)
-        ->with('category')
-        ->get(); 
-
+        ->where('status', 1)
+        ->get()
+        ->map(function ($product) use ($today) {
+            // Filter variants that are active and valid
+            $validVariants = ($product->variants ?? collect([]))->filter(function ($variant) use ($today) {
+                return $variant->status == 1 &&
+                        Carbon::parse($variant->validity_from)->lte($today) &&
+                        Carbon::parse($variant->validity_to)->gte($today);
+            });
+    
+            $product->filtered_variants = $validVariants;
+            return $validVariants->isNotEmpty() ? $product : null;
+        })
+        ->filter();
         $topDestinations = Footer::where('type', 'Top Destination')
                               ->where('status', 1)
                               ->get();
+        $trendingProducts = Product::with(['vendor', 'variants', 'reviews'])
+        ->whereHas('vendor', function ($q) use ($today) {
+            $q->where('status', 1)
+            ->whereDate('validityfrom', '<=', $today)
+            ->whereDate('validityto', '>=', $today);
+        })
+        ->whereDate('validity_from', '<=', $today)
+        ->whereDate('validity_to', '>=', $today)
+        ->where('trending', 1)
+        ->where('status', 1)
+        ->latest()->take(10)
+        ->get()
+        ->map(function ($product) use ($today) {
+            // Filter variants that are active and valid
+            $validVariants = ($product->variants ?? collect([]))->filter(function ($variant) use ($today) {
+                return $variant->status == 1 &&
+                        Carbon::parse($variant->validity_from)->lte($today) &&
+                        Carbon::parse($variant->validity_to)->gte($today);
+            });
     
-
-        $trendingProducts = Product::where('trending', 1)->latest()->take(10)->get();
-
+            $product->filtered_variants = $validVariants;
+            return $validVariants->isNotEmpty() ? $product : null;
+        })
+        ->filter();
+    
         $informationLinks = Footer::where('type', 'Information')
                           ->where('status', 1)
                           ->get();
@@ -67,24 +107,43 @@ class HomeController extends Controller
                           ->where('status', 1)
                           ->get();                
 
-                          $products = Product::where('status', 1)
-                          ->with(['variants', 'reviews'])
+                          $products = Product::with(['vendor', 'variants', 'reviews'])
+                          ->whereHas('vendor', function ($q) use ($today) {
+                              $q->where('status', 1)
+                                ->whereDate('validityfrom', '<=', $today)
+                                ->whereDate('validityto', '>=', $today);
+                          })
+                          ->whereHas('variants', function ($q) use ($today) {
+                              $q->where('status', 1)
+                                ->whereDate('validity_from', '<=', $today)
+                                ->whereDate('validity_to', '>=', $today);
+                          })
+                          ->whereDate('validity_from', '<=', $today)
+                          ->whereDate('validity_to', '>=', $today)
                           ->where('herocarousel', 1)
+                          ->where('status', 1)
                           ->get()
-                          ->map(function ($product) {
-                            $reviews =  $product->reviews; 
-                            $totalRatings = $reviews->sum('review_rating');
-                            $product->total_review = $reviews->count();
-                            $averageRating = $product->total_review > 0 ? $totalRatings / $product->total_review : 0;
-                            $product->average_rating = number_format($averageRating, 1);
-                            $minVariant = $product->variants->sortBy('unit_price')->first();
+                          ->map(function ($product) use ($today) {
+                              $variants = ($product->variants ?? collect([]))->filter(function ($variant) use ($today) {
+                                  return Carbon::parse($variant->validity_from)->lte($today) &&
+                                         Carbon::parse($variant->validity_to)->gte($today);
+                              });
+                      
+                              $product->filtered_variants = $variants;
+                      
+                              $reviews = $product->reviews;
+                              $totalRatings = $reviews->sum('review_rating');
+                              $product->total_review = $reviews->count();
+                              $averageRating = $product->total_review > 0 ? $totalRatings / $product->total_review : 0;
+                              $product->average_rating = number_format($averageRating, 1);
+                      
+                              $minVariant = $variants->sortBy('unit_price')->first();
                       
                               if ($minVariant) {
                                   $product->min_discounted_price = $minVariant->discounted_price;
                                   $product->min_original_price = $minVariant->unit_price;
                                   $product->min_discounted_percentage = number_format($minVariant->discounted_percentage);
                               } else {
-                                  // Fallbacks if no variant found
                                   $product->min_discounted_price = null;
                                   $product->min_original_price = null;
                                   $product->min_discounted_percentage = null;

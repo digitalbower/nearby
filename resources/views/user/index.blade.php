@@ -451,21 +451,30 @@
       <div class="owl-carousel1 owl-carousel owl-theme">
         @foreach($trendingProducts as $product)
         @php
+        $variants = $product->filtered_variants ?? collect([]);
+        $minVariant = $variants->sortBy('unit_price')->first();
+      @endphp
+        @php
              $reviews =  $product->reviews; 
             $totalRatings = $reviews->sum('review_rating');
             $totalReviews = $reviews->count();
             $averageRating = $totalReviews > 0 ? $totalRatings / $totalReviews : 0;
             $averageRating = number_format($averageRating, 1);
-            $variants = $product->variants ?? collect([]);
-
-            $minVariant = $variants->isNotEmpty() ? $variants->sortBy('unit_price')->first() : null;
 
             $originalPrice = number_format($minVariant->unit_price ?? 0);
             $discountedPrice = number_format($minVariant->discounted_price ?? 0);
-            $timer =  $minVariant ? $minVariant->timer_flag : null;
-            $endTime =$minVariant ? $minVariant->end_time : null;
             $variantId = $minVariant ? $minVariant->id : null;
             $discountedPercentage = $minVariant ? number_format($minVariant->discounted_percentage) : null;
+            $timer =  $minVariant ? $minVariant->timer_flag : null;
+            $endTime =$minVariant ? $minVariant->end_time : null;
+            $showTimer = false;
+
+            if ($timer === 1 && $endTime) {
+              $parsedEndTime = \Carbon\Carbon::parse($endTime);
+              $now = \Carbon\Carbon::now();
+              $showTimer = $parsedEndTime->gt($now);
+            }
+
             @endphp
         <div class="item">
           <a href="{{ url('/user/products/' . $product->id) }}">
@@ -482,9 +491,9 @@
                     <img src="{{ asset('images/discount_7939803.png') }}" class="w-8" />
                     <span class="ml-0.5 text-base text-black">{{ $discountedPercentage}}%</span>
                   </div>
-                  @if ($timer === 1)
+                  @if ($showTimer)
                   <div
-                    class="flex items-center ml-auto py-0 rounded-md px-2 gap-x-1 text-[#000] font-semibold countdown-timer" data-endtime="{{ $endTime  }}">
+                    class="flex items-center ml-auto py-0 rounded-md px-2 gap-x-1 text-[#000] font-semibold countdown-timer" data-endtime="{{ \Carbon\Carbon::parse($endTime)->toIso8601String() }}">
                     <span class="text-sm flex mt-1 text-red-400">
                     <img src="{{ asset('images/clock_4241462.png') }}" class="w-8 h-9 pr-1" /></span>
                     <div class="flex items-center gap-x-1 text-center">
@@ -558,16 +567,23 @@
         $totalReviews = $reviews->count();
         $averageRating = $totalReviews > 0 ? $totalRatings / $totalReviews : 0;
         $averageRating = number_format($averageRating, 1);
-        $variants = $product->variants ?? collect([]);
+        $variants = $product->filtered_variants ?? collect([]);
     
         $minVariant = $variants->isNotEmpty() ? $variants->sortBy('unit_price')->first() : null;
     
         $originalPrice = number_format($minVariant->unit_price ?? 0);
         $discountedPrice = number_format($minVariant->discounted_price ?? 0);
-          $timer =  $minVariant ? $minVariant->timer_flag : null;
-            $endTime =$minVariant ? $minVariant->end_time : null;
-            $variantId = $minVariant ? $minVariant->id : null;
-            $discountedPercentage = $minVariant ? number_format($minVariant->discounted_percentage) : null;
+        $variantId = $minVariant ? $minVariant->id : null;
+        $discountedPercentage = $minVariant ? number_format($minVariant->discounted_percentage) : null;
+        $timer =  $minVariant ? $minVariant->timer_flag : null;
+        $endTime =$minVariant ? $minVariant->end_time : null;
+        $showTimer = false;
+
+        if ($timer === 1 && $endTime) {
+          $parsedEndTime = \Carbon\Carbon::parse($endTime);
+          $now = \Carbon\Carbon::now();
+          $showTimer = $parsedEndTime->gt($now);
+        }
       @endphp
       <div class="item">
         <a href="{{ url('/user/products/' . $product->id) }}">
@@ -588,9 +604,9 @@
                   <img src="{{ asset('images/discount_7939803.png') }}" class="w-8" />
                   <span class="ml-0.5 text-base text-black">{{ $discountedPercentage}}%</span>
                 </div>
-                @if ($timer === 1)
+                @if ($showTimer) 
                 <div
-                  class="flex items-center ml-auto py-0 rounded-md px-2 gap-x-1 text-[#000] font-semibold countdown-timer" data-endtime="{{ $endTime  }}">
+                  class="flex items-center ml-auto py-0 rounded-md px-2 gap-x-1 text-[#000] font-semibold countdown-timer" data-endtime="{{ \Carbon\Carbon::parse($endTime)->toIso8601String() }}">
                   <span class="text-sm flex mt-1 text-red-400">
                   <img src="{{ asset('images/clock_4241462.png') }}" class="w-8 h-9 pr-1" /></span>
                   <div class="flex items-center gap-x-1 text-center">
