@@ -10,35 +10,45 @@
                 {{ session('success') }}
             </div>
         @endif
-        
-        <form action="{{ route('admin.navigation.store') }}" method="POST">
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+        <form action="{{ route('admin.navigation.store') }}" id="navigationForm" method="POST">
             @csrf
             
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" name="name" class="form-control" required>
+                <input type="text" name="name" class="form-control" value="{{old('name')}}">
             </div>
 
             <div class="form-group">
                 <label for="link">Link</label>
-                <input type="text" name="link" class="form-control">
+                <input type="text" name="link" class="form-control" value="{{old('link')}}">
             </div>
 
             <div class="form-group">
             <label for="icon">Icon</label>
-            <select name="icon" class="form-control" required>
-                <option value="fa fa-credit-card">Payment Release</option>
-                <option value="fa fa-user-tie">Vendor</option>
-                <option value="fa fa-address-book">Contact</option>
+            <select name="icon" class="form-control">
+                <option value="">Select Icon</option>
+                <option value="fa fa-credit-card" {{ old('icon') == "fa fa-credit-card" ? 'selected' : '' }}>Payment Release</option>
+                <option value="fa fa-user-tie" {{ old('icon') == "fa fa-user-tie" ? 'selected' : '' }}>Vendor</option>
+                <option value="fa fa-address-book" {{ old('icon') == "fa fa-address-book" ? 'selected' : '' }}>Contact</option>
             </select>
         </div>
 
 
             <div class="form-group">
                 <label for="type">Type</label>
-                <select name="navigation_placement" class="form-control" required>
-                    <option value="upper">Upper</option>
-                    <option value="lower">Lower</option>
+                <select name="navigation_placement" class="form-control">
+                    <option value="">Select Type</option>
+                    <option value="upper" {{ old('icon') == "upper" ? 'selected' : '' }}>Upper</option>
+                    <option value="lower" {{ old('icon') == "lower" ? 'selected' : '' }}>Lower</option>
                 </select>
             </div>
 
@@ -52,3 +62,19 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+<script>
+    $(document).ready(function () {
+    $("#navigationForm").validate({
+        rules: {
+            name: { required: true},
+            navigation_placement:{ required: true},
+        },
+        messages: {
+            name: { required: "Name is required"},
+            navigation_placement: { required: "Type is required"},
+        }
+    });
+});
+</script>
+@endpush

@@ -133,7 +133,7 @@
                     <div class="flex items-center">
                       <input type="checkbox" :id="'location' + loc.id" :value="loc.name"
                         class="form-checkbox rounded text-blue-500"
-                        @change="toggleLocation(loc.name)">
+                       x-model="selectedLocations" >
                       <label :for="'location' + loc.id" class="ml-2 text-sm text-gray-600" x-text="loc.name"></label>
                     </div>
                     </template>
@@ -573,13 +573,22 @@
             return `AED ${parseFloat(value).toFixed(2)}`;
         },
         init() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const selectedCategory = urlParams.get('category');
-            if (selectedCategory) {
-                this.selectedCategories.push(selectedCategory);
-            }
-            this.fetchProducts();
-          }   
+          const urlParams = new URLSearchParams(window.location.search);
+
+          // Handle category filter if present
+          const selectedCategory = urlParams.get('category');
+          if (selectedCategory) {
+              this.selectedCategories = [selectedCategory];
+          }
+
+          // Handle location filter if present
+          const selectedLocation = urlParams.get('location');
+          if (selectedLocation) {
+              this.selectedLocations = [selectedLocation];
+          }
+
+          this.fetchProducts();
+        }
     }
 }
 </script>
