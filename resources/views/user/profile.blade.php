@@ -757,38 +757,42 @@
                   <h1 class="text-3xl font-bold text-gray-800">My Bookings</h1>
   
                 </div>
-  
                 <div class="flex gap-4 mb-8">
-                  <input type="text" placeholder="Search by listing name"
-                    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent" />
-                  <button class="px-6 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition duration-300">
-                    Search
-                  </button>
-                </div>
+  <input type="text" id="searchInput" placeholder="Search by booking ID"
+    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent" />
+  <button onclick="filterBookingsAdvanced()" class="px-6 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition duration-300">
+    Search
+  </button>
+</div>
+     
                 <div class="flex items-center mb-3 space-x-4">
                   <!-- Inactive Radio Button -->
-                  <label class="flex items-center space-x-4">
-                    <label class="flex items-center space-x-2">
-                      <input type="radio" name="status" class="hidden"  />
-                      <span class="w-6 h-6 flex items-center justify-center border-2 border-cyan-500 bg-cyan-500 text-white rounded-full">
-                        <i class="fas fa-check-circle"></i>
-                      </span>
-                      <span class="text-gray-700">All</span>
-                    </label>
-                    <input type="radio" name="status" class="hidden"checked />
-                    <span class="w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
-                      <i class="fas fa-circle"></i>
-                    </span>
-                    <span class="text-gray-700">Past Booking</span>
-                  </label>
-                
-                  <label class="flex items-center space-x-2">
-                    <input type="radio" name="status" class="hidden" />
-                    <span class="w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
-                      <i class="fas fa-circle"></i>
-                    </span>
-                    <span class="text-gray-700">Upcoming Booking</span>
-                  </label>
+                  <div class="flex space-x-4 mb-4">
+  <label class="flex items-center space-x-2 cursor-pointer">
+    <input type="radio" name="status" value="all" class="hidden" checked onchange="filterBookings(this)">
+    <span class="w-6 h-6 flex items-center justify-center border-2 border--cyan500 bg-cyan-500 text-white rounded-full">
+      <i class="fas fa-check-circle"></i>
+    </span>
+    <span class="text-gray-700">All</span>
+  </label>
+
+  <label class="flex items-center space-x-2 cursor-pointer">
+    <input type="radio" name="status" value="past" class="hidden" onchange="filterBookings(this)">
+    <span class="w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
+      <i class="fas fa-circle"></i>
+    </span>
+    <span class="text-gray-700">Past Booking</span>
+  </label>
+
+  <label class="flex items-center space-x-2 cursor-pointer">
+    <input type="radio" name="status" value="upcoming" class="hidden" onchange="filterBookings(this)">
+    <span class="w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
+      <i class="fas fa-circle"></i>
+    </span>
+    <span class="text-gray-700">Upcoming Booking</span>
+  </label>
+</div>
+
                  
                 
                   <!-- Active Radio Button -->
@@ -798,7 +802,9 @@
                 <div class="space-y-6">
                   <!-- Booking Item 1 -->
                   @forelse ($bookingConfirmations as $item)
-    <div class="border relative border-cyan-400 rounded-xl shadow-xs p-3 mb-4 transition duration-300">
+                  <div class="booking-card border relative border-cyan-400 rounded-xl shadow-xs p-3 mb-4 transition duration-300"
+                  data-status="{{ $item->verification_status }}"> 
+                 
       <div class="flex gap-x-3 items-center mb-2">
        
         <div class="text-sm col-span-2 text-gray-600">
@@ -824,7 +830,7 @@
                 Total Price: {{ number_format($item->total_price, 2) }}
               </p>
               <p class="text-sm text-gray-600">
-                Verification Status: {{ ucfirst($item->verification_status) }}
+                Verification Status: {{ ($item->verification_status) }}
               </p>
               <p class="text-sm text-gray-600">
                 Gift Product: {{ $item->giftproduct ? 'Yes' : 'No' }}
@@ -834,10 +840,11 @@
 
           <div class="w-full justify-between flex gap-x-3 mt-3">
             <div class="flex w-full justify-end gap-x-3">
-              <!-- <button
-                class="px-2 py-2 text-xs bg-green-100 text-black rounded-lg hover:bg-green-200 transition duration-300 flex items-center">
-                <i class="fas fa-download text-sm mr-1"></i> Download
-              </button> -->
+            <a href="{{ route('user.profile.download', $item->id) }}"
+   class="px-2 py-2 text-xs bg-green-100 text-black rounded-lg hover:bg-green-200 transition duration-300 flex items-center"
+   target="_blank">
+   <i class="fas fa-download text-sm mr-1"></i> Download
+</a>
             </div>
           </div>
         </div>
@@ -1185,6 +1192,27 @@
     }
   </script>
 
+<script> 
+  function filterBookingsAdvanced() { 
+    const status = document.querySelector('input[name="status"]:checked')?.value || 'all';
+    const searchInput = document.getElementById('searchInput').value.toLowerCase();
+    const bookingCards = document.querySelectorAll('.booking-card');
+
+    bookingCards.forEach(card => {
+      const bookingId = card.getAttribute('data-booking-id').toLowerCase();
+      const bookingStatus = card.getAttribute('data-status');
+
+      const matchesStatus = (status === 'all' || status === bookingStatus);
+      const matchesSearch = bookingId.includes(searchInput);
+
+      card.style.display = (matchesStatus && matchesSearch) ? 'block' : 'none';
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    filterBookingsAdvanced();
+  });
+</script>
 
 
 
@@ -1239,4 +1267,24 @@ document.querySelectorAll('.toggle-password').forEach(button => {
     });
 });
 </script>
+
+<script>
+  function filterBookings(radio) {
+    const status = radio.value;
+    const cards = document.querySelectorAll('.booking-card');
+
+    cards.forEach(card => {
+      const cardStatus = card.getAttribute('data-status');
+
+      if (status === 'all') {
+        card.style.display = 'block';
+      } else if (status === 'past') {
+        card.style.display = (cardStatus === 'completed') ? 'block' : 'none';
+      } else if (status === 'upcoming') {
+        card.style.display = (cardStatus !== 'completed') ? 'block' : 'none';
+      }
+    });
+  }
+</script>
+
 @endpush

@@ -130,6 +130,7 @@ Route::prefix('user')->name('user.')->group(function () {
             Route::post('/change-password', [ProfileController::class, 'changePassword'])->name('change-password');
             Route::post('/uploadPicture', [ProfileController::class, 'uploadPicture'])->name('uploadPicture');
             Route::post('/update-password', [ProfileController::class, 'updatePassword'])->name('updatepassword');
+            Route::get('/bookings/{id}/download', [ProfileController::class, 'download'])->name('download');
         });
     });
 });
