@@ -24,7 +24,7 @@
                         <th>#</th>
                         <th>Product</th>
                         <th>Title</th>
-                        <th>Unit Price</th>
+                        <th>Market Unit Price</th>
                         <th>Validity From</th>
                         <th>Validity To</th>
                         <th>Actions</th>

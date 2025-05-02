@@ -10,11 +10,13 @@ use App\Models\User;
 use App\Models\Gender;
 use App\Models\Country;
 use App\Models\Footer;
-use App\Models\Logo;
+use App\Models\Logo; 
+use App\Models\BookingConfirmationItem;
 use App\Models\NavigationMenu;
 use Illuminate\Validation\ValidationException;
 use App\Models\BookingConfirmation;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ProfileController extends Controller
 {
@@ -51,7 +53,7 @@ class ProfileController extends Controller
         $countries = Country::all(); 
         $gender = Gender::all();
 
-        $userId = Auth::id();
+        $userId = Auth::id(); 
 
         // Get items only for the logged-in user, joining to booking_confirmations table to verify user_id
         $bookingConfirmations = DB::table('booking_confirmation_items as bci')
@@ -65,7 +67,8 @@ class ProfileController extends Controller
             )
             ->orderByDesc('bci.created_at')
             ->get();
-    
+
+          
 
         return view('user.profile', compact('user','countries','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels','bookingConfirmations')); // Pass user data to the view
@@ -123,6 +126,16 @@ class ProfileController extends Controller
         $user->save();
     
         return redirect()->route('user.profile.index')->with('success', 'Password successfully updated.');
+    }
+
+    
+    public function download($id)
+    {
+        $item = BookingConfirmation::findOrFail($id);
+
+        $pdf = Pdf::loadView('user.profilebookinghistorypdf', compact('item'));
+
+        return $pdf->download('Booking-'.$item->booking_id.'.pdf');
     }
 
 }
