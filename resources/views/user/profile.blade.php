@@ -819,12 +819,10 @@
         <div class="w-full">
           <div class="grid grid-cols-1 items-center md:grid-cols-3 gap-4">
             <div class="col-span-2">
-              <h3 class="text-lg font-medium text-gray-800">Booking Request {{ $item->booking_id }}</h3>
+              <h3 class="text-lg font-medium text-gray-800">Booking Id {{ $item->booking_id }}</h3>
+           
               <p class="text-sm text-gray-600">
-                Product Variant ID: {{ $item->product_varient_id }}
-              </p>
-              <p class="text-sm text-gray-600">
-                Quantity: {{ $item->quantity }} | Unit Price: {{ number_format($item->unit_price, 2) }}
+                Quantity: {{ $item->quantity }} 
               </p>
               <p class="text-sm text-gray-600">
                 Total Price: {{ number_format($item->total_price, 2) }}
@@ -841,10 +839,9 @@
           <div class="w-full justify-between flex gap-x-3 mt-3">
             <div class="flex w-full justify-end gap-x-3">
             <a href="{{ route('user.profile.download', $item->id) }}"
-   class="px-2 py-2 text-xs bg-green-100 text-black rounded-lg hover:bg-green-200 transition duration-300 flex items-center"
-   target="_blank">
-   <i class="fas fa-download text-sm mr-1"></i> Download
-</a>
+       class="mt-4 inline-flex items-center px-3 py-2 bg-green-100 text-black rounded-lg hover:bg-green-200 transition">
+      <i class="fas fa-download mr-1"></i> Download PDF
+    </a>
             </div>
           </div>
         </div>

@@ -67,14 +67,12 @@
             {{ \Carbon\Carbon::parse($item->booking_created_at)->format('d/m/y') }}
         </div>
 
-        <div class="info">
-            <span class="label">Product Variant ID:</span> {{ $item->product_varient_id }}
-        </div>
+       
 
         <div class="info">
             <span class="label">Quantity:</span> {{ $item->quantity }}
-            &nbsp; | &nbsp;
-            <span class="label">Unit Price:</span> {{ number_format($item->unit_price, 2) }}
+           
+            
         </div>
 
         <div class="info">
