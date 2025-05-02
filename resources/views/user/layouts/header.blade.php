@@ -12,35 +12,42 @@
   </div>
 
   
-      <div class="flex gap-4">
-@auth
-    <!-- ✅ Show Dropdown for Logged-in Users -->
-    <div x-data="{ open: false }" class="relative">
-    <button @click="open = !open" class="flex items-center text-black">
-        <i class="fas fa-user-circle pr-1 text-cyan-900"></i> {{ auth()->user()->first_name }}
-    </button>
+  <div class="flex gap-4">
+    @auth
+        <div x-data="{ open: false }" class="relative">
+            <button @click="open = !open" class="flex items-center text-black">
+                <i class="fas fa-user-circle pr-1 text-cyan-900"></i>
+                 {{ auth()->user()->first_name }}
+            </button>
+            <style>
+                [x-cloak] {
+                    display: none !important;
+                }
+            </style>
 
-    <div
-        x-show="open"
-        @click.away="open = false"
-        class="absolute bg-white shadow-md rounded-lg mt-2 w-40 z-50"
-        x-cloak
-    >
-        <a href="{{ route('home.index') }}" class="block px-4 py-2 text-black hover:bg-gray-200">Dashboard</a>
-        <form method="POST" action="{{ route('user.logout') }}" class="block">
-            @csrf
-            <button type="submit" class="w-full text-left px-4 py-2 text-black hover:bg-gray-200">Logout</button>
-        </form>
+            <div
+                x-show="open"
+                @click.away="open = false"
+                x-cloak
+                 class="absolute right-0 bg-white shadow-md rounded-lg mt-2 min-w-[10rem] w-fit z-[9999]"
+            >
+                <form method="POST" action="{{ route('user.logout') }}" class="block">
+                    @csrf
+                    <button type="submit" class="w-full text-left px-4 py-2 text-black hover:bg-gray-200">
+                        Logout
+                    </button>
+                </form>
+            </div>
+        </div>
+    @else
+    <div class="flex gap-4">
+        <a href="{{ route('user.login') }}" class="text-black flex items-center">
+            <i class="fas fa-sign-in-alt pr-1 text-cyan-900"></i> Sign In
+        </a>
+        <a href="{{ route('user.signup') }}" class="text-black flex items-center">
+            <i class="fas fa-user-plus pr-1 text-cyan-900"></i> Sign Up
+        </a>
     </div>
-</div>
-@else
-    <!-- ✅ Show Sign In and Sign Up for Guests -->
-    <a href="{{ route('user.login') }}" class="text-black flex items-center">
-        <i class="fas pr-1 text-cyan-900 fa-sign-in-alt"></i> Sign In
-    </a>
-    <a href="{{ route('user.signup') }}" class="text-black flex items-center">
-        <i class="fas pr-1 text-cyan-900 fa-user-plus"></i> Sign Up
-    </a>
 @endauth
 </div>
     </div>
