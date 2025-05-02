@@ -133,7 +133,7 @@
                     <div class="flex items-center">
                       <input type="checkbox" :id="'location' + loc.id" :value="loc.name"
                         class="form-checkbox rounded text-blue-500"
-                        @change="toggleLocation(loc.name)">
+                       x-model="selectedLocations" >
                       <label :for="'location' + loc.id" class="ml-2 text-sm text-gray-600" x-text="loc.name"></label>
                     </div>
                     </template>
@@ -233,6 +233,13 @@
                     </span>
                   </label>
                 </div>
+                <div class="flex items-center">
+                  <input type="radio" id="rating0" name="rating" value="" x-model="selectedRating" class="form-radio text-blue-500">
+                  <label for="rating0" class="ml-2 text-sm text-gray-600 flex items-center">
+                    Show All
+                  </label>
+                </div>
+          
               </div>
             </div>
 
@@ -518,7 +525,28 @@
                 const locationMatch = this.selectedLocations.length === 0 || this.selectedLocations.includes("All over UAE") || this.selectedLocations.includes(String(product.location ?? ''));
                 const giftableMatch = this.showGiftable ? Boolean(product.giftable) : true;
                 const discountMatch = product.discount >= Number(this.minDiscountPercentage);
-                const ratingMatch = this.selectedRating ? product.rating >= parseInt(this.selectedRating) : true;
+                const rating = parseFloat(product.rating); console.log(rating);
+                let ratingMatch = false; console.log(this.selectedRating);
+                switch (this.selectedRating) { 
+                  case '5+':
+                    ratingMatch = rating >= 5.0 && rating <= 5.9;
+                    break;
+                  case '4+':
+                    ratingMatch = rating >= 4.0 && rating <= 4.9;
+                    break;
+                  case '3+':
+                    ratingMatch = rating >= 3.0 && rating <= 3.9;
+                    break;
+                  case '2+':
+                    ratingMatch = rating >= 2.0 && rating <= 2.9;
+                    break;
+                  case '1+':
+                    ratingMatch = rating >= 1.0 && rating <= 1.9;
+                    break;
+                  default:
+                    ratingMatch = true; // No rating filter applied
+                }
+
                 return categoryMatch && subCategoryMatch && locationMatch && giftableMatch && discountMatch && ratingMatch;
             });
         },
@@ -573,13 +601,22 @@
             return `AED ${parseFloat(value).toFixed(2)}`;
         },
         init() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const selectedCategory = urlParams.get('category');
-            if (selectedCategory) {
-                this.selectedCategories.push(selectedCategory);
-            }
-            this.fetchProducts();
-          }   
+          const urlParams = new URLSearchParams(window.location.search);
+
+          // Handle category filter if present
+          const selectedCategory = urlParams.get('category');
+          if (selectedCategory) {
+              this.selectedCategories = [selectedCategory];
+          }
+
+          // Handle location filter if present
+          const selectedLocation = urlParams.get('location');
+          if (selectedLocation) {
+              this.selectedLocations = [selectedLocation];
+          }
+
+          this.fetchProducts();
+        }
     }
 }
 </script>

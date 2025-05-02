@@ -44,7 +44,7 @@ class HomeController extends Controller
 
         $categories = Category::where('status', 1)->get();
 
-        $carouselCategories = Product::with(['vendor', 'variants', 'reviews'])
+        $carouselCategories = Product::with(['vendor', 'variants', 'reviews', 'category'])
         ->whereHas('vendor', function ($q) use ($today) {
             $q->where('status', 1)
             ->whereDate('validityfrom', '<=', $today)
@@ -56,7 +56,6 @@ class HomeController extends Controller
         ->where('status', 1)
         ->get()
         ->map(function ($product) use ($today) {
-            // Filter variants that are active and valid
             $validVariants = ($product->variants ?? collect([]))->filter(function ($variant) use ($today) {
                 return $variant->status == 1 &&
                         Carbon::parse($variant->validity_from)->lte($today) &&
@@ -66,7 +65,10 @@ class HomeController extends Controller
             $product->filtered_variants = $validVariants;
             return $validVariants->isNotEmpty() ? $product : null;
         })
-        ->filter();
+        ->filter()
+        ->filter(fn($product) => $product->category && $product->category->name)
+        ->groupBy(fn($product) => $product->category->name);  
+    
         $topDestinations = Footer::where('type', 'Top Destination')
                               ->where('status', 1)
                               ->get();

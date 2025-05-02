@@ -12,60 +12,69 @@
             @if(session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
-
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
             {{-- Add New Footer Item --}}
             <h5>Add New Footer Item</h5>
-            <form action="{{ route('admin.footer.store') }}" method="POST">
+            <form action="{{ route('admin.footer.store') }}" id="footerForm" method="POST">
                 @csrf
-
-                <label>Type:</label>
-                <select name="type" class="form-control" required>
-                    <option value="Top Destination">Top Destination</option>
-                    <option value="Information">Information</option>
-                    <option value="Follow Us">Follow Us</option>
-                    <option value="payment_channels">Payment Channels</option>
-                </select>
-
-                <label>Item Text:</label>
-                <input type="text" name="item_text" class="form-control">
-
-                <label>Link (optional):</label>
-                <input type="text" name="link" class="form-control">
-
                 <div class="form-group">
-    <label>Select Icon</label>
-    <select name="icon" class="form-control" required>
-        <option value="">-- Select Icon --</option>
+                    <label>Type:</label>
+                    <select name="type" class="form-control">
+                        <option value="">Select Type</option>
+                        <option value="Top Destination" {{ old('type') == "Top Destination" ? 'selected' : '' }}>Top Destination</option>
+                        <option value="Information" {{ old('type') == "Information" ? 'selected' : '' }}>Information</option>
+                        <option value="Follow Us" {{ old('type') == "Follow Us" ? 'selected' : '' }}>Follow Us</option>
+                        <option value="payment_channels" {{ old('type') == "payment_channels" ? 'selected' : '' }}>Payment Channels</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Item Text:</label>
+                    <input type="text" name="item_text" class="form-control" value="{{ old('item_text')}}">
+                </div>
+                <div class="form-group">
+                    <label>Link (optional):</label>
+                    <input type="text" name="link" class="form-control" value="{{ old('link')}}">
+                </div>
+                <div class="form-group">
+                <label>Select Icon</label>
+                <select name="icon" class="form-control">
+                    <option value="">-- Select Icon --</option>
 
-        <!-- Social Media Icons -->
-        <option value="fab fa-facebook text-white">Facebook</option>
-        <option value="fab fa-instagram text-white">Instagram</option>
-        <option value="fab fa-twitter text-white">Twitter</option>
-        <option value="fab fa-youtube text-white">YouTube</option>
-        <option value="fab fa-linkedin text-white">LinkedIn</option>
-        <option value="fab fa-pinterest text-white">Pinterest</option>
+                    <!-- Social Media Icons -->
+                    <option value="fab fa-facebook text-white" {{ old('icon') == "fab fa-facebook text-white" ? 'selected' : '' }}>Facebook</option>
+                    <option value="fab fa-instagram text-white" {{ old('icon') == "fab fa-instagram text-white" ? 'selected' : '' }}>Instagram</option>
+                    <option value="fab fa-twitter text-white" {{ old('icon') == "fab fa-twitter text-white" ? 'selected' : '' }}>Twitter</option>
+                    <option value="fab fa-youtube text-white" {{ old('icon') == "fab fa-youtube text-white" ? 'selected' : '' }}>YouTube</option>
+                    <option value="fab fa-linkedin text-white" {{ old('icon') == "fab fa-linkedin text-white" ? 'selected' : '' }}>LinkedIn</option>
+                    <option value="fab fa-pinterest text-white" {{ old('icon') == "fab fa-pinterest text-white" ? 'selected' : '' }}>Pinterest</option>
 
-        <!-- Payment Channel Icons -->
-        <option value="fa fa-cc-visa">Visa</option>
-        <option value="fa fa-cc-mastercard">Mastercard</option>
-        <option value="fa fa-cc-amex">Amex</option>
-        <option value="fa fa-cc-discover">Discover</option>
-        <option value="fa fa-credit-card">Credit Card</option>
-        <option value="fa fa-university">Bank Transfer</option>
-        <option value="fa fa-money-check-alt">Rupay</option>
+                    <!-- Payment Channel Icons -->
+                    <option value="fa fa-cc-visa" {{ old('icon') == "fa fa-cc-visa" ? 'selected' : '' }}>Visa</option>
+                    <option value="fa fa-cc-mastercard" {{ old('icon') == "fa fa-cc-mastercard" ? 'selected' : '' }}>Mastercard</option>
+                    <option value="fa fa-cc-amex" {{ old('icon') == "fa fa-cc-amex" ? 'selected' : '' }}>Amex</option>
+                    <option value="fa fa-cc-discover" {{ old('icon') == "fa fa-cc-discover" ? 'selected' : '' }}>Discover</option>
+                    <option value="fa fa-credit-card" {{ old('icon') == "fa fa-credit-card" ? 'selected' : '' }}>Credit Card</option>
+                    <option value="fa fa-university" {{ old('icon') == "fa fa-university" ? 'selected' : '' }}>Bank Transfer</option>
+                    <option value="fa fa-money-check-alt" {{ old('icon') == "fa fa-money-check-alt" ? 'selected' : '' }}>Rupay</option>
 
-    </select>
-</div>
-
-
-
+                </select>
+            </div>
+            <div class="form-group">
                 <label>Status:</label>
                 <select name="status" class="form-control">
-                    <option value="1">Active</option>
-                    <option value="0">Inactive</option>
+                    <option value="1" {{ old('status') == 1 ? 'selected' : '' }}>Active</option>
+                    <option value="0" {{ old('status') == 0 ? 'selected' : '' }}>Inactive</option>
                 </select>
-
-                <button type="submit" class="btn btn-success mt-3">Add</button>
+            </div>
+            <button type="submit" class="btn btn-success mt-3">Add</button>
             </form>
             <hr>
 
@@ -101,3 +110,17 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+<script>
+    $(document).ready(function () {
+    $("#footerForm").validate({
+        rules: {
+            type: { required: true},
+        },
+        messages: {
+            type: { required: "Type is required"},
+        }
+    });
+});
+</script>
+@endpush

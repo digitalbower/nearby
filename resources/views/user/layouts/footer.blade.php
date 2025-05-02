@@ -28,50 +28,44 @@
 
       <!-- Top Destination -->
       <div>
-      <h3 class="text-black text-base lg:text-xl font-bold mb-6">Top Destination</h3>
-<ul class="space-y-3 text-sm lg:text-base">
-  @foreach ($topDestinations as $item)
-      <li>
-          <a href="{{ $item->link ?? '#' }}" class="hover:text-black transition-colors">
-              {{ $item->item_text }}
-          </a>
-      </li>
-  @endforeach
-</ul>
-</div>
+        <h3 class="text-black text-base lg:text-xl font-bold mb-6">Top
+          Destination</h3>
+        <ul class="space-y-3 text-sm lg:text-base">
+          @foreach ($topDestinations as $item)
+          <li><a href="{{ $item->link ?? '#' }}" class="hover:text-black transition-colors">{{ $item->item_text }}</a></li>
+          @endforeach
+        </ul>
+      </div>
       <!-- Information -->
       <div>
-<h3 class="text-black text-base lg:text-xl font-bold mb-6">Information</h3>
-<ul class="space-y-3 text-sm lg:text-base">
-  @foreach ($informationLinks as $item)
-    <li>
-      <a href="{{ $item->link ?? '#' }}" class="hover:text-black transition-colors">
-        {{ $item->item_text }}
-      </a>
-    </li>
-  @endforeach
-</ul>
-</div>
-
+        <h3 class="text-black text-base lg:text-xl font-bold mb-6">Information</h3>
+        <ul class="space-y-3 text-sm lg:text-base">
+          @foreach ($informationLinks as $item)
+            <li><a href="{{ $item->link ?? '#' }}" class="hover:text-black transition-colors">{{ $item->item_text }}</a></li>
+          @endforeach
+        </ul>
+      </div>
 
       <!-- Follow Us & Payment -->
       <div>
-<h3 class="text-black text-base lg:text-xl font-bold mb-6">Follow Us</h3>
-<div class="flex gap-4 mb-8">
-  @foreach ($followus->where('type', 'Follow Us')->where('status', 1) as $item)
-    <a href="{{ $item->link ?? '#' }}"
-      class="bg-[#58af0838] p-1 justify-center rounded-full w-10 h-10 flex items-center hover:bg-cyan-600 transition-colors">
-      <i class="{{ $item->icon }}"></i>
-    </a>
-  @endforeach
-</div>
+        <h3 class="text-black text-base lg:text-xl font-bold mb-6">Follow
+          Us</h3>
+        <div class="flex gap-4 mb-8">
+          @foreach ($followus as $item)
+          <a href="{{ $item->link ?? '#' }}"
+            class="bg-[#58af0838] p-1 justify-center rounded-full w-10 h-10 flex items-center hover:bg-cyan-600 transition-colors">
+            <i class="{{ $item->icon }}"></i>
+          </a>
+           @endforeach
+        </div>
 
 
-      <h3 class="text-black text-base lg:text-xl font-bold mb-6">Payment Channels</h3>
-            <div class="grid grid-cols-4 gap-4">
-              @foreach ($payment_channels->where('type', 'payment_channels')->where('status', 1) as $item)
-                <img src="{{ asset($item->icon) }}" alt="{{ $item->item_text }}" class="h-9">
-              @endforeach
+        <h3 class="text-black text-base lg:text-xl font-bold mb-6">Payment
+          Channels</h3>
+        <div class="grid grid-cols-4 gap-4">
+          @foreach ($payment_channels as $item)
+          <i class="{{$item->icon}}" class="h-8"></i>
+          @endforeach
         </div>
 
         <button
@@ -129,17 +123,12 @@
         </button>
         <div id="top-destination" class="hidden">
           <ul class="space-y-3 text-sm lg:text-base">
-            <li><a href="#" class="hover:text-black transition-colors">Bali</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">Bangkok</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">Cancun</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">Nha Trang</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">Phuket</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">Tokyo</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">More Destinations</a></li>
+            @foreach ($topDestinations as $item)
+            <li><a href="{{ $item->link ?? '#' }}" class="hover:text-black transition-colors"> {{ $item->item_text }}</a></li>
+            @endforeach
           </ul>
         </div>
       </div>
-
       <!-- Information -->
       <div>
         <button class="w-full text-left flex justify-between items-center py-2 text-base lg:text-xl font-bold"
@@ -149,17 +138,12 @@
         </button>
         <div id="information" class="hidden">
           <ul class="space-y-3 text-sm lg:text-base">
-            <li><a href="#" class="hover:text-black transition-colors">Help & FAQs</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">Careers</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">About us</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">Contact us</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">Privacy policy</a></li>
-            <li><a href="#" class="hover:text-black transition-colors">Blogs</a></li>
+            @foreach ($informationLinks as $item)
+            <li><a href="{{ $item->link ?? '#' }}" class="hover:text-black transition-colors">{{ $item->item_text }}</a></li>
+            @endforeach
           </ul>
         </div>
       </div>
-
-      <!-- Follow Us & Payment -->
       <div>
         <button class="w-full text-left flex justify-between items-center py-2 text-base lg:text-xl font-bold"
           onclick="toggleFooterSection('follow-payment')">
@@ -168,29 +152,17 @@
         </button>
         <div id="follow-payment" class="hidden">
           <div class="flex gap-4 mb-8">
-            <a href="#" class="bg-[#58af0838] rounded-full p-2 hover:bg-cyan-600 transition-colors">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="#" class="bg-blue-400 p-2 rounded-full hover:bg-blue-500 transition-colors">
-              <i class="fab fa-twitter"></i>
-            </a>
-            <a href="#" class="bg-red-600 p-2 rounded-full hover:bg-red-700 transition-colors">
-              <i class="fab fa-youtube"></i>
-            </a>
-            <a href="#" class="bg-pink-600 p-2 rounded-full hover:bg-pink-700 transition-colors">
-              <i class="fab fa-instagram"></i>
-            </a>
+            @foreach ($followus as $item)
+              <a href="{{ $item->link ?? '#' }}" class="bg-[#58af0838] rounded-full p-2 hover:bg-cyan-600 transition-colors">
+                <i class="{{ $item->icon }}"></i>
+              </a>
+            @endforeach
           </div>
           <h3 class="text-black text-base lg:text-xl font-bold mb-6">Payment Channels</h3>
           <div class="grid grid-cols-4 gap-4">
-            <img src="https://via.placeholder.com/50x30" alt="Union Pay" class="h-8">
-            <img src="https://via.placeholder.com/50x30" alt="Visa" class="h-8">
-            <img src="https://via.placeholder.com/50x30" alt="Mastercard" class="h-8">
-            <img src="https://via.placeholder.com/50x30" alt="JCB" class="h-8">
-            <img src="https://via.placeholder.com/50x30" alt="American Express" class="h-8">
-            <img src="https://via.placeholder.com/50x30" alt="Apple Pay" class="h-8">
-            <img src="https://via.placeholder.com/50x30" alt="Google Pay" class="h-8">
-            <img src="https://via.placeholder.com/50x30" alt="Alipay" class="h-8">
+            @foreach ($payment_channels as $item)
+            <i class="{{$item->icon}}" class="h-8"></i>
+            @endforeach
           </div>
           <button
             class="mt-8 border border-gray-700 rounded-lg px-4 py-2 flex items-center gap-2 hover:border-gray-500 transition-colors">

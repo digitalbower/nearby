@@ -17,10 +17,10 @@ class FooterController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'type' => 'nullable|string|max:255',
-            'item_text' => 'nullable|string',
-            'link' => 'nullable|url',
-            'icon' => 'nullable|string', // not an image, just a class string
+            'type' => 'required|string|max:255',
+            'item_text' => 'required_if:type,Top Destination,Information|string|nullable',
+            'icon' => 'required_if:type,Follow Us,payment_channels|string|nullable',
+            'link' => ['required_if:type,Top Destination,Information','nullable', 'regex:/^(https?:\/\/|\/)/'],
             'status' => 'nullable|boolean',
         ]);
     
