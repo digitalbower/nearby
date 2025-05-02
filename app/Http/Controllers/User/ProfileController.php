@@ -130,8 +130,19 @@ class ProfileController extends Controller
 
     
     public function download($id)
-    {
-        $item = BookingConfirmation::findOrFail($id);
+    { 
+        $userId = Auth::id();
+        $item = DB::table('booking_confirmation_items as bci')
+        ->join('booking_confirmations as bc', 'bci.booking_confirmation_id', '=', 'bc.id')
+        ->where('bc.user_id', $userId) // condition 1: user must own the booking
+        ->where('bci.id', $id)         // condition 2: item ID must match
+        ->select(
+            'bci.*',
+            'bc.booking_id',
+            'bc.created_at as booking_created_at',
+            'bc.total_amount'
+        )
+        ->first(); 
 
         $pdf = Pdf::loadView('user.profilebookinghistorypdf', compact('item'));
 
