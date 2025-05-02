@@ -144,7 +144,7 @@
             <p class="font-semibold text-gray-800">{{ $user->phone ?? '-' }}</p>
         </div>
         <div>
-            <p class="text-sm text-gray-600">Shipping Address</p>
+            <p class="text-sm text-gray-600">Address</p>
             <p class="font-semibold text-gray-800">{{ $user->address ?? '-' }}</p>
         </div>
     </div>
@@ -243,8 +243,8 @@
           </div>
         </div>
         <div class="text-right flex justify-center gap-x-4 items-center">
-          <div class="text-4xl font-semibold text-gray-900">${{ number_format($product_item->unit_price, 2) }}</div>
-          <div class="text-2xl text-gray-500 line-through">${{ number_format($product_item->variant->unit_price, 2) }}</div>
+          <div class="text-4xl font-semibold text-gray-900">AED {{ number_format($product_item->unit_price, 2) }}</div>
+          <div class="text-2xl text-gray-500 line-through">AED {{ number_format($product_item->variant->unit_price, 2) }}</div>
         </div>
       </div>
       <hr class="my-2">
@@ -376,6 +376,7 @@
               </div>
               <span class="font-medium text-gray-800">AED {{ number_format($booking->booking_amount, 2) }}</span>
             </li>
+            @if (session('promocode'))
             <li class="flex items-center justify-between text-base text-gray-800">
               <div class="flex items-center space-x-3">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -383,18 +384,18 @@
                 </svg>
                 <span>Promocode Discount</span>
               </div>
-              <span class="font-medium text-gray-800"> {{$promo_discount  ?? 'N/A' }}</span>
+              <span class="font-medium text-gray-800"> {{ rtrim(rtrim(number_format($promo_discount, 2), '0'), '.') }}%</span>
             </li>
             <li class="flex items-center justify-between text-base text-gray-700">
               <div class="flex items-center space-x-3">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5-6l3 3-3 3" />
                 </svg>
-                <span>Discount Amount</span>
+                <span>Promocode Discount Amount</span>
               </div>
-              <span class="font-medium text-gray-800">AED {{ number_format($booking->discount_amount, 2) }}</span>
+              <span class="font-medium text-gray-800">AED {{ number_format($promocode_discount_amount,2) }}</span>
             </li>
-
+            @endif
             <li class="flex items-center justify-between text-base text-gray-700">
               <div class="flex items-center space-x-3">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -410,7 +411,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-3.333 0-5 1.667-5 5v5h10v-5c0-3.333-1.667-5-5-5zM7 16v2h10v-2" />
                 </svg>
-                <span>Amount After Discount</span>
+                <span>Total</span>
               </div>
               <span class="font-medium text-gray-800"> AED {{ number_format($booking->total_amount, 2) }}</span>
             </li>
@@ -699,4 +700,23 @@
   });
 </script>
 
+
+<script>
+    // Push a dummy state so "Back" triggers `onpopstate`
+    history.pushState(null, null, location.href);
+
+    // If user clicks back button
+    window.onpopstate = function () {
+        window.location.href = "/"; // 👈 redirect to a safe page
+    };
+
+    // Block browser cache from showing payment page again
+    window.addEventListener("pageshow", function(event) {
+        if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+            window.location.href = "/";
+        }
+    });
+</script>
 @endpush
+
+

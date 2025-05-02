@@ -159,7 +159,7 @@ class HomeController extends Controller
     }
 
     public function bookingconfirmation()
-    {
+    { 
         $uppermenuItems = NavigationMenu::where('active', 1)
         ->where('navigation_placement', 'upper')
         ->get(); 
@@ -201,8 +201,12 @@ class HomeController extends Controller
        
         $booking = BookingConfirmation::with('items.variant.product')->find($bookingConfirmation->id);  
         
-        $promoCode = session('promocode');
+        $promoCode = session('promocode'); 
         $promo_discount = null;
+        $promocode_discount_amount = 0;
+        $bookingAmount = $booking->booking_amount;
+
+
         if($promoCode){
             $now = Carbon::now();
             $promo = Promo::where('promocode', $promoCode)
@@ -212,7 +216,14 @@ class HomeController extends Controller
             ->first();
 
             $promo_discount =$promo->discount;
-        }
+
+            if ($promo) {
+                $promo_discount = $promo->discount;
+                $promocode_discount_amount = $bookingAmount * $promo_discount / 100;
+            }
+            
+        } 
+
 
         $userId = Auth::user()->id;
 
@@ -229,9 +240,9 @@ class HomeController extends Controller
             ];
         }
 
-
+     
         return view('user.bookingconfirmation',compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
-        'followus','payment_channels','user','bookingConfirmation','payment','booking','checkoutData')); 
+        'followus','payment_channels','user','bookingConfirmation','payment','booking','checkoutData','promocode_discount_amount','promo_discount')); 
     } 
      
 
