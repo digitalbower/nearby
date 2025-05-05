@@ -265,12 +265,14 @@
 @endpush
 @section('content')
 <section class="">
-<!-- Add this to the bottom of your CSS -->
 @if(session('success'))
-  <div x-data="{ show: true }" x-show="show" class="mb-4 p-4 rounded-md bg-green-100 text-green-800 border border-green-300 flex justify-between items-center">
-      <span>{{ session('success') }}</span>
-      <button @click="show = false" class="text-green-700 hover:text-green-900">&times;</button>
-  </div>
+  <div x-data="{ show: true }" 
+      x-init="setTimeout(() => show = false, 3000)" 
+      x-show="show" 
+      class="mb-4 p-4 rounded-md bg-green-100 text-green-800 border border-green-300 flex justify-between items-center">
+    <span>{{ session('success') }}</span>
+    <button @click="show = false" class="text-green-700 hover:text-green-900">&times;</button>
+</div>
 @endif
     <div class="container mx-auto relative border-b">
       <div class=" grid h-full bg-[#58af0838] grid-cols-1  md:grid-cols-5">
@@ -535,7 +537,7 @@
                 </div>
 
                 <p class="text-gray-700 text-sm leading-relaxed">
-                  {{ Str::limit($product->short_description, 100) }}
+                  {{ $product->short_description }}
                 </p>
 
                 <div class="flex justify-between items-center">
@@ -702,7 +704,7 @@
   </section>
 
 
-  <section class="bg-white container mx-auto lg:px-0 px-4 lg:py-20 py-10">
+  <section id="newsletterSection" class="bg-white container mx-auto lg:px-0 px-4 lg:py-20 py-10">
   <form method="POST" action="{{ route('subscribe') }}" class="flex flex-col md:flex-row items-center justify-between gap-8">
     @csrf
     <!-- input fields -->
@@ -714,6 +716,15 @@
       <input name="email" type="email" placeholder="Enter Email"
         class="flex-1 lg:w-80 px-6 py-4 rounded-full border-2 lg:w-auto w-full lg:mb-0 mb-5 focus:outline-none focus:ring-2 focus:ring-cyan-700 bg-white text-black placeholder-gray-500 shadow-md"
         required>
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
       <button type="submit"
         class="w-full lg:w-auto px-9 py-3 bg-[#58af0838] text-black font-semibold rounded-full shadow-md hover:shadow-lg transition-all duration-300">
         Subscribe Now <i class="fas fa-paper-plane ml-2"></i>
@@ -723,18 +734,42 @@
 </section>
 
 
-  
+  <style>
+    [x-cloak] { display: none !important; }
+    </style>
 <!-- Modal Structure -->
 <div id="modal"
-  class="fixed inset-0 bg-gray-500 bg-opacity-50 z-50 flex items-center justify-center hidden transition-opacity duration-300 ease-in-out">
+  x-data="{
+    show: false,
+    successMessageShown: {{ session('modal_success') ? 'true' : 'false' }},
+  }"
+  x-init="
+    if (successMessageShown) {
+      show = true;
+      setTimeout(() => {
+        show = false;
+      }, 3000);
+    }
+  "
+  x-cloak
+  :class="show ? 'flex' : 'hidden'"
+  class="fixed inset-0 bg-gray-500 bg-opacity-50 z-50 items-center justify-center transition-opacity duration-300 ease-in-out"
+>
   <div
     class="bg-[#daedc9]  p-8 rounded-xl shadow-2xl w-full max-w-md mx-auto transform transition-all scale-95 relative">
     <!-- Close Button in Top-Right Corner -->
-    <button id="closeModalButton" class="absolute top-3 right-3 text-gray-800 text-xl font-bold focus:outline-none">
+    <button id="closeModalButton" class="absolute top-3 right-3 text-gray-800 text-xl font-bold focus:outline-none"
+      @click="show = false">
       &times;
     </button>
 
     <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Talk to a Specialist</h2>
+
+    @if(session('modal_success')) 
+      <div class="mb-4 p-4 rounded-md bg-green-100 text-green-800 border border-green-300 text-center">
+        {{ session('modal_success') }}
+      </div>
+    @endif
    
     <form id="modalForm" class=""  action="{{ route('specialist.submit') }}" method="POST">
     @csrf
@@ -1012,7 +1047,10 @@ $(document).ready(function () {
 </script>
 
 <script>
+  document.addEventListener("DOMContentLoaded", () => {
   const dropdown = document.getElementById("dropdown");
+
+    if (!dropdown) return; // Prevent error if dropdown not found
 
   function showDropdown() {
     dropdown.classList.remove("hidden");
@@ -1031,6 +1069,7 @@ $(document).ready(function () {
     ) {
       dropdown.classList.add("hidden");
     }
+    });
   });
 </script>
 
@@ -1058,6 +1097,19 @@ $(document).ready(function () {
     }
   });
 </script>
-
+@if($errors->any())
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const section = document.getElementById("newsletterSection");
+    
+    if (section) {
+      const emailInput = section.querySelector('input[name="email"]');
+      if (emailInput) {
+        emailInput.focus();
+      }
+    }
+  });
+</script>
+@endif
 
 @endpush
