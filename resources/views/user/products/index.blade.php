@@ -300,7 +300,7 @@
         </div>
         <div :class="showFilter ? 'lg:grid gap-6 md:grid-cols-2 lg:grid-cols-3 w-full' : 'grid gap-6 md:grid-cols-2 lg:grid-cols-4 w-full'" class="transition-all duration-300">
           <template x-for="product in sortedProducts" :key="product.id">
-            <a :href="'/user/products/' + product.id" class="block transition-all duration-300 rounded-lg">
+            <a :href="'/products/' + product.slug" class="block transition-all duration-300 rounded-lg">
               <div class="bg-white rounded-lg shadow-md overflow-hidden">
                 <div class="relative">
                   <img :src="product.image" :alt="product.title" class="w-full h-48 object-cover">
@@ -388,7 +388,7 @@
         sortBy: '',
         async fetchProducts() {
             try {
-                let response = await fetch('/user/products/list'); 
+                let response = await fetch('/products/list'); 
                 let data = await response.json(); 
              
                 const productPrices = data.products.map(product => parseFloat(product.price_range?.min ?? 0));
@@ -403,6 +403,7 @@
 
             return {
               id: product.id,
+              slug: product.slug,
               title: product.name ?? 'No title',
               short_description: product.short_description ?? 'No description',
               image: product.image_url ?? 'default-image.jpg',

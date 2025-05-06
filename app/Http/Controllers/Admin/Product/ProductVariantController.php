@@ -44,6 +44,7 @@ class ProductVariantController extends Controller
         })
         ->where('status', 1) 
         ->get(); 
+
         $types = ProductType::where('status', 1)->get();
         $firstProduct = $products->first();
 
@@ -121,7 +122,7 @@ class ProductVariantController extends Controller
             $query->where('status', 1);
         })
         ->where('status', 1) 
-        ->get();
+        ->get(); 
         $types = ProductType::where('status', 1)->get();
         $firstProduct = $products->first();
 

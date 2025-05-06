@@ -718,7 +718,7 @@ clearErrorOnInputChange(cardCvc);
         const result = await finalizeRes.json();
         if (result.success) {
           console.log("Booking complete!");
-          window.location.href = "/user/bookingconfirmation";
+          window.location.href = "/bookingconfirmation";
         } else {
           showError("Booking failed: " + result.error);
         }
@@ -784,7 +784,7 @@ function collectItems() {
   const loadMoreBtn = document.getElementById("load-more-btn");
 
   document.addEventListener("DOMContentLoaded", () => {
-    fetch("/user/checkout-items")
+    fetch("/checkout-items")
       .then((response) => response.json())
       .then((data) => { 
         products = data; 
@@ -962,7 +962,7 @@ function collectItems() {
 
   // Function to update the cart on the server
   function updateCartQuantity(variantId, quantity) {
-    fetch(`/user/update-checkout`, {
+    fetch(`/update-checkout`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1020,7 +1020,7 @@ function collectItems() {
     confirmButtonText: 'Yes, delete it!'
   }).then((result) => {
     if (result.isConfirmed) {
-      fetch(`/user/remove-checkout-item`, {
+      fetch(`/remove-checkout-item`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

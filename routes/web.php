@@ -47,11 +47,12 @@ use App\Http\Controllers\Vendor\ReportManagementController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::post('/subscribe', [NewsletterController::class, 'subscribe'])->name('subscribe');
-Route::prefix('user')->name('user.')->group(function () {
+Route::name('user.')->group(function () {
     Route::prefix('products')->name('products.')->group(function () {
         Route::get('/', [UserProductController::class, 'index'])->name('index');
         Route::get('/list', [UserProductController::class, 'getProducts'])->name('filter');
-        Route::get('/{id}', [UserProductController::class, 'show'])->name('show');
+
+        Route::get('/{slug}', [UserProductController::class, 'show'])->name('show');
     });
     Route::get('deals', [DealsController::class, 'index'])->name('deals.index');
     Route::get('/deals/list', [DealsController::class, 'getDeals'])->name('deals.filter');
@@ -66,7 +67,7 @@ Route::post('/contact', [ContactController::class, 'submit'])->name('contactus.s
 
 // ✅ User Routes
 
-Route::prefix('user')->name('user.')->group(function () {
+Route::name('user.')->group(function () {
 
     // ✅ Publicly Accessible Routes (Available to Everyone)
     Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('auth.google');

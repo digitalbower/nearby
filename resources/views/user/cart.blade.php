@@ -549,7 +549,7 @@ timerElements.forEach((timerElement) => {
 <script>
   // Function to update the cart on the server
   function updateCartQuantity(Id, quantity) {
-    fetch(`/user/update-cart`, {
+    fetch(`/update-cart`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -622,7 +622,7 @@ timerElements.forEach((timerElement) => {
     confirmButtonText: 'Yes, delete it!'
   }).then((result) => {
     if (result.isConfirmed) {
-      fetch(`/user/cart`, {
+      fetch(`/cart`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

@@ -106,6 +106,7 @@ class ProductController extends Controller
             $averageRating = number_format($averageRating, 1);
             return [
                 'id' => $product->id,
+                'slug' => $product->slug,
                 'name' => $product->name,
                 'short_description' => $product->short_description,
                 'image_url' => $product->image ? asset('storage/' . $product->image) : asset('default-image.jpg'),
@@ -155,8 +156,8 @@ class ProductController extends Controller
         ]);
     }
     
-    public function show($id)
-    {
+    public function show($slug)
+    { 
         $uppermenuItems = NavigationMenu::where('active', 1)
         ->where('navigation_placement', 'upper')
         ->get(); 
@@ -185,7 +186,8 @@ class ProductController extends Controller
         ->where('status', 1)
         ->get();    
         $nbvterms = NbvTerm::all();
-        $product = Product::findOrFail($id); 
+       
+        $product = Product::where('slug',$slug)->first(); 
         $tagNames = $product->tag()->toArray();
         $tag_name = implode(', ', $tagNames); 
         $gallery = json_decode($product->gallery, true);
@@ -286,7 +288,7 @@ class ProductController extends Controller
         if ($request->input('redirect_to_cart') == "1") {
             return redirect()->route('user.cart');
         }
-        return redirect('user/cart')->with('success', 'Added to cart successfully!');
+        return redirect('cart')->with('success', 'Added to cart successfully!');
     }
 
 

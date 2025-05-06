@@ -559,7 +559,7 @@ function isAnyVariantSelected() {
 
 function checkAuthAndSubmit() { 
     if (!isUserLoggedIn) {
-        const redirectUrl = "/user/login?redirect=" + encodeURIComponent(window.location.href);
+        const redirectUrl = "/login?redirect=" + encodeURIComponent(window.location.href);
         window.location.href = redirectUrl;
     } else {
         if (isAnyVariantSelected()) {
@@ -583,7 +583,7 @@ function submitAndRedirectToCart() {
 
       function toggleReviewForm() {
         if (!isUserLoggedIn) {
-          const redirectUrl = "/user/login?redirect=" + encodeURIComponent(window.location.href);
+          const redirectUrl = "/login?redirect=" + encodeURIComponent(window.location.href);
           window.location.href = redirectUrl
         } else {
           const reviewButton = document.getElementById("reviewButton");
@@ -639,7 +639,7 @@ function submitAndRedirectToCart() {
           review_rating,
           review_description,
         };
-        fetch('/user/products/store-review', {
+        fetch('/products/store-review', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -676,7 +676,7 @@ function submitAndRedirectToCart() {
           const reviewList = document.getElementById("reviews-list");
           reviewList.innerHTML = "";
 
-          fetch(`/user/products/show-review/${productId}`) 
+          fetch(`/products/show-review/${productId}`) 
             .then(response => response.json())
             .then(reviews => {
               reviews.forEach(review => {
@@ -817,7 +817,7 @@ quantityInput.value = currentValue + 1;
 {{-- <script>
    function checkAuthAndSubmit() {
         if (!isUserLoggedIn) {
-            const redirectUrl = "/user/login?redirect=" + encodeURIComponent(window.location.href);
+            const redirectUrl = "/login?redirect=" + encodeURIComponent(window.location.href);
             window.location.href = redirectUrl;  
         } else {
             $("#addCartForm").valid();  

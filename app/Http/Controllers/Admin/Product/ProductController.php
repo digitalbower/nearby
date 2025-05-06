@@ -14,6 +14,7 @@ use App\Models\Vendor;
 use App\Models\VendorTerm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -121,6 +122,7 @@ class ProductController extends Controller
         $product->trending = $request->has('trending') ? 1 : 0;
         $product->categorycarousel = $request->has('categorycarousel') ? 1 : 0;
         $product->sales_person_id  = $request->sales_person_id;
+        $product->slug = Str::slug($request->name, '_');
         $product->save();
         return redirect()->route('admin.products.index')->with('success', 'New Product created successfully!');
     }
@@ -207,6 +209,7 @@ class ProductController extends Controller
             $product->image = $path; 
         }
         $product->name = $request->name;
+        $product->slug = Str::slug($request->name, '_');
         $product->short_description = $request->short_description;
         $product->about_description = $request->about_description;
         $product->vendor_id = $request->vendor_id;

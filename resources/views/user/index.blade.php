@@ -291,7 +291,7 @@
             <h2 class="hidden lg:block text-2xl ml-5 font-bold mb-6 text-gray-700">Categories</h2>
             <nav class="space-y-2 ml-5">
               @foreach ($categories as $category)
-              <a href="{{ url('/user/products') }}?category={{ urlencode($category->name) }}"
+              <a href="{{ url('/products') }}?category={{ urlencode($category->name) }}"
                     class="flex items-center justify-between py-3 px-4 rounded hover:bg-white/40 transition-colors duration-200 text-gray-700">
                       <div class="flex items-center gap-3">
                           <i class="{{ $category->categoryicon }} h-5 w-5"></i>
@@ -305,7 +305,7 @@
               @endforeach
             </nav>
             <div class="mt-8 pt-6 ml-5 border-t border-white/20">
-              <a href="{{ url('/user/products') }}"
+              <a href="{{ url('/products') }}"
                 class="inline-flex rounded-lg p-2 px-3 items-center text-gray-700 hover:bg-white/40 transition-colors duration-200 text-gray-700 font-medium  transition-all">
                 ALL CATEGORIES
                 <i
@@ -479,7 +479,7 @@
 
             @endphp
         <div class="item">
-          <a href="{{ url('/user/products/' . $product->id) }}">
+          <a href="{{ url('/products/' . $product->id) }}">
             <div class="rounded-lg hover:shadow-xl hover:border-[#58af0838] shadow-lg h-full hover:shadow-xl  border bg-white shadow-lg overflow-hidden transition-transform duration-300"
               data-v0-t="card">
               <!-- Product Image -->
@@ -588,7 +588,7 @@
       }
       @endphp
       <div class="item">
-        <a href="{{ url('/user/products/' . $product->id) }}">
+        <a href="{{ url('/products/' . $product->id) }}">
           <div
             class="rounded-lg hover:shadow-xl hover:border-[#58af0838] shadow-lg h-full hover:shadow-xl  border bg-white shadow-lg overflow-hidden transition-transform duration-300 "
             data-v0-t="card">
