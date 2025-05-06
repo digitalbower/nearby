@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Emirate;
 use App\Models\NbvTerm;
 use App\Models\Product;
+use App\Models\ProductType;
 use App\Models\SalesPerson;
 use App\Models\Subcategory;
 use App\Models\Tags;
@@ -42,7 +43,8 @@ class ProductController extends Controller
         $terms = NbvTerm::where('status',1)->latest()->get();
         $emirates = Emirate::where('status',1)->latest()->get();
         $persons = SalesPerson::where('status',1)->latest()->get();
-        return view('admin.products.create')->with(['vendors'=>$vendors,'categories'=>$categories,
+        $types = ProductType::where('status', 1)->get();
+        return view('admin.products.create')->with(['vendors'=>$vendors,'types'=>$types,'categories'=>$categories,
         'tags'=>$tags,'terms'=>$terms,'emirates'=>$emirates,'persons'=>$persons]);
     }
 
@@ -54,6 +56,7 @@ class ProductController extends Controller
         
         $request->validate([
             'vendor_id' => 'required',
+            'product_type_id' => 'required|exists:product_types,id',
             'category_id' => 'required',
             'sub_category_id' => 'required',
             'name' => 'required',
@@ -101,6 +104,7 @@ class ProductController extends Controller
         }
 
         $product->name = $request->name;
+        $product->product_type_id =$request->product_type_id;
         $product->short_description = $request->short_description;
         $product->about_description = $request->about_description;
         $product->tags_id =  json_encode($request->tags_id);
@@ -138,8 +142,9 @@ class ProductController extends Controller
         $terms = NbvTerm::where('status',1)->latest()->get();
         $emirates = Emirate::where('status',1)->latest()->get();
         $persons = SalesPerson::where('status',1)->latest()->get();
+        $types = ProductType::where('status', 1)->get();
         return view('admin.products.edit')->with(['product'=>$product,'vendors'=>$vendors,'categories'=>$categories,
-        'tags'=>$tags,'terms'=>$terms,'emirates'=>$emirates,'persons'=>$persons]);
+        'tags'=>$tags,'terms'=>$terms,'emirates'=>$emirates,'persons'=>$persons,'types'=>$types]);
 
     }
 
@@ -151,6 +156,7 @@ class ProductController extends Controller
 
         $request->validate([
             'vendor_id' => 'required',
+            'product_type_id' => 'required|exists:product_types,id',
             'category_id' => 'required',
             'sub_category_id' => 'required',
             'name' => 'required',
@@ -210,6 +216,7 @@ class ProductController extends Controller
         }
         $product->name = $request->name;
         $product->slug = Str::slug($request->name, '_');
+        $product->product_type_id =$request->product_type_id;
         $product->short_description = $request->short_description;
         $product->about_description = $request->about_description;
         $product->vendor_id = $request->vendor_id;

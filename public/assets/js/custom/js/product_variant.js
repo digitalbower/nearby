@@ -3,7 +3,6 @@ $(document).ready(function () {
         ignore: [],
         rules: {
             product_id: { required: true },
-            product_type_id: { required: true },
             title: { required: true },
             short_description: { required: true },
             product_variant_icon: { required: true },
@@ -23,7 +22,6 @@ $(document).ready(function () {
         },
         messages: {
             product_id: { required: "Product is required" },
-            product_type_id: { required: "Product type is required" },
             title: { required: "Title is required" },
             short_description: { required: "Short Description is required" },
             product_variant_icon: { required: "Product Variant Icon is required" },

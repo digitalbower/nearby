@@ -4,17 +4,24 @@
 <!-- Main Content -->
 <main class="flex-1  space-y-6">
 <!-- Header -->
-@if (session('success'))
-    <div class="mb-4 px-4 py-2 bg-green-100 border border-green-400 text-green-700 rounded">
-        {{ session('success') }}
+@if(session('success'))
+      <div x-data="{ show: true }" 
+            x-init="setTimeout(() => show = false, 3000)" 
+            x-show="show" 
+            class="mb-4 p-4 rounded-md bg-green-100 text-green-800 border border-green-300 flex justify-between items-center">
+          <span>{{ session('success') }}</span>
+          <button @click="show = false" class="text-green-700 hover:text-green-900">&times;</button>
+      </div>
+  @endif
+@if(session('error'))
+    <div x-data="{ show: true }" 
+         x-show="show" 
+         class="mb-4 p-4 rounded-md bg-red-100 text-red-800 border border-red-300 flex justify-between items-center">
+        <span>{{ session('error') }}</span>
+        <button @click="show = false" class="text-red-700 hover:text-red-900">&times;</button>
     </div>
 @endif
 
-@if (session('error'))
-    <div class="mb-4 px-4 py-2 bg-red-100 border border-red-400 text-red-700 rounded">
-        {{ session('error') }}
-    </div>
-@endif
 
 <div class="container mx-auto px-6 py-10">
     <h1 class="text-3xl font-extrabold text-gray-900 mb-8">Booking Management</h1>
@@ -151,6 +158,7 @@
 </main>
 @endsection
 @push('scripts')
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function () {

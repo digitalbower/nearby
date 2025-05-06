@@ -132,7 +132,7 @@ class StripController extends Controller
         foreach ($booking->items as $booking_item) { 
             $product_variant = ProductVariant::find($booking_item->product_varient_id);
             $order_date = $booking->created_at->copy(); 
-            $validity = $product_variant->types->validity;
+            $validity = $product_variant->product->types->validity; 
             $valid_until = $order_date->copy()->addDays($validity);
             
             $variants[] = [

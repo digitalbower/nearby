@@ -45,14 +45,13 @@ class ProductVariantController extends Controller
         ->where('status', 1) 
         ->get(); 
 
-        $types = ProductType::where('status', 1)->get();
         $firstProduct = $products->first();
 
         $categoryMarkup = 0;
         if ($firstProduct) {
             $categoryMarkup = \App\Models\Category::find($firstProduct->category_id)->markup ?? 0;
         } 
-        return view('admin.products.product_variants.create')->with(['products'=>$products,'types'=>$types,'categoryMarkup'=>$categoryMarkup]);
+        return view('admin.products.product_variants.create')->with(['products'=>$products,'categoryMarkup'=>$categoryMarkup]);
     }
 
     /**
@@ -63,7 +62,6 @@ class ProductVariantController extends Controller
         $categoryMarkupLimit = (float) $request->input('category_markup_limit');
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'product_type_id' => 'required|exists:product_types,id',
             'title' => 'required',
             'short_description' => 'required',
             'product_variant_icon' => 'required',
@@ -122,15 +120,15 @@ class ProductVariantController extends Controller
             $query->where('status', 1);
         })
         ->where('status', 1) 
-        ->get(); 
-        $types = ProductType::where('status', 1)->get();
+        ->get();
         $firstProduct = $products->first();
 
         $categoryMarkup = 0;
         if ($firstProduct) {
             $categoryMarkup = \App\Models\Category::find($firstProduct->category_id)->markup ?? 0;
         } 
-        return view('admin.products.product_variants.edit')->with(['products'=>$products,'product_variant'=>$product_variant,'types'=>$types,'categoryMarkup'=>$categoryMarkup]);
+        return view('admin.products.product_variants.edit')->with(['products'=>$products,'product_variant'=>$product_variant,'categoryMarkup'=>$categoryMarkup]);
+
     }
 
     /**
@@ -142,7 +140,6 @@ class ProductVariantController extends Controller
         $categoryMarkupLimit = (float) $request->input('category_markup_limit');
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'product_type_id' => 'required|exists:product_types,id',
             'title' => 'required',
             'short_description' => 'required',
             'short_legend' => 'required',

@@ -10,16 +10,12 @@ class ProductVariant extends Model
 {
     use HasFactory,SoftDeletes;
 
-    protected $fillable= ['product_id','title','short_legend','short_legend_icon','short_info','product_type_id','short_description','product_variant_icon','unit_price','unit_type_id','discounted_percentage','discounted_price',
+    protected $fillable= ['product_id','title','short_legend','short_legend_icon','short_info','short_description','product_variant_icon','unit_price','unit_type_id','discounted_percentage','discounted_price',
     'available_quantity','threshold_quantity','validity_from','validity_to','timer_flag','start_time','end_time','markup','agreement_unit_price'];
     
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');
-    }
-    public function types()
-    {
-        return $this->hasOne(ProductType::class, 'id', 'product_type_id');
     }
     public function cart()
     {

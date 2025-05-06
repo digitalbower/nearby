@@ -32,18 +32,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label for="product_type_id" class="form-label">Product Type</label>
-                    <select class="form-control" name="product_type_id" id="product_type_id">
-                        <option value="">Select Product type</option>
-                        @foreach ($types as $type)
-                            <option value="{{ $type->id }}" 
-                                {{ old('product_type_id') == $type->id ? 'selected' : '' }}>
-                                {{ $type->product_type }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
                     <input type="text" class="form-control" id="title" name="title" value="{{old('title') }}">
