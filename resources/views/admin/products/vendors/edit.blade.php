@@ -60,3 +60,20 @@
     <script src="{{ asset('assets/js/custom/js/vendor.js') }}"></script>
 @endpush
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const today = new Date().toISOString().split("T")[0];
+        const fromDate = document.getElementById("validityfrom");
+        const toDate = document.getElementById("validityto");
+
+        // Prevent past dates in "Validity From"
+        fromDate.setAttribute("min", today);
+
+        // When "Validity From" is selected, set that as the min for "Validity To"
+        fromDate.addEventListener("change", function () {
+            const selectedFromDate = this.value;
+            toDate.value = ""; // Clear any previously selected "to" date
+            toDate.setAttribute("min", selectedFromDate);
+        });
+    });
+</script>

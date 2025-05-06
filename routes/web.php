@@ -94,8 +94,7 @@ Route::prefix('user')->name('user.')->group(function () {
         });
         // ✅ E-commerce & Booking Routes
         // web.php
-        Route::get('/item/{item}/download-pdf', [HomeController::class, 'downloadPdfItem'])
-        ->name('booking.item.download');
+       
             Route::get('/bookingconfirmation', [HomeController::class, 'bookingconfirmation'])->name('bookingconfirmation');
             Route::get('/cart', [UserProductController::class, 'cart'])->name('cart');
             Route::delete('/cart', [UserProductController::class, 'destroy'])->name('destroy');
@@ -103,16 +102,10 @@ Route::prefix('user')->name('user.')->group(function () {
             Route::post('/proceed-checkout', [CheckoutController::class, 'proceedCheckout'])->name('proceed_checkout');
             Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
             Route::get('/stripe', [CheckoutController::class, 'stripe'])->name('stripe');
+            Route::get('/item/{item}/download-pdf', [HomeController::class, 'downloadPdfItem'])
+            ->name('booking.item.download');
             // routes/web.php
-            // Route::get('/booking-confirmation', [CheckoutController::class, 'confirmation'])->name('user.bookingconfirmation');
-            Route::post('/createpaymentintent', [CheckoutController::class, 'createpaymentintent'])->name('createpaymentintent');
-            
-
-
-                Route::get('/payment/failure', function () {
-                    return view('user.paymentfailure');
-                })->name('user.paymentfailure');
-                Route::post('/create-payment-intent', [CheckoutController::class, 'createIntent'])->name('stripe.intent');
+          
                 
 
 

@@ -84,8 +84,13 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="markup" class="form-label">Markup (%)</label>
-                    <input type="text" class="form-control" id="markup" name="markup" value="{{$product_variant->markup }}">
+                <label for="markup" class="form-label">Markup (%)</label>
+    <input type="text" id="markup" name="markup" class="form-control @error('markup') is-invalid @enderror" value="{{ old('markup') }}">
+    <input type="hidden" id="category_markup_limit" name="category_markup_limit" value="{{ $categoryMarkup }}">
+    
+    @error('markup')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
                 </div>
 
                 
@@ -104,11 +109,11 @@
                 </div>
                 <div class="mb-3">
                     <label for="validity_from" class="form-label">Validity From</label>
-                    <input type="date" class="form-control" id="validity_from" name="validity_from" value="{{$product_variant->validity_from }}">
+                    <input type="date" class="form-control" id="validityfrom" name="validity_from" value="{{$product_variant->validity_from }}">
                 </div>
                 <div class="mb-3">
                     <label for="validity_to" class="form-label">Validity To</label>
-                    <input type="date" class="form-control" id="validity_to" name="validity_to" value="{{$product_variant->validity_to }}">
+                    <input type="date" class="form-control" id="validityto" name="validity_to" value="{{$product_variant->validity_to }}">
                 </div>
                 <div class="mb-3">
                     <label for="timer_flag" class="form-label">Timer</label>
@@ -151,7 +156,23 @@
     });
   </script>
   
-  
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const today = new Date().toISOString().split("T")[0];
+        const fromDate = document.getElementById("validityfrom");
+        const toDate = document.getElementById("validityto");
+
+        // Prevent past dates in "Validity From"
+        fromDate.setAttribute("min", today);
+
+        // When "Validity From" is selected, set that as the min for "Validity To"
+        fromDate.addEventListener("change", function () {
+            const selectedFromDate = this.value;
+            toDate.value = ""; // Clear any previously selected "to" date
+            toDate.setAttribute("min", selectedFromDate);
+        });
+    });
+</script>
 @endpush
 
 

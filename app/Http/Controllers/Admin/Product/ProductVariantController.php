@@ -82,7 +82,7 @@ class ProductVariantController extends Controller
             'validity_to' => 'required',
             'markup' => ['required','numeric','min:0',
             function ($attribute, $value, $fail) use ($categoryMarkupLimit) {
-                if ((float) $value > $categoryMarkupLimit) {
+                if ((float) $value < $categoryMarkupLimit) {
                     $fail("The $attribute may not be greater than {$categoryMarkupLimit}%.");
                 }
             },
@@ -121,7 +121,14 @@ class ProductVariantController extends Controller
         })
         ->where('status', 1) 
         ->get();
-        return view('admin.products.product_variants.edit')->with(['products'=>$products,'product_variant'=>$product_variant]);
+        $firstProduct = $products->first();
+
+        $categoryMarkup = 0;
+        if ($firstProduct) {
+            $categoryMarkup = \App\Models\Category::find($firstProduct->category_id)->markup ?? 0;
+        } 
+        return view('admin.products.product_variants.edit')->with(['products'=>$products,'product_variant'=>$product_variant,'categoryMarkup'=>$categoryMarkup]);
+
     }
 
     /**
@@ -129,6 +136,8 @@ class ProductVariantController extends Controller
      */
     public function update(Request $request, ProductVariant $product_variant)
     {
+
+        $categoryMarkupLimit = (float) $request->input('category_markup_limit');
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'title' => 'required',
@@ -143,7 +152,13 @@ class ProductVariantController extends Controller
             'available_quantity' => 'required',
             'validity_from' => 'required',
             'validity_to' => 'required',
-            'markup' => 'required',
+            'markup' => ['required','numeric','min:0',
+            function ($attribute, $value, $fail) use ($categoryMarkupLimit) {
+                if ((float) $value < $categoryMarkupLimit) {
+                    $fail("The $attribute may not be greater than {$categoryMarkupLimit}%.");
+                }
+            },
+        ],
             'agreement_unit_price'=> 'required',
         ]);
         $data = $request->all(); 

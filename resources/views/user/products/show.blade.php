@@ -668,6 +668,7 @@ function submitAndRedirectToCart() {
           flashMessage.classList.add("hidden");
           flashMessage.textContent = "";
       }, 4000);
+      location.reload();
     }
       function displayReviews() {
         if (isUserLoggedIn) {

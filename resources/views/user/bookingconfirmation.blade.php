@@ -207,7 +207,7 @@
             <h3 class="text-xl font-semibold text-gray-900 mb-6">Purchased Products</h3>
             <div class="space-y-6">
               <!-- Product 1 -->
-        
+      
               @foreach ($booking->items as $product_item)
   <div class="border rounded-lg overflow-hidden lg:shadow-lg">
     <div class="p-3">
@@ -231,7 +231,7 @@
   <div class="border rounded-lg overflow-hidden lg:shadow-lg mb-4">
     <!-- … your existing item HTML … -->
 
-    <a href="{{ route('user.booking.item.download', $product_item->id) }}"
+    <a href="{{ route('user.booking.item.download', $booking->id) }}"
        class="mt-4 inline-flex items-center px-3 py-2 bg-green-100 text-black rounded-lg hover:bg-green-200 transition">
       <i class="fas fa-download mr-1"></i> Download PDF
     </a>
