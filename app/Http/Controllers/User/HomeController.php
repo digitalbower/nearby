@@ -22,6 +22,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\NbvTerm;
+use App\Models\VendorTerm;
+use App\Models\Vendor;
+use App\Models\ProductType;
 
 class HomeController extends Controller
 {
@@ -250,16 +254,38 @@ class HomeController extends Controller
 
     public function downloadPdfItem($itemId)
     {
-        // Load the item with its product
-        $item = BookingConfirmationItem::with('variant.product')
-                 ->findOrFail($itemId);
 
-        // Generate PDF from the Blade view
-        $pdf = Pdf::loadView('user.generate_pdf', compact('item'));
+        $userId = Auth::user();
 
-        // Offer it as a download
-        return $pdf->download('booking_item_'.$item->id.'.pdf');
-    }
+        $item = BookingConfirmationItem::with('variant.product')->findOrFail($itemId); 
+
+        $product = $item->variant->product;
+    
+        $nbvTerms = \App\Models\NbvTerm::find($product->nbv_terms_id);
+        $vendorTerms = \App\Models\VendorTerm::find($product->vendor_terms_id);
+        $vendor = \App\Models\Vendor::find($product->vendor_id); 
+        $productType = ProductType::find($product->product_type_id);
+    
+        // Calculate validity date
+        $validUntil = null;
+        if ($productType && $productType->validity) {
+            $validUntil = Carbon::parse($item->created_at)->addDays($productType->validity);
+        }
+    
+        $pdf = Pdf::loadView('user.generate_pdf', [
+            'item' => $item,
+            'nbvTerms' => $nbvTerms,
+            'vendorTerms' => $vendorTerms,
+            'vendor' => $vendor,
+            'productType' => $productType,
+            'validUntil' => $validUntil,
+            'userId'    =>  $userId,
+        ]);
+    
+        return $pdf->download('booking_item_' . $item->id . '.pdf');
+      }
+    
+    
 
 
    

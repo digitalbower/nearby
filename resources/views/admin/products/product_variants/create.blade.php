@@ -129,11 +129,11 @@
                 </div>
                 <div class="mb-3">
                     <label for="validity_from" class="form-label">Validity From</label>
-                    <input type="date" class="form-control" id="validity_from" name="validity_from" value="{{old('validity_from') }}">
+                    <input type="date" class="form-control" id="validityfrom" name="validity_from" value="{{old('validity_from') }}">
                 </div>
                 <div class="mb-3">
                     <label for="validity_to" class="form-label">Validity To</label>
-                    <input type="date" class="form-control" id="validity_to" name="validity_to" value="{{old('validity_to') }}">
+                    <input type="date" class="form-control" id="validityto" name="validity_to" value="{{old('validity_to') }}">
                 </div>
                 <div class="mb-3">
                     <label for="timer_flag" class="form-label">Timer</label>
@@ -216,6 +216,24 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const today = new Date().toISOString().split("T")[0];
+        const fromDate = document.getElementById("validityfrom");
+        const toDate = document.getElementById("validityto");
+
+        // Prevent past dates in "Validity From"
+        fromDate.setAttribute("min", today);
+
+        // When "Validity From" is selected, set that as the min for "Validity To"
+        fromDate.addEventListener("change", function () {
+            const selectedFromDate = this.value;
+            toDate.value = ""; // Clear any previously selected "to" date
+            toDate.setAttribute("min", selectedFromDate);
+        });
+    });
+</script>
 @endpush
 
 
