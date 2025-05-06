@@ -182,16 +182,16 @@
           <div class="grid grid-cols-2 gap-4">
             <input
               class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              type="text" name="first_name" placeholder="First Name" required >
+              type="text" name="first_name" placeholder="First Name" value="{{old('first_name')}}" required>
             <input
               class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              type="text" name="last_name" placeholder="Last Name" required >
+              type="text" name="last_name" placeholder="Last Name" value="{{old('last_name')}}" required>
           </div>
 
           <!-- Email field -->
           <input
             class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="email" name="email" placeholder="Email" required>
+            type="email" name="email" placeholder="Email" value="{{old('email')}}" required>
 
           <!-- Phone Number field -->
           <div class="flex items-center gap-2">
@@ -210,7 +210,7 @@
             <!-- Phone Number Input -->
             <input
               class="w-3/4 rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              type="tel" name="phone" placeholder="Phone Number" required>
+              type="tel" name="phone" placeholder="Phone Number" value="{{old('phone')}}" required>
           </div>
           
 
@@ -222,7 +222,7 @@
     name="country" required>
     <option value="">Select your country</option>
     @foreach(App\Models\Country::all() as $country)
-        <option value="{{ $country->country_code }}">{{ $country->country }}</option>
+        <option value="{{ $country->country_code }}" {{ old('country') == $country->country_code ? 'selected' : '' }}>{{ $country->country }}</option>
     @endforeach
 </select>
 

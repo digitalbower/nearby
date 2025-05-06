@@ -25,31 +25,57 @@
                 }
             </style>
 
-            <div
+            <ul
                 x-show="open"
                 @click.away="open = false"
                 x-cloak
-                 class="absolute right-0 bg-white shadow-md rounded-lg mt-2 min-w-[10rem] w-fit z-[9999]"
+                class="absolute right-0 bg-white shadow-md rounded-lg mt-2 min-w-[12rem] w-fit z-[9999] list-none p-0"
             >
-                <form method="POST" action="{{ route('user.logout') }}" class="block">
-                    @csrf
-                    <button type="submit" class="w-full text-left px-4 py-2 text-black hover:bg-gray-200">
-                        Logout
-                    </button>
-                </form>
-            </div>
+                <!-- Profile Display (non-clickable) -->
+                <li class="px-4 py-2 border-b border-gray-200">
+                    <div class="flex items-center space-x-3">
+                        <img src="{{ asset('assets/img/dprofile.png') }}" alt="Profile"
+                             class="w-8 h-8 rounded-full">
+                        <div>
+                            <div class="text-sm font-semibold text-black">
+                                {{ auth()->user()->first_name }} {{ auth()->user()->last_name }}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Profile Link -->
+                <li>
+                    <a href="{{ route('user.profile.index') }}" class="block px-4 py-2 text-sm text-black hover:bg-gray-200">
+                        <i class="fas fa-user pr-2 text-cyan-900"></i> Profile
+                    </a>
+                </li>
+
+                <!-- Logout Button -->
+                <li>
+                    <form method="POST" action="{{ route('user.logout') }}" class="block">
+                        @csrf
+                        <button type="submit"
+                                class="w-full text-left px-4 py-2 text-black hover:bg-gray-200 text-sm">
+                            <i class="fas fa-sign-out-alt pr-2 text-cyan-900"></i> Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
         </div>
     @else
-    <div class="flex gap-4">
-        <a href="{{ route('user.login') }}" class="text-black flex items-center">
-            <i class="fas fa-sign-in-alt pr-1 text-cyan-900"></i> Sign In
-        </a>
-        <a href="{{ route('user.signup') }}" class="text-black flex items-center">
-            <i class="fas fa-user-plus pr-1 text-cyan-900"></i> Sign Up
-        </a>
-    </div>
-@endauth
+        <div class="flex gap-4">
+            <a href="{{ route('user.login') }}" class="text-black flex items-center">
+                <i class="fas fa-sign-in-alt pr-1 text-cyan-900"></i> Sign In
+            </a>
+            <a href="{{ route('user.signup') }}" class="text-black flex items-center">
+                <i class="fas fa-user-plus pr-1 text-cyan-900"></i> Sign Up
+            </a>
+        </div>
+    @endauth
 </div>
+
+
     </div>
   </div>
   <header  id="header" class="  shadow-sm  z-50">

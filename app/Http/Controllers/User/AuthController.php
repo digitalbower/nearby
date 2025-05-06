@@ -141,12 +141,11 @@ class AuthController extends Controller
             'password'   => Hash::make($request->password),
         ]);
 
-        Session::flash('success', 'User registered successfully! You can now log in.');
         $email = $request->email;
         $name = $request->first_name;
         Mail::to($email)->send(new RegistrationEmail($name));
         // Redirect to login page with success message
-        return redirect()->route('user.login');
+        return redirect()->route('user.login')->with('success','User registered successfully! You can now log in.');
     }
 
 

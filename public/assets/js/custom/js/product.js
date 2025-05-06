@@ -176,8 +176,14 @@ $(document).ready(function () {
         }
     });
 
-    let selectedFiles = []; // Store all selected files
 
+    // Arrays to track selected new files and removed existing image paths
+    let selectedFiles = [];
+    let removedExistingImages = [];
+
+    // ========== NEW IMAGE HANDLING ==========
+
+    // On file selection
     $("#gallery").on("change", function (event) {
         let files = Array.from(event.target.files); // Convert FileList to array
         console.log("New files:", files);
@@ -213,7 +219,26 @@ $(document).ready(function () {
         console.log("Updated selected files:", selectedFiles);
     });
 
-    // **Attach all selected files before submitting**
+
+    // ========== EXISTING IMAGE HANDLING ==========
+    window.removeExistingImage = function(index) {
+        const wrapper = document.querySelector(`#existing-images .image-wrapper[data-index='${index}']`);
+        if (wrapper) {
+            const path = wrapper.getAttribute('data-path');
+            removedExistingImages.push(path);
+            wrapper.remove();
+            document.getElementById('removed_images').value = JSON.stringify(removedExistingImages);
+        }
+    };
+    
+    $(document).on('click', '.remove-existing-image', function () {
+        const index = $(this).data('index');
+        window.removeExistingImage(index); // or directly put the logic here
+    });
+    
+
+    // ========== FINAL FORM PREP ==========
+
     $("form").on("submit", function (e) {
         let fileInput = document.getElementById("gallery");
         let dataTransfer = new DataTransfer(); // Create a new file list
