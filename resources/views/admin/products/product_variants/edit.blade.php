@@ -95,8 +95,13 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="markup" class="form-label">Markup (%)</label>
-                    <input type="text" class="form-control" id="markup" name="markup" value="{{$product_variant->markup }}">
+                <label for="markup" class="form-label">Markup (%)</label>
+    <input type="text" id="markup" name="markup" class="form-control @error('markup') is-invalid @enderror" value="{{ old('markup') }}">
+    <input type="hidden" id="category_markup_limit" name="category_markup_limit" value="{{ $categoryMarkup }}">
+    
+    @error('markup')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
                 </div>
 
                 
