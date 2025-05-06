@@ -265,6 +265,7 @@ class HomeController extends Controller
         $vendorTerms = \App\Models\VendorTerm::find($product->vendor_terms_id);
         $vendor = \App\Models\Vendor::find($product->vendor_id); 
         $productType = ProductType::find($product->product_type_id);
+        
     
         // Calculate validity date
         $validUntil = null;

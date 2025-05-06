@@ -125,12 +125,12 @@
     <ol type="a">
       <li> {{ $item->variant->product->name ?? 'N/A' }}
         <ol type="i">
-          <li>
-            <em>
-            <img src="{{ asset('/' . $item->variant->product->image) }}" alt="Product Image" class="img-thumbnail" style="width: 100px; height: 100px;">
+        <li>
+        <div class="relative w-28 h-28 rounded-lg overflow-hidden">
+          <img src="{{ asset('storage/' . $item->variant->product->image) }}" alt="{{ $item->variant->product->name }}" class="w-full h-full object-cover">
+        </div>
+      </li>
 
-            </em>
-          </li>
           <li>
             <strong>{{ $item->variant->product->short_description ?? 'No Description' }}</strong>
           </li>
