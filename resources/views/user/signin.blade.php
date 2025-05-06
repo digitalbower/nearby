@@ -143,8 +143,6 @@
     class="relative lg:flex container px-4 mx-auto w-full  ">
     <!-- Left side with illustration -->
    
-   
-
     <!-- Right side with form -->
     <div class=" w-full lg:max-w-2xl relative z-40 bg-white rounded-xl mx-auto p-6 space-y-8">
       <div class="mb-8">
@@ -154,11 +152,15 @@
           adventure!</p>
       </div>
       @if(session('success'))
-      <div class="bg-green-500 text-white text-center p-3 rounded-md">
-          {{ session('success') }}
+      <div x-data="{ show: true }" 
+            x-init="setTimeout(() => show = false, 3000)" 
+            x-show="show" 
+            class="mb-4 p-4 rounded-md bg-green-100 text-green-800 border border-green-300 flex justify-between items-center">
+          <span>{{ session('success') }}</span>
+          <button @click="show = false" class="text-green-700 hover:text-green-900">&times;</button>
       </div>
   @endif
-      <form method="POST" action="{{ route('user.login.submit') }}">
+      <form method="POST" action="{{ route('user.login.submit') }}" class="space-y-6">
       @csrf
       <div class="space-y-4">
         <div>
@@ -172,12 +174,14 @@
             <label for="password" class="mb-1 block text-base font-medium text-gray-800 ml-4 mb-2">
                 Password
             </label>
+          <div class="relative">
             <input id="password" name="password" type="password" placeholder="Enter your password" required
                 class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[#6C5CE7] focus:ring-2 focus:ring-[#6C5CE7] focus:ring-opacity-20 outline-none transition">
-            <div class="flex items-center mt-2">
-                <input type="checkbox" id="showPassword" class="mr-2">
-                <label for="showPassword" class="text-sm text-gray-700">Show Password</label>
-            </div>
+            <button type="button" onclick="togglePassword()"
+              class="absolute right-4 top-1/2 -translate-y-1/2 text-[#718096]">
+              <i id="passwordToggle" class="fas fa-eye"></i>
+            </button>
+          </div>
         </div>
     </div>
        
@@ -202,7 +206,7 @@
         <div class="grid grid-cols-1 gap-4 px-2">
     <a href="{{ route('user.auth.google') }}"
        class="px-6 py-2 text-black rounded-lg bg-[#58af0838] hover:bg-[#4a910954] transition duration-300 flex items-center justify-center">
-        <i class="fab fa-google mr-2"></i> Sign in with Google
+        <i class="fab fa-google mr-2"></i> Google
     </a>
 </div>
 
@@ -246,7 +250,21 @@
       }
     }
   </script>
-   
+    <script>
+      function togglePassword() {
+          const passwordInput = document.getElementById('password');
+          const passwordToggle = document.getElementById('passwordToggle');
+          if (passwordInput.type === 'password') {
+              passwordInput.type = 'text';
+              passwordToggle.classList.remove('fa-eye');
+              passwordToggle.classList.add('fa-eye-slash');
+          } else {
+              passwordInput.type = 'password';
+              passwordToggle.classList.remove('fa-eye-slash');
+              passwordToggle.classList.add('fa-eye');
+          }
+      }
+  </script>
     <script>
       const toggle = document.getElementById("mobile-menu-toggle");
       const menu = document.getElementById("mobile-menu"); // Ensure this matches the id in the HTML

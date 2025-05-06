@@ -98,11 +98,15 @@
                 <div class="mb-3">
                     <div id="existing-images">
                         @if(!empty($product->gallery))
-                        @foreach(json_decode($product->gallery, true) as $image)
-                            <img src="{{ asset('storage/' . $image) }}" class="img-thumbnail" width="100">
-                        @endforeach
+                            @foreach(json_decode($product->gallery, true) as $index => $image)
+                                <div class="image-wrapper" style="display:inline-block; position:relative; margin:5px;" data-index="{{ $index }}" data-path="{{ $image }}">
+                                <img src="{{ asset('storage/' . $image) }}" class="img-thumbnail" width="100">
+                                <button type="button" class="btn-close remove-existing-image" data-index="{{ $index }}"></button>
+                                </div>
+                            @endforeach
                         @endif
                       </div>
+                    <input type="hidden" name="removed_images" id="removed_images" value="">
                     <label for="gallery" class="form-label">Product Gallery</label>
                     <input type="file" class="form-control" id="gallery" name="gallery[]" multiple accept="image/*">
                     <div id="images-preview" class="d-flex flex-wrap mt-3"></div>
@@ -251,6 +255,7 @@
         });
     });
 </script>
+  
 @endpush
 
 

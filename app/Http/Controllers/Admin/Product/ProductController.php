@@ -174,9 +174,27 @@ class ProductController extends Controller
     
         $galleryArray = $product->gallery ? json_decode($product->gallery, true) : [];
 
+        $removedImages = json_decode($request->input('removed_images'), true);
+        
+        // Remove images from storage and gallery array
+        if (!empty($removedImages)) {
+            foreach ($removedImages as $path) {
+                Storage::delete('public/' . $path); // Delete from disk
+        
+                // Remove from gallery array
+                if (($key = array_search($path, $galleryArray)) !== false) {
+                    unset($galleryArray[$key]);
+                }
+            }
+        
+            // Re-index the array to keep it clean
+            $galleryArray = array_values($galleryArray);
+        }
+        
+        // Add new uploaded images
         if ($request->hasFile('gallery')) {
             foreach ($request->file('gallery') as $image) {
-                $path = $image->store('products', 'public');  
+                $path = $image->store('products', 'public');
                 $galleryArray[] = $path;
             }
         }

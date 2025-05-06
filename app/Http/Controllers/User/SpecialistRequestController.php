@@ -28,6 +28,9 @@ class SpecialistRequestController extends Controller
             'message'      => $request->message,
         ]);
 
-        return redirect()->back()->with('success', 'Thank you! Our specialist will get in touch soon.');
+        return redirect()->back()->with([
+            'modal_success' => 'Thank you! Our specialist will get in touch soon.',
+            'modal_open' => true
+        ]);
     }
 }
