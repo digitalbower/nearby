@@ -14,7 +14,7 @@ class Product extends Model
     protected $fillable = ['name', 'short_description','tags_id','gallery','vendor_terms_id','about_description',
     'vendor_id','category_id','sub_category_id','nbv_terms_id','product_support_phone',
     'product_support_email','emirates_id','productlocation_address','productlocation_link','importantinfo',
-    'validity_from','validity_to','giftable','herocarousel','trending','categorycarousel','sales_person_id'];
+    'validity_from','validity_to','giftable','herocarousel','trending','categorycarousel','sales_person_id','product_type_id'];
 
     protected $casts = [
         'tags_id' => 'array',
@@ -59,12 +59,6 @@ class Product extends Model
     {
         return $this->hasMany(Review::class)->where('status', 1);
     }
-
-        public function product()
-    {
-        return $this->belongsTo(Product::class, 'product_id');
-    }
-
     public function productVariant()
     {
         return $this->hasMany(ProductVariant::class, 'product_id');  // 'product_id' is the foreign key in 'product_variants' table
@@ -81,5 +75,8 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
-
+    public function types()
+    {
+        return $this->hasOne(ProductType::class, 'id', 'product_type_id');
+    }
 }

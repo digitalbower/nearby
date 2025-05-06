@@ -91,7 +91,18 @@
                     <div id="images-error" class="text-danger mt-1" style="display: none;">Please upload at least one valid image.</div>
                 </div>
                 <input type="hidden" name="old_gallery" id="old-gallery" value="{{ old('gallery') }}">
-
+                <div class="mb-3">
+                    <label for="product_type_id" class="form-label">Product Type</label>
+                    <select class="form-control" name="product_type_id" id="product_type_id">
+                        <option value="">Select Product type</option>
+                        @foreach ($types as $type)
+                            <option value="{{ $type->id }}" 
+                                {{ old('product_type_id') == $type->id ? 'selected' : '' }}>
+                                {{ $type->product_type }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="mb-3">
                     <label for="tags_id" class="form-label">Tags</label>
                     <select class="form-control" name="tags_id">
@@ -146,6 +157,7 @@
                     <label for="about_description" class="form-label">About Description</label>
                     <textarea name="about_description" id="about_description">{{old('about_description')}}</textarea>
                 </div>
+
                 <div class="mb-3">
 
                     <!-- Giftable Toggle -->
@@ -206,6 +218,13 @@
                 ]
             });
             $('#importantinfo').summernote({
+                height: 200,
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline']],
+                    ['para', ['ul', 'ol', 'paragraph']]
+                ]
+            });
+            $('#productlocation_address').summernote({
                 height: 200,
                 toolbar: [
                     ['style', ['bold', 'italic', 'underline']],

@@ -19,12 +19,12 @@ $(document).ready(function () {
             ignore: [], // Allow validation on hidden input
             rules: {
                 vendor_id: { required: true },
+                product_type_id: { required: true },
                 category_id: { required: true },
                 sub_category_id: { required: true },
                 nbv_terms_id:{ required: true },
                 vendor_terms_id:{ required: true },
                 emirates_id:{ required: true },
-                productlocation_address:{ required: true },
                 productlocation_link:{ required: true },
                 validity_from:{ required: true },
                 validity_to:{ required: true },
@@ -37,6 +37,13 @@ $(document).ready(function () {
                     required: function (textarea) {
                         // Get Summernote content
                         var editorContent = $('#importantinfo').summernote('isEmpty');
+                        return editorContent;
+                    }
+                },
+                productlocation_address: {
+                    required: function (textarea) {
+                        // Get Summernote content
+                        var editorContent = $('#productlocation_address').summernote('isEmpty');
                         return editorContent;
                     }
                 },
@@ -61,10 +68,11 @@ $(document).ready(function () {
             },
             messages: {
                 vendor_id: { required: "Vendor name is required" },
+                product_type_id: { required: "Product type is required" },
                 category_id: { required: "Category name is required" },
                 sub_category_id: { required: "Sub Category name is required" },
                 nbv_terms_id:{ required: "Nbv Terms is required" },
-                vendor_terms_id:{ required: "vendor Terms is required" },
+                vendor_terms_id:{ required: "Vendor Terms is required" },
                 emirates_id:{ required: "Emirates is required" },
                 productlocation_address:{ required: "Product Location address is required" },
                 productlocation_link:{ required: "Product Location link is required" },
@@ -96,6 +104,11 @@ $(document).ready(function () {
                 } 
                 else if (element.attr("name") === "image") {
                     $("#image-error").text(error.text()).show();
+                }
+                else if (element.attr("name") === "vendor_terms_id") {
+                    error.insertAfter( $("#vendor_terms_id"));
+                }  else if (element.attr("name") === "productlocation_address") {
+                    $("#productlocation_address").next('.note-editor').after(error);
                 }else {
                     error.insertAfter(element);
                 }
@@ -107,12 +120,12 @@ $(document).ready(function () {
         ignore: [], // Allow validation on hidden input
         rules: {
             vendor_id: { required: true },
+            product_type_id: { required: true },
             category_id: { required: true },
             sub_category_id: { required: true },
             nbv_terms_id:{ required: true },
             vendor_terms_id:{ required: true },
             emirates_id:{ required: true },
-            productlocation_address:{ required: true },
             productlocation_link:{ required: true },
             validity_from:{ required: true },
             validity_to:{ required: true },
@@ -125,6 +138,13 @@ $(document).ready(function () {
                 required: function (textarea) {
                     // Get Summernote content
                     var editorContent = $('#importantinfo').summernote('isEmpty');
+                    return editorContent;
+                }
+            },
+            productlocation_address: {
+                required: function (textarea) {
+                    // Get Summernote content
+                    var editorContent = $('#productlocation_address').summernote('isEmpty');
                     return editorContent;
                 }
             },
@@ -143,10 +163,11 @@ $(document).ready(function () {
         },
         messages: {
             vendor_id: { required: "Vendor name is required" },
+            product_type_id: { required: "Product type is required" },
             category_id: { required: "Category name is required" },
             sub_category_id: { required: "Sub Category name is required" },
             nbv_terms_id:{ required: "Nbv Terms is required" },
-            vendor_terms_id:{ required: "vendor Terms is required" },
+            vendor_terms_id:{ required: "Vendor Terms is required" },
             emirates_id:{ required: "Emirates is required" },
             productlocation_address:{ required: "Product Location address is required" },
             productlocation_link:{ required: "Product Location link is required" },
@@ -170,7 +191,11 @@ $(document).ready(function () {
                 $("#importantinfo").next('.note-editor').after(error);
             } else if (element.attr("name") === "gallery[]") {
                 $("#images-error").show().text(error.text());
-            } else {
+            }  else if (element.attr("name") === "productlocation_address") {
+                $("#productlocation_address").next('.note-editor').after(error);
+            }else if (element.attr("name") === "importantinfo") {
+                $("#importantinfo").next('.note-editor').after(error);
+            }else {
                 error.insertAfter(element);
             }
         }

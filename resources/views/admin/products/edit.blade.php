@@ -64,7 +64,7 @@
                 <div class="mb-3">
                     <label for="vendor_terms_id" class="form-label">Vendor Terms</label>
                     <input type="hidden" id="vendorterms_id" name="vendor_terms_id" value="{{$product->vendor_terms_id}}">
-                    <select class="form-control" name="vendor_terms_id" id="vendor_terms_id">
+                    <select class="form-control" id="vendor_terms_id">
                         <option value="">Select Vendor Terms</option>
                     </select>
                 </div>
@@ -111,6 +111,18 @@
                     <input type="file" class="form-control" id="gallery" name="gallery[]" multiple accept="image/*">
                     <div id="images-preview" class="d-flex flex-wrap mt-3"></div>
                     <div id="images-error" class="text-danger mt-1" style="display: none;">Please upload at least one valid image.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="product_type_id" class="form-label">Product Type</label>
+                    <select class="form-control" name="product_type_id" id="product_type_id">
+                        <option value="">Select Product type</option>
+                        @foreach ($types as $type)
+                            <option value="{{ $type->id }}" 
+                                {{ old('product_type_id', $type->id ?? '') == $product->product_type_id ? 'selected' : '' }}>
+                                {{ $type->product_type }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label for="tags_id" class="form-label">Tags</label>
@@ -166,6 +178,7 @@
                     <label for="about_description" class="form-label">About Description</label>
                     <textarea name="about_description" id="about_description">{!! $product->about_description !!}</textarea>
                 </div>
+
                 <div class="mb-3">
 
                     <!-- Giftable Toggle -->
@@ -229,6 +242,13 @@
                  ]
              });
              $('#importantinfo').summernote({
+                height: 200,
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline']],
+                    ['para', ['ul', 'ol', 'paragraph']]
+                ]
+            });
+            $('#productlocation_address').summernote({
                 height: 200,
                 toolbar: [
                     ['style', ['bold', 'italic', 'underline']],
