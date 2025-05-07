@@ -67,10 +67,7 @@
                     <div id="editor" style="height: 200px;">{!! $product_variant->short_info !!}</div>
                     <input type="hidden" name="short_info" id="short_info">
                 </div>
-                <div class="mb-3">
-                    <label for="unit_price" class="form-label">Unit Price</label>
-                    <input type="text" class="form-control" id="unit_price" name="unit_price" value="{{$product_variant->unit_price }}">
-                </div>
+              
                 <div class="mb-3">
                     <label for="unit_type_id" class="form-label">Unit Type</label>
                     <input type="hidden" id="unit_type" name="unit_type" value="{{$product_variant->unit_type_id}}">
@@ -78,26 +75,41 @@
                         <option value="">Select Unit Types</option>
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label for="discounted_price" class="form-label">Discounted Price</label>
-                    <input type="text" class="form-control" id="discounted_price" name="discounted_price" value="{{$product_variant->discounted_price }}">
-                </div>
 
                 <div class="mb-3">
-                <label for="markup" class="form-label">Markup (%)</label>
-    <input type="text" id="markup" name="markup" class="form-control @error('markup') is-invalid @enderror" value="{{ old('markup') }}">
-    <input type="hidden" id="category_markup_limit" name="category_markup_limit" value="{{ $categoryMarkup }}">
+                    <label for="unit_price" class="form-label">Market Unit Price</label>
+                    <input type="text" class="form-control" id="unit_price" name="unit_price" value="{{$product_variant->unit_price }}">
+                </div>
+
+
+                <div class="mb-3">
+    <label for="markup" class="form-label">Markup (%)</label>
+    <input type="text" id="markup" name="markup" class="form-control @error('markup') is-invalid @enderror" value="{{$product_variant->markup }}">
+    
     
     @error('markup')
         <div class="invalid-feedback">{{ $message }}</div>
     @enderror
-                </div>
+</div>
 
-                
                 <div class="mb-3">
                     <label for="agreement_unit_price" class="form-label">Agreement Unit Price</label>
-                    <input type="text" class="form-control" id="agreement_unit_price" name="agreement_unit_price" value="{{$product_variant->agreement_unit_price }}">
+                    <input type="text" class="form-control" id="agreement_unit_price" name="agreement_unit_price" value="{{$product_variant->agreement_unit_price}}">
                 </div>
+
+                 <div class="mb-3">
+        <label for="discounted_price" class="form-label">Selling Unit Price</label>
+        <input type="text" class="form-control" id="discounted_price" name="discounted_price" value="{{ $product_variant->discounted_price }}" readonly>
+        @error('discounted_price')
+        <div class="text-danger mt-1">{{ $message }}</div>
+    @enderror
+    </div>
+
+               
+    
+
+                
+              
 
                 <div class="mb-3">
                     <label for="available_quantity" class="form-label">Available Quantity</label>
