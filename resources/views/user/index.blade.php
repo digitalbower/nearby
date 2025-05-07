@@ -341,7 +341,7 @@
 
                 <div>
                     <h2 class="lg:text-lg text-base font-bold text-gray-900">
-                        {{ $product->productlocation_address ?? 'Dubai, UAE' }}
+                        {!! $product->productlocation_address !!}
                     </h2>
                     <div class="flex items-center space-x-2 text-gray-600">
                         @for ($i = 0; $i < 5; $i++)
@@ -369,7 +369,7 @@
                 </span>
 
                 <div>
-                  <a href="{{route('user.products.show',$product->id)}}">
+                  <a href="{{route('user.products.show',$product->slug)}}">
                     <button
                       class="w-auto px-9 py-3 bg-[#58af0838] text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:bg-[#4a910954]">
                       VIEW MORE

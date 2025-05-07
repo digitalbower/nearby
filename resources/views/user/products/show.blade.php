@@ -339,7 +339,7 @@
                   <!-- Address -->
                   <div>
                     <h4 class="font-medium text-gray-900">Address</h4>
-                    <p class="text-gray-600">{{$product->productlocation_address}}</p>
+                    <p class="text-gray-600">{!! $product->productlocation_address !!}</p>
                   </div>
                   <!-- Map Placeholder -->
                   {{-- <div class="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
