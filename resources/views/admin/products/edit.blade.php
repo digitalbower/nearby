@@ -169,10 +169,12 @@
                 <div class="mb-3">
                     <label for="validity_from" class="form-label">Validity From</label> 
                     <input type="date" class="form-control" id="validityfrom" name="validity_from" value="{{$product->validity_from }}">
+                    <label id="from-error" class="error" for="validityfrom"></label>                
                 </div>
                 <div class="mb-3">
                     <label for="validity_to" class="form-label">Validity To</label> 
                     <input type="date" class="form-control" id="validityto" name="validity_to" value="{{ $product->validity_to }}">
+                    <label id="to-error" class="error" for="validityto"></label>                   
                 </div>
                 <div class="mb-3">
                     <label for="about_description" class="form-label">About Description</label>
@@ -263,15 +265,40 @@
         const today = new Date().toISOString().split("T")[0];
         const fromDate = document.getElementById("validityfrom");
         const toDate = document.getElementById("validityto");
+        const fromError = document.getElementById("from-error");
+        const toError = document.getElementById("to-error");
 
-        // Prevent past dates in "Validity From"
-        fromDate.setAttribute("min", today);
+        // Clear error messages
+        function clearErrors() {
+            fromError.textContent = "";
+            toError.textContent = "";
+        }
 
-        // When "Validity From" is selected, set that as the min for "Validity To"
         fromDate.addEventListener("change", function () {
+            clearErrors();
             const selectedFromDate = this.value;
-            toDate.value = ""; // Clear any previously selected "to" date
+
+            if (selectedFromDate < today) {
+                fromError.textContent = "Validity From date cannot be in the past.";
+                this.value = "";
+                toDate.value = "";
+                toDate.removeAttribute("min");
+                return;
+            }
+
+            toDate.value = "";
             toDate.setAttribute("min", selectedFromDate);
+        });
+
+        toDate.addEventListener("change", function () {
+            clearErrors();
+            const selectedToDate = this.value;
+            const selectedFromDate = fromDate.value;
+
+            if (selectedFromDate && selectedToDate < selectedFromDate) {
+                toError.textContent = "Validity To date must be the same or after Validity From.";
+                this.value = "";
+            }
         });
     });
 </script>
