@@ -200,6 +200,32 @@
                         @endforeach
                     </select>
                 </div>
+                <div class="mb-3">
+                    <label>Meta Title</label>
+                    <input type="text" name="meta_title" value="{{ old('meta_title') }}" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label>Meta Description</label>
+                    <input type="text" name="meta_description" value="{{ old('meta_description') }}" class="form-control">
+
+                </div>
+                <div class="mb-3">
+                    <label>OG Title</label>
+                    <input type="text" name="og_title" value="{{ old('og_title') }}" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label>OG Description</label>
+                    <input type="text" name="og_description" value="{{ old('og_description') }}" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label>OG Image</label>
+                    <input type="file" name="og_image" class="form-control" accept="image/*">
+                </div>
+                <div class="mb-3">
+                    <label>Schema (JSON-LD)</label>
+                    <textarea name="schema" class="form-control" rows="4">{{ old('schema') }}</textarea>
+                </div>
+                 
                 <button type="submit" class="btn btn-success">Create</button>
                 <a href="{{ route('admin.products.vendor_terms.index') }}" class="btn btn-secondary">Cancel</a>
             </form>

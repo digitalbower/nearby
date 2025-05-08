@@ -225,6 +225,34 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <label>Meta Title</label>
+                        <input type="text" name="meta_title" value="{{ $product->meta_title }}" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label>Meta Description</label>
+                        <input type="text" name="meta_description" value="{{ $product->meta_description }}" class="form-control">
+    
+                    </div>
+                    <div class="mb-3">
+                        <label>OG Title</label>
+                        <input type="text" name="og_title" value="{{ $product->og_title }}" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label>OG Description</label>
+                        <input type="text" name="og_description" value="{{ $product->og_description }}" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label>OG Image</label>
+                        @if($product->og_image)
+                            <div><img src="{{ asset('storage/' . $product->og_image) }}" width="100"></div>
+                        @endif
+                        <input type="file" name="og_image" class="form-control" accept="image/*">
+                    </div>
+                    <div class="mb-3">
+                        <label>Schema (JSON-LD)</label>
+                        <textarea name="schema" class="form-control" rows="4">{{ $product->schema }}</textarea>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-success">Update</button>
                 <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">Cancel</a>

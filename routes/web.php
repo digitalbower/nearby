@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\Product\ProductTypeController;
 use App\Http\Controllers\Admin\Product\PromoController;
 use App\Http\Controllers\Admin\Product\SalesPersonController;
 use App\Http\Controllers\Admin\Report\ReviewReportController;
+use App\Http\Controllers\SeoManagementController;
 use App\Http\Controllers\User\MerchantController;
 use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\User\ProductController as UserProductController;
@@ -324,6 +325,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::prefix('commission')->name('commission.')->group(function () {
         Route::get('/', [CommissionController::class, 'commission'])->name('commission');
        });
+    Route::resource('seo', SeoManagementController::class);
 
 
 

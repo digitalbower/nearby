@@ -479,7 +479,7 @@
 
             @endphp
         <div class="item">
-          <a href="{{ url('/products/' . $product->id) }}">
+          <a href="{{ url('/products/' . $product->slug) }}">
             <div class="rounded-lg hover:shadow-xl hover:border-[#58af0838] shadow-lg h-full hover:shadow-xl  border bg-white shadow-lg overflow-hidden transition-transform duration-300"
               data-v0-t="card">
               <!-- Product Image -->
@@ -588,7 +588,7 @@
       }
       @endphp
       <div class="item">
-        <a href="{{ url('/products/' . $product->id) }}">
+        <a href="{{ url('/products/' . $product->slug) }}">
           <div
             class="rounded-lg hover:shadow-xl hover:border-[#58af0838] shadow-lg h-full hover:shadow-xl  border bg-white shadow-lg overflow-hidden transition-transform duration-300 "
             data-v0-t="card">

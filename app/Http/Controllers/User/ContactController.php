@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\ContactInformation;
 use App\Models\Footer;
 use App\Models\Logo;
+use App\Models\MainSeo;
 use App\Models\NavigationMenu;
 use Illuminate\Support\Facades\Mail;
 
@@ -41,8 +42,11 @@ class ContactController extends Controller
 
         $payment_channels = Footer::where('type', 'payment_channels')
         ->where('status', 1)
-        ->get();    
-        return view('user.contact',compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+        ->get();  
+        $currentPath = request()->path(); 
+        $seo = MainSeo::where('page_url', $currentPath)->first()
+        ?? MainSeo::where('page_url', 'default')->first();  
+        return view('user.contact',compact('seo','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels'));
     } 
 

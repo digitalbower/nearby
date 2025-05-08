@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Emirate;
 use App\Models\Footer;
 use App\Models\Logo;
+use App\Models\MainSeo;
 use App\Models\NavigationMenu;
 use App\Models\NbvTerm;
 use App\Models\Product;
@@ -49,8 +50,10 @@ class ProductController extends Controller
         $payment_channels = Footer::where('type', 'payment_channels')
         ->where('status', 1)
         ->get();    
-    
-        return view('user.products.index',compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+        $currentPath = request()->path(); 
+        $seo = MainSeo::where('page_url', $currentPath)->first()
+        ?? MainSeo::where('page_url', 'default')->first();
+        return view('user.products.index',compact('seo','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels'));
     }
 
@@ -186,7 +189,10 @@ class ProductController extends Controller
         ->where('status', 1)
         ->get();    
         $nbvterms = NbvTerm::all();
-       
+        $currentPath = request()->path();  
+        $slug = str_replace('products/', '', $currentPath);
+        $slug = trim($slug, '/');
+        $seo = Product::where('slug', $slug)->first();
         $product = Product::where('slug',$slug)->first(); 
         $tagNames = $product->tag()->toArray();
         $tag_name = implode(', ', $tagNames); 
@@ -218,7 +224,7 @@ class ProductController extends Controller
         //     $variant->product_type = $typeName;
         //     return $variant;
         // });
-        return view('user.products.show', compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+        return view('user.products.show', compact('seo','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels','product','tag_name','gallery','nbvterms','variants','reviews',
         'totalReviews','averageRating','percentages','unit_type','user'));
     }
@@ -325,7 +331,10 @@ class ProductController extends Controller
        
         $userId = Auth::id();
         
-        
+        $currentPath = request()->path(); 
+        $seo = MainSeo::where('page_url', $currentPath)->first()
+        ?? MainSeo::where('page_url', 'default')->first();  
+
         $cartItems = Cart::with('productVariant.checkout')->where('user_id', $userId)->get();
 
     $totalQuantity = 0;
@@ -355,7 +364,7 @@ class ProductController extends Controller
        
         
         
-       return view('user.cart', compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+       return view('user.cart', compact('seo','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
        'followus','payment_channels','cartItems', 'totalAmount', 'totalQuantity','totalDays','end','total'));
     }
     public function updateCart(Request $request)

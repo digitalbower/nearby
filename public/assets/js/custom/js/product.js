@@ -63,8 +63,9 @@ $(document).ready(function () {
                 required: true,
                 extension: "jpg|jpeg|png|gif|svg",
                 filesize: 2 * 1024 * 1024
-                }
-                
+                },
+                meta_title:{ required: true },
+                meta_description:{ required: true }
             },
             messages: {
                 vendor_id: { required: "Vendor name is required" },
@@ -92,7 +93,9 @@ $(document).ready(function () {
                     required: "Please upload at least one image.",
                     extension: "Only JPG, JPEG, PNG, and GIF files are allowed.",
                     filesize: "Each image must be less than 2MB."
-                }
+                },
+                meta_title:{ required: "Meta Title is required" },
+                meta_description:{ required: "Meta description is required" }
             },
             errorPlacement: function (error, element) {
                 if (element.attr("name") === "about_description") {
@@ -158,7 +161,9 @@ $(document).ready(function () {
             'gallery[]': {
                 extension: "jpg|jpeg|png|gif|svg",
                 filesize: 2 * 1024 * 1024
-            }
+            },
+            meta_title:{ required: true },
+            meta_description:{ required: true }
             
         },
         messages: {
@@ -181,7 +186,9 @@ $(document).ready(function () {
             'gallery[]': {
                 extension: "Only JPG, JPEG, PNG, and GIF files are allowed.",
                 filesize: "Each image must be less than 2MB."
-            }
+            },
+            meta_title:{ required: "Meta Title is required" },
+            meta_description:{ required: "Meta description is required" }
         },
         errorPlacement: function (error, element) {
             if (element.attr("name") === "about_description") {

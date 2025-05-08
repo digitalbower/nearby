@@ -14,7 +14,8 @@ class Product extends Model
     protected $fillable = ['name', 'short_description','tags_id','gallery','vendor_terms_id','about_description',
     'vendor_id','category_id','sub_category_id','nbv_terms_id','product_support_phone',
     'product_support_email','emirates_id','productlocation_address','productlocation_link','importantinfo',
-    'validity_from','validity_to','giftable','herocarousel','trending','categorycarousel','sales_person_id','product_type_id'];
+    'validity_from','validity_to','giftable','herocarousel','trending','categorycarousel','sales_person_id',
+    'product_type_id','meta_title', 'meta_description','og_title','og_description','og_image','schema'];
 
     protected $casts = [
         'tags_id' => 'array',

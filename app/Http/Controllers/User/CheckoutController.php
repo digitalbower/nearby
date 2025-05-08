@@ -25,6 +25,7 @@ use App\Models\Payment;
 use App\Models\BookingConfirmation;
 use App\Models\BookingConfirmationItem;
 use App\Models\Cart;
+use App\Models\MainSeo;
 use App\Models\ProductVariant;
 use App\Models\PurchasedProduct;
 use Exception;
@@ -112,7 +113,12 @@ class CheckoutController extends Controller
 
         $payment_channels = Footer::where('type', 'payment_channels')
         ->where('status', 1)
-        ->get();     
+        ->get();   
+        
+        $currentPath = request()->path(); 
+        $seo = MainSeo::where('page_url', $currentPath)->first()
+        ?? MainSeo::where('page_url', 'default')->first();  
+
         $products = Checkout::with('items.variant')->where('user_id',Auth::user()->id)->get(); 
 
         if (!$products || count($products) == 0) {
@@ -193,7 +199,7 @@ class CheckoutController extends Controller
         }
 
     
-        return view('user.checkout',compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+        return view('user.checkout',compact('seo','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels','count','bookingAmount','voucherSavings','vat','total','promo_discount',
         'promocode_discount_amount','discountedPrice','order_id','isPromoApplied')); 
     }

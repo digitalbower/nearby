@@ -102,6 +102,11 @@ class ProductController extends Controller
                 
             $product->gallery = json_encode($galleryArray);
         }
+        if ($request->hasFile('og_image')) {
+            $og_image = $request->file('og_image');
+            $path_og_image = $og_image->store('seo_images', 'public');  
+            $product->og_image = $path_og_image; 
+        }
 
         $product->name = $request->name;
         $product->product_type_id =$request->product_type_id;
@@ -127,6 +132,11 @@ class ProductController extends Controller
         $product->categorycarousel = $request->has('categorycarousel') ? 1 : 0;
         $product->sales_person_id  = $request->sales_person_id;
         $product->slug = Str::slug($request->name, '_');
+        $product->meta_title  = $request->meta_title;
+        $product->meta_description  = $request->meta_description;
+        $product->og_title  = $request->og_title;
+        $product->og_description  = $request->og_description;
+        $product->schema  = $request->schema;
         $product->save();
         return redirect()->route('admin.products.index')->with('success', 'New Product created successfully!');
     }
@@ -214,6 +224,14 @@ class ProductController extends Controller
             $path = $image->store('products/images', 'public');  
             $product->image = $path; 
         }
+        if ($request->hasFile('og_image')) {
+            if ($product->og_image) {
+                Storage::disk('public')->delete($product->og_image);
+            }
+            $og_image = $request->file('og_image');
+            $path_og_image = $og_image->store('seo_images', 'public');  
+            $product->og_image = $path_og_image; 
+        }
         $product->name = $request->name;
         $product->slug = Str::slug($request->name, '_');
         $product->product_type_id =$request->product_type_id;
@@ -242,6 +260,11 @@ class ProductController extends Controller
         $product->trending = $request->has('trending') ? 1 : 0;
         $product->categorycarousel = $request->has('categorycarousel') ? 1 : 0;
         $product->sales_person_id  = $request->sales_person_id;
+        $product->meta_title  = $request->meta_title;
+        $product->meta_description  = $request->meta_description;
+        $product->og_title  = $request->og_title;
+        $product->og_description  = $request->og_description;
+        $product->schema  = $request->schema;
         if (!empty($galleryArray)) {
             $product->gallery = json_encode($galleryArray);
         }

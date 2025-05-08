@@ -192,6 +192,22 @@
                     </ul>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#seoLayouts">
+                    <i class="fas fa-th-list"></i>
+                    <p>Seo Management</p>
+                    <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="seoLayouts">
+                    <ul class="nav nav-collapse">
+                        <li>
+                            <a href="{{route('admin.seo.index')}}">
+                                <span class="sub-item">Main Pages</span>
+                            </a>
+                        </li>
+                    </ul>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>

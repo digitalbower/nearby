@@ -13,6 +13,7 @@ use App\Models\Footer;
 use App\Models\Country;
 use App\Models\BookingConfirmation;
 use App\Models\BookingConfirmationItem;
+use App\Models\MainSeo;
 use App\Models\Payment;
 use App\Models\PurchasedProduct;
 use App\Models\ProductVariant;
@@ -161,7 +162,11 @@ class HomeController extends Controller
            
             $countryCodes = Country::all(); 
 
-        return view('user.index', compact('uppermenuItems','lowermenuitem','logo','categories','products','carouselCategories','trendingProducts','topDestinations','informationLinks','followus','payment_channels','countryCodes')); 
+            $currentPath = request()->path();
+            $seo = MainSeo::where('page_url', $currentPath)->first()
+            ?? MainSeo::where('page_url', 'default')->first();  
+
+        return view('user.index', compact('seo','uppermenuItems','lowermenuitem','logo','categories','products','carouselCategories','trendingProducts','topDestinations','informationLinks','followus','payment_channels','countryCodes')); 
     }
 
     public function bookingconfirmation()
@@ -203,7 +208,9 @@ class HomeController extends Controller
         $payment = Payment::where('user_id', $user->id)
         ->latest()
         ->first();
-
+        $currentPath = request()->path();
+        $seo = MainSeo::where('page_url', $currentPath)->first()
+        ?? MainSeo::where('page_url', 'default')->first();  
        
         $booking = BookingConfirmation::with('items.variant.product')->find($bookingConfirmation->id);  
         
@@ -247,7 +254,7 @@ class HomeController extends Controller
         }
 
      
-        return view('user.bookingconfirmation',compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+        return view('user.bookingconfirmation',compact('seo','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels','user','bookingConfirmation','payment','booking','checkoutData','promocode_discount_amount','promo_discount')); 
     } 
      

@@ -15,6 +15,7 @@ use App\Models\BookingConfirmationItem;
 use App\Models\NavigationMenu;
 use Illuminate\Validation\ValidationException;
 use App\Models\BookingConfirmation;
+use App\Models\MainSeo;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -49,6 +50,9 @@ class ProfileController extends Controller
         $payment_channels = Footer::where('type', 'payment_channels')
         ->where('status', 1)
         ->get();    
+        $currentPath = request()->path(); 
+        $seo = MainSeo::where('page_url', $currentPath)->first()
+        ?? MainSeo::where('page_url', 'default')->first();     
         $user = Auth::user(); // Get the authenticated user
         $countries = Country::all(); 
         $gender = Gender::all();
@@ -70,7 +74,7 @@ class ProfileController extends Controller
 
           
 
-        return view('user.profile', compact('user','countries','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+        return view('user.profile', compact('seo','user','countries','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels','bookingConfirmations')); // Pass user data to the view
     }
 

@@ -13,6 +13,7 @@ use Laravel\Socialite\Facades\Socialite;
 use App\Models\Country;
 use App\Models\Footer;
 use App\Models\Logo;
+use App\Models\MainSeo;
 use App\Models\NavigationMenu;
 use Illuminate\Support\Facades\Mail;
 
@@ -46,8 +47,11 @@ class AuthController extends Controller
 
         $payment_channels = Footer::where('type', 'payment_channels')
         ->where('status', 1)
-        ->get();    
-        return view('user.signin', compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+        ->get(); 
+        $currentPath = request()->path(); 
+        $seo = MainSeo::where('page_url', $currentPath)->first()
+        ?? MainSeo::where('page_url', 'default')->first();     
+        return view('user.signin', compact('seo','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels'));
     }
 
@@ -113,8 +117,11 @@ class AuthController extends Controller
         $payment_channels = Footer::where('type', 'payment_channels')
         ->where('status', 1)
         ->get();    
+        $currentPath = request()->path(); 
+        $seo = MainSeo::where('page_url', $currentPath)->first()
+        ?? MainSeo::where('page_url', 'default')->first();  
         $countries = Country::all(); 
-        return view('user.signup', compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+        return view('user.signup', compact('seo','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels','countries'));  
     }
 
