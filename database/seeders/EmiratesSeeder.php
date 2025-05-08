@@ -24,7 +24,12 @@ class EmiratesSeeder extends Seeder
             ['name' => 'Fujairah', 'code' => 'FUJ'],
         ];
 
-        DB::table('emirates')->insert($emirates);
+        foreach ($emirates as $emirate) {
+            DB::table('emirates')->updateOrInsert(
+                ['code' => $emirate['code']],
+                ['name' => $emirate['name']]
+            );
+        }
     
     }
 }

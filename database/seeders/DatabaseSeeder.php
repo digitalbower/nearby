@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             EmiratesSeeder::class,
             CountrySeeder::class,
             GenderSeeder::class,
+            MainSeoSeeder::class,
         ]);
     }
 }
