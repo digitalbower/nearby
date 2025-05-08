@@ -147,27 +147,7 @@
 </ol>
 
 <div class="section-title">⚠️ Important Details:</div>
-<ol>
-  <li>
-    Confirmation Email: Please ensure you have a printout or digital version of this confirmation email for verification at the time of use.
-  </li>
-  <li>
-    Non-Dated Products: For non-dated products, advance slot booking is required. Please contact us using the contact number or email provided above to schedule your slot.
-    <ol type="a">
-      <li><strong>Phone:</strong> <em>{{ $item->variant->product->product_support_phone ?? 'N/A' }}</em></li>
-      <li><strong>Email:</strong> <em>{{ $item->variant->product->product_support_email ?? 'N/A' }}</em></li>
-      <li><strong>Operating Hours:</strong> <em>{{ $item->variant->product->importantinfo ?? 'N/A' }}</em></li>
-    </ol>
-  </li>
-  <li>
-    Dated Bookings: For products with a specific date, please verify your booking by calling us before traveling to confirm your reservation.
-    <ol type="a">
-      <li><strong>Phone:</strong> <em>{{ $item->variant->product->product_support_phone ?? 'N/A' }}</em></li>
-      <li><strong>Email:</strong> <em>{{ $item->variant->product->product_support_email ?? 'N/A' }}</em></li>
-      <li><strong>Operating Hours:</strong> <em>{{ $item->variant->product->importantinfo ?? 'N/A' }}</em></li>
-    </ol>
-  </li>
-</ol>
+ {!! $item->variant->importantinfo !!}
 
 
     <!-- Voucher Terms and Conditions Section -->
