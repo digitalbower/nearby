@@ -260,48 +260,7 @@
          });
      </script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const today = new Date().toISOString().split("T")[0];
-        const fromDate = document.getElementById("validityfrom");
-        const toDate = document.getElementById("validityto");
-        const fromError = document.getElementById("from-error");
-        const toError = document.getElementById("to-error");
 
-        // Clear error messages
-        function clearErrors() {
-            fromError.textContent = "";
-            toError.textContent = "";
-        }
-
-        fromDate.addEventListener("change", function () {
-            clearErrors();
-            const selectedFromDate = this.value;
-
-            if (selectedFromDate < today) {
-                fromError.textContent = "Validity From date cannot be in the past.";
-                this.value = "";
-                toDate.value = "";
-                toDate.removeAttribute("min");
-                return;
-            }
-
-            toDate.value = "";
-            toDate.setAttribute("min", selectedFromDate);
-        });
-
-        toDate.addEventListener("change", function () {
-            clearErrors();
-            const selectedToDate = this.value;
-            const selectedFromDate = fromDate.value;
-
-            if (selectedFromDate && selectedToDate < selectedFromDate) {
-                toError.textContent = "Validity To date must be the same or after Validity From.";
-                this.value = "";
-            }
-        });
-    });
-</script>
   
 @endpush
 
