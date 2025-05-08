@@ -1008,7 +1008,7 @@ function initCountdownTimers() {
 $(document).ready(function () {
   $(".owl-carousel, .owl-carousel1").owlCarousel({
     items: 1,
-    loop: true,
+    loop: false,
     margin: 16,
     nav: true,
     dots: true,

@@ -22,15 +22,17 @@
                 <div class="mb-3">
                     <label for="product_id" class="form-label">Products</label>
                     <select class="form-control" name="product_id" id="product_id">
-                        <option value="">Select Products</option>
-                        @foreach ($products as $product)
-                            <option value="{{ $product->id }}" 
-                                data-category="{{ $product->category_id }}"
-                                {{ old('product_id') == $product->id ? 'selected' : '' }}>
-                                {{ $product->name }}
-                            </option>
-                        @endforeach
-                    </select>
+    <option value="">Select Products</option>
+    @foreach ($products as $product)
+        <option 
+            value="{{ $product->id }}" 
+            data-category="{{ $product->category_id }}"
+            data-markup="{{ $product->category->markup ?? 0 }}"
+            {{ old('product_id') == $product->id ? 'selected' : '' }}>
+            {{ $product->name }}
+        </option>
+    @endforeach
+</select>
                 </div>
 
                 <div class="mb-3">
@@ -68,16 +70,17 @@
                     <input type="hidden" name="short_info" id="short_info">
                 </div>
                 <div class="mb-3">
-                    <label for="unit_price" class="form-label">Market Unit Price</label>
-                    <input type="text" class="form-control" id="unit_price" name="unit_price" value="{{old('unit_price') }}">
-                </div>
-                <div class="mb-3">
                     <label for="unit_type_id" class="form-label">Unit Type</label>
                     <select class="form-control" name="unit_type_id" id="unit_type_id">
                         <option value="">Select Unit Types</option>
                     </select>
                 </div>
              
+                <div class="mb-3">
+                    <label for="unit_price" class="form-label">Market Unit Price</label>
+                    <input type="text" class="form-control" id="unit_price" name="unit_price" value="{{old('unit_price') }}">
+                </div>
+               
 
                
 
@@ -86,7 +89,7 @@
                 <div class="mb-3">
     <label for="markup" class="form-label">Markup (%)</label>
     <input type="text" id="markup" name="markup" class="form-control @error('markup') is-invalid @enderror" value="{{ old('markup') }}">
-    <input type="hidden" id="category_markup_limit" name="category_markup_limit" value="{{ $categoryMarkup }}">
+    
     
     @error('markup')
         <div class="invalid-feedback">{{ $message }}</div>
@@ -223,6 +226,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 </script>
+
+
+
 @endpush
 
 
