@@ -121,8 +121,9 @@ class StripController extends Controller
              $items[] = [
              'product_variant'=>$product_variant->title,
                 'quantity' => $booking_item['quantity'],
-                'unit_price' => $booking_item['unit_price'],
-                'total_price' => $booking_item['total_price'],
+                'unit_price' => $product_variant->discounted_price,
+                'total_price' => $booking_item['unit_price'],
+                'vat' => $booking_item['vat'],
             ];
             if ($product_variant->product) {
                 $importantinfo = $product_variant->product->importantinfo ?? null;

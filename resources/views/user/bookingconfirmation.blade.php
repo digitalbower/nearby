@@ -243,7 +243,7 @@
           </div>
         </div>
         <div class="text-right flex justify-center gap-x-4 items-center">
-          <div class="text-4xl font-semibold text-gray-900">AED {{ number_format($product_item->unit_price, 2) }}</div>
+          <div class="text-4xl font-semibold text-gray-900">AED {{ number_format($product_item->variant->discounted_price, 2) }}</div>
           <div class="text-2xl text-gray-500 line-through">AED {{ number_format($product_item->variant->unit_price, 2) }}</div>
         </div>
       </div>

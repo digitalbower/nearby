@@ -131,7 +131,7 @@ class ProductController extends Controller
         $product->trending = $request->has('trending') ? 1 : 0;
         $product->categorycarousel = $request->has('categorycarousel') ? 1 : 0;
         $product->sales_person_id  = $request->sales_person_id;
-        $product->slug = Str::slug($request->name, '_');
+        $product->slug = Str::slug($request->name, '-');
         $product->meta_title  = $request->meta_title;
         $product->meta_description  = $request->meta_description;
         $product->og_title  = $request->og_title;
@@ -233,7 +233,7 @@ class ProductController extends Controller
             $product->og_image = $path_og_image; 
         }
         $product->name = $request->name;
-        $product->slug = Str::slug($request->name, '_');
+        $product->slug = Str::slug($request->name, '-');
         $product->product_type_id =$request->product_type_id;
         $product->short_description = $request->short_description;
         $product->about_description = $request->about_description;

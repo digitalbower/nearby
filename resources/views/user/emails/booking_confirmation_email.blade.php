@@ -99,6 +99,7 @@
             <th>Item</th>
             <th>Quantity</th>
             <th>Unit Price</th>
+            <th>VAT</th>
             <th>Total</th>
           </tr>
         </thead>
@@ -108,6 +109,7 @@
               <td>{{$item['product_variant']}}</td>
               <td>{{$item['quantity']}}</td>
               <td>AED {{$item['unit_price']}}</td>
+              <td>AED {{$item['vat']}}</td>
               <td>AED {{$item['total_price']}}</td>
             </tr>
           @endforeach         

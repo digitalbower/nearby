@@ -254,7 +254,7 @@
                         </div>
                       </form>
                     </div>
-
+                    @endauth
                     <div class="flex items-center gap-2 mb-1">
                       <span class="text-3xl font-bold text-gray-900">{{$averageRating}}</span>
                       <div class="flex">
@@ -326,7 +326,7 @@
                     <div id="reviews-list" class="space-y-6 hidden">
                       <!-- Reviews will be dynamically added here -->
                     </div>
-                    @endauth
+                    
                   </div>
                 </div>
               </div>

@@ -278,16 +278,15 @@
           </div>
 
           <div class="grid grid-cols-1 gap-4 px-2">
-            <button type="button"
-              class="px-6 py-2 bg-[#a5dd7294] text-black rounded-lg hover:bg-[#709b4bbf] transition duration-300">
-              <i class="fab fa-google mr-2"></i> Google
-            </button>
-
+            <a href="{{ route('user.auth.google') }}"
+            class="px-6 py-2 text-black rounded-lg bg-[#58af0838] hover:bg-[#4a910954] transition duration-300 flex items-center justify-center">
+             <i class="fab fa-google mr-2"></i> Google
+           </a>
           </div>
         </form>
 
         <p class="text-center text-xl text-gray-600">
-          Already have an account? <a href="/signin.html" class="text-blue-500 hover:underline">Log in</a>
+          Already have an account? <a href="{{route('user.login')}}" class="text-blue-500 hover:underline">Log in</a>
         </p>
       </div>
 
