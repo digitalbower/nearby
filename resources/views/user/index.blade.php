@@ -555,7 +555,7 @@
 @foreach($carouselCategories as $categoryName => $products)
  <section class="bg-white lg:p-4  lg:py-20 py-10 ">
   <div class="container mx-auto lg:px-0 px-4">
-    <h2 class="lg:text-3xl text-base font-bold text-black mb-3">What’s Hot in [{{$categoryName}}]</h2>
+    <h2 class="lg:text-3xl text-base font-bold text-black mb-3">What’s Hot in {{$categoryName}}</h2>
     <div class="owl-carousel1  owl-carousel owl-theme">
       @foreach($products as $product) 
       @php
