@@ -28,7 +28,8 @@ class BookingConfirmationEmail extends Mailable
     public $importantinfo;
     public $nbv_terms;
     public $items;
-    public function __construct($name, $order_date, $order_number, $grand_total,$importantinfo, $nbv_terms, $items,$variants)
+    public $vat;
+    public function __construct($name, $order_date, $order_number, $grand_total,$vat,$importantinfo, $nbv_terms, $items,$variants)
     {
         $this->name = $name;
         $this->order_date=$order_date;
@@ -38,6 +39,7 @@ class BookingConfirmationEmail extends Mailable
         $this->nbv_terms =$nbv_terms;
         $this->items = $items;
         $this->variants =$variants;
+        $this->vat =$vat;
     }
 
     /**
@@ -62,6 +64,7 @@ class BookingConfirmationEmail extends Mailable
                 'order_date'=>$this->order_date,
                 'order_number'=>$this->order_number,
                 'grand_total'=>$this->grand_total,
+                'vat'=> $this->vat,
                 'importantinfo'=>$this->importantinfo,
                 'nbv_terms'=>$this->nbv_terms,
                 'items'=>$this->items,
