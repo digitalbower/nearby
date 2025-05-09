@@ -109,6 +109,7 @@ class StripController extends Controller
         $booking = BookingConfirmation::find($bookingConfirmationId);
         $order_date = $booking->created_at->format('Y-m-d');
         $order_number = $booking->booking_id;
+        $vat = $booking->vat;
         $grand_total = $booking->total_amount;
       
 
@@ -123,7 +124,6 @@ class StripController extends Controller
                 'quantity' => $booking_item['quantity'],
                 'unit_price' => $product_variant->discounted_price,
                 'total_price' => $booking_item['unit_price'],
-                'vat' => $booking_item['vat'],
             ];
             if ($product_variant->product) {
                 $importantinfo = $product_variant->product->importantinfo ?? null;
@@ -151,7 +151,7 @@ class StripController extends Controller
             ];
         }
 
-        Mail::to($user->email)->send(new BookingConfirmationEmail($user->first_name,$order_date,$order_number,$grand_total,$importantinfo, $nbv_terms,$items,$variants));
+        Mail::to($user->email)->send(new BookingConfirmationEmail($user->first_name,$order_date,$order_number,$grand_total,$vat,$importantinfo, $nbv_terms,$items,$variants));
 
         DB::commit();
         return response()->json(['success' => true, 'message' => 'Booking confirmed.']);
