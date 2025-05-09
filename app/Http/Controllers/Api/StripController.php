@@ -120,7 +120,8 @@ class StripController extends Controller
         foreach ($booking->items as $booking_item) { 
             $product_variant = ProductVariant::find($booking_item['product_varient_id']);
              $items[] = [
-             'product_variant'=>$product_variant->title,
+                'product_variant_id'=>$product_variant->id,
+                'product_variant'=>$product_variant->title,
                 'quantity' => $booking_item['quantity'],
                 'unit_price' => $product_variant->discounted_price,
                 'total_price' => $booking_item['unit_price'],
