@@ -399,16 +399,14 @@
         class="bg-gradient-to-r from-teal-500 via-[#58af0838] to-blue-500 rounded-xl shadow-lg lg:p-8 p-4 flex items-center  transition-transform duration-300">
         <div class="flex-1">
           <h2 class="lg:text-2xl text-base font-extrabold text-white mb-4">
-            Any Pets Available for Adoption?
+            Give Shoppers a Deal They Can’t Resist
           </h2>
           <p class="lg:text-base text-sm text-white lg:mb-6 mb-4">
-            Join our community and give a loving home to a pet
-            waiting for
-            adoption.
+            Got something great to offer? Let’s team up and help more people discover your products!
           </p>
           <button
             class="bg-white text-gray-900 lg:text-base text-sm font-semibold rounded-full lg:px-6 px-4 lg:py-3 py-2 shadow-md hover:bg-white/80 transition-colors duration-200  hover:shadow-lg transition duration-300">
-            Create an Account →
+            Let’s Partner Up          
           </button>
         </div>
         <div class="flex-shrink-0"> 
@@ -423,15 +421,14 @@
         class="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-xl shadow-lg lg:p-8 p-4 flex items-center  transition-transform duration-300">
         <div class="flex-1">
           <h2 class="lg:text-2xl text-base font-extrabold text-white mb-4">
-            Let's Find Your New Best Friend
+            Sign Up & Save More
           </h2>
           <p class="lg:text-base text-sm text-white lg:mb-6 mb-4">
-            Explore the best pets available for adoption near
-            you.
+            Create your free account and get access to special discounts, new arrivals, and personalized offers—only for members!
           </p>
           <button
             class="bg-white text-pink-500 lg:text-base text-sm font-semibold rounded-full lg:px-6 px-4 lg:py-3 py-2 shadow-md hover:bg-white/80 hover:shadow-lg transition duration-300">
-            Create an Account →
+            Register Now
           </button>
         </div>
         <div class="flex-shrink-0">
@@ -445,9 +442,7 @@
   <section class="bg-[#58af0838] lg:pt-20 py-10 lg:px-4 from-cyan-50 to-blue">
   <div class="mb-8 container mb-10 mx-auto px-4 lg:px-0">
     <div class="flex justify-between items-center mb-4">
-      <h2 class="lg:text-3xl text-base font-bold text-black">Trending
-         Today in  
-          UAE</h2>
+      <h2 class="lg:text-3xl text-base font-bold text-black">Deal of the Day – Trending in UAE</h2>
     </div>
 
       <div class="owl-carousel1 owl-carousel owl-theme">
@@ -560,7 +555,7 @@
 @foreach($carouselCategories as $categoryName => $products)
  <section class="bg-white lg:p-4  lg:py-20 py-10 ">
   <div class="container mx-auto lg:px-0 px-4">
-    <h2 class="lg:text-3xl text-base font-bold text-black mb-3">Popular on - {{$categoryName}}</h2>
+    <h2 class="lg:text-3xl text-base font-bold text-black mb-3">What’s Hot in [{{$categoryName}}]</h2>
     <div class="owl-carousel1  owl-carousel owl-theme">
       @foreach($products as $product) 
       @php
@@ -689,8 +684,7 @@
               <span class="font-semibold">CONTACT US</span>
               <i class="fas fa-arrow-right"></i>
             </div>
-            <h1 class="text-xl md:text-2xl font-extrabold leading-tight">24/7
-              Expert Hosting Support Our<br>Customers Love</h1>
+            <h1 class="text-xl md:text-2xl font-extrabold leading-tight">Expert Travel Assistance – Available During Business Hours</h1>
           </div>
         </div>
         <a href="#"
@@ -710,7 +704,7 @@
     <!-- input fields -->
 
     <h2 class="text-3xl text-black lg:text-3xl text-base font-bold text-black font-extrabold">
-      Stay Updated With Our Latest Newsletter
+      Get the Latest Deals and Updates Delivered to Your Inbox!
     </h2>
     <div class="lg:flex w-full md:w-auto gap-4">
       <input name="email" type="email" placeholder="Enter Email"

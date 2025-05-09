@@ -16,6 +16,6 @@ class NewsletterController extends Controller
     
         NewsletterSubscriber::create(['email' => $request->email]);
     
-        return redirect()->back()->with('success', 'Subscribed successfully!');
+        return redirect()->back()->with('success', 'Thank You for Subscribing!You’re now on the list to receive our latest deals, exclusive offers, and travel inspiration—straight to your inbox. Stay tuned!');
     }
 }

@@ -29,7 +29,7 @@ class SpecialistRequestController extends Controller
         ]);
 
         return redirect()->back()->with([
-            'modal_success' => 'Thank you! Our specialist will get in touch soon.',
+            'modal_success' => "Thank You for Reaching Out! We've received your inquiry and our travel team will get back to you shortly during our business hours.",
             'modal_open' => true
         ]);
     }
