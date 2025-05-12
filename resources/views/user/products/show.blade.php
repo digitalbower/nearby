@@ -188,7 +188,7 @@
                         </button>
                       </div>
                     </div>
-
+                    <input type="hidden" name="product_id" id="product_id" value="{{$product->id}}">
                     @auth
                     <div id="review-form" class="hidden mb-8 p- bg-white">
                       <h3 class="text-2xl font-semibold mb-6 text-gray-800">Add Your Review</h3>
@@ -671,7 +671,6 @@ function submitAndRedirectToCart() {
       location.reload();
     }
       function displayReviews() {
-        if (isUserLoggedIn) {
           const productId = document.getElementById("product_id").value;
           const reviewList = document.getElementById("reviews-list");
           reviewList.innerHTML = "";
@@ -722,7 +721,6 @@ function submitAndRedirectToCart() {
             .catch(error => {
               console.error("Error fetching reviews:", error);
             });
-          }
         }
       function toggleReviews() {
         const reviewsList = document.getElementById("reviews-list");
