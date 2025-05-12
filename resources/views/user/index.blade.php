@@ -403,11 +403,13 @@
           </h2>
           <p class="lg:text-base text-sm text-white lg:mb-6 mb-4">
             Got something great to offer? Let’s team up and help more people discover your products!
-          </p>
+          </p> 
+          <a href="{{ route('user.merchant') }}">
           <button
             class="bg-white text-gray-900 lg:text-base text-sm font-semibold rounded-full lg:px-6 px-4 lg:py-3 py-2 shadow-md hover:bg-white/80 transition-colors duration-200  hover:shadow-lg transition duration-300">
             Let’s Partner Up          
           </button>
+        </a>
         </div>
         <div class="flex-shrink-0"> 
           <img alt="Adopt a pet"
@@ -417,7 +419,7 @@
       </div>
 
       <!-- Find Best Friend Section -->
-      <div
+      <div 
         class="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-xl shadow-lg lg:p-8 p-4 flex items-center  transition-transform duration-300">
         <div class="flex-1">
           <h2 class="lg:text-2xl text-base font-extrabold text-white mb-4">
@@ -426,11 +428,14 @@
           <p class="lg:text-base text-sm text-white lg:mb-6 mb-4">
             Create your free account and get access to special discounts, new arrivals, and personalized offers—only for members!
           </p>
+          <a href="{{ route('user.signup') }}">
           <button
             class="bg-white text-pink-500 lg:text-base text-sm font-semibold rounded-full lg:px-6 px-4 lg:py-3 py-2 shadow-md hover:bg-white/80 hover:shadow-lg transition duration-300">
             Register Now
           </button>
+          </a>
         </div>
+        
         <div class="flex-shrink-0">
           <img alt="Find a friend"
             class="lg:w-40 lg:h-40 w-20 h-20 ml-6 object-cover rounded-full shadow-md border-4 border-white"

@@ -164,36 +164,46 @@ class AuthController extends Controller
     public function handleGoogleCallback()
     {
         try {
-            // Get user data from Google
             $googleUser = Socialite::driver('google')->stateless()->user();
-            
+    
             if (!$googleUser) {
                 return redirect()->route('user.login')->with('error', 'Failed to get user details from Google.');
             }
     
-            \Log::info('Google User:', (array) $googleUser);
+            $email = $googleUser->getEmail();
+            $existingUser = User::where('email', $email)->first();
     
-            // Check if user exists
-            $user = User::where('email', $googleUser->getEmail())->first();
+            if ($existingUser) {
+                if ($existingUser->google_id === null) {
+                    return redirect()->route('user.login')->with('error', 'This email is already registered via email/password. Please login using your password.');
+                }
     
-            // If user does not exist, create a new one
-            if (!$user) {
-                $user = User::create([
-                    'first_name' => $googleUser->getName(),
-                    'email' => $googleUser->getEmail(),
-                    'google_id' => $googleUser->getId(),
-                    'password' => bcrypt('google-auth') // Dummy password
-                ]);
+                Auth::login($existingUser);
+                return redirect()->route('user.dashboard')->with('success', 'Logged in successfully via Google!');
             }
     
-            // Log in the user
-            Auth::login($user);
+            // If user doesn't exist, create new one and send confirmation email
+            $nameParts = explode(' ', $googleUser->getName(), 2);
+            $firstName = $nameParts[0];
+            $lastName = $nameParts[1] ?? '';
     
-            return redirect()->route('user.login')->with('success', 'Logged in successfully!');
+            $newUser = User::create([
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'email' => $email,
+                'google_id' => $googleUser->getId(),
+                'password' => bcrypt(Str::random(16)),
+            ]);
+    
+            // Send registration confirmation email
+            Mail::to($email)->send(new RegistrationEmail($firstName));
+    
+            Auth::login($newUser);
+            return redirect()->route('user.dashboard')->with('success', 'Welcome! Your account has been created via Google.');
     
         } catch (\Exception $e) {
             \Log::error('Google Login Error: ' . $e->getMessage());
-            return redirect()->route('user.login')->with('error', 'Google Sign-In failed: ' . $e->getMessage());
+            return redirect()->route('user.login')->with('error', 'Google Sign-In failed. Please try again.');
         }
     }
 }

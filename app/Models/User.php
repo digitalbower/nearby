@@ -28,6 +28,7 @@ class User extends Authenticatable
         'country',
         'address',
         'profileicon',
+        'country_residence',
     ];
     
 
