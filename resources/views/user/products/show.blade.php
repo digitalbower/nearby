@@ -160,12 +160,8 @@
                 <h3 class="text-xl font-bold text-gray-800 mb-4">Fine
                   Print</h3>
                 
-                  @foreach ($product->vendorTerms as $vendor_term)
-                    {!! $vendor_term->terms !!}
-                  @endforeach
-                  @foreach ($nbvterms as $nbvterm)
-                    {!! $nbvterm->terms !!}
-                  @endforeach
+                  {!! $product->vendorTerms->terms !!}
+                  {!! $product->nbvTerms->terms !!}
                 
                 <div class="mt-6 bg-blue-100 text-blue-800 p-4 rounded-lg">
                   <i class="fas fa-info-circle text-blue-600 mr-2"></i>
@@ -188,7 +184,7 @@
                         </button>
                       </div>
                     </div>
-
+                    <input type="hidden" name="product_id" id="product_id" value="{{$product->id}}">
                     @auth
                     <div id="review-form" class="hidden mb-8 p- bg-white">
                       <h3 class="text-2xl font-semibold mb-6 text-gray-800">Add Your Review</h3>
@@ -317,7 +313,7 @@
                     </div>
 
                     <div class="mb-5">
-                      <button onclick="toggleReviews()"
+                      <button onclick="toggleReviews()" id="show-reviews"
                         class="w-auto px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]  text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
                         Show Reviews
                       </button>
@@ -471,7 +467,7 @@
                     <div
                       class="text-xs  bg-[#58af0838] rounded-md p-2 text-black flex gap-x-4 items-center rounded-lg p-3">
                       <p class="font-medium">{!! $variant->short_info !!}</p>
-                      <p class="text-primary font-semibold">Learn more</p>
+                      {{-- <p class="text-primary font-semibold">Learn more</p> --}}
                     </div>
                 
                     <div class="flex items-center justify-between text-sm text-muted-foreground">
@@ -671,7 +667,6 @@ function submitAndRedirectToCart() {
       location.reload();
     }
       function displayReviews() {
-        if (isUserLoggedIn) {
           const productId = document.getElementById("product_id").value;
           const reviewList = document.getElementById("reviews-list");
           reviewList.innerHTML = "";
@@ -722,11 +717,14 @@ function submitAndRedirectToCart() {
             .catch(error => {
               console.error("Error fetching reviews:", error);
             });
-          }
         }
       function toggleReviews() {
         const reviewsList = document.getElementById("reviews-list");
-        reviewsList.classList.toggle("hidden");
+        const showButton = document.getElementById("show-reviews");
+
+        const isHidden = reviewsList.classList.toggle("hidden");
+
+        showButton.textContent = isHidden ? "Show Reviews" : "Hide Reviews";
       }
 
       document.addEventListener("DOMContentLoaded", function() {

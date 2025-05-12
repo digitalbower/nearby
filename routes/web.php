@@ -45,7 +45,6 @@ use App\Http\Controllers\Vendor\BookingManagementController;
 use App\Http\Controllers\Vendor\PaymentManagementController;
 use App\Http\Controllers\Vendor\ReportManagementController;
 
-
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::post('/subscribe', [NewsletterController::class, 'subscribe'])->name('subscribe');
 Route::name('user.')->group(function () {
@@ -54,6 +53,8 @@ Route::name('user.')->group(function () {
         Route::get('/list', [UserProductController::class, 'getProducts'])->name('filter');
 
         Route::get('/{slug}', [UserProductController::class, 'show'])->name('show');
+        Route::get('/show-review/{id}', [UserProductController::class, 'showReview'])->name('show_review');
+
     });
     Route::get('deals', [DealsController::class, 'index'])->name('deals.index');
     Route::get('/deals/list', [DealsController::class, 'getDeals'])->name('deals.filter');
@@ -91,7 +92,6 @@ Route::name('user.')->group(function () {
 
         Route::prefix('products')->name('products.')->group(function () {
             Route::post('/store-review', [UserProductController::class, 'storeReview'])->name('store_review');
-            Route::get('/show-review/{id}', [UserProductController::class, 'showReview'])->name('show_review');
             Route::post('/add-cart', [UserProductController::class, 'addCart'])->name('add_cart');
         });
         // ✅ E-commerce & Booking Routes

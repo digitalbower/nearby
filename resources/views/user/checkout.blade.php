@@ -478,6 +478,8 @@
       <input type="hidden" name="booking_amount" id="booking_amount" value="{{ $bookingAmount }}">
       <input type="hidden" name="voucher_savings" id="voucher_savings" value="{{ $voucherSavings }}">
       <input type="hidden" name="vat_amount" id="vat_amount" value="{{ $vat }}">
+      <input type="hidden" name="promocode" id="promocode" value="{{ $promoCode }}">
+      <input type="hidden" name="promocode_discount_amount" id="promocode_discount_amount" value="{{ $promocode_discount_amount }}">
       <input type="hidden" name="total_amount" id="total_amount" value="{{ $total }}">
       <input type="hidden" name="order_id" id="order_id" value="{{ $order_id }}">
 
@@ -648,6 +650,9 @@ clearErrorOnInputChange(cardCvc);
     const voucherSavingsElement = document.getElementById("voucher_savings");
     const totalAmountElement = document.getElementById("total_amount");
     const vatAmountElement = document.getElementById("vat_amount");
+    const promocodeElement = document.getElementById("promocode");
+    const promocodeDiscountAmountElement = document.getElementById("promocode_discount_amount");
+
 
     // Check if the required elements exist
     if (!amountElement || !orderIdElement || !bookingAmountElement || !voucherSavingsElement || !totalAmountElement || !vatAmountElement) {
@@ -661,6 +666,9 @@ clearErrorOnInputChange(cardCvc);
     const voucher_savings = voucherSavingsElement.value;
     const total_amount = totalAmountElement.value;
     const vat_amount = vatAmountElement.value;
+    const promocode = promocodeElement.value;
+    const promo_discount_amount = promocodeDiscountAmountElement.value;
+
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
@@ -711,6 +719,8 @@ clearErrorOnInputChange(cardCvc);
             voucher_savings,
             total_amount,
             vat_amount,
+            promocode,
+            promo_discount_amount,
             items,
           })
         });

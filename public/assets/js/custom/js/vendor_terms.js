@@ -4,6 +4,7 @@ $(document).ready(function () {
         rules: {
             vendor_id: { required: true},
             name: { required: true},
+            title: { required: true},
             terms: {
                 required: function (textarea) {
                     // Get Summernote content
@@ -15,7 +16,9 @@ $(document).ready(function () {
         messages: {
             vendor_id: { required: "Vendor is required"},
             name: { required: "Vendor Term Name is required"},
-            terms: { required: "Terms is required"}
+            terms: { required: "Terms is required"},
+            title: { required: "Title is required"},
+
         },
         errorPlacement: function (error, element) {
             if (element.attr("name") === "terms") {

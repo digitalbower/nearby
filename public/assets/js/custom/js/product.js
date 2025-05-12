@@ -54,6 +54,13 @@ $(document).ready(function () {
                         return editorContent;
                     }
                 },
+                email_about: {
+                    required: function (textarea) {
+                        // Get Summernote content
+                        var editorContent = $('#email_about').summernote('isEmpty');
+                        return editorContent;
+                    }
+                },
                 image: {
                     required: true,
                     extension: "jpg|jpeg|png|gif|svg",
@@ -84,6 +91,7 @@ $(document).ready(function () {
                 tags_id: { required: "Please select tag" },
                 importantinfo: { required: "Important Info is required" },
                 about_description: { required: "About Description is required" },
+                email_about: { required: "Email About is required" },
                 image: {
                     required: "Please upload image.",
                     extension: "Only JPG, JPEG, PNG, and GIF files are allowed.",
@@ -100,7 +108,10 @@ $(document).ready(function () {
             errorPlacement: function (error, element) {
                 if (element.attr("name") === "about_description") {
                     $("#about_description").next('.note-editor').after(error);
-                }  else if (element.attr("name") === "importantinfo") {
+                } 
+                else if (element.attr("name") === "email_about") {
+                    $("#email_about").next('.note-editor').after(error);
+                } else if (element.attr("name") === "importantinfo") {
                     $("#importantinfo").next('.note-editor').after(error);
                 }else if (element.attr("name") === "gallery[]") {
                     $("#images-error").text(error.text()).show();
@@ -158,6 +169,13 @@ $(document).ready(function () {
                     return editorContent;
                 }
             },
+            email_about: {
+                required: function (textarea) {
+                    // Get Summernote content
+                    var editorContent = $('#email_about').summernote('isEmpty');
+                    return editorContent;
+                }
+            },
             'gallery[]': {
                 extension: "jpg|jpeg|png|gif|svg",
                 filesize: 2 * 1024 * 1024
@@ -183,6 +201,7 @@ $(document).ready(function () {
             tags: { required: "Please select tag" },
             importantinfo: { required: "Important Info is required" },
             about_description: { required: "About Description is required" },
+            email_about: { required: "Email About is required" },
             'gallery[]': {
                 extension: "Only JPG, JPEG, PNG, and GIF files are allowed.",
                 filesize: "Each image must be less than 2MB."
@@ -194,6 +213,9 @@ $(document).ready(function () {
             if (element.attr("name") === "about_description") {
                 // Place error message below the Summernote editor
                 $("#about_description").next('.note-editor').after(error);
+            }
+            else if (element.attr("name") === "email_about") {
+                $("#email_about").next('.note-editor').after(error);
             }else if (element.attr("name") === "importantinfo") {
                 $("#importantinfo").next('.note-editor').after(error);
             } else if (element.attr("name") === "gallery[]") {

@@ -72,6 +72,7 @@ class ProductController extends Controller
             'gallery' => 'required', 
             'gallery.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'about_description' => 'required',
+            'email_about' => 'required',
 
         ],
         [
@@ -112,6 +113,7 @@ class ProductController extends Controller
         $product->product_type_id =$request->product_type_id;
         $product->short_description = $request->short_description;
         $product->about_description = $request->about_description;
+        $product->email_about = $request->email_about;
         $product->tags_id =  json_encode($request->tags_id);
         $product->vendor_id = $request->vendor_id;
         $product->category_id = $request->category_id;
@@ -182,6 +184,7 @@ class ProductController extends Controller
             'gallery' => 'nullable|array',  
             'gallery.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'about_description' => 'required',
+            'email_about' => 'required',
         ],
         [
             'gallery.array' => 'Gallery must be an array.', 
@@ -237,6 +240,7 @@ class ProductController extends Controller
         $product->product_type_id =$request->product_type_id;
         $product->short_description = $request->short_description;
         $product->about_description = $request->about_description;
+        $product->email_about = $request->email_about;
         $product->vendor_id = $request->vendor_id;
         $product->tags_id =  json_encode($request->tags_id);
         $product->category_id = $request->category_id;

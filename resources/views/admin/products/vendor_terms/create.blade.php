@@ -35,6 +35,10 @@
                     <input type="text" class="form-control" id="name" name="name"  value="{{old('terms')}}"/>
                 </div>
                 <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title"  value="{{old('title')}}"/>
+                </div>
+                <div class="mb-3">
                     <label for="terms" class="form-label">Terms</label>
                     <textarea class="form-control" id="terms" name="terms">{{old('terms')}}</textarea>
                 </div>

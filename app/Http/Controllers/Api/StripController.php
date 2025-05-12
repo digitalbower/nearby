@@ -9,6 +9,7 @@ use App\Models\Cart;
 use App\Models\Checkout;
 use App\Models\CheckoutItem;
 use App\Models\ProductVariant;
+use App\Models\Promo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -33,7 +34,7 @@ class StripController extends Controller
             'client_secret' => $intent->client_secret,
         ]);
     }
-    public function finalizeBooking(Request $request)
+    public function finalizeBooking(Request $request) 
     {
     \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
     $user =Auth::user(); 
@@ -80,6 +81,8 @@ class StripController extends Controller
             'total_amount' => $request->total_amount,
             'booking_status' => 'confirmed',
             'booking_details' => json_encode($request->items),
+            'promocode' => $request->promocode,
+            'promocode_discount_amount' => $request->promo_discount_amount,
             'vat' => $request->vat_amount,
             'created_at' => now(),
             'updated_at' => now(),
@@ -110,8 +113,15 @@ class StripController extends Controller
         $order_date = $booking->created_at->format('Y-m-d');
         $order_number = $booking->booking_id;
         $vat = $booking->vat;
+        $promocode_discount_amount = $booking->promocode_discount_amount;
         $grand_total = $booking->total_amount;
-      
+        $promocode = $booking->promocode;
+        $promo_discount = null;
+        if($promocode){
+            $promo = Promo::where('promocode', $promocode)->first();
+
+            $promo_discount =$promo->discount;
+        }
 
 
         $items = [];
@@ -142,16 +152,21 @@ class StripController extends Controller
                 'guest_name'   =>$user->first_name .' '. $user->last_name,
                 'email'=>$user->email,
                 'verification_number'=>$booking_item->verification_number,
-                'voucher_details'=> $product_variant->product->about_description,
+                'voucher_details'=> $product_variant->product->email_about,
+                'product_name'=>$product_variant->product->name,
+                'product_variant_name'=>$product_variant->name,
                 'importantinfo'=>$product_variant->product->importantinfo,
                 'validity_from' => $order_date->format('Y-m-d'),
                 'validity_to' => $valid_until->format('Y-m-d'),
                 'vendor'=> $product_variant->product->vendor->name,
+                'nbv_terms_title'=> $product_variant->product->nbvTerms->title,
                 'nbv_terms'=> $product_variant->product->nbvTerms->terms,
+                'vendor_terms_title'=> $product_variant->product->vendorTerms->title,
+                'vendor_terms'=> $product_variant->product->vendorTerms->terms,
             ];
         }
 
-        Mail::to($user->email)->send(new BookingConfirmationEmail($user->first_name,$order_date,$order_number,$grand_total,$vat,$importantinfo, $nbv_terms,$items,$variants));
+        Mail::to($user->email)->send(new BookingConfirmationEmail($user->first_name,$order_date,$order_number,$grand_total,$vat,$promocode,$promo_discount,$promocode_discount_amount,$importantinfo, $nbv_terms,$items,$variants));
 
         DB::commit();
         return response()->json(['success' => true, 'message' => 'Booking confirmed.']);
