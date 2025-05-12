@@ -57,13 +57,14 @@
                     <option value="fab fa-pinterest text-white" {{ old('icon') == "fab fa-pinterest text-white" ? 'selected' : '' }}>Pinterest</option>
 
                     <!-- Payment Channel Icons -->
-                    <option value="fa fa-cc-visa" {{ old('icon') == "fa fa-cc-visa" ? 'selected' : '' }}>Visa</option>
-                    <option value="fa fa-cc-mastercard" {{ old('icon') == "fa fa-cc-mastercard" ? 'selected' : '' }}>Mastercard</option>
-                    <option value="fa fa-cc-amex" {{ old('icon') == "fa fa-cc-amex" ? 'selected' : '' }}>Amex</option>
-                    <option value="fa fa-cc-discover" {{ old('icon') == "fa fa-cc-discover" ? 'selected' : '' }}>Discover</option>
-                    <option value="fa fa-credit-card" {{ old('icon') == "fa fa-credit-card" ? 'selected' : '' }}>Credit Card</option>
-                    <option value="fa fa-university" {{ old('icon') == "fa fa-university" ? 'selected' : '' }}>Bank Transfer</option>
-                    <option value="fa fa-money-check-alt" {{ old('icon') == "fa fa-money-check-alt" ? 'selected' : '' }}>Rupay</option>
+                    <option value="https://img.icons8.com/color/48/visa.png" {{ old('icon') == "https://img.icons8.com/color/48/visa.png" ? 'selected' : '' }}>Visa</option>
+<option value="https://img.icons8.com/color/48/mastercard-logo.png" {{ old('icon') == "https://img.icons8.com/color/48/mastercard-logo.png" ? 'selected' : '' }}>Mastercard</option>
+<option value="https://img.icons8.com/color/48/amex.png" {{ old('icon') == "https://img.icons8.com/color/48/amex.png" ? 'selected' : '' }}>Amex</option>
+<option value="https://img.icons8.com/color/48/discover.png" {{ old('icon') == "https://img.icons8.com/color/48/discover.png" ? 'selected' : '' }}>Discover</option>
+<option value="https://img.icons8.com/color/48/bank-card-back-side.png" {{ old('icon') == "https://img.icons8.com/color/48/bank-card-back-side.png" ? 'selected' : '' }}>Credit Card</option>
+<option value="https://img.icons8.com/color/48/bank.png" {{ old('icon') == "https://img.icons8.com/color/48/bank.png" ? 'selected' : '' }}>Bank Transfer</option>
+<option value="https://img.icons8.com/color/48/rupay.png" {{ old('icon') == "https://img.icons8.com/color/48/rupay.png" ? 'selected' : '' }}>Rupay</option>
+
 
                 </select>
             </div>

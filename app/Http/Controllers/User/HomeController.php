@@ -112,7 +112,7 @@ class HomeController extends Controller
 
                           $payment_channels = Footer::where('type', 'payment_channels')
                           ->where('status', 1)
-                          ->get();                
+                          ->get();               
 
                           $products = Product::with(['vendor', 'variants', 'reviews'])
                           ->whereHas('vendor', function ($q) use ($today) {

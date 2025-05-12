@@ -8,9 +8,12 @@
     "require": {
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.1",
+        "illuminate/collections": "*",
         "laravel/framework": "^12.0",
         "laravel/socialite": "^5.18",
         "laravel/tinker": "^2.10.1",
+        "pragmarx/countries": "*",
+        "rinvex/countries": "^9.0",
         "stripe/stripe-php": "^17.1"
     },
     "require-dev": {
