@@ -29,6 +29,10 @@
                     <input type="text" name="type" class="form-control" id="type" value="{{ $nbv_term->type }}">                
                 </div>
                 <div class="mb-3">
+                    <label for="name" class="form-label">Title</label>
+                    <input type="text" class="form-control" name="title" id="title" value="{{$nbv_term->title}}">                
+                </div>
+                <div class="mb-3">
                     <label for="terms" class="form-label">Terms</label>
                     <textarea class="form-control" id="terms" name="terms">{{$nbv_term->terms}}</textarea>
                 </div>

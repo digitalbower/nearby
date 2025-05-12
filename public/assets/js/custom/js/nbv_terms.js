@@ -3,6 +3,7 @@ $(document).ready(function () {
         ignore: [], 
         rules: {
             name: { required: true},
+            title: { required: true},
             terms: {
                 required: function (textarea) {
                     // Get Summernote content
@@ -14,6 +15,7 @@ $(document).ready(function () {
         },
         messages: {
             name: { required: "Name is required"},
+            title: { required: "Title is required"},
             terms: { required: "Terms is required"},
             type: { required: "Type is required"},
         },

@@ -42,6 +42,8 @@ class VendorTermController extends Controller
             'vendor_id'=> 'required',
             'name'=> 'required|string',
             'terms' => 'required|string',
+            'title' => 'required|string',
+
         ]); 
         VendorTerm::create($request->all());
         return redirect()->route('admin.products.vendor_terms.index')->with('success', 'New Vendor Terms created successfully!');
@@ -66,6 +68,8 @@ class VendorTermController extends Controller
             'vendor_id'=> 'required',
             'name'=> 'required|string',
             'terms' => 'required|string',
+            'title' => 'required|string',
+
         ]); 
         $vendor_term->update($request->all());
         return redirect()->route('admin.products.vendor_terms.index')->with('success', ' Vendor Terms updated successfully!');

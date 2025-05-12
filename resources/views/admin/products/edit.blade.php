@@ -180,7 +180,10 @@
                     <label for="about_description" class="form-label">About Description</label>
                     <textarea name="about_description" id="about_description">{!! $product->about_description !!}</textarea>
                 </div>
-
+                <div class="mb-3">
+                    <label for="email_about" class="form-label">Email About</label>
+                    <textarea name="email_about" id="email_about">{!! $product->email_about !!}</textarea>
+                </div>
                 <div class="mb-3">
 
                     <!-- Giftable Toggle -->
@@ -271,6 +274,13 @@
                      ['para', ['ul', 'ol', 'paragraph']]
                  ]
              });
+            $('#email_about').summernote({
+                height: 200,
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline']],
+                    ['para', ['ul', 'ol', 'paragraph']]
+                ]
+            });
              $('#importantinfo').summernote({
                 height: 200,
                 toolbar: [

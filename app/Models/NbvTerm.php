@@ -10,5 +10,5 @@ class NbvTerm extends Model
 {
     use HasFactory,SoftDeletes;
 
-    protected $fillable = ['name','terms','type'];
+    protected $fillable = ['name','terms','title','type'];
 }

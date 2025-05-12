@@ -110,34 +110,39 @@
               <td>AED {{$item['unit_price']}}</td>
               <td>AED {{$item['total_price']}}</td>
             </tr>
-          @endforeach      
+          @endforeach     
+           <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>Promocode:</b> {{ $promocode ?? 'N/A' }}</td>
+          </tr> 
           <tr>
             <td></td>
             <td></td>
             <td></td>
-            <td>VAT: AED {{$vat}}</td>
+            <td><b>Promocode Discount:</b> {{$promo_discount ?? 'N/A'}}</td>
+          </tr> 
+            <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>Promocode discount amount:</b> AED {{$promocode_discount_amount ?? 'N/A'}}</td>
+          </tr>   
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>VAT:</b> AED {{$vat}}</td>
           </tr>     
           <tr>
             <td></td>
             <td></td>
             <td></td>
-            <td>Grand Total: AED {{$grand_total}}</td>
+            <td><b>Grand Total:</b> AED {{$grand_total}}</td>
           </tr>
         </tbody>
       </table>
-      <div class="section-title">📜 Important Details:</div>
-      {!! $importantinfo !!}
-
-      <div class="section-title">📋 Near By Vouchers Terms and Conditions:</div>
-      {!! $nbv_terms !!}
-      <div class="section-title">🔄 NearBy Vouchers Refund & Exchange Policy:</div>
-      <ol>
-        <li>Non-Refundable: All vouchers are non-refundable. Once purchased, vouchers cannot be returned or exchanged for cash or credit.</li>
-        <li>Non-Transferable: Vouchers are non-transferable after a slot is booked or the booking is confirmed with the operator. They can only be used by the original purchaser or as specified in the booking confirmation.</li>
-        <li>Validity: Vouchers must be redeemed within the validity period of 90 days from the date of purchase. Vouchers not used within this period will be considered void and will not be eligible for a refund or exchange.</li>
-        <li>Cancellation by Operator: In the event of unforeseen circumstances such as weather, natural calamity, or traveler security-related issues, if the operator cancels or closes the deal, refunds will be issued for vouchers that have not been redeemed. Refunds will be processed within 14 working days to the original payment method. Notifications regarding cancellations and refunds will be communicated via email.</li>
-        <li>Lost or Stolen Vouchers: We are not responsible for lost or stolen vouchers. It is the responsibility of the voucher holder to keep their voucher details and OTP secure.</li>
-      </ul>
 
       <p>Thank you for shopping with us! We look forward to serving you again soon.</p>
 

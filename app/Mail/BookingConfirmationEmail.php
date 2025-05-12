@@ -29,7 +29,11 @@ class BookingConfirmationEmail extends Mailable
     public $nbv_terms;
     public $items;
     public $vat;
-    public function __construct($name, $order_date, $order_number, $grand_total,$vat,$importantinfo, $nbv_terms, $items,$variants)
+    public $promocode_discount_amount;
+    public $promocode;
+    public $promo_discount;
+
+    public function __construct($name, $order_date, $order_number, $grand_total,$vat,$promocode,$promo_discount,$promocode_discount_amount,$importantinfo, $nbv_terms, $items,$variants)
     {
         $this->name = $name;
         $this->order_date=$order_date;
@@ -40,6 +44,9 @@ class BookingConfirmationEmail extends Mailable
         $this->items = $items;
         $this->variants =$variants;
         $this->vat =$vat;
+        $this->promocode_discount_amount=$promocode_discount_amount;
+        $this->promocode=$promocode;
+        $this->promo_discount = $promo_discount;
     }
 
     /**
@@ -78,7 +85,7 @@ class BookingConfirmationEmail extends Mailable
      *
      * @return array<int, \Illuminate\Mail\Mailables\Attachment>
      */
-    public function attachments(): array
+public function attachments(): array
     {
         $attachments = [];
         $dir = storage_path('app/public/attachments');

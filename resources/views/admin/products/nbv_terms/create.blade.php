@@ -28,6 +28,10 @@
                     <input type="text" class="form-control" name="type" id="type" value="{{ old('type') }}">                
                 </div>
                 <div class="mb-3">
+                    <label for="name" class="form-label">Title</label>
+                    <input type="text" class="form-control" name="title" id="title" value="{{old('title')}}">                
+                </div>
+                <div class="mb-3">
                     <label for="terms" class="form-label">Terms</label>
                     <textarea class="form-control" id="terms" name="terms">{{old('terms')}}</textarea>
                 </div>

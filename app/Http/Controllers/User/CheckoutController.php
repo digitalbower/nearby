@@ -201,7 +201,7 @@ class CheckoutController extends Controller
     
         return view('user.checkout',compact('seo','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels','count','bookingAmount','voucherSavings','vat','total','promo_discount',
-        'promocode_discount_amount','discountedPrice','order_id','isPromoApplied')); 
+        'promocode_discount_amount','discountedPrice','order_id','isPromoApplied','promoCode')); 
     }
     public function getCheckoutItems(){
         

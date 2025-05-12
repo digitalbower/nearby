@@ -36,6 +36,10 @@
                     <input type="text" class="form-control" id="name" name="name"  value="{{ $vendor_term->name}}"/>
                 </div>
                 <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title"  value="{{ $vendor_term->title }}"/>
+                </div>
+                <div class="mb-3">
                     <label for="terms" class="form-label">Terms</label>
                     <textarea class="form-control" id="terms" name="terms">{{ $vendor_term->terms }}</textarea>
                 </div>

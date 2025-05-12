@@ -15,7 +15,7 @@ class Product extends Model
     'vendor_id','category_id','sub_category_id','nbv_terms_id','product_support_phone',
     'product_support_email','emirates_id','productlocation_address','productlocation_link','importantinfo',
     'validity_from','validity_to','giftable','herocarousel','trending','categorycarousel','sales_person_id',
-    'product_type_id','meta_title', 'meta_description','og_title','og_description','og_image','schema'];
+    'product_type_id','meta_title', 'meta_description','og_title','og_description','og_image','schema','email_about'];
 
     protected $casts = [
         'tags_id' => 'array',
@@ -23,11 +23,11 @@ class Product extends Model
 
     public function vendorTerms(){
 
-        return $this->hasMany(VendorTerm::class,'id','vendor_terms_id');
+        return $this->hasOne(VendorTerm::class,'id','vendor_terms_id');
     }
     public function nbvTerms(){
 
-        return $this->belongsTo(NbvTerm::class,'nbv_terms_id');
+        return $this->hasOne(NbvTerm::class,'id','nbv_terms_id');
     }
     public function vendor()
     {

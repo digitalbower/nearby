@@ -24,6 +24,7 @@ class NbvTermController extends Controller
         $request->validate([
             'name' => 'required|string',
             'terms' => 'required|string',
+            'title' => 'required|string',
             'type' => 'required|string',
         ]);
         NbvTerm::create($request->all());
@@ -40,6 +41,7 @@ class NbvTermController extends Controller
         $request->validate([
             'name' => 'required|string',
             'terms' => 'required|string',
+            'title' => 'required|string',
             'type' => 'required|string',
         ]);
         $nbv_term->update($request->all());

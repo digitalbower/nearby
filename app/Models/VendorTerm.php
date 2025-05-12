@@ -10,7 +10,7 @@ class VendorTerm extends Model
 {
     use HasFactory,SoftDeletes;
 
-    protected $fillable = ['vendor_id','terms','name','status'];
+    protected $fillable = ['vendor_id','terms','title','name','status'];
 
     public function vendor()
     {
