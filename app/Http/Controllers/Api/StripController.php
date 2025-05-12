@@ -154,7 +154,7 @@ class StripController extends Controller
                 'verification_number'=>$booking_item->verification_number,
                 'voucher_details'=> $product_variant->product->email_about,
                 'product_name'=>$product_variant->product->name,
-                'product_variant_name'=>$product_variant->name,
+                'product_variant_name'=>$product_variant->title,
                 'importantinfo'=>$product_variant->product->importantinfo,
                 'validity_from' => $order_date->format('Y-m-d'),
                 'validity_to' => $valid_until->format('Y-m-d'),
