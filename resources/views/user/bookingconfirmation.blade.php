@@ -116,8 +116,8 @@
     <div class="flex items-center bg-[#58af0838] text-gray-800  rounded-lg px-4 py-3 mb-6">
       <i class="fas fa-check-circle text-xl"></i>
       <div class="ml-4">
-        <h1 class="text-lg font-semibold">Appointment Booked!</h1>
-        <p class="text-sm">A confirmation email has been sent to your registered email address.</p>
+        <h1 class="text-lg font-semibold">Thanks for Booking!</h1>
+        <p class="text-sm">We’ve sent a confirmation to your email. See you soon!</p>
       </div>
     </div>
 
@@ -148,17 +148,17 @@
 
           <!-- Booking Confirmation Status -->
           <div class="mb-8">
-            <h2 class="text-xl font-semibold text-gray-900 mb-2">Booking Confirmation</h2>
+            <h2 class="text-xl font-semibold text-gray-900 mb-2">Booking Confimed</h2>
           
             <!-- Confirmation Message -->
             <div class="flex items-center gap-2 mt-4">
               <i class="fas fa-check-circle text-4xl text-green-500"></i>
-              <p class="font-semibold text-base lg:text-xl text-green-600">Booking Confirmed</p>
+              <p class="font-semibold text-base lg:text-xl text-green-600">Thank you for your booking!</p>
             </div>
           
             <!-- Confirmation Text -->
             <p class="text-gray-600 mt-4 text-base leading-relaxed">
-              Thank you for your booking! Your appointment has been successfully confirmed. We're looking forward to your visit!
+              Your booking has been successfully confirmed. We're looking forward to your visit!
             </p>
           </div>
           
@@ -176,9 +176,10 @@
           </div>
         
           <div class="flex items-center gap-2 text-gray-800 mb-8 border-b border-gray-200 pb-3">
-    <i class="far text-gray-900 fa-clock"></i>
-    <span>{{ $order_date }}</span>
-</div>
+            <p class="text-gray-800 text-sm">Date:</p>
+              <i class="far text-gray-900 fa-clock"></i>
+              <span>{{ $order_date }}</span>
+          </div>
 
         
           <!-- Payment and Delivery Information -->
@@ -251,19 +252,19 @@
                
         <!-- FAQs -->
         <div class="lg:p-0">
-          <h3 class="text-lg font-bold mb-4 text-gray-800">FAQs</h3>
+          <h3 class="text-lg font-bold mb-4 text-gray-800">Frequently Asked Questions (FAQ)</h3>
           <div class="space-y-4">
             <!-- FAQ Item 1 -->
             <div class="border-b pb-4">
               <button 
                 class="faq-toggle w-full flex justify-between items-center text-left py-2 text-sm font-medium text-gray-700 focus:outline-none">
-                <span>How much time does it take to confirm my appointment?</span>
+                <span>How do I redeem my Nearby Voucher?</span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
               <div class="faq-content hidden text-sm text-gray-600 pl-6 mt-2">
-                <p>Confirmation is typically completed within 30 minutes of booking.</p>
+                <p> Please carefully review the important details in the attached ticket for each item in your booking confirmation. Redemption instructions may vary based on the type of product or service you’ve booked.</p>
               </div>
             </div>
         
@@ -271,13 +272,13 @@
             <div class="border-b pb-4">
               <button 
                 class="faq-toggle w-full flex justify-between items-center text-left py-2 text-sm font-medium text-gray-700 focus:outline-none">
-                <span>How do I download my health voucher?</span>
+                <span>How can I confirm my booking?</span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
               <div class="faq-content hidden text-sm text-gray-600 pl-6 mt-2">
-                <p>You can download your voucher from the confirmation email or the app.</p>
+                <p>To confirm bookings, within the voucher's validity period, you must contact the service provider directly and visit the location. Make sure to carry a copy of the ticket attached in the confirmation email and provide the Verification Number to the receptionist to verify your booking.</p>
               </div>
             </div>
         
@@ -285,13 +286,13 @@
             <div>
               <button 
                 class="faq-toggle w-full flex justify-between items-center text-left py-2 text-sm font-medium text-gray-700 focus:outline-none">
-                <span>Can I reschedule my health checkup?</span>
+                <span>What is a Verification Number?</span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
               <div class="faq-content hidden text-sm text-gray-600 pl-6 mt-2">
-                <p>Yes, rescheduling can be done from your booking confirmation page.</p>
+                <p> The Verification Number is a unique code associated with your booking or voucher. It ensures that your booking or redemption is valid and helps us track the status of your service. Keep this number safe as you may need it for confirmation or any support inquiries.</p>
               </div>
             </div>
           </div>
@@ -337,9 +338,18 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m2 0a6 6 0 10-12 0 6 6 0 0012 0z" />
                 </svg>
-                <span>Booking Amount</span>
+                <span>Total Amount</span>
               </div>
               <span class="font-medium text-gray-800">AED {{ number_format($booking->booking_amount, 2) }}</span>
+            </li>
+                        <li class="flex items-center justify-between text-base text-gray-700">
+              <div class="flex items-center space-x-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5-6l3 3-3 3" />
+                </svg>
+                <span>VAT (5%)</span>
+              </div>
+              <span class="font-medium text-gray-800">AED {{ number_format($booking->vat, 2) }}</span>
             </li>
             @if (session('promocode'))
             <li class="flex items-center justify-between text-base text-gray-800">
@@ -347,9 +357,9 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6M12 15V9m-4 4h8" />
                 </svg>
-                <span>Promocode Discount</span>
+                <span>Promocode</span>
               </div>
-              <span class="font-medium text-gray-800"> {{ rtrim(rtrim(number_format($promo_discount, 2), '0'), '.') }}%</span>
+              <span class="font-medium text-gray-800"> {{ session('promocode') }} ({{ rtrim(rtrim(number_format($promo_discount, 2), '0'), '.') }}%)</span>
             </li>
             <li class="flex items-center justify-between text-base text-gray-700">
               <div class="flex items-center space-x-3">
@@ -361,22 +371,14 @@
               <span class="font-medium text-gray-800">AED {{ number_format($promocode_discount_amount,2) }}</span>
             </li>
             @endif
-            <li class="flex items-center justify-between text-base text-gray-700">
-              <div class="flex items-center space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5-6l3 3-3 3" />
-                </svg>
-                <span>Vat</span>
-              </div>
-              <span class="font-medium text-gray-800">AED {{ number_format($booking->vat, 2) }}</span>
-            </li>
+
 
             <li class="flex items-center justify-between text-base text-gray-800">
               <div class="flex items-center space-x-3">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-3.333 0-5 1.667-5 5v5h10v-5c0-3.333-1.667-5-5-5zM7 16v2h10v-2" />
                 </svg>
-                <span>Total</span>
+                <span>Grand Total</span>
               </div>
               <span class="font-medium text-gray-800"> AED {{ number_format($booking->total_amount, 2) }}</span>
             </li>
