@@ -366,7 +366,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5-6l3 3-3 3" />
                 </svg>
-                <span>Promocode Discount Amount</span>
+                <span>Promocode Discount</span>
               </div>
               <span class="font-medium text-gray-800">AED {{ number_format($promocode_discount_amount,2) }}</span>
             </li>

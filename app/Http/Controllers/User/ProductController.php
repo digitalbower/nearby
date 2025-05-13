@@ -228,7 +228,7 @@ class ProductController extends Controller
         'followus','payment_channels','product','tag_name','gallery','nbvterms','variants','reviews',
         'totalReviews','averageRating','percentages','unit_type','user'));
     }
-    public function storeReview(Request $request)
+   public function storeReview(Request $request)
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
@@ -237,21 +237,39 @@ class ProductController extends Controller
             'review_rating' => 'required|integer|between:1,5',
             'review_description' => 'required|string',
         ]);
-    
+
+        // Check if the user has already reviewed this product
+        $existingReview = Review::where('product_id', $request->product_id)
+            ->where('user_id', $request->user_id)
+            ->first();
+
+        if ($existingReview) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'You have already reviewed this product.'
+            ], 400); // Bad Request
+        }
+
+        // Create the review
         Review::create($request->all());
-    
+
         return response()->json([
             'status' => 'success',
             'message' => 'Review added successfully!'
-        ]);    }
+        ]);
+    }
+    
     public function showReview($product_id){
-        $reviews = Review::where('product_id', $product_id)
-        ->where('status', 1)
-        ->get()
-        ->map(function ($review) {
-            $review->formatted_date = $review->created_at->format('F j, Y'); 
-            return $review;
-        });        
+        $reviews = Review::with('user')
+            ->where('product_id', $product_id)
+            ->where('status', 1)
+            ->get()
+            ->map(function ($review) {
+                     $review->formatted_date = $review->created_at->format('F j, Y');
+                     $review->reviewer_name =  $review->user ? $review->user->first_name. ' ' .$review->user->last_name : null; 
+                    return $review;
+            });
+
         return response()->json($reviews);
     }
     public function addCart(Request $request){

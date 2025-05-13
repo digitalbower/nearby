@@ -310,38 +310,34 @@
             <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
             <div class="space-y-4">
               <div class="flex justify-between">
-                <span>Booking Amount</span>
+                <span>Total Amount</span>
                 <span>AED {{ number_format($bookingAmount, 2) }}</span>
               </div>
               <div class="flex justify-between text-groupon-green">
-                <span>Nearby Voucher Savings</span>
+                <span>Your Savings(Compared to regular prices)</span>
                 <span>AED {{ number_format($voucherSavings, 2) }}</span>
               </div>
-              @if (session('promocode'))
-              <div class="flex justify-between">
-                <span>Promocode Discount</span>
-                <span>{{ rtrim(rtrim(number_format($promo_discount, 2), '0'), '.') }}%</span>
-              </div>
-              <div class="flex justify-between">
-                <span>Promocode Discount Amount</span>
-                <span>AED {{ number_format($promocode_discount_amount,2) }}</span>
-              </div>
-              @endif
               <div class="flex justify-between">
                 <span>VAT (5%)</span>
                 <span>AED {{ number_format($vat, 2) }}</span>
               </div>
+              @if (session('promocode'))
+              <div class="flex justify-between">
+                <span>Promocode</span>
+                <span>{{ $promoCode }}({{ rtrim(rtrim(number_format($promo_discount, 2), '0'), '.') }}%)</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Promocode Discount</span>
+                <span>AED {{ number_format($promocode_discount_amount,2) }}</span>
+              </div>
+              @endif
+            
               <hr />
               
               <div class="flex justify-between font-semibold">
-                <span>Total</span>
+                <span>Grand Total</span>
                 <span>AED {{ number_format($total, 2) }}</span>
               </div>
-
-              <p class="text-xs text-left text-gray-600">
-                By clicking below, I agree to the Terms of Use and Refund Policy
-                and that I have read the Privacy Statement.
-              </p>
             </div>
             {{-- <div class="mt-5">
               <button id="dropdownToggle" type="button" class="flex justify-between w-full items-center mb-4"
@@ -408,8 +404,7 @@
             </button>
 
             <p class="text-xs text-gray-500 md:block hidden text-center mt-4">
-              By completing your purchase you agree to these<a href="#" class="text-gray-800 hover:underline">
-                Terms of Service</a>.
+              By completing your purchase, you agree to our Terms & Conditions.</a>.
             </p>
           </div>
         </div>
@@ -488,37 +483,34 @@
           <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
           <div class="space-y-4">
             <div class="flex justify-between">
-              <span>Booking Amount</span>
+              <span>Total Amount</span>
               <span>AED {{ number_format($bookingAmount, 2) }}</span>
             </div>
             <div class="flex justify-between text-groupon-green">
-                <span>Nearby Voucher Savings</span>
+                <span>Your Savings(Compared to regular prices)</span>
               <span>AED {{ number_format($voucherSavings, 2) }}</span>
           </div> 
+          <div class="flex justify-between">
+              <span>VAT (5%)</span>
+              <span>AED {{ number_format($vat, 2) }}</span>
+          </div>
           @if (session('promocode'))
             <div class="flex justify-between">
-              <span>Promocode Discount</span>
-              <span>{{ rtrim(rtrim(number_format($promo_discount, 2), '0'), '.') }}%</span>
+              <span>Promocode</span>
+              <span>{{ $promoCode }}({{ rtrim(rtrim(number_format($promo_discount, 2), '0'), '.') }}%)</span>
             </div>
             <div class="flex justify-between">
-              <span>Promocode Discount Amount</span>
+              <span>Promocode Discount</span>
               <span>AED {{ number_format($promocode_discount_amount,2) }}</span>
             </div>
             @endif
-            <div class="flex justify-between">
-              <span>VAT (5%)</span>
-              <span>AED {{ number_format($vat, 2) }}</span>
-            </div>
+           
             <hr />
             <div class="flex justify-between font-semibold">
-              <span>Total</span>
+              <span>Grand Total</span>
               <span>AED {{ number_format($total, 2) }}</span>
             </div>
 
-            <p class="text-xs text-left text-gray-600">
-              By clicking below, I agree to the Terms of Use and Refund Policy
-              and that I have read the Privacy Statement.
-            </p>
           </div>
 
 
@@ -585,8 +577,7 @@
           </button>
 
           <p class="text-xs text-gray-500 md:block hidden text-center mt-4">
-            By completing your purchase you agree to these<a href="#" class="text-blue-600 hover:underline">
-              Terms of Service</a>.
+          By completing your purchase, you agree to our Terms & Conditions.</a>.
           </p>
         </div>
 
@@ -879,7 +870,7 @@ function collectItems() {
                   <i class="fas fa-gift mr-2 text-gray-700"></i>
                   Buy as a gift
                 </div>
-                <div class="text-sm text-gray-500">Send or print gift voucher after purchase</div>
+                <div class="text-sm text-gray-500">Send or print a gift voucher after completing your purchase</div>
               </div>
             </label>
           </div>

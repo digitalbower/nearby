@@ -21,7 +21,6 @@
   <section class="w-full">
     <div class="container mx-auto py-10 px-4 lg:px-0 ">
 
-      <div id="flash-message" class="hidden p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg" role="alert"></div>
       <!-- Main Content -->
       <div class="lg:grid md:grid-cols-12 grid-cols-1 relative gap-10">
         <!-- Left Column -->
@@ -186,6 +185,7 @@
                     </div>
                     <input type="hidden" name="product_id" id="product_id" value="{{$product->id}}">
                     @auth
+                    <div id="flash-message" class="hidden p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg" role="alert"></div>
                     <div id="review-form" class="hidden mb-8 p- bg-white">
                       <h3 class="text-2xl font-semibold mb-6 text-gray-800">Add Your Review</h3>
                       <form onsubmit="addReview(event)">
@@ -266,8 +266,7 @@
                         <i class="fas fa-check-circle text-green-600 w-5 h-5"></i>
                         <span class="font-semibold">100% Verified Reviews</span>
                       </div>
-                      <p class="text-sm text-gray-600">All reviews are from customers who redeemed deals. Review
-                        requests are sent by email to customers who purchased the deal.</p>
+                      <p class="text-sm text-gray-600">Our community shares their thoughts to help others make informed choices. We value every review—your voice matters.</p>
                     </div>
 
                     <div class="mb-8">
@@ -315,7 +314,7 @@
                     <div class="mb-5">
                       <button onclick="toggleReviews()" id="show-reviews"
                         class="w-auto px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]  text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-                        Show Reviews
+                        Hide Reviews
                       </button>
                     </div>
 
@@ -544,7 +543,7 @@ function isAnyVariantSelected() {
 
     const errorMsg = document.getElementById('variant-error-msg');
     if (!isValid) {
-        errorMsg.textContent = "Please select at least one variant.";
+        errorMsg.textContent = "Oops! Don’t forget to select at least one option before continuing";
         errorMsg.classList.remove('hidden');
     } else {
         errorMsg.classList.add('hidden');
@@ -620,51 +619,61 @@ function submitAndRedirectToCart() {
       }
 
       function addReview(event) {
-        event.preventDefault();
+          event.preventDefault();
 
-        const product_id = document.getElementById("product_id").value;
-        const review_title = document.getElementById("name").value;
-        const review_rating = Array.from(document.querySelectorAll('.rating-stars .fa-star.text-yellow-500')).length;
-        const review_description  = document.getElementById("comment").value;
-        const user_id = document.getElementById("user_id").value; 
+          const product_id = document.getElementById("product_id").value;
+          const review_title = document.getElementById("name").value;
+          const review_rating = Array.from(document.querySelectorAll('.rating-stars .fa-star.text-yellow-500')).length;
+          const review_description = document.getElementById("comment").value;
+          const user_id = document.getElementById("user_id").value;
 
-        const reviewData = {
-          review_title,
-          user_id,
-          product_id,
-          review_rating,
-          review_description,
-        };
-        fetch('/products/store-review', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')  // CSRF protection
-            },
-            body: JSON.stringify(reviewData)
-        })
-        .then(response => response.json())
-        .then(data => {
-          showFlashMessage(data.message);
-          cancelReview();
-            displayReviews(); 
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert("There was an error adding the review. Please try again.");
-        });
-    }
-    function showFlashMessage(message) {
-      const flashMessage = document.getElementById("flash-message");
-      flashMessage.textContent = message;
-      flashMessage.classList.remove("hidden");
+          const reviewData = {
+              review_title,
+              user_id,
+              product_id,
+              review_rating,
+              review_description,
+          };
 
-      // Optional: Auto-hide after 4 seconds
+          fetch('/products/store-review', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+              },
+              body: JSON.stringify(reviewData)
+          })
+          .then(async response => {
+              const data = await response.json();
+
+              if (!response.ok) {
+                  // Show the custom error message (like "already reviewed")
+                  showFlashMessage(data.message || "An error occurred.", "error");
+              } else {
+                  showFlashMessage(data.message, "success");
+                  cancelReview();
+                  displayReviews();
+              }
+          })
+          .catch(error => {
+              console.error('Unexpected error:', error);
+              showFlashMessage("Unexpected error. Please try again.", "error");
+          });
+      }
+
+      function showFlashMessage(message, type = "success") {
+          const flashMessage = document.getElementById("flash-message");
+          flashMessage.textContent = message;
+          flashMessage.classList.remove("hidden");
+
+          flashMessage.classList.remove("text-red-600", "text-green-600");
+          flashMessage.classList.add(type === "error" ? "text-red-600" : "text-green-600");
+
       setTimeout(() => {
           flashMessage.classList.add("hidden");
           flashMessage.textContent = "";
-      }, 4000);
       location.reload();
+      }, 4000);
     }
       function displayReviews() {
           const productId = document.getElementById("product_id").value;
@@ -683,7 +692,7 @@ function submitAndRedirectToCart() {
 
                 const reviewerName = document.createElement("span");
                 reviewerName.classList.add("font-semibold", "text-lg", "text-gray-800");
-                reviewerName.textContent = review.review_title;
+                reviewerName.textContent = review.reviewer_name;
 
                 const reviewDate = document.createElement("span");
                 reviewDate.classList.add("text-sm", "text-gray-500");
