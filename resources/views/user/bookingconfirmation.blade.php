@@ -231,7 +231,7 @@
   <div class="border rounded-lg overflow-hidden lg:shadow-lg mb-4">
     <!-- … your existing item HTML … -->
 
-    <a href="{{ route('user.booking.item.download', $booking->items->id) }}"
+    <a href="{{ route('user.booking.item.download',$product_item->id) }}"
        class="mt-4 inline-flex items-center px-3 py-2 bg-green-100 text-black rounded-lg hover:bg-green-200 transition">
       <i class="fas fa-download mr-1"></i> Download PDF
     </a>
