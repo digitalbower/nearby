@@ -214,6 +214,8 @@ class HomeController extends Controller
        
         $booking = BookingConfirmation::with('items.variant.product')->find($bookingConfirmation->id);  
         
+        $order_date =$booking->created_at->format('D, d M Y');
+        
         $promoCode = session('promocode'); 
         $promo_discount = null;
         $promocode_discount_amount = 0;
@@ -255,7 +257,7 @@ class HomeController extends Controller
 
      
         return view('user.bookingconfirmation',compact('seo','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
-        'followus','payment_channels','user','bookingConfirmation','payment','booking','checkoutData','promocode_discount_amount','promo_discount')); 
+        'followus','payment_channels','user','bookingConfirmation','payment','booking','order_date','checkoutData','promocode_discount_amount','promo_discount')); 
     } 
      
 

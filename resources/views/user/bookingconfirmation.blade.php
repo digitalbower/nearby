@@ -133,7 +133,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
         <div>
             <p class="text-sm text-gray-600">Full Name</p>
-            <p class="font-semibold text-gray-800">{{ $user->first_name }}</p>
+            <p class="font-semibold text-gray-800">{{ $user->first_name }}  {{ $user->last_name }}</p>
         </div>
         <div>
             <p class="text-sm text-gray-600">Email Address</p>
@@ -142,10 +142,6 @@
         <div>
             <p class="text-sm text-gray-600">Phone Number</p>
             <p class="font-semibold text-gray-800">{{ $user->phone ?? '-' }}</p>
-        </div>
-        <div>
-            <p class="text-sm text-gray-600">Address</p>
-            <p class="font-semibold text-gray-800">{{ $user->address ?? '-' }}</p>
         </div>
     </div>
 </div>
@@ -181,7 +177,7 @@
         
           <div class="flex items-center gap-2 text-gray-800 mb-8 border-b border-gray-200 pb-3">
     <i class="far text-gray-900 fa-clock"></i>
-    <span>{{ \Carbon\Carbon::parse($bookingConfirmation->booking_time)->format('h:i A D, d M Y') }}</span>
+    <span>{{ $order_date }}</span>
 </div>
 
         
@@ -220,25 +216,17 @@
           <p class="text-sm text-gray-500 mt-0">{{ $product_item->variant->title }}</p>
           <p class="text-sm text-gray-500 mt-0">{{ $product_item->variant->product->short_description }}</p>
           <p class="text-sm text-gray-500 mt-2"><strong>Quantity:</strong> {{ $product_item->quantity }}</p>
-          <p class="text-sm text-gray-500 mt-2"><strong>Date:</strong> {{ \Carbon\Carbon::parse($product_item->created_at)->format('d/m/Y') }}</p>
+          {{-- <p class="text-sm text-gray-500 mt-2"><strong>Date:</strong> {{ \Carbon\Carbon::parse($product_item->created_at)->format('d/m/Y') }}</p> --}}
         </div>
       </div>
       <div class="flex items-center justify-between mt-2">
         <div class="flex items-center gap-4">
           <div class="flex items-center gap-x-4">
             {{-- <img src="/images/US-UK_Add_to_Apple_Wallet_RGB_101421.svg" class="w-28"> --}}
-           
-  <div class="border rounded-lg overflow-hidden lg:shadow-lg mb-4">
-    <!-- … your existing item HTML … -->
-
-    <a href="{{ route('user.booking.item.download',$product_item->id) }}"
-       class="mt-4 inline-flex items-center px-3 py-2 bg-green-100 text-black rounded-lg hover:bg-green-200 transition">
-      <i class="fas fa-download mr-1"></i> Download PDF
-    </a>
-  </div>
-
-
-
+              <a href="{{ route('user.booking.item.download',$product_item->id) }}"
+              class="px-2 py-2 text-xs bg-green-100 text-black rounded-lg hover:bg-green-200 transition duration-300 flex items-center">
+              <i class="fas fa-download  text-sm mr-1 "> </i> Download
+              </a>
 
           </div>
         </div>
@@ -260,30 +248,7 @@
           
           
           <hr class="my-8">
-        
-       
-
-        <!-- Instructions -->
-        <div class="mb-6">
-          <h3 class="text-lg font-semibold mb-4">Instructions to Follow</h3>
-          <ul class="space-y-3">
-            <li class="flex items-start gap-2">
-              <i class="fas fa-check-circle text-gray-900"></i>
-              <p>The selected packages require fasting for 12 hours.</p>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fas fa-check-circle text-gray-900"></i>
-              <p>Eat a well-balanced meal before fasting.</p>
-            </li>
-            <li class="flex items-start gap-2">
-              <i class="fas fa-check-circle text-gray-900"></i>
-              <p>Please carry a valid prescription order (if applicable).</p>
-            </li>
-          </ul>
-        </div>
-
-        <hr class="my-2">
-
+               
         <!-- FAQs -->
         <div class="lg:p-0">
           <h3 class="text-lg font-bold mb-4 text-gray-800">FAQs</h3>
