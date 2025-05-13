@@ -261,32 +261,34 @@ class HomeController extends Controller
 
     public function downloadPdfItem($itemId)
     {
-
         $userId = Auth::user();
 
         $item = BookingConfirmationItem::with('variant.product')->findOrFail($itemId); 
+        $booking = bookingConfirmation::findOrFail($item->booking_confirmation_id);
 
         $product = $item->variant->product;
     
         $nbvTerms = \App\Models\NbvTerm::find($product->nbv_terms_id);
         $vendorTerms = \App\Models\VendorTerm::find($product->vendor_terms_id);
         $vendor = \App\Models\Vendor::find($product->vendor_id); 
-        $productType = ProductType::find($product->product_type_id);
+        $productType = ProductType::find($product->product_type_id); 
         
     
         // Calculate validity date
         $validUntil = null;
         if ($productType && $productType->validity) {
-            $validUntil = Carbon::parse($item->created_at)->addDays($productType->validity);
+            $validity = $productType->validity;
+            $order_date = $booking->created_at->copy();  
+            $validUntil = $order_date->copy()->addDays($validity); 
         }
-    
         $pdf = Pdf::loadView('user.generate_pdf', [
             'item' => $item,
             'nbvTerms' => $nbvTerms,
             'vendorTerms' => $vendorTerms,
             'vendor' => $vendor,
             'productType' => $productType,
-            'validUntil' => $validUntil,
+            'order_date'=> $order_date->format('Y-m-d'),
+            'validUntil' => $validUntil->format('Y-m-d'),
             'userId'    =>  $userId,
         ]);
     

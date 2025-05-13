@@ -5,7 +5,10 @@
   <title>Booking Item #{{ $item->id }}</title>
   <style>
     @page {
-      margin: 120px 50px 100px 50px;
+      margin: 40px 50px 100px 50px;
+    }
+    * {
+    font-family: DejaVu Sans, sans-serif !important;
     }
     body {
       font-family: DejaVu Sans, sans-serif;
@@ -93,7 +96,6 @@
     {{-- Header --}}
     <div class="header">
       <img src="{{ public_path('assets/img/logo.png') }}" alt="NearBy Vouchers Logo">
-      <h2>Booking Confirmation attachment</h2>
     </div>
 
     <p>Dear {{ $userId->first_name ?? 'Guest' }},</p>
@@ -101,69 +103,31 @@
     <p>We’re excited to provide you with the voucher you’ve chosen. Below you’ll find all the details you need to redeem your offer.</p>
 
     <div class="section-title">🧾 Your Voucher Summary</div>
+     <p><strong>Product:</strong> {{$item->variant->product->name}}</p>
+    <p><strong>Product Variant:</strong> {{$item->variant->title}}</p>
     <p><strong>Voucher Number:</strong> {{ $item->bookingConfirmation->booking_id ?? 'N/A' }}</p>
     <p><strong>Guest Name:</strong> {{ $userId->first_name ?? 'Guest' }}</p>
     <p><strong>Email:</strong> {{ $userId->email ?? 'N/A' }}</p>
     <p><strong>Website:</strong> https://nearbyvouchers.com/ </p>
    
     <div class="section-title">📅 Booking Date & Details</div>
-    <p><strong>Validity From:</strong> {{ \Carbon\Carbon::parse($item->bookingConfirmation->created_at ?? now())->format('d/m/Y') }}</p>
+    <p><strong>Validity From:</strong> {{ $order_date }}</p>
+    <p><strong>Validity Until:</strong>{{ $validUntil }}
     <p><strong>Fulfilled By:</strong> {{ $vendor->name ?? 'N/A' }}</p>
-    <p><strong>Validity Until:</strong>{{ $validUntil = \Carbon\Carbon::parse($item->bookingConfirmation->created_at)->addDays($item->relatedProductTypePdf->validity ?? 0)->format('Y-m-d'); }}
-
-    </p>
-    <p style="color: red;">Do not share this on the phone.</p>
    
     {{-- Section 3: Verification Number --}}
     <div class="section-title">🔐 Verification Number</div>
-    <p style="color: red;"><strong>{{ $item->verification_number ?? 'N/A' }}</strong></p>
+    <h3 style="color: red;"><strong>{{ $item->verification_number}}</strong></h3>
     <p style="color: red;">Do not share this on the phone.</p>
 
     <div class="section-title">📜 Voucher Details:</div>
-<ol>
-  <li>Below are the specifics of what is covered and not covered by your voucher:
-    <ol type="a">
-      <li> {{ $item->variant->product->name ?? 'N/A' }}
-        <ol type="i">
-        <li>
-        <div class="relative w-28 h-28 rounded-lg overflow-hidden">
-          <img src="{{ asset('storage/' . $item->variant->product->image) }}" alt="{{ $item->variant->product->name }}" class="w-full h-full object-cover">
-        </div>
-      </li>
-
-          <li>
-            <strong>{{ $item->variant->product->short_description ?? 'No Description' }}</strong>
-          </li>
-          <li>
-            <strong>{{ $item->variant->title ?? 'No Variant Title' }}</strong>
-          </li>
-          <li>
-            <strong>AED {{ number_format($item->variant->price ?? 0, 2) }}</strong>
-          </li>
-        </ol>
-      </li>
-    </ol>
-  </li>
-</ol>
-
-<div class="section-title">⚠️ Important Details:</div>
- {!! $item->variant->importantinfo !!}
-
-
-    <!-- Voucher Terms and Conditions Section -->
-    <div class="section-title">📄 Voucher Terms and Conditions:</div>
-
-@if(!empty($item->variant->product->nbvTerms->terms))
-  {!! $item->variant->product->nbvTerms->terms !!}
-@else
-  <p>Voucher terms and conditions are not available at the moment.</p>
-@endif
-
-
-@if($vendorTerms)
-    <div class="section-title">📄 {{ $vendorTerms->name }}</div>
-    <div>{!! nl2br(e($vendorTerms->terms)) !!}</div>
-@endif
+      {!!$item->variant->product->email_about  !!}
+    <div class="section-title">⚠️ Important Details:</div>
+     {!! $item->variant->product->importantinfo !!}
+    <div class="section-title">{{  $vendorTerms->title}}</div>
+      {!!  $vendorTerms->terms !!}
+    <div class="section-title">{{$nbvTerms->title}}</div>
+      {!! $nbvTerms->terms !!}
 
     <!-- Thank You and Closing Message -->
     <p>Thank you for shopping with us! We look forward to serving you again soon.</p>
