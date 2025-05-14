@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('countries', function (Blueprint $table) {
             $table->id();
-            $table->string('country');
-            $table->string('country_code');
-            $table->tinyInteger('status')->default(1);
+            $table->string('iso', 2);
+            $table->string('name');
+            $table->string('iso3', 3)->nullable();
+            $table->string('numcode', 3)->nullable();
+            $table->string('phonecode')->nullable();
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }

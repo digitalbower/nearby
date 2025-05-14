@@ -193,73 +193,96 @@
             class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="email" name="email" placeholder="Email" value="{{old('email')}}" required>
 
-          <!-- Phone Number field -->
-          <div class="flex items-center gap-2">
-            <!-- Country Code Dropdown -->
-            <select 
-    class="w-1/4 rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
-    name="co_id" required>
-    <option value="">Select Country Code</option>
+            <div class="flex items-center gap-2">
+    <!-- Country Code Dropdown -->
+    <select 
+        class="w-1/4 rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+        name="country_code_id" required>
+        <option value="">Select Country Code</option>
+        @foreach($countries as $country)
+            <option value="{{ $country->id }}"
+                {{ old('country_code_id', $user->country_code_id ?? '') == $country->id ? 'selected' : '' }}>
+                +{{ $country->phonecode }} ({{ $country->name }})
+            </option>
+        @endforeach
+    </select>
+
+    <!-- Phone Number Input -->
+    <input
+        class="w-3/4 rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        type="tel" name="phone" placeholder="Phone Number" value="{{ old('phone', $user->phone ?? '') }}" required>
+</div>
+
+<!-- Country -->
+ 
+<select name="country_id"  class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+    <option value="">Select your nationality</option>
     @foreach($countries as $country)
-        <option value="{{ $country->id }}" {{ old('country_code_id', isset($user) ? $user->country_code_id : '') == $country->id ? 'selected' : '' }}>
-            {{ $country->country_code }} ({{ $country->country }})
+        <option value="{{ $country->id }}"
+            {{ old('country_id', $user->country_id ?? '') == $country->id ? 'selected' : '' }}>
+            {{ $country->name }}
         </option>
     @endforeach
 </select>
-          
-            <!-- Phone Number Input -->
-            <input
-              class="w-3/4 rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              type="tel" name="phone" placeholder="Phone Number" value="{{old('phone')}}" required>
-          </div>
-          
 
-
-          <div class="relative w-full">
-            <!-- Styled Select -->
-            <select
-    class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-    name="country" required>
-    <option value="">Select your country</option>
-    @foreach(App\Models\Country::all() as $country)
-        <option value="{{ $country->country_code }}" {{ old('country') == $country->country_code ? 'selected' : '' }}>{{ $country->country }}</option>
+<!-- Country of Residence -->
+<select name="country_of_residence_id"  class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+    <option value="">Select your country of residence</option>
+    @foreach($countries as $country)
+        <option value="{{ $country->id }}"
+            {{ old('country_of_residence_id', $user->country_of_residence_id ?? '') == $country->id ? 'selected' : '' }}>
+            {{ $country->name }}
+        </option>
     @endforeach
 </select>
 
-            <!-- Font Awesome Icon -->
-
-          </div>
 
 
           <!-- Password field -->
-          <input 
-            class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Create a password" required type="password" name="password">
+          <div class="relative w-full mt-4">
+  <input
+    class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    placeholder="Create a password" required type="password" name="password" id="password">
+  
+  <span onclick="togglePassword('password', this)" class="absolute right-4 top-5 cursor-pointer text-gray-500">
+    👁️
+  </span>
+</div>
 
-            <input 
-            class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Confirm Password" required type="password" name="password_confirmation">
-
+<div class="relative w-full mt-4">
+  <input
+    class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    placeholder="Confirm Password" required type="password" name="password_confirmation" id="password_confirmation">
+  
+  <span onclick="togglePassword('password_confirmation', this)" class="absolute right-4 top-5 cursor-pointer text-gray-500">
+    👁️
+  </span>
+</div>
 
           <!-- Terms and conditions -->
 
 
-          <!-- Submit button -->
-        <div>
-          <div class="flex items-center ml-2">
-            <input type="checkbox" id="terms" class="rounded w-4 h-4 border-[#E2E8F0]">
-            <label for="terms" class="ml-2 text-base text-[#718096]">
-              I agree to the <a href="#" class="text-primary hover:underline">Terms and Conditions</a>
-            </label>
-          </div>
-          <div class="flex items-center ml-2 mt-2">
-            <input type="checkbox" id="terms" class="rounded w-4 h-4 border-[#E2E8F0]">
-            <label for="terms" class="ml-2 text-base text-[#718096]">
-              I agree to the <a href="#" class="text-primary hover:underline">market polices</a>
-            </label>
-          </div>
-        </div>
+          <div>
+  <div class="flex items-center ml-2">
+    <input type="checkbox" id="terms" name="terms" class="rounded w-4 h-4 border-[#E2E8F0]" {{ old('terms') ? 'checked' : '' }}>
+    <label for="terms" class="ml-2 text-base text-[#718096]">
+      I agree to the <a href="#" class="text-primary hover:underline">Terms and Conditions</a>
+    </label>
+  </div>
+  <div class="flex items-center ml-2 mt-2">
+    <input type="checkbox" id="market_policy" name="market_policy" class="rounded w-4 h-4 border-[#E2E8F0]" {{ old('market_policy') ? 'checked' : '' }}>
+    <label for="market_policy" class="ml-2 text-base text-[#718096]">
+      I agree to the <a href="#" class="text-primary hover:underline">market policies</a>
+    </label>
+  </div>
 
+  @error('terms')
+    <p class="text-red-500 text-sm mt-1 ml-2">{{ $message }}</p>
+  @enderror
+  @error('market_policy')
+    <p class="text-red-500 text-sm mt-1 ml-2">{{ $message }}</p>
+  @enderror
+</div>
           <div class="w-full px-2">
             <button type="submit"
               class="px-6 py-2 bg-[#a5dd7294] text-black rounded-lg w-full hover:bg-[#709b4bbf] transition duration-300">
@@ -330,4 +353,41 @@
     }
   </script>
   
+  <script>
+    function validatePassword() {
+        const password = document.getElementById("password").value;
+        const help = document.getElementById("passwordHelp");
+
+        const requirements = [
+            { regex: /.{8,}/, message: "Minimum 8 characters" },
+            { regex: /[A-Z]/, message: "At least one uppercase letter" },
+            { regex: /[a-z]/, message: "At least one lowercase letter" },
+            { regex: /[0-9]/, message: "At least one number" },
+            { regex: /[!@#$%^&*]/, message: "At least one special character (!@#$%^&*)" }
+        ];
+
+        const unmet = requirements.filter(req => !req.regex.test(password));
+        
+        if (unmet.length === 0) {
+            help.textContent = "Strong password ✅";
+            help.className = "text-green-600 text-sm mt-1";
+        } else {
+            help.textContent = "Password must have: " + unmet.map(u => u.message).join(", ");
+            help.className = "text-red-600 text-sm mt-1";
+        }
+    }
+</script>
+<script>
+function togglePassword(fieldId, icon) {
+  const field = document.getElementById(fieldId);
+  if (field.type === 'password') {
+    field.type = 'text';
+    icon.textContent = '🙈'; // change icon
+  } else {
+    field.type = 'password';
+    icon.textContent = '👁️'; // change icon
+  }
+}
+</script>
+
 @endpush
