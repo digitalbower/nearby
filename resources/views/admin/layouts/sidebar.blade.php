@@ -121,12 +121,12 @@
                 </li>
 
                 <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#sidebarLayouts">
+                    <a data-bs-toggle="collapse" href="#contractLayouts">
                     <i class="fas fa-th-list"></i>
-                    <p>Product Section</p>
+                    <p>Contracts</p>
                     <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="sidebarLayouts">
+                    <div class="collapse" id="contractLayouts">
                     <ul class="nav nav-collapse">
                         <li>
                             <a href="{{route('admin.products.nbv_terms.index')}}">
@@ -148,6 +148,24 @@
                                 <span class="sub-item">Sales Person</span>
                             </a>
                         </li>
+                         <li>
+                            <a href="{{route('admin.products.promos.index')}}">
+                                <span class="sub-item">Promocodes</span>
+                            </a>
+                        </li>
+                    </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#sidebarLayouts">
+                    <i class="fas fa-th-list"></i>
+                    <p>Product Section</p>
+                    <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="sidebarLayouts">
+                    <ul class="nav nav-collapse">
+                        
+                      
                         <li>
                             <a href="{{route('admin.products.index')}}">
                                 <span class="sub-item">Products</span>
@@ -161,11 +179,6 @@
                         <li>
                             <a href="{{route('admin.products.product_variants.index')}}">
                                 <span class="sub-item">Product Variants</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{route('admin.products.promos.index')}}">
-                                <span class="sub-item">Promos</span>
                             </a>
                         </li>
                     </ul>
