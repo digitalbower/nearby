@@ -14,7 +14,7 @@ class Admin extends Authenticatable
     protected $table = 'admins';
 
     protected $fillable = [
-        'name', 'email', 'password', 'remember_token'
+        'name', 'email', 'password', 'remember_token','user_role_id'
     ];
 
     protected $hidden = [
@@ -24,4 +24,8 @@ class Admin extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'user_role_id');
+    }
 }

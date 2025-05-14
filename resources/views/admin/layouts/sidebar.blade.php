@@ -1,3 +1,7 @@
+@php
+    $admin = Auth::guard('admin')->user();
+    $role = $admin?->user_role_id;
+@endphp
 <div class="sidebar" data-background-color="dark">
     <div class="sidebar-logo">
         <!-- Logo Header -->
@@ -27,6 +31,7 @@
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
+                @if(in_array($role, [1,3]))
                 <li class="nav-item active">
                     <a
                     data-bs-toggle="collapse"
@@ -156,6 +161,8 @@
                     </ul>
                     </div>
                 </li>
+                @endif
+                @if(in_array($role, [1,2,3]))
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#sidebarLayouts">
                     <i class="fas fa-th-list"></i>
@@ -184,6 +191,8 @@
                     </ul>
                     </div>
                 </li>
+                @endif
+                @if(in_array($role, [1,3]))
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#reportLayouts">
                     <i class="fas fa-th-list"></i>
@@ -221,6 +230,23 @@
                     </ul>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#adminLayouts">
+                    <i class="fas fa-th-list"></i>
+                    <p>Admin User Management</p>
+                    <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="adminLayouts">
+                    <ul class="nav nav-collapse">
+                        <li>
+                            <a href="{{route('admin.users.index')}}">
+                                <span class="sub-item">Admin Users</span>
+                            </a>
+                        </li>
+                    </ul>
+                    </div>
+                </li>
+                @endif
             </ul>
         </div>
     </div>

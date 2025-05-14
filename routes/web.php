@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\AuthController;
@@ -329,7 +330,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
        });
     Route::resource('seo', SeoManagementController::class);
 
-
+    Route::resource('users', AdminUserController::class);
 
     });
 });

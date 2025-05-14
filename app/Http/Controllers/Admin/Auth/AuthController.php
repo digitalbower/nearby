@@ -33,7 +33,8 @@ class AuthController extends Controller
                 Cookie::queue(Cookie::forget('remember_email'));
                 Cookie::queue(Cookie::forget('remember_password'));
             }
-            $adminId = Auth::guard('admin')->id();
+            $admin = Auth::guard('admin')->user();
+            $adminId = $admin->id;
             $sessionId = session()->getId();
             $payload = serialize(session()->all());
             DB::table('sessions')->updateOrInsert(
@@ -46,7 +47,12 @@ class AuthController extends Controller
                     'last_activity' => now()->timestamp, 
                 ]
             );
-            return redirect()->intended('/admin');
+           // 🎯 REDIRECT BASED ON ROLE
+            if ($admin->user_role_id == 2) {
+                return redirect()->route('admin.products.index'); 
+            } else {
+                return redirect()->intended('/admin');
+            }
         }
 
         $admin = Admin::where('email', $request->email)->first();

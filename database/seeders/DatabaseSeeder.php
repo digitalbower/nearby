@@ -30,6 +30,8 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             GenderSeeder::class,
             MainSeoSeeder::class,
+            RoleSeeder::class,
+
         ]);
     }
 }
