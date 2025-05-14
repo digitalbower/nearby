@@ -393,6 +393,113 @@
         </div>
       </div>
     </div>
+   <!-- My Reviews Tab -->
+<div class="accordion-item mb-3">
+  <button
+    class="accordion-header flex justify-between items-center w-full py-3 px-4 border-gray-300 border-2 rounded-lg"
+    data-tab="reviews">
+    <span>My Reviews</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content mt-4 px-0 pt-2">
+     <div class="flex justify-between items-center mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">My Reviews</h2>
+   </div>
+     <div class="space-y-6">
+      @forelse($reviews as $review)
+        <div class="bg-white shadow rounded-lg p-4 mb-4">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-lg font-semibold text-gray-800">{{$review->product->name}}</h3>
+            <div class="flex items-center gap-4">
+                <!-- Edit Link -->
+                <a href="#"
+                  onclick="openEditForm({{ $review->id }}, '{{ addslashes($review->review_title) }}', {{ $review->review_rating }}, '{{ addslashes($review->review_description) }}')"
+                  class="flex items-center text-blue-600 hover:underline gap-1 p-0 m-0 leading-none align-middle">
+                  <i class="fas fa-edit"></i> Edit
+                </a>
+
+                <!-- Delete Form -->
+                <form method="POST"
+                      action="{{ route('user.profile.review.delete', $review->id) }}"
+                      class="contents">
+                  @csrf
+                  @method('DELETE')
+                  <button type="submit"
+                          onclick="return confirm('Are you sure?')"
+                          class="flex items-center text-red-600 hover:underline gap-1 p-0 m-0 leading-none align-middle">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
+                </form>
+              </div>
+
+          </div>
+          <div class="flex items-center gap-1 mb-2">
+            @for ($i = 1; $i <= 5; $i++)
+              <i class="fas fa-star {{ $i <= $review->review_rating ? 'text-yellow-400' : 'text-gray-300' }}"></i>
+            @endfor
+          </div>
+          <p class="text-gray-700">{{ $review->review_title }}</p>
+          <p class="text-gray-700">{{ $review->review_description }}</p>
+        </div>
+        @empty
+          <p class="text-gray-500">No reviews found.</p>
+        @endforelse
+    </div>  
+    <!-- Edit Review Form (Initially Hidden) -->
+    <div id="edit-review-form" class="hidden bg-gray-50 p-4 rounded-lg shadow-md mt-6">
+      <h3 class="text-xl font-semibold mb-4 text-gray-800">Edit Review</h3>
+      <form method="POST" id="editForm">
+        @csrf
+        @method('PUT')
+        <input type="hidden" name="product_id" id="modal_product_id"> 
+        <input type="hidden" name="user_id" value="{{ auth()->id() }}">
+        <div class="mb-4">
+          <label class="block mb-1 text-sm text-gray-600">Title</label>
+          <input type="text" name="review_title" id="editTitle" class="w-full border border-gray-300 p-2 rounded">
+        </div>
+         <div class="mb-4">
+                          <label for="rating" class="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                          <div class="flex gap-2 rating-stars">
+                            <button type="button" onclick="setRating(1, 'edit-review-form')"
+                              class="p-2 text-gray-300 hover:text-yellow-500 transition-colors">
+                              <i class="fas fa-star w-6 h-6"></i>
+                            </button>
+                            <button type="button" onclick="setRating(2, 'edit-review-form')"
+                              class="p-2 text-gray-300 hover:text-yellow-500 transition-colors">
+                              <i class="fas fa-star w-6 h-6"></i>
+                            </button>
+                            <button type="button" onclick="setRating(3, 'edit-review-form')"
+                              class="p-2 text-gray-300 hover:text-yellow-500 transition-colors">
+                              <i class="fas fa-star w-6 h-6"></i>
+                            </button>
+                            <button type="button" onclick="setRating(4, 'edit-review-form')"
+                              class="p-2 text-gray-300 hover:text-yellow-500 transition-colors">
+                              <i class="fas fa-star w-6 h-6"></i>
+                            </button>
+                            <button type="button" onclick="setRating(5, 'edit-review-form')"
+                              class="p-2 text-gray-300 hover:text-yellow-500 transition-colors">
+                              <i class="fas fa-star w-6 h-6"></i>
+                            </button>
+                          </div>
+                          <input type="hidden" name="review_rating" id="editRating" value="" />
+                        </div>
+        <div class="mb-4">
+          <label class="block mb-1 text-sm text-gray-600">Description</label>
+          <textarea name="review_description" id="editDescription" rows="3"
+            class="w-full border border-gray-300 p-2 rounded"></textarea>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="closeEditForm()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+            Cancel
+          </button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            Update
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
     <div class="accordion-item mb-3">
       <button
         class="accordion-header flex justify-between items-center w-full py-3 px-4 border-gray-300 border-2 rounded-lg"
@@ -520,6 +627,11 @@
               class="flex items-center space-x-3 px-4 py-3 w-full text-left rounded-lg  text-gray-900">
               <i class="fas fa-user"></i>
               <span>My Booking</span>
+            </button>
+             <button data-tab="reviews"
+              class="flex items-center space-x-3 px-4 py-3 w-full text-left rounded-lg text-gray-900">
+              <i class="fas fa-user"></i>
+              <span>Reviews</span>
             </button>
             <button data-tab="change-password"
               class="flex items-center space-x-3 px-4 py-3 w-full text-left rounded-lg text-gray-700 hover:bg-gray-50">
@@ -704,7 +816,97 @@
               </form>
             </div>
   
-  
+  <div id="reviews" class="tab-content max-w-4xl mx-auto p-8 hidden">
+  <h2 class="text-2xl font-bold text-gray-800 mb-6">
+    <i class="fas fa-star text-yellow-500 mr-2"></i> My Reviews
+  </h2>
+
+  @forelse ($reviews as $review)
+  <div class="border border-gray-300 rounded-lg p-4 mb-4">
+    <div class="flex justify-between items-center">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-800">{{$review->product->name}}</h3>
+        <p class="text-gray-700">{{ $review->review_title }}</p>
+         <div class="flex">
+              @for ($i = 0; $i < 5; $i++)
+              <i class="fas fa-star {{ $i < floor($review->review_rating) ? 'text-yellow-500' : 'text-gray-300' }}"></i>
+              @endfor
+          </div>
+        <p class="mt-2 text-gray-700">{{ $review->review_description }}</p>
+      </div>
+     <span>
+  <!-- Edit Button -->
+  <button 
+    onclick="openEditModal({{ $review->id }}, '{{ addslashes($review->review_title) }}', '{{ addslashes($review->review_description) }}', {{ $review->review_rating }})"
+    class="px-3 py-1 text-sm bg-yellow-400 text-white rounded hover:bg-yellow-500">
+    Edit
+  </button>
+
+  <!-- Delete Button -->
+  <form class="inline-flex" action="{{ route('user.profile.review.delete', $review->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
+    @csrf
+    @method('DELETE')
+    <button class="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600">
+      Delete
+    </button>
+  </form>
+</span>
+
+    </div>
+  </div>
+  @empty
+  <p class="text-gray-500">No reviews found.</p>
+  @endforelse
+</div>
+<!-- Edit Review Modal -->
+<div id="editReviewModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 hidden justify-center items-center">
+  <div class="bg-white p-6 rounded shadow-md w-full max-w-lg">
+    <h2 class="text-xl font-semibold mb-4">Edit Review</h2>
+    <form id="editReviewForm" method="POST">
+      @csrf
+      @method('PUT')
+      <input type="hidden" name="product_id" id="editModalProductId" value="" />
+      <div class="mb-4">
+        <label for="editModalTitle" class="block text-gray-700 font-medium">Title</label>
+        <input type="text" name="review_title" id="editModalTitle" class="w-full border px-3 py-2 rounded" required />
+      </div>
+       <div class="mb-4">
+                          <label for="rating" class="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                          <div class="flex gap-2 rating-stars">
+                            <button type="button" onclick="setRating(1, 'editReviewModal')"
+                              class="p-2 text-gray-300 hover:text-yellow-500 transition-colors">
+                              <i class="fas fa-star w-6 h-6"></i>
+                            </button>
+                            <button type="button" onclick="setRating(2, 'editReviewModal')"
+                              class="p-2 text-gray-300 hover:text-yellow-500 transition-colors">
+                              <i class="fas fa-star w-6 h-6"></i>
+                            </button>
+                            <button type="button" onclick="setRating(3, 'editReviewModal')"
+                              class="p-2 text-gray-300 hover:text-yellow-500 transition-colors">
+                              <i class="fas fa-star w-6 h-6"></i>
+                            </button>
+                            <button type="button" onclick="setRating(4, 'editReviewModal')"
+                              class="p-2 text-gray-300 hover:text-yellow-500 transition-colors">
+                              <i class="fas fa-star w-6 h-6"></i>
+                            </button>
+                            <button type="button" onclick="setRating(5, 'editReviewModal')"
+                              class="p-2 text-gray-300 hover:text-yellow-500 transition-colors">
+                              <i class="fas fa-star w-6 h-6"></i>
+                            </button>
+                          </div>
+                          <input type="hidden" name="review_rating" id="editModalRating" value="" />
+                        </div>
+      <div class="mb-4">
+        <label for="editDescription" class="block text-gray-700 font-medium">Description</label>
+        <textarea name="review_description" id="editModalDescription" rows="4" class="w-full border px-3 py-2 rounded" required></textarea>
+      </div>
+      <div class="flex justify-end gap-2">
+        <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Update</button>
+      </div>
+    </form>
+  </div>
+</div>
   
             <div id="change-password" class="tab-content  max-w-4xl mx-auto p-8">
               <h2 class="text-2xl font-bold text-gray-800 mb-6">
@@ -1289,6 +1491,65 @@ document.querySelectorAll('.toggle-password').forEach(button => {
         card.style.display = (cardStatus !== 'completed') ? 'block' : 'none';
       }
     });
+  }
+</script>
+<script>
+function openEditModal(id, title, description, rating) {
+  const form = document.getElementById('editReviewForm');
+  form.action = `/profile/reviews/update/${id}`;
+
+  document.getElementById('editModalProductId').value = id;
+  document.getElementById('editModalTitle').value = title;
+  document.getElementById('editModalDescription').value = description;
+  document.getElementById('editModalRating').value = rating;
+
+  updateStars(rating, 'editReviewModal');
+
+  document.getElementById('editReviewModal').classList.remove('hidden');
+  document.getElementById('editReviewModal').classList.add('flex');
+}
+
+</script>
+<script>
+function setRating(value, containerId = 'editReviewModal') {
+  document.querySelector(`#${containerId} input[name="review_rating"]`).value = value;
+  updateStars(value, containerId);
+}
+
+
+function updateStars(value, containerId = 'editReviewModal') {
+  const stars = document.querySelectorAll(`#${containerId} .rating-stars button i`);
+  stars.forEach((star, index) => {
+    if (index < value) {
+      star.classList.add('text-yellow-500');
+      star.classList.remove('text-gray-300');
+    } else {
+      star.classList.add('text-gray-300');
+      star.classList.remove('text-yellow-500');
+    }
+  });
+}
+</script>
+<script>
+  function openEditForm(id, title, rating, description) {
+    const form = document.getElementById('editForm');
+    form.action = `/profile/reviews/update/${id}`;
+    document.getElementById('modal_product_id').value = id;
+    document.getElementById('editTitle').value = title;
+    document.getElementById('editRating').value = rating;
+
+    updateStars(rating, 'edit-review-form');
+
+
+    document.getElementById('editDescription').value = description;
+    document.getElementById('edit-review-form').classList.remove('hidden');
+  }
+  function closeEditModal() {
+    document.getElementById('editReviewModal').classList.remove('flex');
+    document.getElementById('editReviewModal').classList.add('hidden');
+  }
+  function closeEditForm() {
+    document.getElementById('edit-review-form').classList.add('hidden');
   }
 </script>
 

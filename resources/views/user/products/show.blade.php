@@ -158,8 +158,9 @@
               <div id="fine-print" class="tab-content hidden mt-4  bg-white">
                 <h3 class="text-xl font-bold text-gray-800 mb-4">Fine
                   Print</h3>
-                
+                  <h3 class="font-bold">{!! $product->vendorTerms->title !!}</h3>
                   {!! $product->vendorTerms->terms !!}
+                  <h3 class="font-bold">{!! $product->nbvTerms->title !!}</h3>
                   {!! $product->nbvTerms->terms !!}
                 
                 <div class="mt-6 bg-blue-100 text-blue-800 p-4 rounded-lg">

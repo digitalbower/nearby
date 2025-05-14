@@ -16,6 +16,7 @@ use App\Models\NavigationMenu;
 use Illuminate\Validation\ValidationException;
 use App\Models\BookingConfirmation;
 use App\Models\MainSeo;
+use App\Models\Review;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -72,10 +73,10 @@ class ProfileController extends Controller
             ->orderByDesc('bci.created_at')
             ->get();
 
-          
+        $reviews = Review::with('product')->where('user_id', Auth::user()->id)->get();  
 
         return view('user.profile', compact('seo','user','countries','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
-        'followus','payment_channels','bookingConfirmations')); // Pass user data to the view
+        'followus','payment_channels','bookingConfirmations','reviews')); // Pass user data to the view
     }
 
     /**
@@ -151,6 +152,26 @@ class ProfileController extends Controller
         $pdf = Pdf::loadView('user.profilebookinghistorypdf', compact('item'));
 
         return $pdf->download('Booking-'.$item->booking_id.'.pdf');
+    }
+    public function updateReview(Request $request,$id){
+
+       $request->validate([
+            'product_id' => 'required',
+            'review_title' => 'required|string|max:255',
+            'review_rating' => 'required|integer|between:1,5',
+            'review_description' => 'required|string',
+        ]);
+        $data= $request->all();
+        $review = Review::findOrFail($id);
+        $review->update($request->all());
+        return redirect()->route('user.profile.index')->with('success', 'Review updated successfully!');
+    
+    }
+    public function deleteReview($id){
+        $review = Review::findOrFail($id);
+        $review->delete();
+        return redirect()->route('user.profile.index')->with('success', 'Review deleted successfully!');
+
     }
 
 }

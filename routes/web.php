@@ -126,6 +126,8 @@ Route::name('user.')->group(function () {
             Route::post('/uploadPicture', [ProfileController::class, 'uploadPicture'])->name('uploadPicture');
             Route::post('/update-password', [ProfileController::class, 'updatePassword'])->name('updatepassword');
             Route::get('/bookings/{id}/download', [ProfileController::class, 'download'])->name('download');
+            Route::delete('/reviews/delete/{id}', [ProfileController::class, 'deleteReview'])->name('review.delete');
+            Route::put('/reviews/update/{id}', [ProfileController::class, 'updateReview'])->name('review.update');
         });
     });
 });

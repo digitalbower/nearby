@@ -111,6 +111,7 @@
               <td>AED {{$item['total_price']}}</td>
             </tr>
           @endforeach     
+          @if($promocode !== null)  
            <tr>
             <td></td>
             <td></td>
@@ -129,6 +130,7 @@
             <td></td>
             <td><b>Promocode discount amount:</b> AED {{$promocode_discount_amount ?? 'N/A'}}</td>
           </tr>   
+          @endif
           <tr>
             <td></td>
             <td></td>
