@@ -256,7 +256,7 @@
                 <!-- Min Price Slider -->
                 <input type="range" step="1" x-model="minPrice"
                 @input="updateFilters();" 
-                min="0" :max="maxPrice" class="w-full accent-blue-500 rounded-lg h-2 hover:accent-blue-600 focus:outline-none">
+                min="0" :max="priceRangeLimit" class="w-full accent-blue-500 rounded-lg h-2 hover:accent-blue-600 focus:outline-none">
                 <p class="text-base font-semibold text-gray-800 mt-2">Min: 
                     <span x-text="formatPrice(minPrice)" class="font-semibold text-blue-600"></span>
                 </p>
@@ -264,7 +264,7 @@
                 <!-- Max Price Slider -->
                 <input type="range" step="1" x-model="maxPrice"
                 @input="updateFilters();"
-                min="0" :max="maxPrice" class="w-full accent-blue-500 rounded-lg h-2 hover:accent-blue-600 focus:outline-none">
+                min="0" :max="priceRangeLimit" class="w-full accent-blue-500 rounded-lg h-2 hover:accent-blue-600 focus:outline-none">
                 <p class="text-base font-semibold text-gray-800 mt-2">Max: 
                   <span x-text="formatPrice(maxPrice)" class="font-semibold text-blue-600"></span>
                 </p>
@@ -293,6 +293,22 @@
                 <div class="flex items-center">
                   <input type="radio" id="discount50" name="discount" :value="50" x-model.number="minDiscountPercentage"  @change="updateFilters()" class="form-radio text-blue-500">
                   <label for="discount50" class="ml-2 text-sm text-gray-600">50% or more</label>
+                </div>
+                <div class="flex items-center">
+                  <input type="radio" id="discount60" name="discount" :value="60" x-model.number="minDiscountPercentage"  @change="updateFilters()" class="form-radio text-blue-500">
+                  <label for="discount60" class="ml-2 text-sm text-gray-600">60% or more</label>
+                </div>
+                <div class="flex items-center">
+                  <input type="radio" id="discount70" name="discount" :value="70" x-model.number="minDiscountPercentage"  @change="updateFilters()" class="form-radio text-blue-500">
+                  <label for="discount70" class="ml-2 text-sm text-gray-600">70% or more</label>
+                </div>
+                <div class="flex items-center">
+                  <input type="radio" id="discount80" name="discount" :value="80" x-model.number="minDiscountPercentage"  @change="updateFilters()" class="form-radio text-blue-500">
+                  <label for="discount80" class="ml-2 text-sm text-gray-600">80% or more</label>
+                </div>
+                <div class="flex items-center">
+                  <input type="radio" id="discount90" name="discount" :value="90" x-model.number="minDiscountPercentage"  @change="updateFilters()" class="form-radio text-blue-500">
+                  <label for="discount90" class="ml-2 text-sm text-gray-600">90% or more</label>
                 </div>
               </div>
             </div>
@@ -381,7 +397,8 @@
         showGiftable: false, 
         destinationCoordinates: null, 
         minPrice: 0, 
-        maxPrice: 500,  
+        maxPrice: 1000,  
+        priceRangeLimit: 1000,
         minDiscountPercentage: 0,
         filteredByPrice: [],        
         showFilters: false,
@@ -396,6 +413,7 @@
 
                 this.minPrice = Math.min(...productPrices); 
                 this.maxPrice = Math.max(...productMaxPrices); 
+                  this.priceRangeLimit = this.maxPrice;
 
                 this.products = data.products.map(product => { 
                  const productCoordinates = this.getLocationCoordinates(product.location);
@@ -499,23 +517,16 @@
             return subcategories;
         },
         updateFilters() {
-          this.minPrice = Number(this.minPrice);
-          this.maxPrice = Number(this.maxPrice);
+          if (this.minPrice > this.maxPrice) {
+            [this.minPrice, this.maxPrice] = [this.maxPrice, this.minPrice];
+          }
           this.filteredByPrice = this.products.filter(product => {
               const productMinPrice = Number(product.priceRange.min);
               const productMaxPrice = Number(product.priceRange.max);
-              // Exclude products where:
-              // - The product's minimum price is greater than the selected maxPrice
-              // - The product's maximum price is less than the selected minPrice
               return (
-              (productMinPrice >= this.minPrice) &&  
-              (productMaxPrice <= this.maxPrice)     
+              productMinPrice <= this.maxPrice &&
+              productMaxPrice >= this.minPrice
               );
-              //If the price between min and max then use this 
-              // return (
-              //     (productMinPrice <= this.maxPrice) &&  
-              //     (productMaxPrice >= this.minPrice)     
-              // );
             });
         },
         get filteredProducts() {

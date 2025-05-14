@@ -342,14 +342,14 @@
                       <p class="text-gray-500">[Map Placeholder]</p>
                   </div> --}}
                   <!-- Contact Details -->
-                  <div class="pb-4">
+                  {{-- <div class="pb-4">
                     <h4 class="font-medium text-gray-900">Contact Us</h4>
                     <p class="text-gray-600">
                       Phone: <a href="tel:+1234567890" class="text-gray-800 hover:underline">{{$product->vendor->phone}}</a><br>
                       Email: <a href="mailto:{{$product->vendor->email}}"
                         class="text-gray-800 hover:underline">{{$product->vendor->email}}</a>
                     </p>
-                  </div>
+                  </div> --}}
                   <!-- Directions Button -->
                   <div class="">
                     <a href="{{ $product->productlocation_link }}" target="_blank" rel="noopener noreferrer"
