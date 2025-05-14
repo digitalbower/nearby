@@ -16,6 +16,7 @@ use App\Models\Logo;
 use App\Models\MainSeo;
 use App\Models\NavigationMenu;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -120,7 +121,7 @@ class AuthController extends Controller
         $currentPath = request()->path(); 
         $seo = MainSeo::where('page_url', $currentPath)->first()
         ?? MainSeo::where('page_url', 'default')->first();  
-        $countries = Country::all(); 
+        $countries = \App\Models\Country::orderBy('name')->get();
         return view('user.signup', compact('seo','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels','countries'));  
     }
@@ -133,18 +134,28 @@ class AuthController extends Controller
             'last_name'  => 'required|string|max:255',
             'email'      => 'required|email|unique:users,email',
             'phone'      => 'required|string|max:20',
-            'country'    => 'required|string|max:100',
-            'password'   => 'required|string|min:6|confirmed',
+            'password'   => 'required','string','min:8','confirmed','regex:/[A-Z]/','regex:/[a-z]/','regex:/[0-9]/','regex:/[!@#$%^&*(),.?":{}|<>]/',  
+            'terms' => 'accepted',
+           'market_policy' => 'accepted',
+ [
+    'password.regex' => 'Password must contain uppercase, lowercase, number, and special character.',
+    'terms.accepted' => 'You must accept the Terms and Conditions.',
+    'market_policy.accepted' => 'You must accept the market policies.',
+   
+    ],
         ]); 
 
         // Create user
+        $country = Country::find($request->country_id);
+        $residenceCountry = Country::find($request->country_of_residence_id);
         $user = User::create([
             'first_name' => $request->first_name,
             'last_name'  => $request->last_name,
             'email'      => $request->email,
             'phone'      => $request->phone,
-            'country'    => $request->country,
-            'cor_id '    => $request->cor_id ,
+            'country'    => $country,
+            'country_code_id '    => $request->country_code_id ,
+            'country_residence' =>$residenceCountry,
             'password'   => Hash::make($request->password),
         ]);
 
@@ -170,19 +181,23 @@ class AuthController extends Controller
                 return redirect()->route('user.login')->with('error', 'Failed to get user details from Google.');
             }
     
+            \Log::info('Google User:', (array) $googleUser);
+    
             $email = $googleUser->getEmail();
             $existingUser = User::where('email', $email)->first();
     
             if ($existingUser) {
+                // User exists but was registered using email/password (not Google)
                 if ($existingUser->google_id === null) {
-                    return redirect()->route('user.login')->with('error', 'This email is already registered via email/password. Please login using your password.');
+                    return redirect()->route('user.login')->with('error', 'This email is already registered using a password. Please login with your password.');
                 }
     
+                // User registered via Google – allow login
                 Auth::login($existingUser);
                 return redirect()->route('user.dashboard')->with('success', 'Logged in successfully via Google!');
             }
     
-            // If user doesn't exist, create new one and send confirmation email
+            // If user does not exist – create new user
             $nameParts = explode(' ', $googleUser->getName(), 2);
             $firstName = $nameParts[0];
             $lastName = $nameParts[1] ?? '';
@@ -192,15 +207,15 @@ class AuthController extends Controller
                 'last_name' => $lastName,
                 'email' => $email,
                 'google_id' => $googleUser->getId(),
-                'password' => bcrypt(Str::random(16)),
+                'password' => bcrypt(Str::random(16)), // Dummy password
             ]);
     
-            // Send registration confirmation email
+            // Send welcome/registration confirmation email
             Mail::to($email)->send(new RegistrationEmail($firstName));
     
             Auth::login($newUser);
             return redirect()->route('user.dashboard')->with('success', 'Welcome! Your account has been created via Google.');
-    
+            
         } catch (\Exception $e) {
             \Log::error('Google Login Error: ' . $e->getMessage());
             return redirect()->route('user.login')->with('error', 'Google Sign-In failed. Please try again.');
