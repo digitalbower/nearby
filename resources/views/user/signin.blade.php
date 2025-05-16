@@ -204,7 +204,7 @@
         </div>
 
         <div class="grid grid-cols-1 gap-4 px-2">
-    <a href="{{ route('user.auth.google') }}"
+    <a href="{{ route('user.auth.google', ['mode' => 'signin']) }}"
        class="px-6 py-2 text-black rounded-lg bg-[#58af0838] hover:bg-[#4a910954] transition duration-300 flex items-center justify-center">
         <i class="fab fa-google mr-2"></i> Google
     </a>

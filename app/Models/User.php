@@ -29,6 +29,7 @@ class User extends Authenticatable
         'address',
         'profileicon',
         'country_residence',
+        'google_id',
     ];
     
 
