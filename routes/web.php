@@ -45,6 +45,8 @@ use App\Http\Controllers\User\StripePaymentController;
 use App\Http\Controllers\Vendor\BookingManagementController;
 use App\Http\Controllers\Vendor\PaymentManagementController;
 use App\Http\Controllers\Vendor\ReportManagementController;
+use App\Http\Controllers\Vendor\Auth\VendorForgotPasswordController;
+use App\Http\Controllers\Vendor\Auth\VendorResetPasswordController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::post('/subscribe', [NewsletterController::class, 'subscribe'])->name('subscribe');
@@ -136,6 +138,11 @@ Route::name('user.')->group(function () {
 Route::prefix('vendor')->name('vendor.')->group(function () {
     Route::get('/login', [VendorAuthController::class, 'showVendorLogin'])->name('login');
     Route::post('/login', [VendorAuthController::class, 'login'])->name('login.submit');
+    
+    Route::get('password/reset', [VendorForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('password/email', [VendorForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('password/reset/{token}', [VendorResetPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('password/reset', [VendorResetPasswordController::class, 'reset'])->name('password.update');
 
     Route::middleware(['auth.vendor'])->group(function () {
         Route::get('booking', [BookingManagementController::class, 'index'])->name('booking');

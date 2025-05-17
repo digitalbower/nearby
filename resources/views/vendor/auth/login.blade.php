@@ -53,9 +53,11 @@
                     </div>
 
                     <div class="text-right">
-                        <a href="#" class="text-gray-100 py-2 h-auto font-normal hover:text-gray-200">Forgot
-                            Password?</a>
-                    </div>
+    <a href="{{ route('vendor.password.request') }}" class="text-gray-100 py-2 h-auto font-normal hover:text-gray-200">
+        Forgot Password?
+    </a>
+</div>
+
 
                     <button type="submit" class="w-full bg-gray-100 rounded-md hover:bg-gray-300 text-black py-2">Sign in</button>
                 </form>
