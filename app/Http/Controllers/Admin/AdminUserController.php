@@ -16,7 +16,7 @@ class AdminUserController extends Controller
     public function index()
     {
         $users = Admin::with('role')
-            ->whereIn('user_role_id', [1, 2])
+            ->whereIn('user_role_id', [2, 3])
             ->latest()
             ->get();
 
@@ -93,7 +93,7 @@ class AdminUserController extends Controller
      */
     public function destroy( Admin $user)
     {
-        $admin->delete(); 
+        $user->delete(); 
         return redirect()->route('admin.users.index')->with('success', ' Admin User deleted successfully!');
 
     }
