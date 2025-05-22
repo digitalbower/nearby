@@ -16,7 +16,7 @@ class AdminUserController extends Controller
     public function index()
     {
         $users = Admin::with('role')
-            ->whereIn('user_role_id', [1, 2])
+            ->whereIn('user_role_id', [2, 3])
             ->latest()
             ->get();
 
@@ -29,7 +29,7 @@ class AdminUserController extends Controller
      */
     public function create()
     {
-        $roles = Role::all();
+        $roles = Role::whereIn('id', [2, 3])->get();
          return view('admin.users.create')->with(['roles'=>$roles]);
     }
 
@@ -65,7 +65,7 @@ class AdminUserController extends Controller
      */
     public function edit(Admin $user)
     {
-        $roles = Role::all();
+        $roles = Role::whereIn('id', [2, 3])->get();
         return view('admin.users.edit')->with(['user'=>$user,'roles'=>$roles]);
 
     }
@@ -93,7 +93,7 @@ class AdminUserController extends Controller
      */
     public function destroy( Admin $user)
     {
-        $admin->delete(); 
+        $user->delete(); 
         return redirect()->route('admin.users.index')->with('success', ' Admin User deleted successfully!');
 
     }

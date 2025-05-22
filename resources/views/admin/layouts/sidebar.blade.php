@@ -31,7 +31,7 @@
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
-                @if(in_array($role, [1,3]))
+                @if(in_array($role, [1,2]))
                 <li class="nav-item active">
                     <a
                     data-bs-toggle="collapse"
@@ -192,7 +192,7 @@
                     </div>
                 </li>
                 @endif
-                @if(in_array($role, [1,3]))
+                @if(in_array($role, [1,2]))
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#reportLayouts">
                     <i class="fas fa-th-list"></i>
