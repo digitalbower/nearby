@@ -61,7 +61,9 @@
                                         {{ json_encode($booking_item->bookingConfirmation->booking_id) }}, 
                                         {{ json_encode($booking_item->variant->product->name ?? 'N/A') }}, 
                                         {{ json_encode($booking_item->bookingConfirmation->user->first_name ?? 'N/A') }}, 
-                                        {{ json_encode($booking_item->bookingConfirmation->created_at->format('Y-m-d')) }}
+                                        {{ json_encode($booking_item->bookingConfirmation->created_at->format('Y-m-d')) }},
+                                        {{ json_encode($booking_item->validity) }}
+
                                     )">
                                     Approve
                                 </button>
@@ -112,8 +114,12 @@
                         <span id="modal-customer-name" class="text-gray-800 font-semibold">John Doe</span>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span class="font-medium">Date:</span>
+                        <span class="font-medium">Booking Date:</span>
                         <span id="modal-date" class="text-gray-800 font-semibold">Jan 12, 2025</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="font-medium">Expiry Date:</span>
+                        <span id="modal-exp-date" class="text-gray-800 font-semibold">Jan 12, 2025</span>
                     </div>
                 </div>
 
@@ -194,12 +200,13 @@ $(document).ready(function () {
 });
 </script>
 <script>
-    function openModal(id,bookingId, productName, customerName, date) {
+    function openModal(id,bookingId, productName, customerName, date, expDate) {
         document.getElementById('modal-booking-confirmation-item-id').value = id;
         document.getElementById('modal-booking-id').textContent = bookingId;
         document.getElementById('modal-product-name').textContent = productName;
         document.getElementById('modal-customer-name').textContent = customerName;
         document.getElementById('modal-date').textContent = date;
+        document.getElementById('modal-exp-date').textContent = expDate;
         document.getElementById('otp-modal').classList.remove('hidden');
     }
 
