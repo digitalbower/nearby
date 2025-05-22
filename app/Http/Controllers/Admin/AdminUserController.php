@@ -29,7 +29,7 @@ class AdminUserController extends Controller
      */
     public function create()
     {
-        $roles = Role::all();
+        $roles = Role::whereIn('id', [2, 3])->get();
          return view('admin.users.create')->with(['roles'=>$roles]);
     }
 
@@ -65,7 +65,7 @@ class AdminUserController extends Controller
      */
     public function edit(Admin $user)
     {
-        $roles = Role::all();
+        $roles = Role::whereIn('id', [2, 3])->get();
         return view('admin.users.edit')->with(['user'=>$user,'roles'=>$roles]);
 
     }
