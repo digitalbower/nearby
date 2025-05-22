@@ -57,11 +57,11 @@
                                 <button
                                     class="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none"
                                     onclick="openModal(
-                                        '{{ $booking_item->id }}', 
-                                        '{{ $booking_item->bookingConfirmation->booking_id }}', 
-                                        '{{ $booking_item->variant->product->name ?? 'N/A' }}', 
-                                        '{{$booking_item->bookingConfirmation->user->first_name ?? 'N/A' }}', 
-                                        '{{ $booking_item->bookingConfirmation->created_at->format('Y-m-d') }}'
+                                        {{ json_encode($booking_item->id) }}, 
+                                        {{ json_encode($booking_item->bookingConfirmation->booking_id) }}, 
+                                        {{ json_encode($booking_item->variant->product->name ?? 'N/A') }}, 
+                                        {{ json_encode($booking_item->bookingConfirmation->user->first_name ?? 'N/A') }}, 
+                                        {{ json_encode($booking_item->bookingConfirmation->created_at->format('Y-m-d')) }}
                                     )">
                                     Approve
                                 </button>

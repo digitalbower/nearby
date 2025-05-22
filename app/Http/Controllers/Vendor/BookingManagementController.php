@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class BookingManagementController extends Controller
 {
     public function index(){
-        $booking_items = BookingConfirmationItem::with('variant.product')
+          $booking_items = BookingConfirmationItem::with(['variant.product','bookingConfirmation.user'])
         ->where('verification_status','pending')
         ->whereHas('variant.product', function ($query) {
             $query->where('vendor_id', Auth::guard('vendor')->id());
@@ -36,7 +36,7 @@ class BookingManagementController extends Controller
        }
     }
     public function bookingHistory(){
-        $booking_items = BookingConfirmationItem::with('variant.product')
+        $booking_items = BookingConfirmationItem::with(['variant.product','bookingConfirmation.user'])
         ->where('verification_status','completed')
         ->whereHas('variant.product', function ($query) {
             $query->where('vendor_id', Auth::guard('vendor')->id());
