@@ -71,7 +71,7 @@ class StripController extends Controller
         ]);
 
         // Create Booking Confirmation
-        $bookingConfirmationId = DB::table('booking_confirmations')->insertGetId([
+        $bookingConfirmation = BookingConfirmation::create([
             'payment_id' => $paymentId,
             'order_id' => $request->order_id,
             'booking_id' => uniqid('BOOK-'),
@@ -89,14 +89,21 @@ class StripController extends Controller
         ]);
 
         foreach ($request->items as $variantId => $item) {
+
+            $product_variant = ProductVariant::find($variantId);
+            $order_date = $bookingConfirmation->created_at->copy(); 
+            $validity = $product_variant->product->types->validity; 
+            $valid_until = $order_date->copy()->addDays($validity);
+
             DB::table('booking_confirmation_items')->insert([
-                'booking_confirmation_id' => $bookingConfirmationId,
+                'booking_confirmation_id' => $bookingConfirmation->id,
                 'product_varient_id' => $variantId,
                 'quantity' => $item['quantity'],
                 'unit_price' => $item['unit_price'],
                 'total_price' => $item['total_price'],
                 'verification_number' => rand(100000, 999999),
                 'verification_status' => 'pending',
+                'validity'=>  $valid_until,
                 'giftproduct' => $item['giftproduct'],
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -109,8 +116,9 @@ class StripController extends Controller
         Checkout::where('id', $request->order_id)->delete();
 
         $variants = [];
+        $bookingConfirmationId = $bookingConfirmation->id;
         $booking = BookingConfirmation::find($bookingConfirmationId);
-        $order_date = $booking->created_at->format('Y-m-d');
+        $order_date = $booking->created_at->format('Y-m-d'); 
         $order_number = $booking->booking_id;
         $vat = $booking->vat;
         $promocode_discount_amount = $booking->promocode_discount_amount;
@@ -141,10 +149,6 @@ class StripController extends Controller
             }
         }
         foreach ($booking->items as $booking_item) { 
-            $product_variant = ProductVariant::find($booking_item->product_varient_id);
-            $order_date = $booking->created_at->copy(); 
-            $validity = $product_variant->product->types->validity; 
-            $valid_until = $order_date->copy()->addDays($validity);
             
             $variants[] = [
                 'product_variant_id'=>$booking_item->product_varient_id,
@@ -156,8 +160,8 @@ class StripController extends Controller
                 'product_name'=>$product_variant->product->name,
                 'product_variant_name'=>$product_variant->title,
                 'importantinfo'=>$product_variant->product->importantinfo,
-                'validity_from' => $order_date->format('Y-m-d'),
-                'validity_to' => $valid_until->format('Y-m-d'),
+                'validity_from' => $order_date,
+                'validity_to' => $booking_item->validity,
                 'vendor'=> $product_variant->product->vendor->name,
                 'nbv_terms_title'=> $product_variant->product->nbvTerms->title,
                 'nbv_terms'=> $product_variant->product->nbvTerms->terms,

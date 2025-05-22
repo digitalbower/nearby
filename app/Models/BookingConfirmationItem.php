@@ -16,6 +16,7 @@ class BookingConfirmationItem extends Model
         'total_price',
         'verification_number',
         'verification_status',
+        'validity',
         'giftproduct',
     ];
 

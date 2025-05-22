@@ -274,15 +274,7 @@ class HomeController extends Controller
         $vendorTerms = \App\Models\VendorTerm::find($product->vendor_terms_id);
         $vendor = \App\Models\Vendor::find($product->vendor_id); 
         $productType = ProductType::find($product->product_type_id); 
-        
-    
-        // Calculate validity date
-        $validUntil = null;
-        if ($productType && $productType->validity) {
-            $validity = $productType->validity;
             $order_date = $booking->created_at->copy();  
-            $validUntil = $order_date->copy()->addDays($validity); 
-        }
         $pdf = Pdf::loadView('user.generate_pdf', [
             'item' => $item,
             'nbvTerms' => $nbvTerms,
@@ -290,7 +282,7 @@ class HomeController extends Controller
             'vendor' => $vendor,
             'productType' => $productType,
             'order_date'=> $order_date->format('Y-m-d'),
-            'validUntil' => $validUntil->format('Y-m-d'),
+            'validUntil' => $item->validity,
             'userId'    =>  $userId,
         ]);
     
