@@ -50,7 +50,7 @@
                             <td class="px-6 py-4">
                                 <span
                                     class="inline-block px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
-                                    {{$booking_item->bookingConfirmation->booking_status}}
+                                    {{$booking_item->verification_status}}
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-center">
