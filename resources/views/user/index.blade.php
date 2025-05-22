@@ -466,7 +466,7 @@
             $originalPrice = number_format($minVariant->unit_price ?? 0);
             $discountedPrice = number_format($minVariant->discounted_price ?? 0);
             $variantId = $minVariant ? $minVariant->id : null;
-            $discountedPercentage = $minVariant ? number_format($minVariant->discounted_percentage) : null;
+            $discountedPercentage = $minVariant ? $minVariant->discounted_percentage : null;
             $timer =  $minVariant ? $minVariant->timer_flag : null;
             $endTime =$minVariant ? $minVariant->end_time : null;
             $showTimer = false;
@@ -576,7 +576,7 @@
       $discountedPrice = number_format($minVariant->discounted_price ?? 0); 
 
       $variantId = $minVariant ? $minVariant->id : null;
-      $discountedPercentage = $minVariant ? number_format($minVariant->discounted_percentage) : null;
+      $discountedPercentage = $minVariant ? $minVariant->discounted_percentage : null;
       $timer =  $minVariant ? $minVariant->timer_flag : null;
       $endTime =$minVariant ? $minVariant->end_time : null;
       $showTimer = false;
