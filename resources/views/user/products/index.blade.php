@@ -253,13 +253,6 @@
               </button>
             
               <div x-show="isOpen('price')" class="mt-4 transition-all duration-300 ease-in-out">
-                <!-- Min Price Slider -->
-                <input type="range" step="1" x-model="minPrice"
-                @input="updateFilters();" 
-                min="0" :max="priceRangeLimit" class="w-full accent-blue-500 rounded-lg h-2 hover:accent-blue-600 focus:outline-none">
-                <p class="text-base font-semibold text-gray-800 mt-2">Min: 
-                    <span x-text="formatPrice(minPrice)" class="font-semibold text-blue-600"></span>
-                </p>
             
                 <!-- Max Price Slider -->
                 <input type="range" step="1" x-model="maxPrice"
@@ -517,17 +510,10 @@
             return subcategories;
         },
         updateFilters() {
-          if (this.minPrice > this.maxPrice) {
-            [this.minPrice, this.maxPrice] = [this.maxPrice, this.minPrice];
-          }
           this.filteredByPrice = this.products.filter(product => {
-              const productMinPrice = Number(product.priceRange.min);
-              const productMaxPrice = Number(product.priceRange.max);
-              return (
-              productMinPrice <= this.maxPrice &&
-              productMaxPrice >= this.minPrice
-              );
-            });
+            const productMaxPrice = Number(product.priceRange.max);
+            return productMaxPrice <= this.maxPrice;
+          });
         },
         get filteredProducts() {
             if (!Array.isArray(this.filteredByPrice)) return []; 
