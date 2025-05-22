@@ -48,7 +48,7 @@ class VendorResetPasswordController extends Controller
 
 
 
-        $updatePassword = DB::table('password_resets')
+        $updatePassword = DB::table('password_reset_tokens')
 
                             ->where([
 
