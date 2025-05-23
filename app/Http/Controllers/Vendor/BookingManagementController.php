@@ -37,7 +37,7 @@ class BookingManagementController extends Controller
     }
     public function bookingHistory(){
         $booking_items = BookingConfirmationItem::with(['variant.product','bookingConfirmation.user'])
-        ->where('verification_status','redeem')
+        ->whereIn('verification_status',['redeem','expired'])
         ->whereHas('variant.product', function ($query) {
             $query->where('vendor_id', Auth::guard('vendor')->id());
         })
