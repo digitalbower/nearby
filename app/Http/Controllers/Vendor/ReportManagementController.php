@@ -12,7 +12,7 @@ class ReportManagementController extends Controller
 {
     public function index(){
         $booking_items = BookingConfirmationItem::with('variant.product')
-        ->where('verification_status','completed')
+        ->where('verification_status','redeem')
         ->whereHas('variant.product', function ($query) {
             $query->where('vendor_id', Auth::guard('vendor')->id());
         })
