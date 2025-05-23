@@ -451,7 +451,7 @@
       <form method="POST" id="editForm">
         @csrf
         @method('PUT')
-        <input type="hidden" name="product_id" id="modal_product_id"> 
+        <input type="hidden" name="id" id="modal_review_id"> 
         <input type="hidden" name="user_id" value="{{ auth()->id() }}">
         <div class="mb-4">
           <label class="block mb-1 text-sm text-gray-600">Title</label>
@@ -865,7 +865,7 @@
     <form id="editReviewForm" method="POST">
       @csrf
       @method('PUT')
-      <input type="hidden" name="product_id" id="editModalProductId" value="" />
+      <input type="hidden" name="id" id="editModalReviewId" value="" />
       <div class="mb-4">
         <label for="editModalTitle" class="block text-gray-700 font-medium">Title</label>
         <input type="text" name="review_title" id="editModalTitle" class="w-full border px-3 py-2 rounded" required />
@@ -1498,7 +1498,7 @@ function openEditModal(id, title, description, rating) {
   const form = document.getElementById('editReviewForm');
   form.action = `/profile/reviews/update/${id}`;
 
-  document.getElementById('editModalProductId').value = id;
+  document.getElementById('editModalReviewId').value = id;
   document.getElementById('editModalTitle').value = title;
   document.getElementById('editModalDescription').value = description;
   document.getElementById('editModalRating').value = rating;
@@ -1534,7 +1534,7 @@ function updateStars(value, containerId = 'editReviewModal') {
   function openEditForm(id, title, rating, description) {
     const form = document.getElementById('editForm');
     form.action = `/profile/reviews/update/${id}`;
-    document.getElementById('modal_product_id').value = id;
+    document.getElementById('modal_review_id').value = id;
     document.getElementById('editTitle').value = title;
     document.getElementById('editRating').value = rating;
 

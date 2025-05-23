@@ -214,9 +214,12 @@ class ProductController extends Controller
         foreach ($ratingCounts as $rating => $count) {
             $percentages[$rating] = $totalReviews > 0 ? ($count / $totalReviews) * 100 : 0;
         }
-
-        $variants =  $product->variants;  
-
+        $today = Carbon::today();
+        $variants = ($product->variants ?? collect([]))->filter(function ($variant) use ($today) {
+                return 
+                       Carbon::parse($variant->validity_from)->lte($today) &&
+                       Carbon::parse($variant->validity_to)->gte($today);
+            });
         $user = Auth::user();
         $unit_type = $product->category->categoryType->unitType->unit_type;
         // $variantsWithType = $variants->map(function ($variant) {

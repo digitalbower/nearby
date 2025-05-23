@@ -158,6 +158,11 @@
                                 <span class="sub-item">Promocodes</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="{{route('admin.products.product_types.index')}}">
+                                <span class="sub-item">Product Types</span>
+                            </a>
+                        </li>
                     </ul>
                     </div>
                 </li>
@@ -178,11 +183,7 @@
                                 <span class="sub-item">Products</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="{{route('admin.products.product_types.index')}}">
-                                <span class="sub-item">Product Types</span>
-                            </a>
-                        </li>
+
                         <li>
                             <a href="{{route('admin.products.product_variants.index')}}">
                                 <span class="sub-item">Product Variants</span>

@@ -341,3 +341,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     });
 });
+Route::prefix('vendor')->group(function () {
+    Route::get('{any}', function ($any) {
+        return redirect()->away("https://vendor.nearbyvouchers.com/{$any}");
+    })->where('any', '.*');
+});

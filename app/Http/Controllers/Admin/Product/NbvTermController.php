@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin\Product;
 
 use App\Http\Controllers\Controller;
 use App\Models\NbvTerm;
+use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class NbvTermController extends Controller
@@ -49,10 +51,28 @@ class NbvTermController extends Controller
     }
     public function destroy(NbvTerm $nbv_term)
     {
+        $today = Carbon::today();
+
+        $isUsed = Product::with('vendor')
+            ->where('nbv_terms_id', $nbv_term->id)
+            ->whereDate('validity_from', '<=', $today)
+            ->whereDate('validity_to', '>=', $today)
+            ->whereHas('vendor', function ($query) use ($today) {
+                $query->where('status', 1)
+                    ->whereDate('validityfrom', '<=', $today)
+                    ->whereDate('validityto', '>=', $today);
+            })
+            ->exists();
+
+        if ($isUsed) {
+            return redirect()->route('admin.products.nbv_terms.index')
+                            ->with('error', 'Cannot delete this term because it is used in one or more products.');
+        }
+
         $nbv_term->delete();
-        
+
         return redirect()->route('admin.products.nbv_terms.index')
-                         ->with('success', 'Nbv term deleted successfully.');
+                        ->with('success', 'Nbv term deleted successfully.');
     }
     public function changeTermStatus(Request $request)
     { 

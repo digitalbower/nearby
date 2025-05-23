@@ -163,8 +163,8 @@
     <div class="lg:w-1/2 mx-auto p-4   w-full space-y-8">
       <div class="w-full lg:max-w-2xl relative z-40 bg-white rounded-xl mx-auto p-6 space-y-8">
         <div class="text-center">
-          <h1 class="text-3xl font-bold text-gray-900">Join TravelBoard</h1>
-          <p class="mt-2 text-sm text-gray-600">Start your journey today</p>
+          <h1 class="text-3xl font-bold text-gray-900">Sign Up for NearBy Vouchers</h1>
+          <p class="mt-2 text-sm text-gray-600">Create an account to manage your deals and redeem offers easily</p>
         </div>
         @if ($errors->any())
         <div class="bg-red-500 text-white p-3 rounded-md">

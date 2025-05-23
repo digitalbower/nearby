@@ -87,7 +87,7 @@ class ProductVariantController extends Controller
             'markup' => ['required','numeric','min:0',
             function ($attribute, $value, $fail) use ($categoryMarkupLimit) {
                 if ((float) $value < $categoryMarkupLimit) {
-                    $fail("The $attribute may not be greater than {$categoryMarkupLimit}%.");
+                    $fail("The markup must be greater than {$categoryMarkupLimit}%.");
                 }
             },
         ],
@@ -155,7 +155,7 @@ class ProductVariantController extends Controller
             'markup' => ['required','numeric','min:0',
             function ($attribute, $value, $fail) use ($categoryMarkupLimit) {
                 if ((float) $value < $categoryMarkupLimit) {
-                    $fail("The $attribute may not be greater than {$categoryMarkupLimit}%.");
+                    $fail("The markup must be greater than {$categoryMarkupLimit}%.");
                 }
             },
         ],

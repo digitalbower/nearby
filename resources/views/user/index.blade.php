@@ -804,16 +804,20 @@ body {
 }
 </style>
 <!-- Modal Structure -->
+
 <div id="modal" x-data="{
     show: false,
+
+<div id="modal"
+  x-data="{
+    show: {{ $errors->modal->any() ? 'true' : (session('modal_success') ? 'true' : 'false') }},
+
     successMessageShown: {{ session('modal_success') ? 'true' : 'false' }},
   }" x-init="
     if (successMessageShown) {
-      show = true;
-      setTimeout(() => {
-        show = false;
-      }, 3000);
+      setTimeout(() => show = false, 3000);
     }
+
   " x-cloak :class="show ? 'flex' : 'hidden'"
     class="fixed inset-0 bg-gray-500 bg-opacity-50 z-50 items-center justify-center transition-opacity duration-300 ease-in-out">
     <div
@@ -829,6 +833,74 @@ body {
         @if(session('modal_success'))
         <div class="mb-4 p-4 rounded-md bg-green-100 text-green-800 border border-green-300 text-center">
             {{ session('modal_success') }}
+
+  "
+  x-cloak
+  :class="show ? 'flex' : 'hidden'"
+  class="fixed inset-0 bg-gray-500 bg-opacity-50 z-50 items-center justify-center transition-opacity duration-300 ease-in-out"
+>
+  <div
+    class="bg-[#daedc9]  p-8 rounded-xl shadow-2xl w-full max-w-md mx-auto transform transition-all scale-95 relative">
+    <!-- Close Button in Top-Right Corner -->
+    <button id="closeModalButton" class="absolute top-3 right-3 text-gray-800 text-xl font-bold focus:outline-none"
+      @click="show = false">
+      &times;
+    </button>
+
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Talk to a Specialist</h2>
+
+    @if(session('modal_success')) 
+      <div class="mb-4 p-4 rounded-md bg-green-100 text-green-800 border border-green-300 text-center">
+        {{ session('modal_success') }}
+      </div>
+    @endif
+    @if ($errors->modal->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->modal->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+    <form id="modalForm" class=""  action="{{ route('specialist.submit') }}" method="POST">
+    @csrf
+      <!-- Name Field -->
+      <div class="mb-5">
+        <label for="name" class="block text-sm font-medium text-gray-800">Name</label>
+        <input type="text" id="name" name="name"
+          class="mt-2 p-3 border border-transparent rounded-lg w-full bg-white focus:ring-2 focus:ring-blue-400 transition-all"
+          placeholder="Enter your name" required>
+      </div>
+
+      <!-- Email Field -->
+      <div class="mb-5">
+        <label for="email" class="block text-sm font-medium text-gray-800">Email</label>
+        <input type="email" id="email" name="email"
+          class="mt-2 p-3 border border-transparent rounded-lg w-full bg-white focus:ring-2 focus:ring-blue-400 transition-all"
+          placeholder="Enter your email" required>
+      </div>
+
+      <!-- Phone Number Field -->
+      <div class="mb-5">
+        <label for="number" class="block text-sm font-medium text-gray-800">Phone Number</label>
+        <div class="flex items-center space-x-3">
+
+   
+          <select id="countryCode" name="countryCode"
+            class="p-3 border border-transparent rounded-lg bg-white focus:ring-2 focus:ring-blue-400 transition-all">
+            @foreach($countryCodes as $country)
+            <option value="{{ $country->id }}" {{ old('countryCode') == $country->id ? 'selected' : '' }}>
+            {{ $country->phonecode }} 
+        </option>
+    @endforeach
+           
+            <!-- Add more country codes as needed -->
+          </select>
+          <input type="tel" id="phone" name="phone"
+            class="mt-2 p-3 border border-transparent rounded-lg w-full bg-white focus:ring-2 focus:ring-blue-400 transition-all"
+            placeholder="Enter phone number" required>
+
         </div>
         @endif
 

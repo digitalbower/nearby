@@ -158,10 +158,10 @@
               <div id="fine-print" class="tab-content hidden mt-4  bg-white">
                 <h3 class="text-xl font-bold text-gray-800 mb-4">Fine
                   Print</h3>
-                  <h3 class="font-bold">{!! $product->vendorTerms->title !!}</h3>
-                  {!! $product->vendorTerms->terms !!}
-                  <h3 class="font-bold">{!! $product->nbvTerms->title !!}</h3>
-                  {!! $product->nbvTerms->terms !!}
+                  <h3 class="font-bold">{!! $product->vendorTerms?->title !!}</h3>
+                  {!! $product->vendorTerms?->terms !!}
+                  <h3 class="font-bold">{!! $product->nbvTerms?->title !!}</h3>
+                  {!! $product->nbvTerms?->terms !!}
                 
                 <div class="mt-6 bg-blue-100 text-blue-800 p-4 rounded-lg">
                   <i class="fas fa-info-circle text-blue-600 mr-2"></i>
@@ -265,7 +265,7 @@
                     <div class="bg-gray-50 rounded-lg p-4 my-8">
                       <div class="flex items-center gap-2 mb-4">
                         <i class="fas fa-check-circle text-green-600 w-5 h-5"></i>
-                        <span class="font-semibold">100% Verified Reviews</span>
+                        <span class="font-semibold">Trusted by Our Community</span>
                       </div>
                       <p class="text-sm text-gray-600">Our community shares their thoughts to help others make informed choices. We value every review—your voice matters.</p>
                     </div>
@@ -369,6 +369,7 @@
         <div class=" lg:mt-0 mt-5 w-full pb-20 col-span-5 sticky top-0  h-[120vh]  bg-[#58af0838] rounded-lg  p-3 lg:p-5 space-y-6">
           <!-- Option Selector -->
         <!-- Options -->
+        @if($variants && $variants->isNotEmpty())
           <form action="{{route('user.products.add_cart')}}" id="addCartForm" method="POST">
             @csrf
             <div class="space-y-4 overflow-x-hidden overflow-y-auto max-h-[955px] lg:max-h-[785px] pr-[5px]">
@@ -522,6 +523,7 @@
             </button>
               </div>
           </form>
+          @endif
         </div>
       </div>
     </div>
@@ -689,18 +691,27 @@ function submitAndRedirectToCart() {
                 reviewDiv.classList.add("p-2", "bg-white", "rounded-lg", "border", "border-gray-200", "space-y-4");
 
                 const reviewHeader = document.createElement("div");
-                reviewHeader.classList.add("flex", "justify-between", "items-center", "mb-4");
+                reviewHeader.classList.add("flex", "justify-between", "items-start", "mb-4");
+                const reviewTitle = document.createElement("span");
+                reviewTitle.classList.add("font-semibold", "text-lg", "text-gray-800");
+                reviewTitle.textContent = review.review_title;
+
+                const rightSideInfo = document.createElement("div");
+                rightSideInfo.classList.add("text-right", "flex", "flex-col", "items-end");
 
                 const reviewerName = document.createElement("span");
-                reviewerName.classList.add("font-semibold", "text-lg", "text-gray-800");
+                reviewerName.classList.add("text-sm", "text-gray-700");
                 reviewerName.textContent = review.reviewer_name;
 
                 const reviewDate = document.createElement("span");
                 reviewDate.classList.add("text-sm", "text-gray-500");
                 reviewDate.textContent = review.formatted_date;
 
-                reviewHeader.appendChild(reviewerName);
-                reviewHeader.appendChild(reviewDate);
+                rightSideInfo.appendChild(reviewerName);
+                rightSideInfo.appendChild(reviewDate);
+
+                reviewHeader.appendChild(reviewTitle);     // Left side
+                reviewHeader.appendChild(rightSideInfo);   // Right side (name + date)
 
                 const reviewRating = document.createElement("div");
                 reviewRating.classList.add("flex", "gap-1");

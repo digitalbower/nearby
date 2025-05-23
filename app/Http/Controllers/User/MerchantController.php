@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Footer;
 use App\Models\Logo;
+use App\Models\MainSeo;
 use App\Models\Merchant;
 use App\Models\NavigationMenu;
 use Illuminate\Http\Request;
@@ -41,8 +42,12 @@ class MerchantController extends Controller
         ->where('status', 1)
         ->get();  
         $categories = Category::where('status',1)->get();
+
+        $currentPath = request()->path();
+        $seo = MainSeo::where('page_url', $currentPath)->first()
+            ?? MainSeo::where('page_url', 'default')->first();  
         return view('user.merchant',compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
-        'followus','payment_channels','categories'));
+        'followus','payment_channels','categories','seo'));
     }
     public function storeMerchant(Request $request){
 
