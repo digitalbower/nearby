@@ -138,7 +138,7 @@
     </style>
 @endpush
 @section('content')
-   <div class="overflow-hidden   z-10  py-8  bg-[#58af0838] border-b-2 border-[#58af0838]">
+   <div class="overflow-hidden z-10  py-8  bg-[#ebebeb] border-b-2 border-[#58af0838]">
     <div
     class="relative lg:flex container px-4 mx-auto w-full  ">
     <!-- Left side with illustration -->

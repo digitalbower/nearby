@@ -12,7 +12,7 @@
     margin-left: 1.25rem;
   }
   a {
-    background-color: transparent !important;
+    background-color: transparent;
   }
 </style>
 </style>
@@ -371,7 +371,7 @@
         <!-- Options -->
           <form action="{{route('user.products.add_cart')}}" id="addCartForm" method="POST">
             @csrf
-            <div class="space-y-4">
+            <div class="space-y-4 overflow-x-hidden overflow-y-auto max-h-[955px] lg:max-h-[785px] pr-[5px]">
               <h2 class="md:text-2xl text-base font-bold text-gray-800 mb-0">
                 Choose a Variant
               </h2>

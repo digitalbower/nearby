@@ -146,7 +146,7 @@
     </style>
     @endpush
     @section('content')
-  <div class="relative lg:flex   mx-auto w-full overflow-hidden  bg-[#58af0838] border-b-2 border-[#58af0838] hover:bg-[#4a910954] border-b-2 ">
+  <div class="relative lg:flex   mx-auto w-full overflow-hidden  bg-[#ebebeb] border-b-2 border-[#58af0838] border-b-2 ">
     <!-- Left side with illustration -->
 
     <div class="w-full absolute top-0 z0 h-full w-full overflow-hidden">
