@@ -6934,7 +6934,7 @@
                     "src/Collect/Support/alias.php"
                 ],
                 "psr-4": {
-                   
+                    "Tightenco\\Collect\\": "src/Collect"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -9519,12 +9519,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
 }
