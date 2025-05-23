@@ -739,15 +739,12 @@
 <!-- Modal Structure -->
 <div id="modal"
   x-data="{
-    show: false,
+    show: {{ $errors->modal->any() ? 'true' : (session('modal_success') ? 'true' : 'false') }},
     successMessageShown: {{ session('modal_success') ? 'true' : 'false' }},
   }"
   x-init="
     if (successMessageShown) {
-      show = true;
-      setTimeout(() => {
-        show = false;
-      }, 3000);
+      setTimeout(() => show = false, 3000);
     }
   "
   x-cloak
@@ -769,7 +766,15 @@
         {{ session('modal_success') }}
       </div>
     @endif
-   
+    @if ($errors->modal->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->modal->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
     <form id="modalForm" class=""  action="{{ route('specialist.submit') }}" method="POST">
     @csrf
       <!-- Name Field -->
@@ -797,8 +802,8 @@
           <select id="countryCode" name="countryCode"
             class="p-3 border border-transparent rounded-lg bg-white focus:ring-2 focus:ring-blue-400 transition-all">
             @foreach($countryCodes as $country)
-            <option value="{{ $country->id }}" {{ old('country_code_id', isset($user) ? $user->country_code_id : '') == $country->id ? 'selected' : '' }}>
-            {{ $country->country_code }} 
+            <option value="{{ $country->id }}" {{ old('countryCode') == $country->id ? 'selected' : '' }}>
+            {{ $country->phonecode }} 
         </option>
     @endforeach
            

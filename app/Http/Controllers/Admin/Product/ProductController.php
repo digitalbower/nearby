@@ -13,6 +13,7 @@ use App\Models\Subcategory;
 use App\Models\Tags;
 use App\Models\Vendor;
 use App\Models\VendorTerm;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -37,7 +38,11 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $vendors = Vendor::where('status',1)->latest()->get();
+        $today = Carbon::today();
+        $vendors =  Vendor::where('status', 1)
+        ->whereDate('validityfrom', '<=', $today)
+        ->whereDate('validityto', '>=', $today)
+        ->get();
         $categories = Category::where('status',1)->latest()->get();
         $tags = Tags::where('status',1)->latest()->get();
         $terms = NbvTerm::where('status',1)->latest()->get();
@@ -148,7 +153,11 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $vendors = Vendor::where('status',1)->latest()->get();
+        $today = Carbon::today();
+        $vendors =  Vendor::where('status', 1)
+        ->whereDate('validityfrom', '<=', $today)
+        ->whereDate('validityto', '>=', $today)
+        ->get();
         $categories = Category::where('status',1)->latest()->get();
         $tags = Tags::where('status',1)->latest()->get();
         $terms = NbvTerm::where('status',1)->latest()->get();

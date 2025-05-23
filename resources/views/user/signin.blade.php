@@ -146,10 +146,8 @@
     <!-- Right side with form -->
     <div class=" w-full lg:max-w-2xl relative z-40 bg-white rounded-xl mx-auto p-6 space-y-8">
       <div class="mb-8">
-        <h1 class="mb-2 text-3xl font-bold text-[#2D3748]">Create your
-          TravelBoard account</h1>
-        <p class="text-[#718096]">Sign up now to start planning your next
-          adventure!</p>
+        <h1 class="mb-2 text-3xl font-bold text-[#2D3748]">Sign in to Nearby Vouchers</h1>
+        <p class="text-[#718096]">Login to access your dashboard and manage your account securely.</p>
       </div>
       @if(session('success'))
       <div x-data="{ show: true }" 

@@ -5,20 +5,24 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SpecialistRequest;
-
+use Illuminate\Support\Facades\Validator;
 
 class SpecialistRequestController extends Controller
 {
     
     public function submit(Request $request)
     { 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name'         => 'required|string|max:255',
             'email'        => 'required|email|max:255',
             'countryCode'  => 'required|string|max:10',
-            'phone'        => 'required|string|max:20',
+            'phone'        => 'required|max:20|regex:/^\d+$/',
             'message'      => 'required|string',
         ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator, 'modal')->withInput();
+        }
 
         SpecialistRequest::create([
             'name'         => $request->name,

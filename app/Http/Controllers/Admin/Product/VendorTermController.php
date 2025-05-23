@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Vendor;
 use App\Models\VendorTerm;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class VendorTermController extends Controller
@@ -80,6 +81,22 @@ class VendorTermController extends Controller
      */
     public function destroy(VendorTerm $vendor_term)
     {
+        $today = Carbon::today();
+
+        $isUsed = Product::with('vendor')
+            ->where('vendor_terms_id', $vendor_term->id)
+            ->whereDate('validity_from', '<=', $today)
+            ->whereDate('validity_to', '>=', $today)
+            ->whereHas('vendor', function ($query) use ($today) {
+                $query->where('status', 1)
+                    ->whereDate('validityfrom', '<=', $today)
+                    ->whereDate('validityto', '>=', $today);
+            })
+            ->exists();
+        if ($isUsed) {
+            return redirect()->route('admin.products.vendor_terms.index')
+                            ->with('error', 'Cannot delete this vendor term because it is used in one or more products.');
+        }
         $vendor_term->delete();
         
         return redirect()->route('admin.products.vendor_terms.index')

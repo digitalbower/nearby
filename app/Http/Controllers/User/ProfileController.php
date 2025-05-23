@@ -156,7 +156,6 @@ class ProfileController extends Controller
     public function updateReview(Request $request,$id){
 
        $request->validate([
-            'product_id' => 'required',
             'review_title' => 'required|string|max:255',
             'review_rating' => 'required|integer|between:1,5',
             'review_description' => 'required|string',

@@ -174,13 +174,15 @@
         const fromDate = document.getElementById("validityfrom");
         const toDate = document.getElementById("validityto");
 
-        // Prevent past dates in "Validity From"
-        fromDate.setAttribute("min", today);
+        // Only restrict "validityfrom" min date if it's empty (create mode)
+        if (!fromDate.value) {
+            fromDate.setAttribute("min", today);
+        }
 
-        // When "Validity From" is selected, set that as the min for "Validity To"
+        // Set min for "validityto" based on selected "validityfrom"
         fromDate.addEventListener("change", function () {
             const selectedFromDate = this.value;
-            toDate.value = ""; // Clear any previously selected "to" date
+            toDate.value = ""; // Clear "validityto" if needed
             toDate.setAttribute("min", selectedFromDate);
         });
     });

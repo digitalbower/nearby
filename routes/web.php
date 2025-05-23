@@ -48,6 +48,7 @@ use App\Http\Controllers\Vendor\ReportManagementController;
 use App\Http\Controllers\Vendor\Auth\VendorForgotPasswordController;
 use App\Http\Controllers\Vendor\Auth\VendorResetPasswordController;
 
+Route::middleware('web')->group(function () {
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::post('/subscribe', [NewsletterController::class, 'subscribe'])->name('subscribe');
 Route::name('user.')->group(function () {
@@ -340,4 +341,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('users', AdminUserController::class);
 
     });
+});
 });

@@ -14,6 +14,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             @endif
+            @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" id="error-message">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endif
+
             <div id="status-message"></div>
             <div class="d-flex justify-content-end mb-3">
                 <a href="{{ route('admin.products.nbv_terms.create') }}" class="btn btn-primary">Add NbvTerms</a>
