@@ -289,9 +289,15 @@ class HomeController extends Controller
         return $pdf->download('booking_item_' . $item->id . '.pdf');
       }
     
-    
-
-
+    public function privacyPolicy(){
+        return view('user.privacy_policy');
+    }
+    public function cookiePolicy(){
+        return view('user.cookie_policy');
+    }
+    public function termsAndConditions(){
+        return view('user.terms_and_conditions');
+    }
    
 
 

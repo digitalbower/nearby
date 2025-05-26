@@ -49,6 +49,9 @@ use App\Http\Controllers\Vendor\Auth\VendorForgotPasswordController;
 use App\Http\Controllers\Vendor\Auth\VendorResetPasswordController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('privacy_policy');
+Route::get('/cookie-policy', [HomeController::class, 'cookiePolicy'])->name('cookie_policy');
+Route::get('/terms-and-conditions', [HomeController::class, 'termsAndConditions'])->name('terms_and_conditions');
 Route::post('/subscribe', [NewsletterController::class, 'subscribe'])->name('subscribe');
 Route::name('user.')->group(function () {
     Route::prefix('products')->name('products.')->group(function () {

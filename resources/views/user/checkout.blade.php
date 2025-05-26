@@ -314,7 +314,7 @@
                 <span>AED {{ number_format($bookingAmount, 2) }}</span>
               </div>
               <div class="flex justify-between text-groupon-green">
-                <span>Your Savings(Compared to regular prices)</span>
+                <span>Savings from Regular Price</span>
                 <span>AED {{ number_format($voucherSavings, 2) }}</span>
               </div>
               <div class="flex justify-between">
@@ -404,7 +404,7 @@
             </button>
 
             <p class="text-xs text-gray-500 md:block hidden text-center mt-4">
-              By completing your purchase, you agree to our Terms & Conditions.</a>.
+              By completing your purchase, you agree to our <a href="{{route('terms_and_conditions')}}" class="text-blue-600 hover:underline">Terms & Conditions</a>.
             </p>
           </div>
         </div>
@@ -464,7 +464,7 @@
         
            
             <p class="text-xs text-gray-500 text-center mt-4">
-              By completing your purchase you agree to these <a href="#" class="text-blue-600 hover:underline">Terms of Service</a>.
+              By completing your purchase, you agree to our <a href="{{route('terms_and_conditions')}}" class="text-blue-600 hover:underline">Terms & Conditions</a>.
             </p>
           </div>
         </div>
@@ -487,7 +487,7 @@
               <span>AED {{ number_format($bookingAmount, 2) }}</span>
             </div>
             <div class="flex justify-between text-groupon-green">
-                <span>Your Savings(Compared to regular prices)</span>
+                <span>Savings from Regular Price</span>
               <span>AED {{ number_format($voucherSavings, 2) }}</span>
           </div> 
           <div class="flex justify-between">
@@ -577,7 +577,7 @@
           </button>
 
           <p class="text-xs text-gray-500 md:block hidden text-center mt-4">
-          By completing your purchase, you agree to our Terms & Conditions.</a>.
+          By completing your purchase, you agree to our <a href="{{route('terms_and_conditions')}}" class="text-blue-600 hover:underline">Terms & Conditions</a>.
           </p>
         </div>
 
@@ -839,11 +839,13 @@ function collectItems() {
                   <i class="fas fa-trash-alt"></i>
                 </button>
               </div>  
-                <div class="text-right flex justify-center gap-x-4 items-center">
-                <div class="text-4xl font-semibold text-gray-700">        
+                <div class="text-right">
+                 <div class="text-2xl font-bold text-gray-700"> 
+                    AED ${variant.discounted_price}   
                   <input type="hidden" name="items[${variant.id}][unit_price]" value="${variant.discounted_price}"/>
                 </div>
-                <div class="text-2xl text-gray-500 line-through">
+               <div class="text-lg line-through text-gray-500">
+                    AED ${variant.original_price}   
                    <input type="hidden" name="items[${variant.id}][total_price]" value="${total.toFixed(2)}"/>
                 </div>
               </div>           

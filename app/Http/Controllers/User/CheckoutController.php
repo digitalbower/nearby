@@ -215,6 +215,8 @@ class CheckoutController extends Controller
 
                 $variant = $item->variant; 
 
+                $originalPrice =  $variant['unit_price'];
+
                 $discountedPrice = $variant['discounted_price'] * $item->quantity;
 
                 $imagePath = $variant['product']['image'] ?? null;
@@ -226,6 +228,7 @@ class CheckoutController extends Controller
                     'title' => $variant['title'],
                     'short_description' => $variant['short_description'],
                     'discounted_price' => number_format($discountedPrice, 2),
+                    'original_price' => number_format($originalPrice, 2),
                     'timer_flag' => $variant['timer_flag'],
                     'end_time' => $variant['end_time'],
                     'image' => $imagePath ? asset('storage/' . $imagePath) : 'https://via.placeholder.com/100',

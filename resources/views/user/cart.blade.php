@@ -309,7 +309,7 @@
 
         <!-- Nearby Voucher Savings -->
         <div class="flex justify-between lg:py-2">
-            <div>Nearby Voucher Savings</div>
+            <div>Savings from Regular Price</div>
             <div class="text-red-500">- AED {{ number_format($voucherSavings, 2) }}</div>
         </div>
 
