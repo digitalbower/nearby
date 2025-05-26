@@ -27,7 +27,7 @@ class LogoController extends Controller
     {
         $request->validate([
             'logo' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'link' => 'nullable|url',
+             'link' => ['nullable', 'regex:/^(https?:\/\/|\/)/'],
             'type' => 'required|string',
             'status' => 'required|boolean',
         ]);

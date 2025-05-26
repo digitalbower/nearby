@@ -33,7 +33,7 @@
                 <!-- Link -->
                 <div class="mb-3">
                     <label for="link" class="form-label">Website Link (Optional)</label>
-                    <input type="url" class="form-control" id="link" name="link" value="{{ $logo->link }}">
+                    <input type="text" class="form-control" id="link" name="link" value="{{ $logo->link }}">
                 </div>
 
                 <!-- Current Logo -->
