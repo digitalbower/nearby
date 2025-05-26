@@ -32,8 +32,10 @@
                     <tr>
                         <th class="px-6 py-3">Booking ID</th>
                         <th class="px-6 py-3">Product Name</th>
+                        <th class="px-6 py-3">Variant Name</th>
                         <th class="px-6 py-3">Quantity</th>
                         <th class="px-6 py-3">Date</th>
+                        <th class="px-6 py-3">Expiry Date</th>
                         <th class="px-6 py-3">Customer Name</th>
                         <th class="px-6 py-3">Status</th>
                         <th class="px-6 py-3 text-center">Actions</th>
@@ -44,8 +46,10 @@
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 font-medium text-gray-900">{{$booking_item->bookingConfirmation->booking_id}}</td>
                             <td class="px-6 py-4">{{$booking_item->variant->product->name}}</td>
+                             <td class="px-6 py-4">{{$booking_item->variant->title}}</td>
                             <td class="px-6 py-4">{{$booking_item->quantity}}</td>
                             <td class="px-6 py-4">{{$booking_item->bookingConfirmation->created_at->format('Y-m-d')}}</td>
+                            <td class="px-6 py-4">{{$booking_item->validity}}</td>
                             <td class="px-6 py-4">{{$booking_item->bookingConfirmation->user->first_name}}</td>
                             <td class="px-6 py-4">
                                 <span
@@ -60,6 +64,7 @@
                                         {{ json_encode($booking_item->id) }}, 
                                         {{ json_encode($booking_item->bookingConfirmation->booking_id) }}, 
                                         {{ json_encode($booking_item->variant->product->name ?? 'N/A') }}, 
+                                        {{ json_encode($booking_item->variant->title ?? 'N/A') }}, 
                                         {{ json_encode($booking_item->bookingConfirmation->user->first_name ?? 'N/A') }}, 
                                         {{ json_encode($booking_item->bookingConfirmation->created_at->format('Y-m-d')) }},
                                         {{ json_encode($booking_item->validity) }}
@@ -108,6 +113,10 @@
                     <div class="flex items-center justify-between">
                         <span class="font-medium">Product Name:</span>
                         <span id="modal-product-name" class="text-gray-800 font-semibold">Premium Plan</span>
+                    </div>
+                     <div class="flex items-center justify-between">
+                        <span class="font-medium">Variant Name:</span>
+                        <span id="modal-variant-name" class="text-gray-800 font-semibold">Premium Plan</span>
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="font-medium">Customer Name:</span>
@@ -200,10 +209,11 @@ $(document).ready(function () {
 });
 </script>
 <script>
-    function openModal(id,bookingId, productName, customerName, date, expDate) {
+    function openModal(id,bookingId, productName,variantName, customerName, date, expDate) {
         document.getElementById('modal-booking-confirmation-item-id').value = id;
         document.getElementById('modal-booking-id').textContent = bookingId;
         document.getElementById('modal-product-name').textContent = productName;
+        document.getElementById('modal-variant-name').textContent = variantName;
         document.getElementById('modal-customer-name').textContent = customerName;
         document.getElementById('modal-date').textContent = date;
         document.getElementById('modal-exp-date').textContent = expDate;
