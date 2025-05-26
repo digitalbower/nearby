@@ -768,29 +768,35 @@
 
                   </div>
                 </div>
-                <div class="mb-4">
-                  <!-- Label with Icon -->
-                  <label for="country" class="block text-sm font-medium text-gray-700 mb-1">
-                    <i class="fas fa-globe text-black text-base mr-2"></i> Country
-                  </label>
-  
-                  <!-- Select Input -->
-                  <div class="relative">
-                  <select id="country" name="country"
-    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-    <option value="">Select your country</option>
-    @foreach(App\Models\Country::all() as $country)
-        <option value="{{ $country->country_code }}" 
-            {{ (old('country', $user->country) == $country->country_code) ? 'selected' : '' }}>
-            {{ $country->country }}
+<div>
+    <label for="country_id" class="block text-sm font-medium text-gray-700 mb-1">
+        <i class="fas fa-flag text-black text-base mr-2"></i> Nationality
+    </label>
+    <select name="country_id" id="country_id"
+            class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required>
+        <option value="">Select your nationality</option>
+        @foreach ($countries as $country)
+            <option value="{{ $country->id }}"
+                @selected(old('country_id', $user->country_id ?? '') == $country->id)>
+                {{ $country->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
+{{-- Country of Residence --}}
+<select name="country_of_residence_id" id="country_of_residence_id"
+        class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        required>
+    <option value="">Select your country of residence</option>
+    @foreach ($countries as $country)
+        <option value="{{ $country->id }}"
+            {{ (old('country_of_residence_id', $user->country_residence ?? '') == $country->id) ? 'selected' : '' }}>
+            {{ $country->name }}
         </option>
     @endforeach
-</select>
-
-  
-  
-                  </div>
-                </div>
+</select> 
                 <!-- Address Section -->
                 <div>
                   <label for="address" class="block text-sm font-medium text-gray-700 mb-1">

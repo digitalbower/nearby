@@ -26,6 +26,7 @@ class BookingManagementController extends Controller
         $booking_item = BookingConfirmationItem::find($request->booking_confirmation_item_id); 
         if($booking_item->verification_number == $request->verification_number){
             $booking_item->verification_status = "redeemed";
+            $booking_item->redeemed_date = now();
             $booking_item->save();
             return redirect()->back()
             ->with('success', 'Booking approved successfully!');

@@ -110,7 +110,7 @@
     <p><strong>Quantity:</strong> {{ $booking->quantity }}</p>
     <p><strong>Booking Date:</strong>{{ $booking->bookingConfirmation->created_at->format('Y-m-d') }}</p>
     <p><strong>Customer Name:</strong> {{ $booking->bookingConfirmation->user->first_name }}</p>
-    <p><strong>Redeemed Date:</strong> {{ $booking->bookingConfirmation->updated_at->format('Y-m-d') }}</p>
+    <p><strong>Redeemed Date:</strong> {{ $booking->redeemed_date }}</p>
     <p><strong>Expiry Date:</strong> {{ $booking->validity }}</p>
   </div>
 

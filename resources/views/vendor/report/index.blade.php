@@ -48,7 +48,7 @@
                                         <span>{{ $booking_item->bookingConfirmation?->user?->first_name }}</span>
                                     </td>
                                    <td class="py-3 px-6 text-center">
-                                        <span>{{ $booking_item->bookingConfirmation->updated_at->format('Y-m-d') }}</span>
+                                        <span>{{ $booking_item->redeemed_date }}</span>
                                     </td>
                                     <td class="py-3 px-6 text-center">
                                         <span>{{ $booking_item->validity }}</span>
