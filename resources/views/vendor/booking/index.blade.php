@@ -45,12 +45,12 @@
                     @foreach ($booking_items as $booking_item)
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 font-medium text-gray-900">{{$booking_item->bookingConfirmation->booking_id}}</td>
-                            <td class="px-6 py-4">{{$booking_item->variant->product->name}}</td>
-                             <td class="px-6 py-4">{{$booking_item->variant->title}}</td>
+                            <td class="px-6 py-4">{{$booking_item->variant?->product?->name}}</td>
+                             <td class="px-6 py-4">{{$booking_item->variant?->title}}</td>
                             <td class="px-6 py-4">{{$booking_item->quantity}}</td>
                             <td class="px-6 py-4">{{$booking_item->bookingConfirmation->created_at->format('Y-m-d')}}</td>
                             <td class="px-6 py-4">{{$booking_item->validity}}</td>
-                            <td class="px-6 py-4">{{$booking_item->bookingConfirmation->user->first_name}}</td>
+                            <td class="px-6 py-4">{{$booking_item->bookingConfirmation?->user?->first_name}}</td>
                             <td class="px-6 py-4">
                                 <span
                                     class="inline-block px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">

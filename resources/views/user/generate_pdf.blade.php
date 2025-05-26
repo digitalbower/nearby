@@ -103,9 +103,9 @@
     <p>We’re excited to provide you with the voucher you’ve chosen. Below you’ll find all the details you need to redeem your offer.</p>
 
     <div class="section-title">🧾 Your Voucher Summary</div>
-     <p><strong>Product:</strong> {{$item->variant->product->name}}</p>
-    <p><strong>Product Variant:</strong> {{$item->variant->title}}</p>
-    <p><strong>Voucher Number:</strong> {{ $item->bookingConfirmation->booking_id ?? 'N/A' }}</p>
+     <p><strong>Product:</strong> {{$item->variant?->product?->name}}</p>
+    <p><strong>Product Variant:</strong> {{$item->variant?->title}}</p>
+    <p><strong>Voucher Number:</strong> {{ $item->bookingConfirmation?->booking_id ?? 'N/A' }}</p>
     <p><strong>Guest Name:</strong> {{ $userId->first_name ?? 'Guest' }}</p>
     <p><strong>Email:</strong> {{ $userId->email ?? 'N/A' }}</p>
     <p><strong>Website:</strong> https://nearbyvouchers.com/ </p>
@@ -113,7 +113,7 @@
     <div class="section-title">📅 Booking Date & Details</div>
     <p><strong>Validity From:</strong> {{ $order_date }}</p>
     <p><strong>Validity Until:</strong>{{ $validUntil }}
-    <p><strong>Fulfilled By:</strong> {{ $vendor->name ?? 'N/A' }}</p>
+    <p><strong>Fulfilled By:</strong> {{ $vendor?->name ?? 'N/A' }}</p>
    
     {{-- Section 3: Verification Number --}}
     <div class="section-title">🔐 Verification Number</div>
@@ -121,13 +121,13 @@
     <p style="color: red;">Do not share this on the phone.</p>
 
     <div class="section-title">📜 Voucher Details:</div>
-      {!!$item->variant->product->email_about  !!}
+      {!!$item->variant?->product?->email_about  !!}
     <div class="section-title">⚠️ Important Details:</div>
-     {!! $item->variant->product->importantinfo !!}
-    <div class="section-title">{{  $vendorTerms->title}}</div>
-      {!!  $vendorTerms->terms !!}
-    <div class="section-title">{{$nbvTerms->title}}</div>
-      {!! $nbvTerms->terms !!}
+     {!! $item->variant?->product?->importantinfo !!}
+    <div class="section-title">{{  $vendorTerms?->title}}</div>
+      {!!  $vendorTerms?->terms !!}
+    <div class="section-title">{{$nbvTerms?->title}}</div>
+      {!! $nbvTerms?->terms !!}
 
     <!-- Thank You and Closing Message -->
     <p>Thank you for shopping with us! We look forward to serving you again soon.</p>

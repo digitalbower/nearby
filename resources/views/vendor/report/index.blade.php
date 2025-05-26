@@ -32,10 +32,10 @@
                                         <span class="font-medium">{{$booking_item->bookingConfirmation->booking_id}}</span>
                                     </td>
                                     <td class="py-3 px-6 text-left">
-                                        <span>{{$booking_item->variant->product->name}}</span>
+                                        <span>{{$booking_item->variant?->product?->name}}</span>
                                     </td>
                                     <td class="py-3 px-6 text-left">
-                                        <span>{{$booking_item->variant->title}}</span>
+                                        <span>{{$booking_item->variant?->title}}</span>
                                     </td>
                                     <td class="py-3 px-6 text-center">
                                         <span
@@ -45,7 +45,7 @@
                                         <span>{{ $booking_item->bookingConfirmation->created_at->format('Y-m-d') }}</span>
                                     </td>
                                      <td class="py-3 px-6 text-center">
-                                        <span>{{ $booking_item->bookingConfirmation->user->first_name }}</span>
+                                        <span>{{ $booking_item->bookingConfirmation?->user?->first_name }}</span>
                                     </td>
                                    <td class="py-3 px-6 text-center">
                                         <span>{{ $booking_item->bookingConfirmation->updated_at->format('Y-m-d') }}</span>
