@@ -310,7 +310,7 @@
         <div :class="showFilter ? 'lg:grid gap-6 md:grid-cols-2 lg:grid-cols-3 w-full' : 'grid gap-6 md:grid-cols-2 lg:grid-cols-4 w-full'" class="transition-all duration-300">
           <template x-for="product in sortedProducts" :key="product.id">
             <a :href="'/products/' + product.slug" class="block transition-all duration-300 rounded-lg">
-              <div class="bg-white rounded-lg shadow-md overflow-hidden">
+              <div class="bg-white rounded-lg shadow-md overflow-hidden min-h-[440px] lg:h-[450px]">
                 <div class="relative">
                   <img :src="product.image" :alt="product.title" class="w-full h-48 object-cover">
 
@@ -319,7 +319,7 @@
                   </div>
                 </div>
                 <div class="p-4">
-                  <h3 x-text="product.title" class="font-semibold text-lg mb-2"></h3>
+                  <h3 x-text="product.title" class="font-semibold text-lg lg:text-sm mb-2 h-[55px]"></h3>
                 <div class="flex gap-x-1">
                   <i class="fas fa-map-marker-alt"></i>
                   <p x-text="product.location" class="text-sm text-gray-600 mb-2"></p>
@@ -336,7 +336,7 @@
                     
                     {{-- <span x-text="product.distance + ' mi'" class="text-sm text-gray-600"></span> --}}
                   </div>
-                <p class="text-gray-700 text-sm mb-2 leading-relaxed" x-text="product.short_description"></p>
+                <p class="text-gray-700 text-sm mb-2 leading-relaxed line-clamp-2" x-text="product.short_description"></p>
                   <div class="flex items-center justify-between">
                     <div>
                       <span x-text="'AED ' + product.discountedPrice.toFixed(2)" class="text-xl font-bold"></span>

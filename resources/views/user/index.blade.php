@@ -740,9 +740,9 @@ body {
 @endforeach
 
 
-<section class="bg-[#58af0838] text-black  lg:px-0  lg:py-20 py-10 px-4 lg:px-0">
+<section class="bg-[#58af0838] text-black  lg:py-20 py-10 px-4">
     <div class="container mx-auto">
-        <div class=" flex flex-col lg:px-0 px-6 md:flex-row items-center  justify-between">
+        <div class=" flex flex-col lg:px-0 md:flex-row items-center  justify-between">
             <div class="flex items-center lg:gap-8 gap-4">
                 <img src="{{ asset('images/help.jpg') }}" alt="Support illustration"
                     class="lg:w-48 w-10 rounded-full shadow-md">
@@ -757,7 +757,7 @@ body {
                 </div>
             </div>
             <a href="#"
-                class="mt-6 md:mt-0 bg-white text-black lg:px-6 lg:py-3 px-4 py-2 rounded-full lg:text-base text-sm hover:bg-[#4a910954] transition-colors transform shadow-md"
+                class="mt-6 md:mt-0 bg-white text-black text-nowrap lg:px-6 lg:py-3 lg:w-[300px] px-4 py-2 rounded-full lg:text-base text-sm hover:bg-[#4a910954] transition-colors transform shadow-md"
                 id="openModalButton">
                 TALK TO A SPECIALIST <i class="fas fa-arrow-right ml-2"></i>
             </a>
@@ -767,7 +767,7 @@ body {
 </section>
 
 
-<section id="newsletterSection" class="bg-white container mx-auto lg:px-0 px-4 lg:py-20 py-10">
+<section id="newsletterSection" class="bg-white container mx-auto lg:px-0 px-4 lg:py-20 py-10 lg:px-5">
     <form method="POST" action="{{ route('subscribe') }}"
         class="flex flex-col md:flex-row items-center justify-between gap-8">
         @csrf
@@ -790,7 +790,7 @@ body {
             </div>
             @endif
             <button type="submit"
-                class="w-full lg:w-auto px-9 py-3 bg-[#58af0838] text-black font-semibold rounded-full shadow-md hover:shadow-lg transition-all duration-300">
+                class="w-full lg:w-auto px-9 py-3 bg-[#58af0838] text-black text-nowrap font-semibold rounded-full shadow-md hover:shadow-lg transition-all duration-300">
                 Subscribe Now <i class="fas fa-paper-plane ml-2"></i>
             </button>
         </div>
