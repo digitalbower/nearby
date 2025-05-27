@@ -575,7 +575,7 @@ body {
 
                         <!-- Product Details -->
                         <div class="px-4 pb-4 space-y-2 mt-1 relative z-50">
-                            <h3 class="text-xl font-semibold leading-tight h-[55px]">{{ $product->name }}</h3>
+                            <h3 class="xxl:text-xl xl:text-lg font-semibold leading-tight h-[55px]">{{ $product->name }}</h3>
 
                             <div class="flex items-center text-sm text-gray-500 gap-1">
                                 <i class="fas fa-map-marker-alt"></i>
@@ -695,7 +695,7 @@ body {
 
                         <!-- Content Section -->
                         <div class="px-4 pb-4 space-y-2 mt-1 relative z-50">
-                            <h3 class="text-xl font-semibold leading-tight h-[55px]">
+                            <h3 class="xxl:text-xl xl:text-lg font-semibold leading-tight h-[55px]">
                                 {{ $product->name }}
                             </h3>
 
@@ -776,7 +776,7 @@ body {
         <h2 class="text-3xl text-black lg:text-3xl text-base font-bold text-black w-[70%] md:w-[100%] font-extrabold">
             Get the Latest Deals and Updates Delivered to Your Inbox!
         </h2>
-        <div class="lg:flex w-full md:w-auto gap-4">
+        <div class="lg:flex lg:w-full md:w-auto gap-4">
             <input name="email" type="email" placeholder="Enter Email"
                 class="flex-1 lg:w-80 px-6 py-4 rounded-full border-2 lg:w-auto w-full lg:mb-0 mb-5 focus:outline-none focus:ring-2 focus:ring-cyan-700 bg-white text-black placeholder-gray-500 shadow-md"
                 required>
