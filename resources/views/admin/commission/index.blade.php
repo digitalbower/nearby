@@ -30,11 +30,10 @@
                     $agreementPrice = $variant->agreement_unit_price;
                     $sellingPrice = $variant->unit_price;
                     $markup = $variant->markup;
-                    $rawCommission       = $variant->product->category->commission ?? 0;
+                    $rawCommission = $variant->product->category->commission ?? 0;
                     $commissionPercent   = $rawCommission / 100;
-    
-                    $commissionPercent = $variant->product->category->commission ?? 0;
                     $commissionableAmount = $markup;
+                    $commissionPercent  = ($commissionableAmount * $rawCommission) / 100;
                     $commission = $commissionableAmount * $commissionPercent;
                 @endphp
 
@@ -44,7 +43,7 @@
                     <td>{{ $qty }}</td>
                     <td>{{ number_format($agreementPrice, 2) }}</td>
                     <td>{{ number_format($sellingPrice, 2) }}</td>
-                    <td>{{ number_format($markup) }}</td>
+                    <td>{{ number_format($markup) }}</td> 
                     <td>{{ $variant->product->category->name ?? '-' }}</td>
                     <td>{{ number_format($commissionPercent)}} % </td>
                     <td>{{ number_format($commissionableAmount, 2) }}</td>
