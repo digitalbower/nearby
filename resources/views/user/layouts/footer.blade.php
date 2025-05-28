@@ -11,15 +11,15 @@
         <div class="space-y-3">
           <div class="flex items-center gap-3">
             <i class="fas fa-location-dot"></i>
-            <span>Nearby Vouchers – Operated by AJL Gulf Group LLC
-            Sharjah, Shams Free Zone
+            <span>Nearby Vouchers – Operated by Digital Bower FZ LLC
+            RAK Free Zone
             United Arab Emirates
             </span>
           </div>
-          {{-- <div class="flex items-center gap-3">
+          <!--<div class="flex items-center gap-3">
             <i class="fas fa-phone"></i>
             <span>(308) 555-0121</span>
-          </div> --}}
+          </div>-->
           <div class="flex items-center gap-3">
             <i class="fas fa-envelope"></i>
             <span>support@nearbyvouchers.com</span>
@@ -30,7 +30,7 @@
       <!-- Top Destination -->
       <div>
         <h3 class="text-black text-base lg:text-xl font-bold mb-6">Top
-          Destination</h3>
+          Destinations</h3>
         <ul class="space-y-3 text-sm lg:text-base">
           @foreach ($topDestinations as $item)
           <li><a href="{{ $item->link ?? '#' }}" class="hover:text-black transition-colors">{{ $item->item_text }}</a></li>
@@ -100,8 +100,8 @@
           <div class="space-y-3 text-sm lg:text-base">
             <div class="flex items-center gap-3">
               <i class="fas fa-location-dot"></i>
-               <span>Nearby Vouchers – Operated by AJL Gulf Group LLC
-                Sharjah, Shams Free Zone
+               <span>Nearby Vouchers – Operated by Digital Bower FZ LLC
+                RAK Free Zone
                 United Arab Emirates
                 </span>
             </div>

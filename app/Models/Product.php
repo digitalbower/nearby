@@ -80,4 +80,7 @@ class Product extends Model
     {
         return $this->hasOne(ProductType::class, 'id', 'product_type_id');
     }
+    public function salesPerson(){
+        return $this->belongsTo(SalesPerson::class,'sales_person_id');
+    }
 }
