@@ -72,7 +72,7 @@ class HomeController extends Controller
         })
         ->filter()
         ->filter(fn($product) => $product->category && $product->category->name)
-        ->groupBy(fn($product) => $product->category->name);  
+        ->groupBy(fn($product) => $product->category->name);   dd($carouselCategories);
     
         $topDestinations = Footer::where('type', 'Top Destination')
                               ->where('status', 1)

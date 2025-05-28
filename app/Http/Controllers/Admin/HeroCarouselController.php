@@ -10,7 +10,7 @@ use App\Models\Product;
 class HeroCarouselController extends Controller
 {
     public function index() {
-        $carousels = HeroCarousel::with('product')->get();
+        $carousels = HeroCarousel::with('product')->get(); 
         return view('admin.hero-carousel.index', compact('carousels'));
     }
 
