@@ -2,7 +2,7 @@
 @section('title', 'Report Management')
 @section('content')
     <!-- Main Content -->
-    <main class="flex-1  space-y-6">
+    <main class="flex-1  space-y-8">
         <!-- Header -->
 
 
@@ -16,9 +16,12 @@
                             <tr class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
                                 <th class="py-3 px-6 text-left"><i class="fas fa-hashtag mr-2"></i>Booking ID</th>
                                 <th class="py-3 px-6 text-left"><i class="fas fa-box mr-2"></i>Product Name</th>
-                                <th class="py-3 px-6 text-center"><i class="fas fa-sort-amount-up mr-2"></i>Quantity
-                                </th>
-                                <th class="py-3 px-6 text-center"><i class="fas fa-calendar-alt mr-2"></i>Date</th>
+                                <th class="py-3 px-6 text-center"><i class="fas fa-box mr-2"></i>Product Variant</th>
+                                <th class="py-3 px-6 text-center"><i class="fas fa-sort-amount-up mr-2"></i>Quantity</th>
+                                <th class="py-3 px-6 text-center"><i class="fas fa-calendar-alt mr-2"></i>Booked Date</th>
+                                <th class="py-3 px-6 text-center"><i class="fas fa-calendar-alt mr-2"></i>Customer Name</th>
+                                <th class="py-3 px-6 text-center"><i class="fas fa-calendar-alt mr-2"></i>Redeemed Date</th>
+                                <th class="py-3 px-6 text-center"><i class="fas fa-calendar-alt mr-2"></i>Expiry Date</th> 
                                 <th class="py-3 px-6 text-center">Action</th>
                             </tr>
                         </thead>
@@ -29,7 +32,10 @@
                                         <span class="font-medium">{{$booking_item->bookingConfirmation->booking_id}}</span>
                                     </td>
                                     <td class="py-3 px-6 text-left">
-                                        <span>{{$booking_item->variant->product->name}}</span>
+                                        <span>{{$booking_item->variant?->product?->name}}</span>
+                                    </td>
+                                    <td class="py-3 px-6 text-left">
+                                        <span>{{$booking_item->variant?->title}}</span>
                                     </td>
                                     <td class="py-3 px-6 text-center">
                                         <span
@@ -38,11 +44,20 @@
                                     <td class="py-3 px-6 text-center">
                                         <span>{{ $booking_item->bookingConfirmation->created_at->format('Y-m-d') }}</span>
                                     </td>
+                                     <td class="py-3 px-6 text-center">
+                                        <span>{{ $booking_item->bookingConfirmation?->user?->first_name }}</span>
+                                    </td>
+                                   <td class="py-3 px-6 text-center">
+                                        <span>{{ $booking_item->redeemed_date }}</span>
+                                    </td>
+                                    <td class="py-3 px-6 text-center">
+                                        <span>{{ $booking_item->validity }}</span>
+                                    </td> 
                                     <td class="py-3 px-6 text-center">
                                         <a href="{{ route('vendor.report.download_pdf', $booking_item->id) }}"
                                             class="blue-card text-white py-1 px-3 rounded-full text-xs hover:bg-secondary transition duration-300 ease-in-out"
                                             target="_blank">
-                                            <i class="fas fa-download mr-1"></i>Download
+                                            <i class="fas fa-download mr-1"></i>
                                          </a>
                                     </td>
                                 </tr>

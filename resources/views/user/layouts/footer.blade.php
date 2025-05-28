@@ -16,10 +16,10 @@
             United Arab Emirates
             </span>
           </div>
-          <div class="flex items-center gap-3">
+          {{-- <div class="flex items-center gap-3">
             <i class="fas fa-phone"></i>
             <span>(308) 555-0121</span>
-          </div>
+          </div> --}}
           <div class="flex items-center gap-3">
             <i class="fas fa-envelope"></i>
             <span>support@nearbyvouchers.com</span>
@@ -89,7 +89,7 @@
       <div>
         <button class="w-full text-left flex justify-between items-center py-2 text-base lg:text-xl font-bold"
           onclick="toggleFooterSection('brand-section')">
-          Brand Info
+          About Us
           <i class="fas fa-chevron-down" id="brand-section-icon"></i>
         </button>
         <div id="brand-section" class="hidden"> 
@@ -100,12 +100,15 @@
           <div class="space-y-3 text-sm lg:text-base">
             <div class="flex items-center gap-3">
               <i class="fas fa-location-dot"></i>
-              <span>901 Thornridge Cir Shiloh, Hawaii 81063</span>
+               <span>Nearby Vouchers – Operated by AJL Gulf Group LLC
+                Sharjah, Shams Free Zone
+                United Arab Emirates
+                </span>
             </div>
-            <div class="flex items-center gap-3">
+            {{-- <div class="flex items-center gap-3">
               <i class="fas fa-phone"></i>
-              <span>(308) 555-0121</span>
-            </div>
+                 <span>(308) 555-0121</span>
+            </div> --}}
             <div class="flex items-center gap-3">
               <i class="fas fa-envelope"></i>
               <span>support@nearbyvouchers.com</span>
@@ -161,20 +164,20 @@
           <h3 class="text-black text-base lg:text-xl font-bold mb-6">We Accept</h3>
           <div class="grid grid-cols-4 gap-4">
             @foreach ($payment_channels as $item)
-            <i class="{{$item->icon}}" class="h-8"></i>
+            <img src="{{ $item->icon }}" class="h-8">
             @endforeach
           </div>
           <button
             class="mt-8 border border-gray-700 rounded-lg px-4 py-2 flex items-center gap-2 hover:border-gray-500 transition-colors">
             <i class="fas fa-globe"></i>
-            English | USD
+            English | AED
           </button>
         </div>
       </div>
     </div>
 
     <div class="mt-16 pt-8 border-t border-gray-800 text-center">
-      Copyright © 2024 Travel WP. All Rights Reserved.
+    © 2025 Nearby Vouchers. All rights reserved.
     </div>
   </div>
 </footer>

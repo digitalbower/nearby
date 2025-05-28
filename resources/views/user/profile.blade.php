@@ -768,29 +768,35 @@
 
                   </div>
                 </div>
-                <div class="mb-4">
-                  <!-- Label with Icon -->
-                  <label for="country" class="block text-sm font-medium text-gray-700 mb-1">
-                    <i class="fas fa-globe text-black text-base mr-2"></i> Country
-                  </label>
-  
-                  <!-- Select Input -->
-                  <div class="relative">
-                  <select id="country" name="country"
-    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-    <option value="">Select your country</option>
-    @foreach(App\Models\Country::all() as $country)
-        <option value="{{ $country->country_code }}" 
-            {{ (old('country', $user->country) == $country->country_code) ? 'selected' : '' }}>
-            {{ $country->country }}
+<div>
+    <label for="country_id" class="block text-sm font-medium text-gray-700 mb-1">
+        <i class="fas fa-flag text-black text-base mr-2"></i> Nationality
+    </label>
+    <select name="country_id" id="country_id"
+            class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required>
+        <option value="">Select your nationality</option>
+        @foreach ($countries as $country)
+            <option value="{{ $country->id }}"
+                @selected(old('country_id', $user->country_id ?? '') == $country->id)>
+                {{ $country->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
+{{-- Country of Residence --}}
+<select name="country_of_residence_id" id="country_of_residence_id"
+        class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        required>
+    <option value="">Select your country of residence</option>
+    @foreach ($countries as $country)
+        <option value="{{ $country->id }}"
+            {{ (old('country_of_residence_id', $user->country_residence ?? '') == $country->id) ? 'selected' : '' }}>
+            {{ $country->name }}
         </option>
     @endforeach
-</select>
-
-  
-  
-                  </div>
-                </div>
+</select> 
                 <!-- Address Section -->
                 <div>
                   <label for="address" class="block text-sm font-medium text-gray-700 mb-1">
@@ -979,28 +985,20 @@
                   <!-- Inactive Radio Button -->
                   <div class="flex space-x-4 mb-4">
   <label class="flex items-center space-x-2 cursor-pointer">
-    <input type="radio" name="status" value="all" class="hidden" checked onchange="filterBookings(this)">
-    <span class="w-6 h-6 flex items-center justify-center border-2 border--cyan500 bg-cyan-500 text-white rounded-full">
-      <i class="fas fa-check-circle"></i>
+    <input type="radio" name="status" value="upcoming" class="hidden" onchange="filterBookings(this)" checked>
+    <span class="radio-icon w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
+      <i class="fas fa-circle"></i>
     </span>
-    <span class="text-gray-700">All</span>
+    <span class="text-gray-700">Upcoming Booking</span>
   </label>
-
   <label class="flex items-center space-x-2 cursor-pointer">
     <input type="radio" name="status" value="past" class="hidden" onchange="filterBookings(this)">
-    <span class="w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
+    <span class="radio-icon w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
       <i class="fas fa-circle"></i>
     </span>
     <span class="text-gray-700">Past Booking</span>
   </label>
 
-  <label class="flex items-center space-x-2 cursor-pointer">
-    <input type="radio" name="status" value="upcoming" class="hidden" onchange="filterBookings(this)">
-    <span class="w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
-      <i class="fas fa-circle"></i>
-    </span>
-    <span class="text-gray-700">Upcoming Booking</span>
-  </label>
 </div>
 
                  
@@ -1013,7 +1011,7 @@
                   <!-- Booking Item 1 -->
                   @forelse ($bookingConfirmations as $item)
                   <div class="booking-card border relative border-cyan-400 rounded-xl shadow-xs p-3 mb-4 transition duration-300"
-                  data-status="{{ $item->verification_status }}"> 
+                  data-status="{{ $item->verification_status }}" data-booking-id="{{ $item->booking_id }}"> 
                  
       <div class="flex gap-x-3 items-center mb-2">
        
@@ -1046,6 +1044,7 @@
             </div>
           </div>
 
+          @if($item->verification_status === "pending")
           <div class="w-full justify-between flex gap-x-3 mt-3">
             <div class="flex w-full justify-end gap-x-3">
             <a href="{{ route('user.profile.download', $item->id) }}"
@@ -1053,6 +1052,7 @@
       <i class="fas fa-download mr-1"></i> Download PDF
     </a>
             </div>
+            @endif
           </div>
         </div>
       </div>
@@ -1401,15 +1401,18 @@
 
 <script> 
   function filterBookingsAdvanced() { 
-    const status = document.querySelector('input[name="status"]:checked')?.value || 'all';
-    const searchInput = document.getElementById('searchInput').value.toLowerCase();
+    const status = document.querySelector('input[name="status"]:checked')?.value; 
+    const searchInput = document.getElementById('searchInput')?.value.toLowerCase() || ''; 
     const bookingCards = document.querySelectorAll('.booking-card');
 
     bookingCards.forEach(card => {
-      const bookingId = card.getAttribute('data-booking-id').toLowerCase();
+      const rawBookingId = card.getAttribute('data-booking-id'); 
+      const bookingId = rawBookingId ? rawBookingId.toLowerCase() : ''; 
+
       const bookingStatus = card.getAttribute('data-status');
 
-      const matchesStatus = (status === 'all' || status === bookingStatus);
+      const matchesStatus = (status === 'upcoming' && bookingStatus === 'pending') ||
+                          (status === 'past' && (bookingStatus === 'expired' || bookingStatus === 'redeemed'));
       const matchesSearch = bookingId.includes(searchInput);
 
       card.style.display = (matchesStatus && matchesSearch) ? 'block' : 'none';
@@ -1476,22 +1479,48 @@ document.querySelectorAll('.toggle-password').forEach(button => {
 </script>
 
 <script>
-  function filterBookings(radio) {
-    const status = radio.value;
-    const cards = document.querySelectorAll('.booking-card');
+function filterBookings(radio) {
+  const status = radio.value;
+  const cards = document.querySelectorAll('.booking-card');
 
-    cards.forEach(card => {
-      const cardStatus = card.getAttribute('data-status');
+  cards.forEach(card => {
+    const cardStatus = card.getAttribute('data-status');
 
-      if (status === 'all') {
-        card.style.display = 'block';
-      } else if (status === 'past') {
-        card.style.display = (cardStatus === 'completed') ? 'block' : 'none';
-      } else if (status === 'upcoming') {
-        card.style.display = (cardStatus !== 'completed') ? 'block' : 'none';
-      }
-    });
+    if (status === 'upcoming') {
+      card.style.display = (cardStatus === 'pending') ? 'block' : 'none';
+    } else if (status === 'past') {
+      card.style.display = (cardStatus === 'expired' || cardStatus === 'redeemed') ? 'block' : 'none';
+    } else {
+      card.style.display = 'block'; // for 'all'
+    }
+  });
+
+  // Update radio button visual states
+  const allRadios = document.querySelectorAll('input[name="status"]');
+  allRadios.forEach(input => {
+    const icon = input.closest('label').querySelector('.radio-icon');
+    if (input === radio) {
+      icon.classList.remove('border-gray-400', 'text-gray-400');
+      icon.classList.add('border-cyan-500', 'bg-cyan-500', 'text-white');
+    } else {
+      icon.classList.remove('border-cyan-500', 'bg-cyan-500', 'text-white');
+      icon.classList.add('border-gray-400', 'text-gray-400');
+    }
+  });
+}
+
+// Run on page load
+document.addEventListener('DOMContentLoaded', () => {
+  const defaultRadio = document.querySelector('input[name="status"][value="upcoming"]');
+  if (defaultRadio) {
+    // Make sure it’s selected (browser already should do this via `checked`)
+    defaultRadio.checked = true;
+
+    // Call filter logic and update visuals
+    filterBookings(defaultRadio);
   }
+});
+
 </script>
 <script>
 function openEditModal(id, title, description, rating) {

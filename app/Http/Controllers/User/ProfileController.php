@@ -1,24 +1,28 @@
 <?php
 
 namespace App\Http\Controllers\User;
-use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\Logo; 
+use App\Models\Footer;
+use App\Models\Gender;
+use App\Models\Review;
+use App\Models\Vendor;
+use App\Models\Country;
+use App\Models\MainSeo;
+use App\Models\NbvTerm;
+use App\Models\VendorTerm;
+use App\Models\ProductType;
 use Illuminate\Http\Request;
+use App\Models\NavigationMenu;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
+use App\Models\BookingConfirmation;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
-use App\Models\User;
-use App\Models\Gender;
-use App\Models\Country;
-use App\Models\Footer;
-use App\Models\Logo; 
 use App\Models\BookingConfirmationItem;
-use App\Models\NavigationMenu;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
-use App\Models\BookingConfirmation;
-use App\Models\MainSeo;
-use App\Models\Review;
-use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class ProfileController extends Controller
 {
@@ -136,20 +140,28 @@ class ProfileController extends Controller
     
     public function download($id)
     { 
-        $userId = Auth::id();
-        $item = DB::table('booking_confirmation_items as bci')
-        ->join('booking_confirmations as bc', 'bci.booking_confirmation_id', '=', 'bc.id')
-        ->where('bc.user_id', $userId) // condition 1: user must own the booking
-        ->where('bci.id', $id)         // condition 2: item ID must match
-        ->select(
-            'bci.*',
-            'bc.booking_id',
-            'bc.created_at as booking_created_at',
-            'bc.total_amount'
-        )
-        ->first(); 
+       $userId = Auth::user();
 
-        $pdf = Pdf::loadView('user.profilebookinghistorypdf', compact('item'));
+        $item = BookingConfirmationItem::with('variant.product')->findOrFail($id); 
+        $booking = bookingConfirmation::findOrFail($item->booking_confirmation_id);
+
+        $product = $item->variant->product;
+    
+        $nbvTerms = NbvTerm::find($product->nbv_terms_id);
+        $vendorTerms = VendorTerm::find($product->vendor_terms_id);
+        $vendor = Vendor::find($product->vendor_id); 
+        $productType = ProductType::find($product->product_type_id); 
+        $order_date = $booking->created_at->copy();  
+        $pdf = Pdf::loadView('user.generate_pdf', [
+            'item' => $item,
+            'nbvTerms' => $nbvTerms,
+            'vendorTerms' => $vendorTerms,
+            'vendor' => $vendor,
+            'productType' => $productType,
+            'order_date'=> $order_date->format('Y-m-d'),
+            'validUntil' => $item->validity,
+            'userId'    =>  $userId,
+        ]);
 
         return $pdf->download('Booking-'.$item->booking_id.'.pdf');
     }

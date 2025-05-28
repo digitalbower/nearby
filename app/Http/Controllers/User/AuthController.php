@@ -67,7 +67,7 @@ class AuthController extends Controller
         // Attempt to authenticate user
         if (Auth::attempt($request->only('email', 'password'))) {
             $redirectUrl = $request->input('redirect', route('home.index'));
-            return redirect()->to($redirectUrl);
+            return redirect()->to($redirectUrl)->with('success', 'Logged in successfully!');
         }
 
         // If authentication fails, return back with error
@@ -136,11 +136,11 @@ class AuthController extends Controller
             'phone'      => 'required|string|max:20',
             'password'   => 'required','string','min:8','confirmed','regex:/[A-Z]/','regex:/[a-z]/','regex:/[0-9]/','regex:/[!@#$%^&*(),.?":{}|<>]/',  
             'terms' => 'accepted',
-           'market_policy' => 'accepted',
+          
  [
     'password.regex' => 'Password must contain uppercase, lowercase, number, and special character.',
     'terms.accepted' => 'You must accept the Terms and Conditions.',
-    'market_policy.accepted' => 'You must accept the market policies.',
+   
    
     ],
         ]); 
