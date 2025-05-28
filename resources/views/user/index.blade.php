@@ -384,7 +384,7 @@ body {
 
                                     <div>
                                         <h2 class="lg:text-lg text-base font-bold text-gray-900">
-                                            {!! $product->productlocation_address !!}
+                                        {{ $product->emirate->name }}
                                         </h2>
                                         <div class="flex items-center space-x-2 text-gray-600">
                                             @for ($i = 0; $i < 5; $i++) <span

@@ -49,6 +49,8 @@ use App\Http\Controllers\Vendor\ReportManagementController;
 use App\Http\Controllers\Vendor\Auth\VendorForgotPasswordController;
 use App\Http\Controllers\Vendor\Auth\VendorResetPasswordController;
 
+
+
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('privacy_policy');
 Route::get('/cookie-policy', [HomeController::class, 'cookiePolicy'])->name('cookie_policy');
@@ -138,6 +140,8 @@ Route::name('user.')->group(function () {
         });
     });
 });
+
+
 
 Route::prefix('vendor')->name('vendor.')->group(function () {
     Route::get('/login', [VendorAuthController::class, 'showVendorLogin'])->name('login');

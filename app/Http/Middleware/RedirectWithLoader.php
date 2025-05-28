@@ -15,10 +15,22 @@ class RedirectWithLoader
      */
     public function handle(Request $request, Closure $next)
     {
+        // Let the request continue
         $response = $next($request);
 
-        if ($response instanceof RedirectResponse) {
-            $response->with('show_loader', true);
+        // Optionally, you can inject a loader script into response content
+        if ($response instanceof \Illuminate\Http\Response && $response->isSuccessful()) {
+            $content = $response->getContent();
+
+            $loaderScript = <<<HTML
+                <script>
+                    const loader = document.getElementById('page-loader');
+                    if (loader) loader.style.display = 'none';
+                </script>
+            HTML;
+
+            $content = str_replace('</body>', $loaderScript . '</body>', $content);
+            $response->setContent($content);
         }
 
         return $response;
