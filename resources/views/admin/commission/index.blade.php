@@ -2,7 +2,6 @@
 
 @section('title', 'Commission')
 
-
 @section('content')
 <div class="container">
     <h4 class="mb-4">Commission Listing</h4>
@@ -19,30 +18,35 @@
                 <th>Category</th>
                 <th>Commission %</th>
                 <th>Commissionable Amount</th>
-                <th>Commission</th>
+                <th>Varification Status</th>
+                <th>Sales Person</th>
+                <th>Redeem  to Date</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($productVariants as $variant)
+        @foreach ($productVariants as $variant)
                 @php
                     $qty = 1;
                     $agreementPrice = $variant->agreement_unit_price;
                     $sellingPrice = $variant->unit_price;
-                    $markup = $sellingPrice - $agreementPrice;
+                    $markup = $variant->markup;
+                    $rawCommission       = $variant->product->category->commission ?? 0;
+                    $commissionPercent   = $rawCommission / 100;
+    
                     $commissionPercent = $variant->product->category->commission ?? 0;
                     $commissionableAmount = $markup;
                     $commission = $commissionableAmount * $commissionPercent;
                 @endphp
 
-                <tr>
+                <tr> 
                     <td>{{ $variant->product->name ?? '-' }}</td>
                     <td>{{ $variant->title }}</td>
                     <td>{{ $qty }}</td>
                     <td>{{ number_format($agreementPrice, 2) }}</td>
                     <td>{{ number_format($sellingPrice, 2) }}</td>
-                    <td>{{ number_format($markup, 2) }}</td>
+                    <td>{{ number_format($markup) }}</td>
                     <td>{{ $variant->product->category->name ?? '-' }}</td>
-                    <td>{{ number_format($commissionPercent, 2) }}</td>
+                    <td>{{ number_format($commissionPercent)}} % </td>
                     <td>{{ number_format($commissionableAmount, 2) }}</td>
                     <td>{{ number_format($commission, 2) }}</td>
                 </tr>

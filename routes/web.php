@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\Product\VendorTermController;
 use App\Http\Controllers\Admin\NavigationMenuController;
 use App\Http\Controllers\Admin\Product\ProductVariantController;
 use App\Http\Controllers\Admin\CommissionController;;
+use App\Http\Controllers\Admin\BlogNavigationController;
 
 use App\Http\Controllers\Admin\LocationScopeController;
 use App\Http\Controllers\Admin\FooterController;
@@ -339,6 +340,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::resource('users', AdminUserController::class);
 
+    });
+
+    Route::prefix('blog')->group(function () {
+        Route::get('/navigation/create', [BlogNavigationController::class, 'create'])->name('navigation.create');
+        Route::post('/navigation', [BlogNavigationController::class, 'store'])->name('navigation.store');
+        Route::get('/navigation/{navigation}/edit', [BlogNavigationController::class, 'edit'])->name('navigation.edit');
+        Route::put('/navigation/{navigation}', [BlogNavigationController::class, 'update'])->name('navigation.update');
     });
 });
 Route::prefix('vendor')->group(function () {

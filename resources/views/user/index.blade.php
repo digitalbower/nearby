@@ -306,7 +306,7 @@ body {
 @endpush
 @section('content')
 
-<div id="cover"> <span class="glyphicon glyphicon-refresh w3-spin preloader-Icon"></span> loading...</div>
+
 <section class="">
     @if(session('success'))
     <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
