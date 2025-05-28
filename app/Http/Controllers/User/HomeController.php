@@ -32,7 +32,7 @@ class HomeController extends Controller
 {
 
     public function index()
-    {
+    { 
         $today = Carbon::today();
 
         $uppermenuItems = NavigationMenu::where('active', 1)
@@ -49,7 +49,7 @@ class HomeController extends Controller
 
         $categories = Category::where('status', 1)->get();
 
-        $carouselCategories = Product::with(['vendor', 'variants', 'reviews', 'category'])
+        $carouselCategories = Product::with(['vendor', 'variants', 'reviews', 'category','emirate'])
         ->whereHas('vendor', function ($q) use ($today) {
             $q->where('status', 1)
             ->whereDate('validityfrom', '<=', $today)
@@ -71,7 +71,8 @@ class HomeController extends Controller
             return $validVariants->isNotEmpty() ? $product : null;
         })
         ->filter()
-        ->filter(fn($product) => $product->category && $product->category->name)
+        ->filter(fn($product) => $product->category && $product->category->name &&
+        $product->emirate && $product->emirate->name)
         ->groupBy(fn($product) => $product->category->name);   
     
         $topDestinations = Footer::where('type', 'Top Destination')
