@@ -27,7 +27,7 @@
         <tbody>
         @foreach ($items as $item)
                 @php
-                    $qty = 1;
+                    $qty = $item->quantity;
                     $agreementPrice = $item->variant?->agreement_unit_price;
                     $sellingPrice = $item->variant?->unit_price;
                     $markup = $item->variant?->markup;
