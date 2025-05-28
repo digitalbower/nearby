@@ -26,6 +26,14 @@
     @include('user.layouts.footer')
     @include('user.layouts.footerjs')
 
+ 
+    <script>
+        window.addEventListener('load', function () {
+            const loader = document.getElementById('page-loader');
+            if (loader) loader.style.display = 'none';
+        });
+    </script>
+
 </body>
 
 </html>

@@ -25,7 +25,8 @@ class BookingManagementController extends Controller
       
         $booking_item = BookingConfirmationItem::find($request->booking_confirmation_item_id); 
         if($booking_item->verification_number == $request->verification_number){
-            $booking_item->verification_status = "redeem";
+            $booking_item->verification_status = "redeemed";
+            $booking_item->redeemed_date = now();
             $booking_item->save();
             return redirect()->back()
             ->with('success', 'Booking approved successfully!');
@@ -37,7 +38,7 @@ class BookingManagementController extends Controller
     }
     public function bookingHistory(){
         $booking_items = BookingConfirmationItem::with(['variant.product','bookingConfirmation.user'])
-        ->whereIn('verification_status',['redeem','expired'])
+        ->where('verification_status','redeemed')
         ->whereHas('variant.product', function ($query) {
             $query->where('vendor_id', Auth::guard('vendor')->id());
         })

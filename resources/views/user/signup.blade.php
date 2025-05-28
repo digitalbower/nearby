@@ -166,15 +166,37 @@
           <h1 class="text-3xl font-bold text-gray-900">Sign Up for NearBy Vouchers</h1>
           <p class="mt-2 text-sm text-gray-600">Create an account to manage your deals and redeem offers easily</p>
         </div>
-        @if ($errors->any())
-        <div class="bg-red-500 text-white p-3 rounded-md">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-          @endif
+        @if(session('success'))
+            <div x-data="{ show: true }"
+                x-init="setTimeout(() => show = false, 3000)"
+                x-show="show"
+                class="mb-4 p-4 rounded-md bg-green-100 text-green-800 border border-green-300 flex justify-between items-center">
+                <span>{{ session('success') }}</span>
+                <button @click="show = false" class="text-green-700 hover:text-green-900 text-xl leading-none">&times;</button>
+            </div>
+        @endif
+        @if(session('error'))
+            <div x-data="{ show: true }"
+                x-init="setTimeout(() => show = false, 3000)"
+                x-show="show"
+                class="mb-4 p-4 rounded-md bg-red-100 text-red-800 border border-red-300 flex justify-between items-center">
+                <span>{{ session('error') }}</span>
+                <button @click="show = false" class="text-red-700 hover:text-red-900 text-xl leading-none">&times;</button>
+            </div>
+        @endif
+         @if ($errors->any())
+          <div x-data="{ show: true }"
+              x-init="setTimeout(() => show = false, 3000)"
+              x-show="show"
+              class="mb-4 p-4 rounded-md bg-red-100 text-red-800 border border-red-300 flex justify-between items-start gap-4">
+              <ul class="mb-0 list-disc list-inside">
+                  @foreach ($errors->all() as $error)
+                      <li>{{ $error }}</li>
+                  @endforeach
+              </ul>
+              <button @click="show = false" class="text-red-700 hover:text-red-900 text-xl leading-none mt-1">&times;</button>
+          </div>
+      @endif
     
         <form method="POST" action="{{ route('user.register') }}" class="space-y-6">
         @csrf
@@ -239,24 +261,44 @@
 
 
           <!-- Password field -->
-          <div class="relative w-full mt-4">
-  <input
-    class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-    placeholder="Create a password" required type="password" name="password" id="password">
-  
-  <span onclick="togglePassword('password', this)" class="absolute right-4 top-5 cursor-pointer text-gray-500">
-    👁️
-  </span>
+ <div>
+  <label for="password" class="mb-1 block text-base font-medium text-gray-800 ml-4 mb-2">
+    Password
+  </label>
+  <div class="relative">
+    <input
+      id="password"
+      name="password"
+      type="password"
+      placeholder="Enter your password"
+      required
+      class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[#6C5CE7] focus:ring-2 focus:ring-[#6C5CE7] focus:ring-opacity-20 outline-none transition"
+    >
+    <button type="button" onclick="togglePassword('password', 'passwordToggle')" 
+      class="absolute right-4 top-1/2 -translate-y-1/2 text-[#718096]">
+      <i id="passwordToggle" class="fas fa-eye"></i>
+    </button>
+  </div>
 </div>
 
-<div class="relative w-full mt-4">
-  <input
-    class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-    placeholder="Confirm Password" required type="password" name="password_confirmation" id="password_confirmation">
-  
-  <span onclick="togglePassword('password_confirmation', this)" class="absolute right-4 top-5 cursor-pointer text-gray-500">
-    👁️
-  </span>
+<div class="mt-4">
+  <label for="password_confirmation" class="mb-1 block text-base font-medium text-gray-800 ml-4 mb-2">
+    Confirm Password
+  </label>
+  <div class="relative">
+    <input
+      id="password_confirmation"
+      name="password_confirmation"
+      type="password"
+      placeholder="Confirm your password"
+      required
+      class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-[#6C5CE7] focus:ring-2 focus:ring-[#6C5CE7] focus:ring-opacity-20 outline-none transition"
+    >
+    <button type="button" onclick="togglePassword('password_confirmation', 'passwordConfirmationToggle')" 
+      class="absolute right-4 top-1/2 -translate-y-1/2 text-[#718096]">
+      <i id="passwordConfirmationToggle" class="fas fa-eye"></i>
+    </button>
+  </div>
 </div>
 
           <!-- Terms and conditions -->
@@ -378,16 +420,19 @@
     }
 </script>
 <script>
-function togglePassword(fieldId, icon) {
-  const field = document.getElementById(fieldId);
-  if (field.type === 'password') {
-    field.type = 'text';
-    icon.textContent = '🙈'; // change icon
-  } else {
-    field.type = 'password';
-    icon.textContent = '👁️'; // change icon
+  function togglePassword(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+    if (input.type === "password") {
+      input.type = "text";
+      icon.classList.remove('fa-eye');
+      icon.classList.add('fa-eye-slash');
+    } else {
+      input.type = "password";
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+    }
   }
-}
 </script>
 
 @endpush

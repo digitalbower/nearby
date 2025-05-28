@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\CheckAdmin::class,
             'auth.custom' => \App\Http\Middleware\CustomAuthenticate::class,
             'auth.vendor' => \App\Http\Middleware\VendorAuthenticate::class,
+            'loader' => \App\Http\Middleware\RedirectWithLoader::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

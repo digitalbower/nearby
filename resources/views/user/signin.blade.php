@@ -138,7 +138,11 @@
     </style>
 @endpush
 @section('content')
-   <div class="overflow-hidden z-10  py-8  bg-[#ebebeb] border-b-2 border-[#58af0838]">
+
+
+
+   <div class="overflow-hidden   z-10  py-8  bg-[#58af0838] border-b-2 border-[#58af0838]">
+
     <div
     class="relative lg:flex container px-4 mx-auto w-full  ">
     <!-- Left side with illustration -->
@@ -149,15 +153,40 @@
         <h1 class="mb-2 text-3xl font-bold text-[#2D3748]">Sign in to Nearby Vouchers</h1>
         <p class="text-[#718096]">Login to access your dashboard and manage your account securely.</p>
       </div>
-      @if(session('success'))
-      <div x-data="{ show: true }" 
-            x-init="setTimeout(() => show = false, 3000)" 
-            x-show="show" 
-            class="mb-4 p-4 rounded-md bg-green-100 text-green-800 border border-green-300 flex justify-between items-center">
-          <span>{{ session('success') }}</span>
-          <button @click="show = false" class="text-green-700 hover:text-green-900">&times;</button>
-      </div>
-  @endif
+    {{-- Show success message --}}
+@if(session('success'))
+    <div x-data="{ show: true }"
+         x-init="setTimeout(() => show = false, 3000)"
+         x-show="show"
+         class="mb-4 p-4 rounded-md bg-green-100 text-green-800 border border-green-300 flex justify-between items-center">
+        <span>{{ session('success') }}</span>
+        <button @click="show = false" class="text-green-700 hover:text-green-900 text-xl leading-none">&times;</button>
+    </div>
+@endif
+@if(session('error'))
+    <div x-data="{ show: true }"
+         x-init="setTimeout(() => show = false, 3000)"
+         x-show="show"
+         class="mb-4 p-4 rounded-md bg-red-100 text-red-800 border border-red-300 flex justify-between items-center">
+        <span>{{ session('error') }}</span>
+        <button @click="show = false" class="text-red-700 hover:text-red-900 text-xl leading-none">&times;</button>
+    </div>
+@endif
+
+{{-- Show validation errors --}}
+@if ($errors->any())
+    <div x-data="{ show: true }"
+         x-init="setTimeout(() => show = false, 3000)"
+         x-show="show"
+         class="mb-4 p-4 rounded-md bg-red-100 text-red-800 border border-red-300 flex justify-between items-start gap-4">
+        <ul class="mb-0 list-disc list-inside">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+        <button @click="show = false" class="text-red-700 hover:text-red-900 text-xl leading-none mt-1">&times;</button>
+    </div>
+@endif
       <form method="POST" action="{{ route('user.login.submit') }}" class="space-y-6">
       @csrf
       <div class="space-y-4">

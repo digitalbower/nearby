@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\Product\VendorTermController;
 use App\Http\Controllers\Admin\NavigationMenuController;
 use App\Http\Controllers\Admin\Product\ProductVariantController;
 use App\Http\Controllers\Admin\CommissionController;;
+use App\Http\Controllers\Admin\BlogNavigationController;
 
 use App\Http\Controllers\Admin\LocationScopeController;
 use App\Http\Controllers\Admin\FooterController;
@@ -48,7 +49,12 @@ use App\Http\Controllers\Vendor\ReportManagementController;
 use App\Http\Controllers\Vendor\Auth\VendorForgotPasswordController;
 use App\Http\Controllers\Vendor\Auth\VendorResetPasswordController;
 
+
+
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('privacy_policy');
+Route::get('/cookie-policy', [HomeController::class, 'cookiePolicy'])->name('cookie_policy');
+Route::get('/terms-and-conditions', [HomeController::class, 'termsAndConditions'])->name('terms_and_conditions');
 Route::post('/subscribe', [NewsletterController::class, 'subscribe'])->name('subscribe');
 Route::name('user.')->group(function () {
     Route::prefix('products')->name('products.')->group(function () {
@@ -134,6 +140,8 @@ Route::name('user.')->group(function () {
         });
     });
 });
+
+
 
 Route::prefix('vendor')->name('vendor.')->group(function () {
     Route::get('/login', [VendorAuthController::class, 'showVendorLogin'])->name('login');
@@ -339,6 +347,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::resource('users', AdminUserController::class);
 
+    });
+
+    Route::prefix('blog')->group(function () {
+        Route::get('/navigation/create', [BlogNavigationController::class, 'create'])->name('navigation.create');
+        Route::post('/navigation', [BlogNavigationController::class, 'store'])->name('navigation.store');
+        Route::get('/navigation/{navigation}/edit', [BlogNavigationController::class, 'edit'])->name('navigation.edit');
+        Route::put('/navigation/{navigation}', [BlogNavigationController::class, 'update'])->name('navigation.update');
     });
 });
 Route::prefix('vendor')->group(function () {

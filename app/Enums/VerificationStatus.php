@@ -5,6 +5,6 @@ namespace App\Enums;
 enum VerificationStatus: string
 {
     case Pending = 'pending';
-    case Redeem = 'redeem';
+    case Redeem = 'redeemed';
     case Expired = 'expired';
 }
