@@ -5,7 +5,9 @@
 @section('content')
 <div class="container">
     <h4 class="mb-4">Commission Listing</h4>
-
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{{ route('admin.commission.export') }}" class="btn btn-success">Download Excel</a>
+    </div>
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
