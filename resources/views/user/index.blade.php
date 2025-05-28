@@ -247,13 +247,13 @@ body {
     }
 
     .owl-prev {
-        top: -35px;
+        top: -40px;
 
     }
 
     .owl-next {
 
-        top: -35px;
+        top: -40px;
     }
 
     .owl-prev,
@@ -330,7 +330,7 @@ body {
                 <!-- Sidebar Content -->
                 <div id="menuContent" class="hidden md:block p-4">
                     <h2 class="hidden lg:block text-2xl ml-5 font-bold mb-6 text-gray-700">Categories</h2>
-                    <nav class="space-y-2 ml-5">
+                    <nav class="space-y-2 xxl:ml-5">
                         @foreach ($categories as $category)
                         <a href="{{ url('/products') }}?category={{ urlencode($category->name) }}"
                             class="flex items-center justify-between py-3 px-4 rounded hover:bg-white/40 transition-colors duration-200 text-gray-700">
@@ -378,7 +378,7 @@ body {
                                     class="lg:absolute flex flex-col w-full lg:w-1/2 bg-white text-gray-800 rounded-lg p-3 lg:p-8 shadow-xl z-20 right-0 transform translate-x-[50px] opacity-0">
 
                                     <h1
-                                        class="lg:text-2xl text-lg font-extrabold mb-0 leading-tight text-gray-900 leading-snug">
+                                        class="lg:text-2xl text-xl font-extrabold mb-0 leading-tight text-gray-900 leading-snug">
                                         {{ $product->name }}
                                     </h1>
 
@@ -495,7 +495,7 @@ body {
 <section class="bg-[#58af0838] lg:pt-20 py-10 lg:px-4 from-cyan-50 to-blue">
     <div class="mb-8 container mb-10 mx-auto px-4 lg:px-0">
         <div class="flex justify-between items-center mb-4">
-            <h2 class="lg:text-3xl text-base font-bold text-black">Deal of the Day – Trending in UAE</h2>
+            <h2 class="lg:text-3xl text-base font-bold text-black w-[70%] md:w-[100%]">Deal of the Day – Trending in UAE</h2>
         </div>
 
         <div class="owl-carousel1 owl-carousel owl-theme">
@@ -575,7 +575,7 @@ body {
 
                         <!-- Product Details -->
                         <div class="px-4 pb-4 space-y-2 mt-1 relative z-50">
-                            <h3 class="text-xl font-semibold leading-tight">{{ $product->name }}</h3>
+                            <h3 class="xxl:text-xl xl:text-lg font-semibold leading-tight h-[55px]">{{ $product->name }}</h3>
 
                             <div class="flex items-center text-sm text-gray-500 gap-1">
                                 <i class="fas fa-map-marker-alt"></i>
@@ -590,7 +590,7 @@ body {
                                     <span class="text-sm text-gray-500">{{$averageRating}} ({{$totalReviews}})</span>
                             </div>
 
-                            <p class="text-gray-700 text-sm leading-relaxed">
+                            <p class="text-gray-700 text-sm leading-relaxed line-clamp-2 h-[50px]">
                                 {{ $product->short_description }}
                             </p>
 
@@ -616,7 +616,7 @@ body {
 @foreach($carouselCategories as $categoryName => $products)
 <section class="bg-white lg:p-4  lg:py-20 py-10 ">
     <div class="container mx-auto lg:px-0 px-4">
-        <h2 class="lg:text-3xl text-base font-bold text-black mb-3">What’s Hot in {{$categoryName}}</h2>
+        <h2 class="lg:text-3xl text-base font-bold text-black w-[70%] md:w-[100%] mb-3">What’s Hot in {{$categoryName}}</h2>
         <div class="owl-carousel1  owl-carousel owl-theme">
             @foreach($products as $product)
             @php
@@ -695,7 +695,7 @@ body {
 
                         <!-- Content Section -->
                         <div class="px-4 pb-4 space-y-2 mt-1 relative z-50">
-                            <h3 class="text-xl font-semibold leading-tight">
+                            <h3 class="xxl:text-xl xl:text-lg font-semibold leading-tight h-[55px]">
                                 {{ $product->name }}
                             </h3>
 
@@ -711,7 +711,7 @@ body {
                                     <span class="text-sm text-gray-500">{{$averageRating}}
                                         ({{$totalReviews}})</span>
                             </div>
-                            <p class="text-gray-700 line-clamp-3 text-sm leading-relaxed">{{$product->short_description}}
+                            <p class="text-gray-700 line-clamp-2 text-sm leading-relaxed h-[50px]">{{$product->short_description}}
                             </p>
 
                             <div class="flex justify-between items-center">
@@ -740,9 +740,9 @@ body {
 @endforeach
 
 
-<section class="bg-[#58af0838] text-black  lg:px-0  lg:py-20 py-10 px-4 lg:px-0">
+<section class="bg-[#58af0838] text-black  lg:py-20 py-10 px-4">
     <div class="container mx-auto">
-        <div class=" flex flex-col lg:px-0 px-6 md:flex-row items-center  justify-between">
+        <div class=" flex flex-col lg:px-0 md:flex-row items-center  justify-between">
             <div class="flex items-center lg:gap-8 gap-4">
                 <img src="{{ asset('images/help.jpg') }}" alt="Support illustration"
                     class="lg:w-48 w-10 rounded-full shadow-md">
@@ -757,7 +757,7 @@ body {
                 </div>
             </div>
             <a href="#"
-                class="mt-6 md:mt-0 bg-white text-black lg:px-6 lg:py-3 px-4 py-2 rounded-full lg:text-base text-sm hover:bg-[#4a910954] transition-colors transform shadow-md"
+                class="mt-6 md:mt-0 bg-white text-black text-nowrap lg:px-6 lg:py-3 lg:w-[300px] px-4 py-2 rounded-full lg:text-base text-sm hover:bg-[#4a910954] transition-colors transform shadow-md"
                 id="openModalButton">
                 TALK TO A SPECIALIST <i class="fas fa-arrow-right ml-2"></i>
             </a>
@@ -767,16 +767,16 @@ body {
 </section>
 
 
-<section id="newsletterSection" class="bg-white container mx-auto lg:px-0 px-4 lg:py-20 py-10">
+<section id="newsletterSection" class="bg-white container mx-auto lg:px-0 px-4 lg:py-20 py-10 lg:px-5">
     <form method="POST" action="{{ route('subscribe') }}"
         class="flex flex-col md:flex-row items-center justify-between gap-8">
         @csrf
         <!-- input fields -->
 
-        <h2 class="text-3xl text-black lg:text-3xl text-base font-bold text-black font-extrabold">
+        <h2 class="text-3xl text-black lg:text-3xl text-base font-bold text-black w-[70%] md:w-[100%] font-extrabold">
             Get the Latest Deals and Updates Delivered to Your Inbox!
         </h2>
-        <div class="lg:flex w-full md:w-auto gap-4">
+        <div class="lg:flex lg:w-full md:w-auto gap-4">
             <input name="email" type="email" placeholder="Enter Email"
                 class="flex-1 lg:w-80 px-6 py-4 rounded-full border-2 lg:w-auto w-full lg:mb-0 mb-5 focus:outline-none focus:ring-2 focus:ring-cyan-700 bg-white text-black placeholder-gray-500 shadow-md"
                 required>
@@ -790,7 +790,7 @@ body {
             </div>
             @endif
             <button type="submit"
-                class="w-full lg:w-auto px-9 py-3 bg-[#58af0838] text-black font-semibold rounded-full shadow-md hover:shadow-lg transition-all duration-300">
+                class="w-full lg:w-auto px-9 py-3 bg-[#58af0838] text-black text-nowrap font-semibold rounded-full shadow-md hover:shadow-lg transition-all duration-300">
                 Subscribe Now <i class="fas fa-paper-plane ml-2"></i>
             </button>
         </div>
