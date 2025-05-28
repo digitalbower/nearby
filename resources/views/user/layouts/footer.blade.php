@@ -1,7 +1,7 @@
  <!-- Footer -->
- <footer id="mainFooter" class="bg-[#58af0838] lg:block hidden text-gray-900 py-16 shadow-lg">
+ <footer id="mainFooter" class="bg-[#58af0838] lg:block hidden text-gray-900 py-16 lg:px-10 shadow-lg">
   <div class="container mx-auto  px-4 lg:px-0">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-5">
       <!-- Brand Section -->
       <div> 
         <div class="flex items-center gap-2 text-white text-2xl font-bold mb-4">

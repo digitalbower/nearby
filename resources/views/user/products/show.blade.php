@@ -372,7 +372,7 @@
         @if($variants && $variants->isNotEmpty())
           <form action="{{route('user.products.add_cart')}}" id="addCartForm" method="POST">
             @csrf
-            <div class="space-y-4 overflow-x-hidden overflow-y-auto max-h-[955px] lg:max-h-[785px] pr-[5px]">
+            <div class="space-y-4 overflow-x-hidden xl:max-h-[955px] lg:max-h-[785px] pr-[5px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
               <h2 class="md:text-2xl text-base font-bold text-gray-800 mb-0">
                 Choose a Variant
               </h2>
@@ -769,7 +769,7 @@ document.addEventListener("DOMContentLoaded", function () {
     fixedHeight: 60,
     isNavigation: true, // Sync thumbnails to main slider
     gap: 10,
-    focus: "center",
+    focus: "left",
     pagination: false,
     cover: true,
     arrows: false,
