@@ -4,10 +4,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/custom/customcss.css') }}?v={{ time() }}">
 @endsection
 @section('content')
-    <div class="container mt-5">
-        <div class="card shadow-lg p-4">
-            <h4 class="text-center mb-4">Products</h4>
-
+    <div class="card shadow-none px-4 bg-transparent mt-5">
+        <div class="card-body shadow-lg bg-white rounded-3">
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
                     {{ session('success') }}
@@ -15,7 +13,8 @@
                 </div>
             @endif
             <div id="status-message"></div>
-            <div class="d-flex justify-content-end mb-3">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h3 class="text-start">Products</h3>
                 <a href="{{ route('admin.products.create') }}" class="btn btn-primary">Add New Product</a>
             </div>
             <table class="table table-bordered">
