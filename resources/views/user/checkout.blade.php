@@ -821,7 +821,7 @@ function collectItems() {
             <div class="flex items-center justify-between mt-2">
               <div class="flex items-center gap-4">
                 <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
-                  <button type="button" class="w-8 h-8 bg-gray-100 text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white" onclick="decrementQty(${variant.id})">
+                  <button type="button" class="w-8 h-8 bg-gray-100 text-center text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white" onclick="decrementQty(${variant.id})">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
                     </svg>
@@ -829,7 +829,7 @@ function collectItems() {
                   <input type="number" name="items[${variant.id}][quantity]" data-variant-id="${variant.id}"
                     id="quantity_${variant.id}" value="${variant.quantity}" min="1" 
                     class="w-8 h-8 pl-4 text-center text-lg font-semibold text-gray-700" />
-                  <button type="button" class="w-8 h-8 bg-gray-100 text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white" onclick="incrementQty(${variant.id})">
+                  <button type="button" class="w-8 h-8 bg-gray-100 text-center text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white" onclick="incrementQty(${variant.id})">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
                     </svg>
