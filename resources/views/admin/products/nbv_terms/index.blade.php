@@ -4,10 +4,12 @@
     <link rel="stylesheet" href="{{ asset('assets/css/custom/customcss.css') }}?v={{ time() }}">
 @endsection
 @section('content')
-    <div class="container mt-5">
-        <div class="card shadow-lg p-4">
-            <h4 class="text-center mb-4">Nbv Terms List</h4>
-        
+    <div class="card shadow-none px-4 bg-transparent mt-5">
+        <div class="card-body shadow-lg bg-white rounded-3">
+            <div class="d-flex justify-content-between mb-3">
+                <h4 class="text-center mb-4">Nbv Terms List</h4>
+                <a href="{{ route('admin.products.nbv_terms.create') }}" class="btn btn-primary d-flex align-items-center">Add NbvTerms</a>
+            </div>
             @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
                 {{ session('success') }}
@@ -22,9 +24,7 @@
             @endif
 
             <div id="status-message"></div>
-            <div class="d-flex justify-content-end mb-3">
-                <a href="{{ route('admin.products.nbv_terms.create') }}" class="btn btn-primary">Add NbvTerms</a>
-            </div>
+            
 
             <table class="table table-bordered">
                 <thead>

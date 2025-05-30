@@ -281,7 +281,7 @@ body {
   font-family:tahoma;
 }
 
-.w3-spin {
+/* .w3-spin {
   width: 48px;
   height: 48px;
   border: 5px solid #000;
@@ -299,13 +299,143 @@ body {
 100% {
     transform: rotate(360deg);
 }
-} 
+} */
+
+.truck {
+  --dur: 3s;
+  display: block;
+  width: 5em;
+  height: auto;
+}
+.truck__body, .truck__line, .truck__outside1, .truck__outside2, .truck__outside3, .truck__wheel, .truck__wheel-spin, .truck__window1, .truck__window2 {
+  animation: truck-body var(--dur) linear infinite;
+}
+.truck__body {
+  transform-origin: 17px 11px;
+}
+.truck__line {
+  animation-name: truck-line;
+}
+.truck__outside1 {
+  animation-name: truck-outside1;
+}
+.truck__outside2 {
+  animation-name: truck-outside2;
+}
+.truck__outside3 {
+  animation-name: truck-outside3;
+}
+.truck__wheel {
+  animation-name: truck-wheel;
+}
+.truck__wheel-spin {
+  animation-name: truck-wheel-spin;
+  transform-origin: 6.5px 17px;
+}
+.truck__wheel:nth-child(2) {
+  animation-delay: calc(var(--dur) * 0.0625);
+}
+.truck__wheel:nth-child(2) .truck__wheel-spin {
+  transform-origin: 27px 17px;
+}
+.truck__window1 {
+  animation-name: truck-window1;
+}
+.truck__window2 {
+  animation-name: truck-window2;
+}
+
+/* Dark theme */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: hsl(var(--hue),90%,10%);
+    --fg: hsl(var(--hue),90%,50%);
+  }
+}
+/* Animations */
+@keyframes truck-body {
+  from, 12.5%, 25%, 37.5%, 50%, 62.5%, 75%, 87.5%, to {
+    animation-timing-function: cubic-bezier(0.33, 0, 0.67, 0);
+    transform: translate(0, 0) rotate(0);
+  }
+  6.25%, 18.75%, 31.25%, 43.75%, 56.25%, 68.75%, 81.25%, 93.75% {
+    animation-timing-function: cubic-bezier(0.33, 1, 0.67, 1);
+    transform: translate(0, 1px) rotate(-0.75deg);
+  }
+}
+@keyframes truck-line {
+  from {
+    stroke-dashoffset: -18;
+  }
+  to {
+    stroke-dashoffset: 78;
+  }
+}
+@keyframes truck-outside1 {
+  from {
+    stroke-dashoffset: 105;
+  }
+  to {
+    stroke-dashoffset: -105;
+  }
+}
+@keyframes truck-outside2 {
+  from {
+    stroke-dashoffset: 168;
+  }
+  to {
+    stroke-dashoffset: -42;
+  }
+}
+@keyframes truck-outside3 {
+  from {
+    stroke-dashoffset: 192;
+  }
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+@keyframes truck-wheel {
+  from, 12.5%, 25%, 37.5%, 50%, 62.5%, 75%, 87.5%, to {
+    animation-timing-function: cubic-bezier(0.33, 0, 0.67, 0);
+    transform: translate(0, 0);
+  }
+  6.25%, 18.75%, 31.25%, 43.75%, 56.25%, 68.75%, 81.25%, 93.75% {
+    animation-timing-function: cubic-bezier(0.33, 1, 0.67, 1);
+    transform: translate(0, -1px);
+  }
+}
+@keyframes truck-wheel-spin {
+  from {
+    stroke-dashoffset: -15.71;
+    transform: rotate(0);
+  }
+  to {
+    stroke-dashoffset: 15.71;
+    transform: rotate(-4turn);
+  }
+}
+@keyframes truck-window1 {
+  from {
+    stroke-dashoffset: -21;
+  }
+  to {
+    stroke-dashoffset: 189;
+  }
+}
+@keyframes truck-window2 {
+  from {
+    stroke-dashoffset: -39;
+  }
+  to {
+    stroke-dashoffset: 171;
+  }
+}
 
 </style>
 
 @endpush
 @section('content')
-
 
 <section class="">
     @if(session('success'))
@@ -805,50 +935,33 @@ body {
 </style>
 <!-- Modal Structure -->
 
-<div id="modal" x-data="{
-    show: false,
-
 <div id="modal"
   x-data="{
-    show: {{ $errors->modal->any() ? 'true' : (session('modal_success') ? 'true' : 'false') }},
-
-    successMessageShown: {{ session('modal_success') ? 'true' : 'false' }},
-  }" x-init="
-    if (successMessageShown) {
-      setTimeout(() => show = false, 3000);
+    show: false,
+    successMessage: @json(session('modal_success')),
+    hasErrors: @json($errors->modal->any()),
+  }"
+  x-init="
+    if (successMessage || hasErrors) {
+      show = true;
+      // Optional: auto-close on success only
+      if (successMessage) {
+        setTimeout(() => show = false, 3000);
+      }
     }
-
-  " x-cloak :class="show ? 'flex' : 'hidden'"
-    class="fixed inset-0 bg-gray-500 bg-opacity-50 z-50 items-center justify-center transition-opacity duration-300 ease-in-out">
-    <div
-        class="bg-[#daedc9]  p-8 rounded-xl shadow-2xl w-full max-w-md mx-auto transform transition-all scale-95 relative">
-        <!-- Close Button in Top-Right Corner -->
-        <button id="closeModalButton" class="absolute top-3 right-3 text-gray-800 text-xl font-bold focus:outline-none"
-            @click="show = false">
-            &times;
-        </button>
-
-        <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Talk to a Specialist</h2>
-
-        @if(session('modal_success'))
-        <div class="mb-4 p-4 rounded-md bg-green-100 text-green-800 border border-green-300 text-center">
-            {{ session('modal_success') }}
-
   "
   x-cloak
   :class="show ? 'flex' : 'hidden'"
-  class="fixed inset-0 bg-gray-500 bg-opacity-50 z-50 items-center justify-center transition-opacity duration-300 ease-in-out"
->
-  <div
+  class="fixed inset-0 bg-gray-500 bg-opacity-50 z-50 items-center justify-center transition-opacity duration-300 ease-in-out">
+<div
     class="bg-[#daedc9]  p-8 rounded-xl shadow-2xl w-full max-w-md mx-auto transform transition-all scale-95 relative">
     <!-- Close Button in Top-Right Corner -->
     <button id="closeModalButton" class="absolute top-3 right-3 text-gray-800 text-xl font-bold focus:outline-none"
-      @click="show = false">
-      &times;
+    @click="show = false">
+    &times;
     </button>
 
     <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Talk to a Specialist</h2>
-
     @if(session('modal_success')) 
       <div class="mb-4 p-4 rounded-md bg-green-100 text-green-800 border border-green-300 text-center">
         {{ session('modal_success') }}
@@ -863,47 +976,6 @@ body {
         </ul>
     </div>
     @endif
-    <form id="modalForm" class=""  action="{{ route('specialist.submit') }}" method="POST">
-    @csrf
-      <!-- Name Field -->
-      <div class="mb-5">
-        <label for="name" class="block text-sm font-medium text-gray-800">Name</label>
-        <input type="text" id="name" name="name"
-          class="mt-2 p-3 border border-transparent rounded-lg w-full bg-white focus:ring-2 focus:ring-blue-400 transition-all"
-          placeholder="Enter your name" required>
-      </div>
-
-      <!-- Email Field -->
-      <div class="mb-5">
-        <label for="email" class="block text-sm font-medium text-gray-800">Email</label>
-        <input type="email" id="email" name="email"
-          class="mt-2 p-3 border border-transparent rounded-lg w-full bg-white focus:ring-2 focus:ring-blue-400 transition-all"
-          placeholder="Enter your email" required>
-      </div>
-
-      <!-- Phone Number Field -->
-      <div class="mb-5">
-        <label for="number" class="block text-sm font-medium text-gray-800">Phone Number</label>
-        <div class="flex items-center space-x-3">
-
-   
-          <select id="countryCode" name="countryCode"
-            class="p-3 border border-transparent rounded-lg bg-white focus:ring-2 focus:ring-blue-400 transition-all">
-            @foreach($countryCodes as $country)
-            <option value="{{ $country->id }}" {{ old('countryCode') == $country->id ? 'selected' : '' }}>
-            {{ $country->phonecode }} 
-        </option>
-    @endforeach
-           
-            <!-- Add more country codes as needed -->
-          </select>
-          <input type="tel" id="phone" name="phone"
-            class="mt-2 p-3 border border-transparent rounded-lg w-full bg-white focus:ring-2 focus:ring-blue-400 transition-all"
-            placeholder="Enter phone number" required>
-
-        </div>
-        @endif
-
         <form id="modalForm" class="" action="{{ route('specialist.submit') }}" method="POST">
             @csrf
             <!-- Name Field -->
@@ -933,7 +1005,7 @@ body {
                         @foreach($countryCodes as $country)
                         <option value="{{ $country->id }}"
                             {{ old('country_code_id', isset($user) ? $user->country_code_id : '') == $country->id ? 'selected' : '' }}>
-                            {{ $country->country_code }}
+                            {{ $country->phonecode }}
                         </option>
                         @endforeach
 
@@ -1024,7 +1096,7 @@ menuToggle.addEventListener('click', () => {
 });
 
 $(window).on('load', function () {
-$("#cover").fadeOut(750);
+$("#cover").fadeOut(2000);
 });
 </script>
 

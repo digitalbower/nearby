@@ -345,6 +345,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
       
     Route::prefix('commission')->name('commission.')->group(function () {
         Route::get('/', [CommissionController::class, 'commission'])->name('commission');
+        Route::get('/export-commissions',  [CommissionController::class, 'exportCommission'])->name('export');
        });
     Route::resource('seo', SeoManagementController::class);
 

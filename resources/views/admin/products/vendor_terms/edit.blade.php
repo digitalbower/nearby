@@ -2,9 +2,9 @@
 @section('title', 'Vendor Terms')
 @section('content')
   
-    <div class="container mt-5">
-        <div class="card shadow-lg p-4">
-            <h4 class="text-center mb-4">Edit Vendor Terms</h4>
+    <div class="card shadow-none px-4 bg-transparent mt-5">
+        <div class="card-body shadow-lg bg-white rounded-3">
+            <h3 class="text-start mb-4">Edit Vendor Terms</h3>
 
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -45,7 +45,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-success">Update</button>
-                <a href="{{ route('admin.products.vendor_terms.index') }}" class="btn btn-secondary">Cancel</a>
+                <a href="{{ route('admin.products.vendor_terms.index') }}" class="btn btn-secondary ms-3">Cancel</a>
             </form>
     </div>
 </div>
