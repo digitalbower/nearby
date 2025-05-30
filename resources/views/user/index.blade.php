@@ -281,7 +281,7 @@ body {
   font-family:tahoma;
 }
 
-.w3-spin {
+/* .w3-spin {
   width: 48px;
   height: 48px;
   border: 5px solid #000;
@@ -299,13 +299,143 @@ body {
 100% {
     transform: rotate(360deg);
 }
-} 
+} */
+
+.truck {
+  --dur: 3s;
+  display: block;
+  width: 5em;
+  height: auto;
+}
+.truck__body, .truck__line, .truck__outside1, .truck__outside2, .truck__outside3, .truck__wheel, .truck__wheel-spin, .truck__window1, .truck__window2 {
+  animation: truck-body var(--dur) linear infinite;
+}
+.truck__body {
+  transform-origin: 17px 11px;
+}
+.truck__line {
+  animation-name: truck-line;
+}
+.truck__outside1 {
+  animation-name: truck-outside1;
+}
+.truck__outside2 {
+  animation-name: truck-outside2;
+}
+.truck__outside3 {
+  animation-name: truck-outside3;
+}
+.truck__wheel {
+  animation-name: truck-wheel;
+}
+.truck__wheel-spin {
+  animation-name: truck-wheel-spin;
+  transform-origin: 6.5px 17px;
+}
+.truck__wheel:nth-child(2) {
+  animation-delay: calc(var(--dur) * 0.0625);
+}
+.truck__wheel:nth-child(2) .truck__wheel-spin {
+  transform-origin: 27px 17px;
+}
+.truck__window1 {
+  animation-name: truck-window1;
+}
+.truck__window2 {
+  animation-name: truck-window2;
+}
+
+/* Dark theme */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: hsl(var(--hue),90%,10%);
+    --fg: hsl(var(--hue),90%,50%);
+  }
+}
+/* Animations */
+@keyframes truck-body {
+  from, 12.5%, 25%, 37.5%, 50%, 62.5%, 75%, 87.5%, to {
+    animation-timing-function: cubic-bezier(0.33, 0, 0.67, 0);
+    transform: translate(0, 0) rotate(0);
+  }
+  6.25%, 18.75%, 31.25%, 43.75%, 56.25%, 68.75%, 81.25%, 93.75% {
+    animation-timing-function: cubic-bezier(0.33, 1, 0.67, 1);
+    transform: translate(0, 1px) rotate(-0.75deg);
+  }
+}
+@keyframes truck-line {
+  from {
+    stroke-dashoffset: -18;
+  }
+  to {
+    stroke-dashoffset: 78;
+  }
+}
+@keyframes truck-outside1 {
+  from {
+    stroke-dashoffset: 105;
+  }
+  to {
+    stroke-dashoffset: -105;
+  }
+}
+@keyframes truck-outside2 {
+  from {
+    stroke-dashoffset: 168;
+  }
+  to {
+    stroke-dashoffset: -42;
+  }
+}
+@keyframes truck-outside3 {
+  from {
+    stroke-dashoffset: 192;
+  }
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+@keyframes truck-wheel {
+  from, 12.5%, 25%, 37.5%, 50%, 62.5%, 75%, 87.5%, to {
+    animation-timing-function: cubic-bezier(0.33, 0, 0.67, 0);
+    transform: translate(0, 0);
+  }
+  6.25%, 18.75%, 31.25%, 43.75%, 56.25%, 68.75%, 81.25%, 93.75% {
+    animation-timing-function: cubic-bezier(0.33, 1, 0.67, 1);
+    transform: translate(0, -1px);
+  }
+}
+@keyframes truck-wheel-spin {
+  from {
+    stroke-dashoffset: -15.71;
+    transform: rotate(0);
+  }
+  to {
+    stroke-dashoffset: 15.71;
+    transform: rotate(-4turn);
+  }
+}
+@keyframes truck-window1 {
+  from {
+    stroke-dashoffset: -21;
+  }
+  to {
+    stroke-dashoffset: 189;
+  }
+}
+@keyframes truck-window2 {
+  from {
+    stroke-dashoffset: -39;
+  }
+  to {
+    stroke-dashoffset: 171;
+  }
+}
 
 </style>
 
 @endpush
 @section('content')
-
 
 <section class="">
     @if(session('success'))
@@ -966,7 +1096,7 @@ menuToggle.addEventListener('click', () => {
 });
 
 $(window).on('load', function () {
-$("#cover").fadeOut(750);
+$("#cover").fadeOut(2000);
 });
 </script>
 
