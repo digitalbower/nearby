@@ -1,7 +1,7 @@
 <div id="mainHeader" class=" ">  
   <div  class="bg-[#58af0838] ">
     <div
-      class="hidden container mx-auto lg:px-0 px-4 md:flex  w-full  justify-between items-center py-2 text-sm border-b border-gray-200">
+      class="container mx-auto lg:px-0 px-4 flex  w-full  justify-between items-center py-2 text-sm border-b border-gray-200">
       <div class="flex gap-4">
       @foreach ($uppermenuItems->where('navigation_placement', 'upper') as $menu)
       <a href="{{ $menu->link }}" class="text-black duration-300">
