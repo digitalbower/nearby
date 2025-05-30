@@ -30,7 +30,7 @@
           {{$product->name}}
           </h1>
           <div class="flex items-center gap-6 mb-6">
-            <a href="#" class="text-gray-800 text-sm lg:text-base hover:underline font-medium"> {{$product->emirate->name}}</a>
+            <a href="#" class="text-gray-800 text-sm lg:text-base font-medium"> {{$product->emirate->name}}</a>
             <div class="flex items-center text-gray-600 gap-2">
               <i class="fas fa-star text-yellow-500"></i>
               <span class="font-semibold">{{$averageRating}}</span>
@@ -374,7 +374,7 @@
             @csrf
             <div class="space-y-4 overflow-x-hidden xl:max-h-[955px] lg:max-h-[785px] pr-[5px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
               <h2 class="md:text-2xl text-base font-bold text-gray-800 mb-0">
-                Choose a Variant
+                Choose an option
               </h2>
               @if ($errors->any())
               <div class="bg-red-500 text-white p-4 rounded-lg shadow-md">

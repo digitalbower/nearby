@@ -68,7 +68,7 @@ class Product extends Model
     public function getTotalBookingCount()
     {
         return $this->variants->sum(function ($variant) {
-            return $variant->bookingConfirmationItems->where('verification_status','completed')->sum('quantity');
+            return $variant->bookingConfirmationItems->where('verification_status','redeemed')->sum('quantity');
         });
     }
 

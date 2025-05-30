@@ -170,6 +170,9 @@ class AuthController extends Controller
     public function redirectToGoogle(Request $request)
     {
         $mode = $request->query('mode', 'signin'); // default is signin
+        if ($request->has('state')) {
+        session(['google_oauth_state' => $request->query('state')]);
+        }  
         session(['google_mode' => $mode]);
         return Socialite::driver('google')->stateless()->redirect();
     }
@@ -211,6 +214,8 @@ class AuthController extends Controller
             }
     
             if ($mode === 'signin') {
+                $redirectUrl = session('google_oauth_state', '/'); 
+                $redirectUrl = urldecode($redirectUrl); 
                 if (!$existingUser) {
                     return redirect()->route('user.login')
                         ->with('error', 'No account found. Please sign up using Google first.');
@@ -222,7 +227,7 @@ class AuthController extends Controller
                 }
     
                 Auth::login($existingUser);
-                return redirect()->route('user.dashboard')->with('success', 'Logged in successfully via Google!');
+                return redirect()->to($redirectUrl)->with('success', 'Logged in successfully via Google!');
             }
     
             return redirect()->route('user.login')->with('error', 'Invalid action.');

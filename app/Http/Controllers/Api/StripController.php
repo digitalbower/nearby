@@ -170,7 +170,7 @@ class StripController extends Controller
             ];
         }
 
-        Mail::to($user->email)->send(new BookingConfirmationEmail($user->first_name,$order_date,$order_number,$grand_total,$vat,$promocode,$promo_discount,$promocode_discount_amount,$importantinfo, $nbv_terms,$items,$variants));
+         Mail::to($user->email)->send(new BookingConfirmationEmail($user->first_name,$order_date,$order_number,$grand_total,$vat,$promocode,$promo_discount,$promocode_discount_amount,$importantinfo, $nbv_terms,$items,$variants));
 
         DB::commit();
         return response()->json(['success' => true, 'message' => 'Booking confirmed.']);

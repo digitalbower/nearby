@@ -743,7 +743,19 @@ clearErrorOnInputChange(cardCvc);
   document.querySelectorAll(".pay-now-button").forEach(button => {
     button.addEventListener("click", async (event) => { 
       event.preventDefault();
+      const loader = document.getElementById("page-loader");
+      if (!loader) {
+        console.error("Loader element not found!");
+        return;
+      }
+        loader.style.display = 'flex';
+      
+
+      requestAnimationFrame(() => {
+        setTimeout(() => {
        handlePayment();  
+        }, 50);
+      });
     });
   });
 });
@@ -813,8 +825,8 @@ function collectItems() {
                 <img src="${variant.image}" alt="${variant.title}" class="w-full h-full object-cover" />
               </div>
               <div class="flex-1">
-                <h3 class="font-semibold text-base lg:text-xl">${variant.title}</h3>
-                <p class="text-sm text-gray-500 mt-2">${variant.product_name}</p>
+                <h3 class="font-semibold text-base lg:text-xl">${variant.product_name}</h3>
+                <p class="text-sm text-gray-500 mt-2">${variant.title}</p>
                 <p class="text-sm text-gray-500 mt-2">${variant.short_description}</p>
               </div>
             </div>
@@ -861,20 +873,6 @@ function collectItems() {
                 </div>
               </div>
             ` : '<br>'}
-                      
-            
-            <label class="flex items-start gap-2">
-              <input type="hidden" name="items[${variant.id}][giftproduct]" value="0" />
-              <input type="checkbox" class="mt-1 w-4 h-4"  name="items[${variant.id}][giftproduct]" value="1" 
-               ${variant.giftproduct === 1 || variant.giftproduct === "1" ? 'checked' : ''}/>
-              <div>
-                <div class="font-medium flex items-center">
-                  <i class="fas fa-gift mr-2 text-gray-700"></i>
-                  Buy as a gift
-                </div>
-                <div class="text-sm text-gray-500">Send or print a gift voucher after completing your purchase</div>
-              </div>
-            </label>
           </div>
         </div>
       `;
