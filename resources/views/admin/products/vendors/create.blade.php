@@ -2,9 +2,9 @@
 @section('title', 'Vendors')
 @section('content')
   
-    <div class="container mt-5">
-        <div class="card shadow-lg p-4">
-            <h4 class="text-center mb-4">Add Vendor</h4>
+    <div class="card shadow-none px-4 bg-transparent mt-5">
+        <div class="card-body shadow-lg bg-white rounded-3">
+            <h3 class="text-start mb-4">Add Vendor</h3>
 
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -44,12 +44,12 @@
                     <label for="validityfrom" class="form-label">Validity From</label> 
                     <input type="date" class="form-control" id="validityfrom" name="validityfrom" value="{{ old('validityfrom') }}">
                 </div>
-                <div class="mb-3">
+                <div class="mb-4">
                     <label for="validityto" class="form-label">Validity To</label> 
                     <input type="date" class="form-control" id="validityto" name="validityto" value="{{ old('validityto') }}">
                 </div>
                 <button type="submit" class="btn btn-success">Create</button>
-                <a href="{{ route('admin.products.vendors.index') }}" class="btn btn-secondary">Cancel</a>
+                <a href="{{ route('admin.products.vendors.index') }}" class="btn btn-secondary ms-3">Cancel</a>
             </form>
     </div>
 </div>

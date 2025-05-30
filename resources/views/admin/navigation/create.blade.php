@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="wrapper-div">
-    <div class="container">
+    <div class="">
         <h2>Add Menu Item</h2>
         
         @if(session('success'))
@@ -10,6 +10,7 @@
                 {{ session('success') }}
             </div>
         @endif
+
         @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -19,6 +20,7 @@
             </ul>
         </div>
         @endif
+
         <form action="{{ route('admin.navigation.store') }}" id="navigationForm" method="POST">
             @csrf
             
@@ -33,14 +35,14 @@
             </div>
 
             <div class="form-group">
-            <label for="icon">Icon</label>
-            <select name="icon" class="form-control">
-                <option value="">Select Icon</option>
-                <option value="fa fa-credit-card" {{ old('icon') == "fa fa-credit-card" ? 'selected' : '' }}>Payment Release</option>
-                <option value="fa fa-user-tie" {{ old('icon') == "fa fa-user-tie" ? 'selected' : '' }}>Vendor</option>
-                <option value="fa fa-address-book" {{ old('icon') == "fa fa-address-book" ? 'selected' : '' }}>Contact</option>
-            </select>
-        </div>
+                <label for="icon">Icon</label>
+                <select name="icon" class="form-control">
+                    <option value="">Select Icon</option>
+                    <option value="fa fa-credit-card" {{ old('icon') == "fa fa-credit-card" ? 'selected' : '' }}>Payment Release</option>
+                    <option value="fa fa-user-tie" {{ old('icon') == "fa fa-user-tie" ? 'selected' : '' }}>Vendor</option>
+                    <option value="fa fa-address-book" {{ old('icon') == "fa fa-address-book" ? 'selected' : '' }}>Contact</option>
+                </select>
+            </div>
 
 
             <div class="form-group">

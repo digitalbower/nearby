@@ -2,9 +2,9 @@
 @section('title', 'Admin Users')
 @section('content')
   
-    <div class="container mt-5">
-        <div class="card shadow-lg p-4">
-            <h4 class="text-center mb-4">Add User</h4>
+    <div class="card shadow-none px-4 bg-transparent mt-5">
+        <div class="card-body shadow-lg bg-white rounded-3">
+            <h4 class="text-start mb-4">Add User</h4>
 
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -36,7 +36,7 @@
                     <label for="password_confirmation" class="form-label">Password Confirmation</label>
                     <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" value="{{old('password_confirmation') }}">
                 </div>
-                 <div class="mb-3">
+                 <div class="mb-4">
                     <label for="user_role_id" class="form-label">User Role</label>
                     <select class="form-control" name="user_role_id" id="user_role_id">
                         <option value="">Select User Role</option>
@@ -48,7 +48,7 @@
                     </select>
                 </div>
                 <button type="submit" class="btn btn-success">Create</button>
-                <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">Cancel</a>
+                <a href="{{ route('admin.users.index') }}" class="btn btn-secondary ms-3">Cancel</a>
             </form>
     </div>
 </div>

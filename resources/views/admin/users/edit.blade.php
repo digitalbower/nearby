@@ -2,54 +2,54 @@
 @section('title', 'Admin Users')
 @section('content')
   
-    <div class="container mt-5">
-        <div class="card shadow-lg p-4">
-            <h4 class="text-center mb-4">Edit User</h4>
+<div class="card shadow-none px-4 bg-transparent mt-5">
+    <div class="card-body shadow-lg bg-white rounded-3">
+        <h3 class="text-start mb-4">Edit User</h3>
 
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
 
-            <form action="{{ route('admin.users.update',$user->id) }}" id="adminUserForm" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}">
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="text" class="form-control" id="email" name="email" value="{{ $user->email }}">
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password">
-                </div>
-                <div class="mb-3">
-                    <label for="password_confirmation" class="form-label">Password Confirmation</label>
-                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
-                </div>
-                 <div class="mb-3">
-                    <label for="user_role_id" class="form-label">User Role</label>
-                    <select class="form-control" name="user_role_id" id="user_role_id">
-                        <option value="">Select User Role</option>
-                        @foreach ($roles as $role)
-                            <option value="{{ $role->id }}" {{ $user->user_role_id == $role->id ? 'selected' : '' }}>
-                                {{ $role->role_name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-success">Update</button>
-                <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">Cancel</a>
-            </form>
+        <form action="{{ route('admin.users.update',$user->id) }}" id="adminUserForm" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" class="form-control" id="email" name="email" value="{{ $user->email }}">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password">
+            </div>
+            <div class="mb-3">
+                <label for="password_confirmation" class="form-label">Password Confirmation</label>
+                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
+            </div>
+                <div class="mb-4">
+                <label for="user_role_id" class="form-label">User Role</label>
+                <select class="form-control" name="user_role_id" id="user_role_id">
+                    <option value="">Select User Role</option>
+                    @foreach ($roles as $role)
+                        <option value="{{ $role->id }}" {{ $user->user_role_id == $role->id ? 'selected' : '' }}>
+                            {{ $role->role_name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Update</button>
+            <a href="{{ route('admin.users.index') }}" class="btn btn-secondary ms-3">Cancel</a>
+        </form>
     </div>
 </div>
 @endsection

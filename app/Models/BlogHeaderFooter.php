@@ -10,7 +10,6 @@ class BlogHeaderFooter extends Model
     protected $table = 'blog_header_footers';
     protected $fillable = [
         'navigation_placement',
-        'type',
         'logo',
         'main_title',
         'description',

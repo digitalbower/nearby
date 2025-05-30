@@ -29,7 +29,7 @@ class CategoryController extends Controller
      * Store a newly created category in storage.
      */
     public function store(Request $request)
-    { dd($request->all());
+    { 
         $request->validate([
             'name' => 'required|string|max:255',
             'categoryicon' => 'required|string',
