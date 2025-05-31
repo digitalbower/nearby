@@ -623,7 +623,12 @@ function submitAndRedirectToCart() {
 
       function addReview(event) {
           event.preventDefault();
-
+          const loader = document.getElementById("page-loader");
+          if (!loader) {
+              console.error("Loader element not found!");
+              return;
+          }
+          loader.style.display = 'flex';
           const product_id = document.getElementById("product_id").value;
           const review_title = document.getElementById("name").value;
           const review_rating = Array.from(document.querySelectorAll('.rating-stars .fa-star.text-yellow-500')).length;
@@ -647,18 +652,27 @@ function submitAndRedirectToCart() {
               body: JSON.stringify(reviewData)
           })
           .then(async response => {
-              const data = await response.json();
+          let data = {};
+
+          try {
+              data = await response.json(); 
+          } catch (jsonError) {
+              console.warn("Failed to parse JSON response", jsonError);
+          }
+
+          loader.style.display = 'none'; 
 
               if (!response.ok) {
                   // Show the custom error message (like "already reviewed")
                   showFlashMessage(data.message || "An error occurred.", "error");
               } else {
-                  showFlashMessage(data.message, "success");
+                  showFlashMessage(data.message || "Review submitted successfully.", "success");
                   cancelReview();
                   displayReviews();
               }
           })
           .catch(error => {
+            loader.style.display = 'none'; 
               console.error('Unexpected error:', error);
               showFlashMessage("Unexpected error. Please try again.", "error");
           });
@@ -675,7 +689,9 @@ function submitAndRedirectToCart() {
       setTimeout(() => {
           flashMessage.classList.add("hidden");
           flashMessage.textContent = "";
+              if (type !== "error") {
       location.reload();
+              }
       }, 4000);
     }
       function displayReviews() {

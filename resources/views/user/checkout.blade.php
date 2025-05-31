@@ -806,19 +806,15 @@ function collectItems() {
      
     loadMoreBtn.addEventListener("click", () => {
       visibleCount += 2; // Increment visible count by 2 for each "load more"
-      renderProducts();
+      updateVisibleItems();
     });
-
-    renderProducts(); // Initial render
   });
-  function renderProducts() { 
-    const renderedCount = productList.querySelectorAll('.product-item').length;
-    const newProducts = products
-      .slice(renderedCount, visibleCount)
-      .map((variant, index) => { 
+  function renderProducts() {
+    const allProductsHTML = products.map((variant, index) => {
         const total = variant.discounted_price * variant.quantity;
+        const isVisible = index < visibleCount;
         return `
-        <div class="border rounded-lg relative overflow-hidden shadow-lg product-item">
+        <div class="product-item border p-4 rounded shadow" style="display: ${isVisible ? 'block' : 'none'};">
           <div class="p-3">
             <div class="md:flex gap-3 md:space-y-0 space-y-4">
               <div class="relative md:w-28 w-full h-[200px] md:h-28 max-h-[300px] rounded-lg overflow-hidden">
@@ -878,14 +874,25 @@ function collectItems() {
       `;
       })
       .join("");
-      productList.insertAdjacentHTML("beforeend", newProducts);
+      productList.innerHTML = allProductsHTML;
     // Update countdown for all timers
     updateCountdownForTimers();
     // Hide Load More button if all products are visible
     if (visibleCount >= products.length) {
       loadMoreBtn.style.display = "none";
-    } else {
-      loadMoreBtn.style.display = "block";
+    }
+  }
+
+  function updateVisibleItems() {
+    const productItems = document.querySelectorAll(".product-item");
+    productItems.forEach((item, index) => {
+      if (index < visibleCount) {
+        item.style.display = "block";
+      }
+    });
+
+    if (visibleCount >= products.length) {
+      loadMoreBtn.style.display = "none";
     }
   }
 

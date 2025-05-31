@@ -43,7 +43,7 @@ class StripController extends Controller
     try {
         // Optional: Retrieve payment intent to verify it again if needed
         $paymentIntent = \Stripe\PaymentIntent::retrieve($request->payment_intent_id);
-
+        DB::reconnect();
         if ($paymentIntent->status !== 'succeeded') {
             throw new \Exception('Payment not completed.');
         }
@@ -170,7 +170,7 @@ class StripController extends Controller
             ];
         }
 
-         Mail::to($user->email)->send(new BookingConfirmationEmail($user->first_name,$order_date,$order_number,$grand_total,$vat,$promocode,$promo_discount,$promocode_discount_amount,$importantinfo, $nbv_terms,$items,$variants));
+         Mail::to($user->email)->queue(new BookingConfirmationEmail($user->first_name,$order_date,$order_number,$grand_total,$vat,$promocode,$promo_discount,$promocode_discount_amount,$importantinfo, $nbv_terms,$items,$variants));
 
         DB::commit();
         return response()->json(['success' => true, 'message' => 'Booking confirmed.']);
