@@ -147,8 +147,6 @@ class StripController extends Controller
                 $importantinfo = $product_variant->product->importantinfo ?? null;
                 $nbv_terms = $product_variant->product->nbvTerms->terms ?? null;
             }
-        }
-        foreach ($booking->items as $booking_item) { 
             
             $variants[] = [
                 'product_variant_id'=>$booking_item->product_varient_id,
@@ -170,7 +168,7 @@ class StripController extends Controller
             ];
         }
 
-         Mail::to($user->email)->queue(new BookingConfirmationEmail($user->first_name,$order_date,$order_number,$grand_total,$vat,$promocode,$promo_discount,$promocode_discount_amount,$importantinfo, $nbv_terms,$items,$variants));
+         Mail::to($user->email)->send(new BookingConfirmationEmail($user->first_name,$order_date,$order_number,$grand_total,$vat,$promocode,$promo_discount,$promocode_discount_amount,$importantinfo, $nbv_terms,$items,$variants));
 
         DB::commit();
         return response()->json(['success' => true, 'message' => 'Booking confirmed.']);
