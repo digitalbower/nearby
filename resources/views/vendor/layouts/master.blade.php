@@ -7,6 +7,7 @@
     <title>@yield('title', 'Booking Management')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
     @include('vendor.layouts.headercss')  
 </head>
 <body class="blue-bg min-h-screen font-sans">

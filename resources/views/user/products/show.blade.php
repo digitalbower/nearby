@@ -353,7 +353,7 @@
                   <!-- Directions Button -->
                   <div class="">
                     <a href="{{ $product->productlocation_link }}" target="_blank" rel="noopener noreferrer"
-                      class="w-auto px-9 py-3 bg-[#58af0838]  text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                      class="w-auto px-9 py-3 bg-[#58af0838] inline-block text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
                       Get Directions
                     </a>
                   </div>
@@ -366,16 +366,20 @@
         </div>
 
         <!-- Right Column -->
-        <div class=" lg:mt-0 mt-5 w-full pb-20 col-span-5 sticky top-0  h-[120vh]  bg-[#58af0838] rounded-lg  p-3 lg:p-5 space-y-6">
+        <div class=" lg:mt-0 mt-5 w-full pb-20 col-span-5 sticky top-0 h-[100vh] xl:h-[120vh] bg-[#58af0838] rounded-lg  p-3 lg:p-5 space-y-6">
           <!-- Option Selector -->
         <!-- Options -->
         @if($variants && $variants->isNotEmpty())
           <form action="{{route('user.products.add_cart')}}" id="addCartForm" method="POST">
             @csrf
-            <div class="space-y-4 overflow-x-hidden xl:max-h-[955px] lg:max-h-[785px] pr-[5px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
-              <h2 class="md:text-2xl text-base font-bold text-gray-800 mb-0">
-                Choose an option
-              </h2>
+
+            <h2 class="md:text-2xl text-base font-bold text-gray-800 mb-3">
+              Choose a Variant
+            </h2>
+            <div class="space-y-4 overflow-x-hidden xl:max-h-[955px] max-h-[785px] pr-[5px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
+
+          
+
               @if ($errors->any())
               <div class="bg-red-500 text-white p-4 rounded-lg shadow-md">
                   <ul>
@@ -411,14 +415,14 @@
                             data-v0-t="badge">-{{$variant->discounted_percentage}}%</div>
                         </div>
                         <div class="flex items-center gap-2">
-                          <span class="text-3xl font-bold text-primary" style="font-size: 1.375rem;">AED {{$variant->discounted_price}}</span>
+                          <span class="lg:text-3xl text-lg font-bold text-primary">AED {{$variant->discounted_price}}</span>
                           <span class="text-sm text-muted-foreground">/{{$unit_type}}</span>
                 
                           <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
                             <!-- Decrement Button -->
                             <button
                               type="button"
-                              class="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-300"
+                              class="w-6 h-6 lg:w-8 lg:h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-300"
                              onclick="decrementQty({{ $variant->id }})"
                               aria-label="Decrease Quantity">
                               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
@@ -436,13 +440,13 @@
                               id="quantity_{{ $variant->id }}" 
                               value="{{ old('quantity', $cart->quantity ?? 0) }}"                               
                               min="0"
-                              class="w-12 h-8 pl-4 text-center flex justify-center rounded-lg text-lg font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 variant-quantity"
+                              class="w-6 h-6 lg:w-12 lg:h-8 text-center flex justify-center rounded-lg lg:text-lg text-sm font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 variant-quantity"
                               aria-label="Quantity" />
                             
                             <!-- Increment Button -->
                             <button
                               type="button"
-                              class="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
+                              class="w-6 h-6 lg:w-8 lg:h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
                               onclick="incrementQty({{ $variant->id }})" 
                               aria-label="Increase Quantity">
                               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"

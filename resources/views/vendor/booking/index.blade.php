@@ -3,6 +3,7 @@
 @section('content')
 <!-- Main Content -->
 <main class="flex-1  space-y-6">
+
 <!-- Header -->
 @if(session('success'))
       <div x-data="{ show: true }" 
@@ -23,7 +24,8 @@
 @endif
 
 
-<div class="container mx-auto px-6 py-10">
+<div class="px-6 pb-10 h-[100%]">
+    <a href="javascript:void(0);" class="inline-block sidemenu_btn p-3 text-xl">|||</a>
     <h1 class="text-3xl font-extrabold text-gray-900 mb-8">Booking Management</h1>
     <div class="overflow-hidden rounded-lg shadow-lg border bg-white">
         <div class="relative w-full overflow-x-auto">
@@ -205,6 +207,12 @@ $(document).ready(function () {
     $('#otp').on('input', function () {
         $(this).removeClass('border-red-500');
         $('#otp-error-box').html('');
+    });
+
+    $(document).ready(function(){
+        $(".sidemenu_btn").click(function(){
+            $(".vendor-sidebar").toggleClass("active");
+        });
     });
 });
 </script>
