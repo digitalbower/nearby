@@ -4,9 +4,8 @@
     <!-- Main Content -->
     <main class="flex-1  space-y-8">
         <!-- Header -->
-
-
-        <div class="container mx-auto px-4 py-8">
+        <div class="md:px-6 px-2 pb-10 h-[100%]">
+            <a href="javascript:void(0);" class="inline-block sidemenu_btn p-3 text-xl"><i class="fa-solid fa-bars"></i></a>
             <h1 class="text-2xl font-bold text-gray-800 mb-8">Report Management</h1>
 
             <div class="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -72,3 +71,17 @@
         </div>
     </main>
 @endsection
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function(){
+    $(".sidemenu_btn").click(function(){
+        $(".vendor-sidebar").toggleClass("active");
+    });
+
+    $(".close_sidemenu_btn").click(function(){
+        $(".vendor-sidebar").removeClass("active");
+    });
+});
+</script>
