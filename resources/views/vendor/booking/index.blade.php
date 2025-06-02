@@ -24,31 +24,31 @@
 @endif
 
 
-<div class="px-6 pb-10 h-[100%]">
-    <a href="javascript:void(0);" class="inline-block sidemenu_btn p-3 text-xl">|||</a>
+<div class="md:px-6 px-2 pb-10 h-[100%]">
+    <a href="javascript:void(0);" class="inline-block sidemenu_btn p-3 text-xl"><i class="fa-solid fa-bars"></i></a>
     <h1 class="text-3xl font-extrabold text-gray-900 mb-8">Booking Management</h1>
     <div class="overflow-hidden rounded-lg shadow-lg border bg-white">
         <div class="relative w-full overflow-x-auto">
-            <table class="w-full text-sm text-left text-gray-700">
+            <table class="w-full table-auto text-sm text-left text-gray-700">
                 <thead class="bg-gray-100 text-gray-600 text-xs uppercase">
                     <tr>
-                        <th class="px-6 py-3">Booking ID</th>
-                        <th class="px-6 py-3">Product Name</th>
-                        <th class="px-6 py-3">Variant Name</th>
-                        <th class="px-6 py-3">Quantity</th>
-                        <th class="px-6 py-3">Date</th>
-                        <th class="px-6 py-3">Expiry Date</th>
-                        <th class="px-6 py-3">Customer Name</th>
-                        <th class="px-6 py-3">Status</th>
-                        <th class="px-6 py-3 text-center">Actions</th>
+                        <th scope="col" class="px-6 py-3">Booking ID</th>
+                        <th scope="col" class="px-6 py-3">Product Name</th>
+                        <th scope="col" class="px-6 py-3">Variant Name</th>
+                        <th scope="col" class="px-6 py-3">Quantity</th>
+                        <th scope="col" class="px-6 py-3">Date</th>
+                        <th scope="col" class="px-6 py-3">Expiry Date</th>
+                        <th scope="col" class="px-6 py-3">Customer Name</th>
+                        <th scope="col" class="px-6 py-3">Status</th>
+                        <th scope="col" class="px-6 py-3 text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                     @foreach ($booking_items as $booking_item)
                         <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 font-medium text-gray-900">{{$booking_item->bookingConfirmation->booking_id}}</td>
+                            <td scope="row" class="px-6 py-4 font-medium text-gray-900">{{$booking_item->bookingConfirmation->booking_id}}</td>
                             <td class="px-6 py-4">{{$booking_item->variant?->product?->name}}</td>
-                             <td class="px-6 py-4">{{$booking_item->variant?->title}}</td>
+                            <td class="px-6 py-4">{{$booking_item->variant?->title}}</td>
                             <td class="px-6 py-4">{{$booking_item->quantity}}</td>
                             <td class="px-6 py-4">{{$booking_item->bookingConfirmation->created_at->format('Y-m-d')}}</td>
                             <td class="px-6 py-4">{{$booking_item->validity}}</td>
@@ -212,6 +212,10 @@ $(document).ready(function () {
     $(document).ready(function(){
         $(".sidemenu_btn").click(function(){
             $(".vendor-sidebar").toggleClass("active");
+        });
+
+        $(".close_sidemenu_btn").click(function(){
+            $(".vendor-sidebar").removeClass("active");
         });
     });
 });

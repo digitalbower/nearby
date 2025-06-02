@@ -139,62 +139,11 @@
   @endpush
   @section('content')
   <!-- Hero Section -->
-  <section class="container px-4 py-16 mx-auto">
-    <div class="grid gap-12 md:grid-cols-2 items-center">
-      <div class="space-y-8 bg-[#58af0838] rounded-lg p-10 ">
-        <div class="space-y-4">
-          <h1 class="lg:text-3xl text-base font-bold text-black">
-            Transform Your Business Growth
-          </h1>
-          <p class="text-base text-gray-600">
-            Join thousands of successful businesses reaching new heights with our platform.
-          </p>
-        </div>
-        @if (session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-          <strong class="font-bold">Success!</strong>
-          <span class="block sm:inline">{{ session('success') }}</span>
-        </div>
-        @endif
-        @if ($errors->any())
-          <div class="alert alert-danger">
-              <ul>
-                  @foreach ($errors->all() as $error)
-                      <li>{{ $error }}</li>
-                  @endforeach
-              </ul>
-          </div>
-        @endif
-        <div class="backdrop-blur-sm  rounded-xl">
-          <form action="{{route('user.merchant_store')}}" id="merchantForm" method="POST">
-            @csrf
-            <div class="space-y-4 p-0">
-              <div class="grid gap-4 md:grid-cols-2">
-                <div>
-                  <input type="text" name="business_name" placeholder="Business Name" class="bg-white p-2 rounded-md border py-3 text-gray-800" />
-                </div>
-                <div>
-                  <input type="text" name="name" placeholder="Your Name" class="bg-white p-2 rounded-md border py-3 text-gray-800" />
-                </div>
-              </div>
-              <input type="email" name="email" placeholder="Email Address" class="bg-white p-2 rounded-md border py-3 text-gray-800 w-full" />
-              <input type="tel" name="phone" placeholder="Phone Number" class="bg-white p-2 rounded-md border py-3 text-gray-800 w-full" />
-
-              <select name="category_id" class="bg-white p-2 rounded-md border py-3 text-gray-800 w-full">
-                @foreach ($categories as $category)
-                  <option value="{{$category->id}}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{$category->name}}</option>
-                @endforeach
-              </select>
-
-              <button class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-                Start Free Trial
-              </button>
-           
-              <p class="text-sm text-center text-gray-500">
-                No credit card required • 14-day free trial
-              </p>
-            </div>
-          </form>
+  <section class="container px-4 py-5 lg:py-16 mx-auto">
+    <div class="grid md:grid-cols-2 gap-2 items-center">
+      <div class="w-full h-full rounded-2xl overflow-hidden aspect-square rounded-2xl bg-white shadow-lg p-4">
+        <div class="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 rounded-xl">
+          <img src="{{asset('images/half-img.jpg')}}" alt="" class="w-full h-full object-cover">
         </div>
       </div>
 
@@ -202,19 +151,28 @@
         <div class="absolute inset-0 bg-gradient-to-r from-purple-400 to-blue-400 rounded-3xl blur-3xl opacity-20"></div>
         <div class="relative grid grid-cols-2 gap-4">
           <div class="aspect-square rounded-2xl bg-white shadow-lg p-4">
-            <div class="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 rounded-xl"></div>
+            <div class="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 rounded-xl">
+              <img src="{{asset('images/hero-1.jpg')}}" alt="" class="w-full h-full object-cover">
+            </div>
           </div>
           <div class="aspect-square rounded-2xl bg-white shadow-lg p-4">
-            <div class="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 rounded-xl"></div>
+            <div class="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 rounded-xl">
+              <img src="{{asset('images/hero-2.jpg')}}" alt="" class="w-full h-full object-cover">
+            </div>
           </div>
           <div class="aspect-square rounded-2xl bg-white shadow-lg p-4">
-            <div class="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 rounded-xl"></div>
+            <div class="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 rounded-xl">
+              <img src="{{asset('images/hero-3.jpg')}}" alt="" class="w-full h-full object-cover">
+            </div>
           </div>
           <div class="aspect-square rounded-2xl bg-white shadow-lg p-4">
-            <div class="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 rounded-xl"></div>
+            <div class="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 rounded-xl">
+              <img src="{{asset('images/hero-4.jpg')}}" alt="" class="w-full h-full object-cover">
+            </div>
           </div>
         </div>
       </div>
+
     </div>
   </section>
 
@@ -229,53 +187,65 @@
       <!-- Stats Section -->
       <div class="mb-24 text-center">
         <h2 class="text-4xl md:text-5xl font-bold mb-16 ">
-          Unmatched Reach. Unlimited Potential.
+          <!-- Unmatched Reach. Unlimited Potential. -->
+           UAE’s Thriving Deal Economy
         </h2>
-        <div class="grid md:grid-cols-2 gap-8">
+        <div class="grid md:grid-cols-3 gap-8">
           <div class="relative group">
             <div class="absolute inset-0 transition-transform duration-300"></div>
             <div class="relative backdrop-blur-sm bg-white/30 rounded-2xl p-8 border border-[#58af08]/20">
-              <div class="text-6xl font-bold mb-4 ">
-                <span>19</span>M+
+              <div class="xl:text-6xl text-4xl font-bold mb-4 ">
+                <span>9.8</span>M +
               </div>
-              <div class="text-xl text-gray-700">Active global customers</div>
+              <div class="text-xl text-gray-700">UAE residents actively use digital platforms to discover services and offers</div>
             </div>
           </div>
+
           <div class="relative group">
             <div class="absolute inset-0 transition-transform duration-300"></div>
             <div class="relative backdrop-blur-sm bg-white/30 rounded-2xl p-8 border border-[#58af08]/20">
-              <div class="text-6xl font-bold mb-4 ">
-                <span>1</span>M+
+              <div class="xl:text-6xl text-4xl font-bold mb-4 ">
+                <span>500</span>K +
               </div>
-              <div class="text-xl text-gray-700">Merchants worked with Groupon to date</div>
+              <div class="text-xl text-gray-700">Monthly searches in the UAE for discounts, experiences, and local deals</div>
             </div>
           </div>
+
+          <div class="relative group">
+            <div class="absolute inset-0 transition-transform duration-300"></div>
+            <div class="relative backdrop-blur-sm bg-white/30 rounded-2xl p-8 border border-[#58af08]/20">
+              <div class="xl:text-6xl text-4xl font-bold mb-4 ">
+                <span>100</span>+
+              </div>
+              <div class="text-xl text-gray-700">Businesses have already joined our launch-phase to reach more customers</div>
+            </div>
+          </div>
+
         </div>
       </div>
 
       <!-- Main Content -->
-      <div class="mb-24 text-center max-w-3xl mx-auto">
-        <h1 class="text-4xl md:text-6xl font-bold mb-8 leading-tight">
-          The Marketplace For
-          <span class="">
+      <div class="mb-24 text-center max-w-4xl mx-auto">
+        <h1 class="text-4xl md:text-5xl font-bold mb-8 leading-tight">
+          Why Merchants Choose Us
+          <!-- <span class="">
             Local Experiences
-          </span>
+          </span> -->
         </h1>
         <p class="text-xl text-gray-600">
-          More than deals - we're where the world explores local possibilities.
-          Discover how Groupon Merchant transforms your business reach.
+          We promote your business across digital channels — from social media to search — to help you stand out.
         </p>
       </div>
 
       <!-- Feature Cards -->
-      <div class="grid md:grid-cols-3 gap-8">
+      <div class="grid md:grid-cols-4 gap-8">
         <div class="relative bg-[#58af0838] p-4 rounded-lg group">
          
           <div class="relative w-16 h-16 rounded-full bg-[#58af0838] flex items-center justify-center">
             <i class="fas fa-users text-black text-3xl"></i>
           </div>
-          <div class="text-2xl font-semibold mb-4">Find New Audiences</div>
-          <p class="text-gray-600 leading-relaxed">We invest millions in marketing campaigns across web and mobile to bring customers to the Groupon platform.</p>
+          <div class="text-2xl font-semibold mb-4 mt-3">Get Discovered</div>
+          <p class="text-gray-600 leading-relaxed">We promote your business across digital channels — from social media to search — to help you stand out.</p>
         </div>
 
         <div class="relative bg-[#58af0838] p-4 rounded-lg group">
@@ -283,8 +253,17 @@
           <div class="relative w-16 h-16 rounded-full bg-[#58af0838] flex items-center justify-center">
             <i class="fas fa-brain text-black text-3xl"></i>
           </div>
-          <div class="text-2xl font-semibold mb-4">Boost Brand Loyalty</div>
-          <p class="text-gray-600 leading-relaxed">Groupon is an all-in-one marketing solution with no upfront cost that helps your business to build brand recognition.</p>
+          <div class="text-2xl font-semibold mb-4 mt-3">No Upfront Cost</div>
+          <p class="text-gray-600 leading-relaxed">It’s free to list. You only pay when customers redeem your offers.</p>
+        </div>
+
+        <div class="relative bg-[#58af0838] p-4 rounded-lg group">
+         
+          <div class="relative w-16 h-16 rounded-full bg-[#58af0838] flex items-center justify-center">
+            <i class="fa-solid fa-users text-black text-3xl"></i>
+          </div>
+          <div class="text-2xl font-semibold mb-4 mt-3">Easy Onboarding</div>
+          <p class="text-gray-600 leading-relaxed">List your business and offers with just a few simple steps — no technical skills needed.</p>
         </div>
 
         <div class="relative bg-[#58af0838] p-4 rounded-lg group">
@@ -292,8 +271,87 @@
           <div class="relative w-16 h-16 rounded-full bg-[#58af0838] flex items-center justify-center">
             <i class="fas fa-map-pin text-black text-3xl"></i>
           </div>
-          <div class="text-2xl font-semibold mb-4">Become the Destination</div>
-          <p class="text-gray-600 leading-relaxed">People are always looking for their new favorite thing to do. We'll use our tools to help them find you.</p>
+          <div class="text-2xl font-semibold mb-4 mt-3">Direct Customer Access</div>
+          <p class="text-gray-600 leading-relaxed">Get notified when someone buys your offer. We’ll provide basic insights and support to help you grow.</p>
+        </div>
+      </div>
+
+      <div class="text-center mt-10">
+        <!-- <button onclick="document.getElementById('myModal').classList.remove('hidden')"
+          class="text-black font-bold py-3 px-8 rounded bg-[#58af0838] hover:bg-[#4a910954] shadow-md hover:shadow-lg">
+          List your Business Now
+        </button> -->
+
+        <!-- Modal Backdrop -->
+        <div id="myModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <!-- Modal Content -->
+          <div class="relative top-10 md:top-20 mx-2 md:mx-auto max-w-2xl rounded-md bg-white">
+            <div class="mt-3 text-center">
+              <!-- Modal Body -->
+              <div class="space-y-8 bg-[#58af0838] rounded-lg p-5 md:p-10">
+                <button onclick="document.getElementById('myModal').classList.add('hidden')"
+                  class="text-gray-400 absolute top-5 right-5 bg-transparent hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                  </svg>
+                </button>
+                <div class="space-y-4">
+                  <h1 class="lg:text-3xl text-base font-bold text-black">
+                    Transform Your Business Growth
+                  </h1>
+                  <p class="text-base text-gray-600">
+                    Join thousands of successful businesses reaching new heights with our platform.
+                  </p>
+                </div>
+                @if (session('success'))
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                  <strong class="font-bold">Success!</strong>
+                  <span class="block sm:inline">{{ session('success') }}</span>
+                </div>
+                @endif
+                @if ($errors->any())
+                  <div class="alert alert-danger">
+                      <ul>
+                          @foreach ($errors->all() as $error)
+                              <li>{{ $error }}</li>
+                          @endforeach
+                      </ul>
+                  </div>
+                @endif
+                <div class="backdrop-blur-sm  rounded-xl">
+                  <form action="{{route('user.merchant_store')}}" id="merchantForm" method="POST">
+                    @csrf
+                    <div class="space-y-4 p-0">
+                      <div class="grid gap-4 md:grid-cols-2">
+                        <div>
+                          <input type="text" name="business_name" placeholder="Business Name" class="w-full bg-white p-2 rounded-md border py-3 text-gray-800" />
+                        </div>
+                        <div>
+                          <input type="text" name="name" placeholder="Your Name" class="w-full bg-white p-2 rounded-md border py-3 text-gray-800" />
+                        </div>
+                      </div>
+                      <input type="email" name="email" placeholder="Email Address" class="bg-white p-2 rounded-md border py-3 text-gray-800 w-full" />
+                      <input type="tel" name="phone" placeholder="Phone Number" class="bg-white p-2 rounded-md border py-3 text-gray-800 w-full" />
+
+                      <select name="category_id" class="bg-white p-2 rounded-md border py-3 text-gray-800 w-full">
+                        @foreach ($categories as $category)
+                          <option value="{{$category->id}}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{$category->name}}</option>
+                        @endforeach
+                      </select>
+
+                      <button class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                        Start Free Trial
+                      </button>
+                  
+                      <p class="text-sm text-center text-gray-500">
+                        No credit card required • 14-day free trial
+                      </p>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -301,7 +359,7 @@
 
 
   <!-- Features Section -->
-  <section class="py-20">
+  <section class="py-20 hidden">
     <div class="container px-4 mx-auto">
       <div class="text-center max-w-2xl mx-auto mb-16">
         <h2 class="text-3xl md:text-4xl font-bold mb-4">Everything You Need to Succeed</h2>
@@ -342,11 +400,11 @@
   <section class="py-20 bg-gray-50">
     <div class="container px-4 mx-auto">
       <div class="max-w-3xl mx-auto text-center">
-        <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Business?</h2>
-        <p class="text-xl text-gray-600 mb-8">Join thousands of successful businesses already growing with us</p>
+        <h2 class="text-4xl md:text-5xl font-bold mb-6">Be Among the First</h2>
+        <p class="text-xl text-gray-600 mb-8">Join us during our launch phase and enjoy priority visibility and dedicated onboarding support.</p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <button class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-            Get Started Now
+            <button onclick="document.getElementById('myModal').classList.remove('hidden')" class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+            Be Among
           </button>
           <button class="border-2 border-black w-full hover:bg-[#4a910954] hover:text-black p-2 rounded-md">
             Schedule Demo
@@ -357,95 +415,135 @@
   </section>
 @endsection
 @push('scripts')
-  <script>
-    function toggleFooterSection(sectionId) {
-      const section = document.getElementById(sectionId);
-      const icon = document.getElementById(`${sectionId}-icon`);
-      if (section.classList.contains('hidden')) {
-        section.classList.remove('hidden');
-        icon.classList.remove('fa-chevron-down');
-        icon.classList.add('fa-chevron-up');
-      } else {
-        section.classList.add('hidden');
-        icon.classList.remove('fa-chevron-up');
-        icon.classList.add('fa-chevron-down');
-      }
+<script>
+  function toggleFooterSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    const icon = document.getElementById(`${sectionId}-icon`);
+    if (section.classList.contains('hidden')) {
+      section.classList.remove('hidden');
+      icon.classList.remove('fa-chevron-down');
+      icon.classList.add('fa-chevron-up');
+    } else {
+      section.classList.add('hidden');
+      icon.classList.remove('fa-chevron-up');
+      icon.classList.add('fa-chevron-down');
     }
-  </script>
-    <script>
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const passwordToggle = document.getElementById('passwordToggle');
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                passwordToggle.classList.remove('fa-eye');
-                passwordToggle.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                passwordToggle.classList.remove('fa-eye-slash');
-                passwordToggle.classList.add('fa-eye');
-            }
+  }
+</script>
+<script>
+    function togglePassword() {
+        const passwordInput = document.getElementById('password');
+        const passwordToggle = document.getElementById('passwordToggle');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            passwordToggle.classList.remove('fa-eye');
+            passwordToggle.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            passwordToggle.classList.remove('fa-eye-slash');
+            passwordToggle.classList.add('fa-eye');
         }
-    </script>
-    <script>
-      const toggle = document.getElementById("mobile-menu-toggle");
-      const menu = document.getElementById("mobile-menu"); // Ensure this matches the id in the HTML
-      toggle.addEventListener("click", () => {
-        menu.classList.toggle("hidden");
-      });
-    </script>
-    
-    <script>
-      const dropdown = document.getElementById("dropdown");
-    
-      function showDropdown() {
-        dropdown.classList.remove("hidden");
-      }
-    
-      function toggleDropdown() {
-        dropdown.classList.toggle("hidden");
-      }
-    
-      // Hide dropdown when clicking outside
-      document.addEventListener("click", (event) => {
-        if (
-          !event.target.closest("#dropdown") &&
-          !event.target.closest("#search-input") &&
-          !event.target.closest("button")
-        ) {
-          dropdown.classList.add("hidden");
-        }
-      });
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
-    <script>
-      $(document).ready(function () {
-        $("#merchantForm").validate({
-          rules: {
-              business_name: { required: true},
-              name: { required: true},
-              email: { required: true,email:true},
-              category_id: { required: true},
+    }
+</script>
+<script>
+  const toggle = document.getElementById("mobile-menu-toggle");
+  const menu = document.getElementById("mobile-menu"); // Ensure this matches the id in the HTML
+  toggle.addEventListener("click", () => {
+    menu.classList.toggle("hidden");
+  });
+</script>
+
+<script>
+  const dropdown = document.getElementById("dropdown");
+
+  function showDropdown() {
+    dropdown.classList.remove("hidden");
+  }
+
+  function toggleDropdown() {
+    dropdown.classList.toggle("hidden");
+  }
+
+  // Hide dropdown when clicking outside
+  document.addEventListener("click", (event) => {
+    if (
+      !event.target.closest("#dropdown") &&
+      !event.target.closest("#search-input") &&
+      !event.target.closest("button")
+    ) {
+      dropdown.classList.add("hidden");
+    }
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#merchantForm").validate({
+      rules: {
+          business_name: { required: true},
+          name: { required: true},
+          email: { required: true,email:true},
+          category_id: { required: true},
 
 
-          },
-          messages: {
-            business_name: { required: "Business Name is required"},
-            name: { required: "Name is required"},
-            email: { required: "Email is required","email":"Please enter a valid email"},
-            category_id: { required: "Category is required"},
-          },
-          errorPlacement: function (error, element) {
-              error.addClass("text-red-500 text-sm mt-1 block w-full");
-              error.insertAfter(element);
-            },
-            highlight: function (element) {
-              $(element).addClass("border-red-500");
-            },
-            unhighlight: function (element) {
-              $(element).removeClass("border-red-500");
-            }
-        });
-      });
-    </script>
+      },
+      messages: {
+        business_name: { required: "Business Name is required"},
+        name: { required: "Name is required"},
+        email: { required: "Email is required","email":"Please enter a valid email"},
+        category_id: { required: "Category is required"},
+      },
+      errorPlacement: function (error, element) {
+          error.addClass("text-red-500 text-sm mt-1 block w-full");
+          error.insertAfter(element);
+        },
+        highlight: function (element) {
+          $(element).addClass("border-red-500");
+        },
+        unhighlight: function (element) {
+          $(element).removeClass("border-red-500");
+        }
+    });
+  });
+
+  // Get the modal
+const modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+const btn = document.querySelector("[data-modal-toggle='myModal']");
+
+// Get the element that closes the modal
+const closeBtn = document.querySelector("[data-modal-hide='myModal']");
+
+// When the user clicks the button, open the modal 
+btn.addEventListener('click', () => {
+  modal.classList.remove('hidden');
+});
+
+// When the user clicks on close button, close the modal
+closeBtn.addEventListener('click', () => {
+  modal.classList.add('hidden');
+});
+
+// When the user clicks anywhere outside the modal, close it
+window.addEventListener('click', (event) => {
+  if (event.target === modal) {
+    modal.classList.add('hidden');
+  }
+});
+
+btn.addEventListener('click', () => {
+  modal.classList.remove('hidden');
+  setTimeout(() => {
+    modal.classList.remove('opacity-0');
+  }, 20);
+});
+
+closeBtn.addEventListener('click', () => {
+  modal.classList.add('opacity-0');
+  setTimeout(() => {
+    modal.classList.add('hidden');
+  }, 300);
+});
+</script>
 @endpush
