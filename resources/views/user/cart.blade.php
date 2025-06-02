@@ -182,8 +182,8 @@
                     />
                 </div>
                 <div class="flex-1">
-                    <h3 class="font-semibold text-base lg:text-xl">{{$variant->title}}</h3>
-                    <p class="text-sm text-gray-500 mt-2">{{ $product->name }}</p>
+                    <h3 class="font-semibold text-base lg:text-xl">{{ $product->name }}</h3>
+                    <p class="text-sm text-gray-500 mt-2">{{$variant->title}}</p>
                     <p class="text-sm text-gray-500 mt-2">{{ $product->short_description }}</p>
                 </div>
             </div>
@@ -237,15 +237,6 @@
     <i class="fas fa-trash-alt mr-2"></i>
 </button>
 
-            <label class="flex items-start gap-2 mt-2">
-                <input type="hidden" name="orders[{{ $item->id }}][giftproduct]" value="0" />
-                <input type="checkbox" name="orders[{{ $item->id }}][giftproduct]" value="1" 
-                       {{ $item->giftproduct ? 'checked' : '' }} class="mt-1 w-4 h-4" />
-                <div>
-                    <div class="font-medium text-gray-800"><i class="fas fa-gift mr-2"></i>Buy as a gift</div>
-                    <div class="text-sm text-gray-500">Send or print gift voucher after purchase</div>
-                </div>
-            </label>
         </div>
     @endif
 @endforeach
@@ -303,7 +294,7 @@
 
         <!-- Booking Amount -->
         <div class="flex justify-between lg:py-2">
-            <div>Booking Amount (after discount)</div>
+            <div>Total Amount</div>
             <div class="font-medium text-green-700">AED {{ number_format($bookingAmount, 2) }}</div>
         </div>
 
@@ -323,7 +314,7 @@
 
         <!-- Total -->
         <div class="flex justify-between lg:py-2 font-semibold">
-            <div>Total</div>
+            <div>Grand Total</div>
             <div class="text-gray-800">AED {{ number_format($total, 2) }}</div>
         </div>
 

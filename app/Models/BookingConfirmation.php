@@ -17,6 +17,8 @@ class BookingConfirmation extends Model
         'booking_status',
         'booking_details',
         'vat',
+        'promocode',
+        'promocode_discount_amount'
     ];
 
     protected $casts = [

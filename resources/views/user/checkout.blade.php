@@ -743,7 +743,19 @@ clearErrorOnInputChange(cardCvc);
   document.querySelectorAll(".pay-now-button").forEach(button => {
     button.addEventListener("click", async (event) => { 
       event.preventDefault();
+      const loader = document.getElementById("page-loader");
+      if (!loader) {
+        console.error("Loader element not found!");
+        return;
+      }
+        loader.style.display = 'flex';
+      
+
+      requestAnimationFrame(() => {
+        setTimeout(() => {
        handlePayment();  
+        }, 50);
+      });
     });
   });
 });
@@ -794,27 +806,23 @@ function collectItems() {
      
     loadMoreBtn.addEventListener("click", () => {
       visibleCount += 2; // Increment visible count by 2 for each "load more"
-      renderProducts();
+      updateVisibleItems();
     });
-
-    renderProducts(); // Initial render
   });
-  function renderProducts() { 
-    const renderedCount = productList.querySelectorAll('.product-item').length;
-    const newProducts = products
-      .slice(renderedCount, visibleCount)
-      .map((variant, index) => { 
+  function renderProducts() {
+    const allProductsHTML = products.map((variant, index) => {
         const total = variant.discounted_price * variant.quantity;
+        const isVisible = index < visibleCount;
         return `
-        <div class="border rounded-lg relative overflow-hidden shadow-lg product-item">
+        <div class="product-item border p-4 rounded shadow" style="display: ${isVisible ? 'block' : 'none'};">
           <div class="p-3">
             <div class="md:flex gap-3 md:space-y-0 space-y-4">
               <div class="relative md:w-28 w-full h-[200px] md:h-28 max-h-[300px] rounded-lg overflow-hidden">
                 <img src="${variant.image}" alt="${variant.title}" class="w-full h-full object-cover" />
               </div>
               <div class="flex-1">
-                <h3 class="font-semibold text-base lg:text-xl">${variant.title}</h3>
-                <p class="text-sm text-gray-500 mt-2">${variant.product_name}</p>
+                <h3 class="font-semibold text-base lg:text-xl">${variant.product_name}</h3>
+                <p class="text-sm text-gray-500 mt-2">${variant.title}</p>
                 <p class="text-sm text-gray-500 mt-2">${variant.short_description}</p>
               </div>
             </div>
@@ -861,33 +869,30 @@ function collectItems() {
                 </div>
               </div>
             ` : '<br>'}
-                      
-            
-            <label class="flex items-start gap-2">
-              <input type="hidden" name="items[${variant.id}][giftproduct]" value="0" />
-              <input type="checkbox" class="mt-1 w-4 h-4"  name="items[${variant.id}][giftproduct]" value="1" 
-               ${variant.giftproduct === 1 || variant.giftproduct === "1" ? 'checked' : ''}/>
-              <div>
-                <div class="font-medium flex items-center">
-                  <i class="fas fa-gift mr-2 text-gray-700"></i>
-                  Buy as a gift
-                </div>
-                <div class="text-sm text-gray-500">Send or print a gift voucher after completing your purchase</div>
-              </div>
-            </label>
           </div>
         </div>
       `;
       })
       .join("");
-      productList.insertAdjacentHTML("beforeend", newProducts);
+      productList.innerHTML = allProductsHTML;
     // Update countdown for all timers
     updateCountdownForTimers();
     // Hide Load More button if all products are visible
     if (visibleCount >= products.length) {
       loadMoreBtn.style.display = "none";
-    } else {
-      loadMoreBtn.style.display = "block";
+    }
+  }
+
+  function updateVisibleItems() {
+    const productItems = document.querySelectorAll(".product-item");
+    productItems.forEach((item, index) => {
+      if (index < visibleCount) {
+        item.style.display = "block";
+      }
+    });
+
+    if (visibleCount >= products.length) {
+      loadMoreBtn.style.display = "none";
     }
   }
 

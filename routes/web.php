@@ -17,6 +17,9 @@ use App\Http\Controllers\Admin\NavigationMenuController;
 use App\Http\Controllers\Admin\Product\ProductVariantController;
 use App\Http\Controllers\Admin\CommissionController;;
 use App\Http\Controllers\Admin\BlogNavigationController;
+use App\Http\Controllers\Admin\FeaturedItemController;
+use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\BlogDetailController;
 
 use App\Http\Controllers\Admin\LocationScopeController;
 use App\Http\Controllers\Admin\FooterController;
@@ -351,11 +354,54 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 
     Route::prefix('blog')->group(function () {
+
+        // Navigation Routes
+        Route::get('/navigation', [BlogNavigationController::class, 'index'])->name('navigation.index');
         Route::get('/navigation/create', [BlogNavigationController::class, 'create'])->name('navigation.create');
         Route::post('/navigation', [BlogNavigationController::class, 'store'])->name('navigation.store');
         Route::get('/navigation/{navigation}/edit', [BlogNavigationController::class, 'edit'])->name('navigation.edit');
         Route::put('/navigation/{navigation}', [BlogNavigationController::class, 'update'])->name('navigation.update');
+        Route::delete('/navigation/{id}', [BlogNavigationController::class, 'destroy'])->name('navigation.destroy');
+    
+        // Featured Items Routes
+        Route::prefix('featured-items')->name('featured-items.')->group(function () {
+            Route::get('/', [FeaturedItemController::class, 'index'])->name('index');       
+            Route::get('/create', [FeaturedItemController::class, 'create'])->name('create');
+            Route::post('/', [FeaturedItemController::class, 'store'])->name('store'); 
+            Route::get('/{featured_item}/edit', [FeaturedItemController::class,'edit'])->name('edit'); 
+            Route::post('/{featured_item}', [FeaturedItemController::class, 'update'])->name('update');  
+            Route::delete('/{featured_item}', [FeaturedItemController::class, 'destroy'])->name('destroy'); 
+        });
+
+        Route::prefix('blogs')->name('blogs.')->group(function () {
+            Route::get('/', [BlogController::class, 'index'])->name('index');
+            Route::get('/create', [BlogController::class, 'create'])->name('create');
+            Route::post('/', [BlogController::class, 'store'])->name('store');
+            Route::get('/{blog}/edit', [BlogController::class, 'edit'])->name('edit');
+            Route::put('/{blog}', [BlogController::class, 'update'])->name('update');
+            Route::delete('/{blog}', [BlogController::class, 'destroy'])->name('destroy');
+        });
+
+        Route::prefix('blog-details')->name('blog-details.')->group(function () {
+            Route::get('/', [BlogDetailController::class, 'index'])->name('index');
+            Route::get('/create', [BlogDetailController::class, 'create'])->name('create');
+            Route::post('/', [BlogDetailController::class, 'store'])->name('store');
+            Route::get('/{blog_detail}/edit', [BlogDetailController::class, 'edit'])->name('edit');
+            Route::put('/{blog_detail}', [BlogDetailController::class, 'update'])->name('update');
+            Route::delete('/{blog_detail}', [BlogDetailController::class, 'destroy'])->name('destroy');
+        });
+    
     });
+
+
+ 
+    
+    
+
+    
+    
+ 
+
 });
 Route::prefix('vendor')->group(function () {
     Route::get('{any}', function ($any) {

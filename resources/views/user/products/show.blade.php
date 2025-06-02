@@ -30,7 +30,7 @@
           {{$product->name}}
           </h1>
           <div class="flex items-center gap-6 mb-6">
-            <a href="#" class="text-gray-800 text-sm lg:text-base hover:underline font-medium"> {{$product->emirate->name}}</a>
+            <a href="#" class="text-gray-800 text-sm lg:text-base font-medium"> {{$product->emirate->name}}</a>
             <div class="flex items-center text-gray-600 gap-2">
               <i class="fas fa-star text-yellow-500"></i>
               <span class="font-semibold">{{$averageRating}}</span>
@@ -372,10 +372,14 @@
         @if($variants && $variants->isNotEmpty())
           <form action="{{route('user.products.add_cart')}}" id="addCartForm" method="POST">
             @csrf
+
             <h2 class="md:text-2xl text-base font-bold text-gray-800 mb-3">
               Choose a Variant
             </h2>
             <div class="space-y-4 overflow-x-hidden xl:max-h-[955px] max-h-[785px] pr-[5px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
+
+          
+
               @if ($errors->any())
               <div class="bg-red-500 text-white p-4 rounded-lg shadow-md">
                   <ul>
@@ -623,7 +627,12 @@ function submitAndRedirectToCart() {
 
       function addReview(event) {
           event.preventDefault();
-
+          const loader = document.getElementById("page-loader");
+          if (!loader) {
+              console.error("Loader element not found!");
+              return;
+          }
+          loader.style.display = 'flex';
           const product_id = document.getElementById("product_id").value;
           const review_title = document.getElementById("name").value;
           const review_rating = Array.from(document.querySelectorAll('.rating-stars .fa-star.text-yellow-500')).length;
@@ -647,18 +656,27 @@ function submitAndRedirectToCart() {
               body: JSON.stringify(reviewData)
           })
           .then(async response => {
-              const data = await response.json();
+          let data = {};
+
+          try {
+              data = await response.json(); 
+          } catch (jsonError) {
+              console.warn("Failed to parse JSON response", jsonError);
+          }
+
+          loader.style.display = 'none'; 
 
               if (!response.ok) {
                   // Show the custom error message (like "already reviewed")
                   showFlashMessage(data.message || "An error occurred.", "error");
               } else {
-                  showFlashMessage(data.message, "success");
+                  showFlashMessage(data.message || "Review submitted successfully.", "success");
                   cancelReview();
                   displayReviews();
               }
           })
           .catch(error => {
+            loader.style.display = 'none'; 
               console.error('Unexpected error:', error);
               showFlashMessage("Unexpected error. Please try again.", "error");
           });
@@ -675,7 +693,9 @@ function submitAndRedirectToCart() {
       setTimeout(() => {
           flashMessage.classList.add("hidden");
           flashMessage.textContent = "";
+              if (type !== "error") {
       location.reload();
+              }
       }, 4000);
     }
       function displayReviews() {
