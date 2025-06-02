@@ -100,8 +100,9 @@ class ProfileController extends Controller
             'gender' => $request->input('gender'),
             'date_of_birth' => $request->input('birthday'),
             'phone' => $request->input('phone'),
-            'country' => $request->input('country'),
+            'country_code_id' => $request->input('country_id'), 
             'address' => $request->input('address'),
+            'country_residence'=> $request->input('country_of_residence_id'),
         ]);
 
         // ✅ Handle Profile Picture Upload

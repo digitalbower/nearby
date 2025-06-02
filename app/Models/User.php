@@ -25,11 +25,12 @@ class User extends Authenticatable
         'gender',
         'dob',
         'phone',
-        'country',
+        'country_code_id',
         'address',
         'profileicon',
-        'country_residence',
+        'country_residence', 
         'google_id',
+        'date_of_birth',
     ];
     
 
