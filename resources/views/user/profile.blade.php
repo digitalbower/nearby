@@ -164,14 +164,469 @@ window.onscroll = function() {
 }
 </style>
 @endpush
+  <div class="lg:hidden bg-[#58af0838]  text-gray-900 p-4">
+    <div class="accordion-item mb-3">
+      <button
+        class="accordion-header flex justify-between items-center w-full py-3 px-4 border-gray-300 border-2 rounded-lg"
+        data-tab="personal-info">
+        <span>Personal Info</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+
+      <div class="accordion-content mt-4 px-0 pt-2">
+        <!-- Title -->
+        <h2 class="text-2xl font-semibold text-gray-800 mb-8 flex items-center gap-3">
+          <i class="fas fa-user-circle text-blue-500"></i> Profile Information
+        </h2>
+
+        <!-- Profile Picture -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-3">
+            <i class="fas fa-camera text-black text-base mr-2"></i> Profile Picture
+          </label>
+          <div class="flex flex-col md:flex-row items-center gap-6">
+            <!-- Profile Picture -->
+            <div class="relative group w-28 h-28">
+              <img src="https://via.placeholder.com/100" alt="Profile Picture"
+                class="w-full h-full rounded-full object-cover">
+              <div
+                class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full">
+                <button type="button"
+                  class="text-white text-sm px-3 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                  <i class="fas fa-camera"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Upload Section -->
+            <div class="flex flex-col gap-2">
+              <label for="profile-upload"
+                class="block w-full px-4 py-2 text-sm text-center text-gray-700 border border-dashed border-gray-300 rounded-lg bg-gray-100 hover:bg-gray-200 cursor-pointer">
+                <i class="fas fa-upload text-blue-500 mr-2"></i> Drag & Drop or <span
+                  class="text-blue-600">Browse</span>
+                <input type="file" id="profile-upload" class="hidden">
+              </label>
+              <p class="text-sm text-black text-base">Supports JPG, PNG. Max size: 2MB.</p>
+            </div>
+          </div>
+        </div>
+
+        @if ($errors->any())
+        <div class="bg-red-500 text-white p-3 rounded-md">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+        <!-- Form Start -->
+      <!-- resources/views/user/profile/mobile-profile.blade.php -->
+
+<form action="{{ route('user.profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6" id="personal-info-form">
+    @csrf
+
+    <!-- Profile Image -->
+    <div class="mb-4 flex justify-center">
+        @if($user->profile_picture)
+            <img id="profile-image-preview"
+                 src="{{ asset('storage/' . $user->profile_picture) }}"
+                 alt="Profile Picture"
+                 class="w-24 h-24 rounded-full object-cover border border-gray-300">
+        @else
+            <div class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center border border-gray-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+                </svg>
+            </div>
+        @endif
+    </div>
+
+    <!-- Upload Button -->
+    <div class="flex flex-col items-center">
+        <input type="file" id="profile-upload" name="profile_picture"
+               accept="image/*"
+               onchange="previewProfileImage(event)"
+               class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg bg-gray-100 px-3 py-2 cursor-pointer hover:bg-gray-200 focus:ring-2 focus:ring-blue-500">
+    </div>
+
+    <!-- JavaScript for Live Preview -->
+    @push('scripts')
+    <script>
+        function previewProfileImage(event) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                document.getElementById('profile-image-preview').src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+    @endpush
+
+    <!-- First & Last Name -->
+    <div>
+        <label for="first-name" class="block text-sm font-medium text-gray-700">First Name</label>
+        <input type="text" id="first-name" name="first_name"
+               value="{{ old('first_name', $user->first_name) }}"
+               class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+    </div>
+    <div>
+        <label for="last-name" class="block text-sm font-medium text-gray-700">Last Name</label>
+        <input type="text" id="last-name" name="last_name"
+               value="{{ old('last_name', $user->last_name) }}"
+               class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+    </div>
+
+    <!-- Gender -->
+    <div>
+        <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
+        <select id="gender" name="gender"
+                class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 bg-white focus:ring-blue-500 focus:border-blue-500">
+            <option value="">Select gender</option>
+            <option value="male" {{ old('gender', $user->gender) == 'male' ? 'selected' : '' }}>Male</option>
+            <option value="female" {{ old('gender', $user->gender) == 'female' ? 'selected' : '' }}>Female</option>
+            <option value="other" {{ old('gender', $user->gender) == 'other' ? 'selected' : '' }}>Other</option>
+        </select>
+    </div>
+
+    <!-- Birthday -->
+<div>
+    <label for="date_of_birth" class="block text-sm font-medium text-gray-700">Birthday</label>
+    <input type="date" id="date_of_birth" name="date_of_birth"
+           value="{{ old('date_of_birth', isset($user->date_of_birth) ? \Carbon\Carbon::parse($user->date_of_birth)->format('Y-m-d') : '') }}"
+           class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+</div>
 
 
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const accordionHeaders = document.querySelectorAll('.accordion-header');
+    <!-- Phone -->
+    <div>
+        <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+        <input type="tel" id="phone" name="phone"
+               value="{{ old('phone', $user->phone) }}"
+               placeholder="+91 1234567890"
+               class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+    </div>
 
-    accordionHeaders.forEach(header => {
+    <!-- Email (Readonly) -->
+    <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <input type="email" id="email" name="email"
+               value="{{ $user->email }}" readonly
+               class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 bg-gray-100 text-gray-600 cursor-not-allowed">
+    </div>
+
+    <!-- Nationality -->
+ <div>
+    <label for="country_code_id" class="block text-sm font-medium text-gray-700">Nationality</label>
+    <select id="country_code_id" name="country_code_id"
+            class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 bg-white focus:ring-blue-500 focus:border-blue-500" required>
+        <option value="">Select your nationality</option>
+        @foreach($countries as $country)
+            <option value="{{ $country->id }}"
+                @selected(old('country_code_id', isset($user) ? $user->country_code_id : null) == $country->id)>
+                {{ $country->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
+    <!-- Country of Residence -->
+    <div>
+        
+    <label for="country_of_residence_id" class="block text-sm font-medium text-gray-700">Country of Residence</label>
+        <select id="country_of_residence_id" name="country_of_residence_id"
+                class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 bg-white focus:ring-blue-500 focus:border-blue-500" required>
+            <option value="">Select your country of residence</option>
+            @foreach($countries as $country)
+                <option value="{{ $country->id }}"
+                    {{ old('country_of_residence_id', $user->country_residence) == $country->id ? 'selected' : '' }}>
+                    {{ $country->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <!-- Address -->
+    <div>
+        <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+        <textarea id="address" name="address" rows="3"
+                  class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter your address">{{ old('address', $user->address) }}</textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="flex justify-end">
+        <button type="submit"
+                class="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg text-white font-semibold transition hover:shadow-lg">
+            <i class="fas fa-save mr-2"></i> Save Changes
+        </button>
+    </div>
+</form>
+
+      </div>
+
+    </div>
+    <div class="accordion-item mb-3">
+      <button
+        class="accordion-header flex justify-between items-center w-full py-3 px-4 border-gray-300 border-2 rounded-lg"
+        data-tab="personal-info">
+        <span>My booking </span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content mt-4 px-0 pt-2">
+        <div class="flex justify-between items-center mb-8">
+          <h1 class="text-3xl font-bold text-gray-800">My Bookings</h1>
+
+        </div>
+
+        <div class="flex gap-4 mb-8">
+          <input type="text" placeholder="Search by listing name"
+            class="flex-1 px-4 py-2 border w-full border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent" />
+          <button class="px-6 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition duration-300">
+            Search
+          </button>
+        </div>
+
+        <div class="space-y-6">
+          <!-- Booking Item 1 -->
+
+
+          <!-- Booking Item 2 -->
+          <div class="bg-white rounded-xl shadow-lg p-3 transition duration-300 hover:shadow-xl">
+            <div class="flex flex-col md:flex-row gap-2">
+              <div class="w-full md:w-20">
+                <img src="/images/banner.png" alt="West Town 3rd Floor" class="w-full h-20 object-cover rounded-lg" />
+              </div>
+              <div class="flex-1 w-full">
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-2">
+                  <div class="col-span-3">
+                    <h3 class="text-lg font-medium text-gray-800">Booking Request 35426</h3>
+                    <p class="text-sm text-gray-600">for West Town 3rd Floor Dorm</p>
+                    <div class="flex mt-2 gap-x-4 w-full">
+                      <p class="text-xs text-gray-500"><i class="fas fa-dollar-sign mr-2 text-cyan-500"></i>Pay Amount:
+                        USD 1,234</p>
+                      <p class="text-xs text-gray-500"><i class="fas fa-users mr-2 text-cyan-500"></i>Guests: 1 (1
+                        Guest, 0 Children, 0 Infants)</p>
+                    </div>
+                  </div>
+                  <div>
+                    <span
+                      class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                      <i class="fas fa-exclamation-circle mr-2"></i> Invoice Posted
+                    </span>
+                  </div>
+                  <div class="text-sm text-gray-600">
+                    <p><i class="fas fa-calendar-alt mr-2 text-cyan-500"></i><strong>date</strong> 16/12/21 </p>
+
+                  </div>
+                </div>
+                <div class="mt-4 flex gap-2">
+                  <!-- <button
+                    class="px-4 py-2 text-sm bg-cyan-100 text-cyan-700 rounded-lg hover:bg-cyan-200 transition duration-300">Create
+                    Invoice</button> -->
+                  <button
+                    class="px-4 py-2 text-sm bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition duration-300">Reject
+                    Booking</button>
+                  <button
+                    class="px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition duration-300">Send
+                    Reminder Email</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+   <!-- My Reviews Tab -->
+<div class="accordion-item mb-3">
+  <button
+    class="accordion-header flex justify-between items-center w-full py-3 px-4 border-gray-300 border-2 rounded-lg"
+    data-tab="reviews">
+    <span>My Reviews</span>
+    <i class="fas fa-chevron-down"></i>
+  </button>
+  <div class="accordion-content mt-4 px-0 pt-2">
+     <div class="flex justify-between items-center mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">My Reviews</h2>
+   </div>
+     <div class="space-y-6">
+      @forelse($reviews as $review)
+        <div class="bg-white shadow rounded-lg p-4 mb-4">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-lg font-semibold text-gray-800">{{$review->product->name}}</h3>
+            <div class="flex items-center gap-4">
+                <!-- Edit Link -->
+                <a href="#"
+                  onclick="openEditForm({{ $review->id }}, '{{ addslashes($review->review_title) }}', {{ $review->review_rating }}, '{{ addslashes($review->review_description) }}')"
+                  class="flex items-center text-blue-600 hover:underline gap-1 p-0 m-0 leading-none align-middle">
+                  <i class="fas fa-edit"></i> Edit
+                </a>
+
+                <!-- Delete Form -->
+                <form method="POST"
+                      action="{{ route('user.profile.review.delete', $review->id) }}"
+                      class="contents">
+                  @csrf
+                  @method('DELETE')
+                  <button type="submit"
+                          onclick="return confirm('Are you sure?')"
+                          class="flex items-center text-red-600 hover:underline gap-1 p-0 m-0 leading-none align-middle">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
+                </form>
+              </div>
+
+          </div>
+          <div class="flex items-center gap-1 mb-2">
+            @for ($i = 1; $i <= 5; $i++)
+              <i class="fas fa-star {{ $i <= $review->review_rating ? 'text-yellow-400' : 'text-gray-300' }}"></i>
+            @endfor
+          </div>
+          <p class="text-gray-700">{{ $review->review_title }}</p>
+          <p class="text-gray-700">{{ $review->review_description }}</p>
+        </div>
+        @empty
+          <p class="text-gray-500">No reviews found.</p>
+        @endforelse
+    </div>  
+    <!-- Edit Review Form (Initially Hidden) -->
+    <div id="edit-review-form" class="hidden bg-gray-50 p-4 rounded-lg shadow-md mt-6">
+      <h3 class="text-xl font-semibold mb-4 text-gray-800">Edit Review</h3>
+      <form method="POST" id="editForm">
+        @csrf
+        @method('PUT')
+        <input type="hidden" name="id" id="modal_review_id"> 
+        <input type="hidden" name="user_id" value="{{ auth()->id() }}">
+        <div class="mb-4">
+          <label class="block mb-1 text-sm text-gray-600">Title</label>
+          <input type="text" name="review_title" id="editTitle" class="w-full border border-gray-300 p-2 rounded">
+        </div>
+         <div class="mb-4">
+                          <label for="rating" class="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                          <div class="flex gap-2 rating-stars">
+                            <button type="button" onclick="setRating(1, 'edit-review-form')"
+                              class="p-2 text-gray-300 hover:text-yellow-500 transition-colors">
+                              <i class="fas fa-star w-6 h-6"></i>
+                            </button>
+                            <button type="button" onclick="setRating(2, 'edit-review-form')"
+                              class="p-2 text-gray-300 hover:text-yellow-500 transition-colors">
+                              <i class="fas fa-star w-6 h-6"></i>
+                            </button>
+                            <button type="button" onclick="setRating(3, 'edit-review-form')"
+                              class="p-2 text-gray-300 hover:text-yellow-500 transition-colors">
+                              <i class="fas fa-star w-6 h-6"></i>
+                            </button>
+                            <button type="button" onclick="setRating(4, 'edit-review-form')"
+                              class="p-2 text-gray-300 hover:text-yellow-500 transition-colors">
+                              <i class="fas fa-star w-6 h-6"></i>
+                            </button>
+                            <button type="button" onclick="setRating(5, 'edit-review-form')"
+                              class="p-2 text-gray-300 hover:text-yellow-500 transition-colors">
+                              <i class="fas fa-star w-6 h-6"></i>
+                            </button>
+                          </div>
+                          <input type="hidden" name="review_rating" id="editRating" value="" />
+                        </div>
+        <div class="mb-4">
+          <label class="block mb-1 text-sm text-gray-600">Description</label>
+          <textarea name="review_description" id="editDescription" rows="3"
+            class="w-full border border-gray-300 p-2 rounded"></textarea>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="button" onclick="closeEditForm()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+            Cancel
+          </button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            Update
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+    <div class="accordion-item mb-3">
+      <button
+        class="accordion-header flex justify-between items-center w-full py-3 px-4 border-gray-300 border-2 rounded-lg"
+        data-tab="change-password">
+        <span>Change Password</span>
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="accordion-content px-0 mt-4 pt-2">
+
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">
+          <i class="fas fa-lock text-blue-500 mr-2"></i> Change Password
+        </h2>
+        <form class="space-y-6" id="change-password-form">
+          <!-- Current Password -->
+          <div>
+            <label for="current-password" class="block text-sm font-medium text-gray-700 mb-2">
+              <i class="fas fa-key text-gray-400 mr-2"></i> Current Password
+            </label>
+            <div class="relative">
+              <input type="password" id="current-password" name="current-password" placeholder="Enter current password"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+              <button type="button"
+                class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-gray-700 toggle-password">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- New Password -->
+          <div>
+            <label for="new-password" class="block text-sm font-medium text-gray-700 mb-2">
+              <i class="fas fa-shield-alt text-gray-400 mr-2"></i> New Password
+            </label>
+            <div class="relative">
+              <input type="password" id="new-password" name="new-password" placeholder="Enter new password"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+              <button type="button"
+                class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-gray-700 toggle-password">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Confirm New Password -->
+          <div>
+            <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-2">
+              <i class="fas fa-check-circle text-gray-400 mr-2"></i> Confirm New Password
+            </label>
+            <div class="relative">
+              <input type="password" id="confirm-password" name="confirm-password" placeholder="Re-enter new password"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+              <button type="button"
+                class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-gray-700 toggle-password">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="flex justify-end mt-4">
+            <button type="button" id="change-password-btn"
+              class="px-6 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition duration-300">
+              <i class="fas fa-save mr-2"></i> Change Password
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+   
+
+       
+      </div>
+    </div>
+  </div>
+
+  @push('scripts')
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+      accordionHeaders.forEach(header => {
         header.addEventListener('click', () => {
             const content = header.nextElementSibling;
             const icon = header.querySelector('i');
@@ -218,10 +673,158 @@ document.addEventListener('DOMContentLoaded', () => {
                   <i class="fas fa-user-circle text-blue-500"></i> Profile Information
               </h2>
 
-              <!-- Profile Picture -->
-              <div class="mb-6">
-                  <label class="block text-sm font-medium text-gray-700 mb-3">
-                      <i class="fas fa-camera text-black text-base mr-2"></i> Profile Picture
+
+             
+
+   
+    
+              <!-- Form Start -->
+              <form action="{{ route('user.profile.update') }}" method="POST" enctype="multipart/form-data"  class="space-y-6" id="personal-info-form">
+              @csrf
+
+             
+              <div class="mb-4 flex justify-center">
+              @if($user->profile_picture)
+        <img id="profile-image-preview" 
+             src="{{ asset('storage/' . $user->profile_picture) }}" 
+             alt="Profile Picture"
+             class="w-28 h-28 rounded-full object-cover border border-gray-300">
+    @else
+        <div class="w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center border border-gray-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+            </svg>
+        </div>
+    @endif
+    </div>
+
+    <!-- Upload Button -->
+    
+    <div class="flex flex-col items-center">
+        
+       
+        <input type="file" id="profile-upload" name="profile_picture" 
+       accept="image/*" 
+       onchange="previewProfileImage(event)" 
+       class="block w-full px-3 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+    </div>
+    
+    @push('scripts')
+<!-- JavaScript for Live Preview -->
+<script>
+    function previewProfileImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            document.getElementById('profile-image-preview').src = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+@endpush
+                <!-- Name Section -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label for="first-name" class="block text-sm font-medium text-gray-700 mb-1">
+                      <i class="fas fa-id-badge text-black text-base mr-2"></i> First Name
+                    </label>
+                    <input type="text" id="first-name" name="first_name" value="{{ old('first_name', $user->first_name) }}"
+    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+
+                  </div>
+                  <div>
+                    <label for="last-name" class="block text-sm font-medium text-gray-700 mb-1">
+                      <i class="fas fa-id-card text-black text-base mr-2"></i> Last Name
+                    </label>
+                    <input type="text" id="last-name" name="last_name" value="{{ old('last_name', $user->last_name) }}"
+    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+
+                  </div>
+                </div>
+  
+                <!-- Gender and Birthday Section -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">
+                      <i class="fas fa-venus-mars text-black text-base mr-2"></i> Gender
+                    </label>
+                    <select id="gender" name="gender"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option value="">Select your gender</option>
+            <option value="male" {{ old('gender', $user->gender) == 'male' ? 'selected' : '' }}>Male</option>
+            <option value="female" {{ old('gender', $user->gender) == 'female' ? 'selected' : '' }}>Female</option>
+            <option value="other" {{ old('gender', $user->gender) == 'other' ? 'selected' : '' }}>Other</option>
+        </select>
+                  </div>
+                  <div>
+                    <label for="birthday" class="block text-sm font-medium text-gray-700 mb-1">
+                      <i class="fas fa-birthday-cake text-black text-base mr-2"></i> Birthday
+                    </label>
+                    <input type="date" id="birthday" name="birthday" 
+    value="{{ old('date_of_birth', $user->date_of_birth ? date('Y-m-d', strtotime($user->date_of_birth)) : '') }}"
+    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+
+                  </div>
+                </div>
+  
+                <!-- Contact Section -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">
+                      <i class="fas fa-phone-alt text-black text-base mr-2"></i> Phone Number
+                    </label>
+                    <input type="tel" id="phone" name="phone"
+    placeholder="+91 1234567890"
+    value="{{ old('phone', $user->phone ?? '') }}"
+    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                  </div>
+                  <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+                      <i class="fas fa-envelope text-black text-base mr-2"></i> Email Address
+                    </label>
+                    <input type="email" id="email" name="email" 
+    value="{{ $user->email ?? '' }}" 
+    readonly
+    class="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-600 cursor-not-allowed">
+
+                  </div>
+                </div>
+<div>
+    <label for="country_id" class="block text-sm font-medium text-gray-700 mb-1">
+        <i class="fas fa-flag text-black text-base mr-2"></i> Nationality
+    </label>
+    <select name="country_id" id="country_id"
+            class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required>
+        <option value="">Select your nationality</option>
+        @foreach ($countries as $country)
+            <option value="{{ $country->id }}"
+                @selected(old('country_id', $user->country_code_id ?? '') == $country->id)>
+                {{ $country->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
+{{-- Country of Residence --}}
+<div>
+<label for="country_of_residence_id" class="block text-sm font-medium text-gray-700">Country of Residence</label>
+<select name="country_of_residence_id" id="country_of_residence_id"
+        class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        required>
+    <option value="">Select your country of residence</option>
+    @foreach ($countries as $country)
+        <option value="{{ $country->id }}"
+            {{ (old('country_of_residence_id', $user->country_residence ?? '') == $country->id) ? 'selected' : '' }}>
+            {{ $country->name }}
+        </option>
+    @endforeach
+</select> 
+</div>
+                <!-- Address Section -->
+                <div>
+                  <label for="address" class="block text-sm font-medium text-gray-700 mb-1">
+                    <i class="fas fa-map-marker-alt text-black text-base mr-2"></i> Address
                   </label>
                   <div class="flex flex-col md:flex-row items-center gap-6">
                       <!-- Profile Picture -->
