@@ -4,13 +4,16 @@
     <!-- Main Content -->
     <main class="flex-1  space-y-6">
         <div class="md:px-6 px-2 pb-10 h-[100%]">
-            <a href="javascript:void(0);" class="inline-block sidemenu_btn p-3 text-xl"><i class="fa-solid fa-bars"></i></a>
+            <div class="p-3 mb-4 bg-white flex items-center justify-between md:hidden">
+                <a href="javascript:void(0);"><img src="{{asset('images/admin-logo.svg')}}" class="max-w-[180px]" alt="" srcset=""></a>
+                <a href="javascript:void(0);" class="inline-block sidemenu_btn p-3 text-xl"><i class="fa-solid fa-bars"></i></a>
+            </div>
             <h1 class="text-2xl font-bold text-gray-800 mb-8">Payment Management</h1>
 
-            <div class="bg-white rounded-lg shadow-lg w-full">
-                <div class="">
-                    <table id="paymentTable" class=" overflow-x-auto w-[600px] sm:w-full table-auto text-left border-collapse">
-                        <thead class="bg-gray-100">
+            <div class="bg-white rounded-lg shadow-lg w-full overflow-hidden">
+                <div class="relative w-full overflow-x-auto">
+                    <table id="paymentTable" class="w-full text-sm text-left text-gray-700 border-collapse">
+                        <thead class="bg-gray-100 whitespace-nowrap">
                             <tr>
                                 <th onclick="sortTable(0)" class="py-3 px-4 text-indigo-700 font-semibold cursor-pointer hover:bg-gray-200">
                                     <i class="fas fa-sort mr-2"></i> Booking ID

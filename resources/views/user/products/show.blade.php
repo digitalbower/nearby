@@ -404,10 +404,10 @@
                     </div>
                   </div>
                 
-                  <div class="p-4 pt-0 space-y-3">
-                    <div class="flex items-center justify-between">
+                  <div class="md:p-4 px-2 pt-0 space-y-3">
+                    <div class="flex md:items-center items-end justify-between">
                       <div class="space-y-1">
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2 mb-2">
                           <span class="text-sm font-medium text-muted-foreground">From</span>
                           <span class="text-sm line-through text-muted-foreground">{{$variant->unit_price}}</span>
                           <div
@@ -415,8 +415,8 @@
                             data-v0-t="badge">-{{$variant->discounted_percentage}}%</div>
                         </div>
                         <div class="flex items-center gap-2">
-                          <span class="lg:text-3xl text-lg font-bold text-primary">AED {{$variant->discounted_price}}</span>
-                          <span class="text-sm text-muted-foreground">/{{$unit_type}}</span>
+                          <span class="lg:text-3xl text-sm font-bold text-primary">AED {{$variant->discounted_price}}</span>
+                          <span class="md:text-sm text-xs text-muted-foreground">/{{$unit_type}}</span>
                 
                           <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
                             <!-- Decrement Button -->
@@ -459,7 +459,7 @@
                         </div>
                       </div>
                       <div
-                        class="bg-primary text-primary-foreground rounded-full p-2 hover:bg-primary/90 transition-colors duration-200 cursor-pointer">
+                        class="bg-primary text-primary-foreground rounded-full md:p-2 p-1 hover:bg-primary/90 transition-colors duration-200 cursor-pointer">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                           class="lucide lucide-arrow-right h-6 w-6">

@@ -182,7 +182,6 @@ body {
 .owl-prev {
     right: 80px;
     top: -45px;
-
 }
 
 .owl-prev,
@@ -262,6 +261,14 @@ body {
     }
 }
 
+
+@media screen and (max-width:767px) {
+
+.owl-prev, .owl-next {
+    top: 25px;
+}
+    
+}
 #cover {
   position: fixed;
   height: 100%;
@@ -625,7 +632,7 @@ body {
 <section class="bg-[#58af0838] lg:pt-20 py-10 lg:px-4 from-cyan-50 to-blue">
     <div class="lg:mb-8 container mx-auto px-4 lg:px-0">
         <div class="flex justify-between items-center mb-4">
-            <h2 class="lg:text-3xl text-xl font-bold text-black w-[70%] md:w-[100%]">Deal of the Day – Trending in UAE</h2>
+            <h2 class="lg:text-3xl text-xl font-bold text-black w-full">Deal of the Day – Trending in UAE</h2>
         </div>
 
         <div class="owl-carousel1 owl-carousel owl-theme">
@@ -746,7 +753,7 @@ body {
 @foreach($carouselCategories as $categoryName => $products)
 <section class="bg-white lg:p-4  lg:py-20 py-5">
     <div class="container mx-auto lg:px-0 px-4">
-        <h2 class="lg:text-3xl text-xl font-bold text-black w-[70%] md:w-[100%] mb-3">What’s Hot in {{$categoryName}}</h2>
+        <h2 class="lg:text-3xl text-xl font-bold text-black w-full mb-3">What’s Hot in {{$categoryName}}</h2>
         <div class="owl-carousel1  owl-carousel owl-theme">
             @foreach($products as $product)
             @php
