@@ -93,7 +93,7 @@
 
         <!-- Mobile Menu Toggle -->
         <button id="mobile-menu-toggle"
-          class="md:hidden text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500">
+          class="md:hidden text-gray-800 focus:outline-none">
           <i class="fas pr-1 text-[#58af0838] fa-bars"></i>
         </button>
 
@@ -116,9 +116,9 @@
     </div>
 
     <!-- Mobile menu -->
-    <nav id="mobile-menu" class="hidden fixed md:top-0 top-20 md:h-auto lg:auto z-30 md:relative md:py-0 py-10 w-full px-4 lg:px-0 bg-white border-y md:flex justify-between border-gray-200">
+    <nav id="mobile-menu" class="hidden fixed md:top-0 top-23 md:h-auto lg:auto z-30 md:relative md:py-0 pb-6 w-full px-4 lg:px-0 bg-white md:border-y md:flex justify-between border-gray-200">
 <div class="container mx-auto lg:px-0 px-4">
-    <ul class="flex py-2 flex-col md:flex-row md:items-center md:space-x-4 text-gray-700">
+    <ul class="flex md:py-2 flex-col md:flex-row md:items-center md:space-x-4 text-gray-700">
     @foreach($lowermenuitem as $menu)
     @php
     // Check if it's a named route

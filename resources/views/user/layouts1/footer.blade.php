@@ -26,6 +26,7 @@
           </div>
         </div>
 
+
         <!-- Top Destination -->
         <div>
           <h3 class="text-black text-base lg:text-xl font-bold mb-6">Top
@@ -114,7 +115,7 @@
 
   <footer class=" lg:hidden block bg-[#58af0838] text-gray-900 py-16 shadow-lg">
     <div class="container mx-auto lg:px-0 px-4 lg:px-4">
-      <div class="grid grid-cols-1 gap-8">
+      <div class="grid grid-cols-1 gap-5">
         <!-- Brand Section -->
         <div>
           <button class="w-full text-left flex justify-between items-center py-2 text-base lg:text-xl font-bold"

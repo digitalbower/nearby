@@ -82,7 +82,7 @@
   </div>
 </footer>
 
-<footer class=" lg:hidden block bg-[#58af0838] text-gray-900 py-16 shadow-lg">
+<footer class=" lg:hidden block bg-[#58af0838] text-gray-900 py-8 shadow-lg">
   <div class="container mx-auto lg:px-0 px-4 lg:px-4">
     <div class="grid grid-cols-1 gap-8">
       <!-- Brand Section -->
