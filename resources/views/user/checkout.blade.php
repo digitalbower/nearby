@@ -306,7 +306,7 @@
         </div>
         @endguest
         <div class="md:mt-0 mt-4 md:hidden block mb-5 md:mb-0">
-          <div class="bg-white rounded-xl shadow p-6 sticky top-4">
+          <div class="bg-white rounded-xl shadow md:p-6 p-3 sticky top-4">
             <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
             <div class="space-y-4">
               <div class="flex justify-between">
@@ -815,7 +815,7 @@ function collectItems() {
         const isVisible = index < visibleCount;
         return `
         <div class="product-item border p-4 rounded shadow" style="display: ${isVisible ? 'block' : 'none'};">
-          <div class="md:class="md:text-2xl text-lg font-bold text-gray-700"-3">
+          <div class="md:text-2xl text-lg relative font-bold text-gray-700">
             <div class="md:flex gap-3 md:space-y-0 space-y-4">
               <div class="relative md:w-28 w-full h-[200px] md:h-28 max-h-[300px] rounded-lg overflow-hidden">
                 <img src="${variant.image}" alt="${variant.title}" class="w-full h-full object-cover" />
@@ -843,9 +843,7 @@ function collectItems() {
                     </svg>
                   </button>
                 </div>
-                <button type="button" class="text-red-500 hover:text-red-700" onclick="confirmDelete(${variant.id})">
-                  <i class="fas fa-trash-alt"></i>
-                </button>
+                
               </div>  
                 <div class="text-right">
                  <div class="md:text-2xl text-lg font-bold text-gray-700"> 
@@ -858,7 +856,9 @@ function collectItems() {
                 </div>
               </div>           
             </div>
-         
+            <button type="button" class="text-red-500 hover:text-red-700 absolute md:top-0 md:right-0 top-3 right-3 z-20" onclick="confirmDelete(${variant.id})">
+              <i class="fas fa-trash-alt text-lg"></i>
+            </button>
             <!-- Timer section -->
             ${variant.timer_flag === 1 ? `
               <div class="bg-[#58af0838] rounded-lg w-full p-3 text-base my-2">

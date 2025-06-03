@@ -11,7 +11,7 @@
     @include('vendor.layouts.headercss')  
 </head>
 <body class="blue-bg min-h-screen font-sans">
-    <div class="flex min-h-screen">
+    <div class="md:flex min-h-screen">
         @include('vendor.layouts.sidebar')
         @yield('content')
     </div>

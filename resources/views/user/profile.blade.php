@@ -429,7 +429,7 @@
 
 
             <!-- Booking Item 2 -->
-            <div class="bg-white rounded-xl shadow-lg p-3 transition duration-300 hover:shadow-xl">
+            <!-- <div class="bg-white rounded-xl shadow-lg p-3 transition duration-300 hover:shadow-xl">
               <div class="flex flex-col md:flex-row gap-2">
                 <div class="w-full md:w-20">
                   <img src="/images/banner.png" alt="West Town 3rd Floor" class="w-full h-20 object-cover rounded-lg" />
@@ -458,9 +458,9 @@
                     </div>
                   </div>
                   <div class="mt-4 flex gap-2">
-                    <!-- <button
+                    <button
                       class="px-4 py-2 text-sm bg-cyan-100 text-cyan-700 rounded-lg hover:bg-cyan-200 transition duration-300">Create
-                      Invoice</button> -->
+                      Invoice</button>
                     <button
                       class="px-4 py-2 text-xs bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition duration-300">Reject
                       Booking</button>
@@ -470,7 +470,9 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
+
+            
 
 
           </div>
@@ -1018,35 +1020,34 @@
               <div class="">
                 <div class="flex justify-between items-center mb-8">
                   <h1 class="text-3xl font-bold text-gray-800">My Bookings</h1>
-  
                 </div>
                 <div class="flex gap-4 mb-8">
-  <input type="text" id="searchInput" placeholder="Search by booking ID"
-    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent" />
-  <button onclick="filterBookingsAdvanced()" class="px-6 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition duration-300">
-    Search
-  </button>
-</div>
-     
+                    <input type="text" id="searchInput" placeholder="Search by booking ID"
+                      class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent" />
+                    <button onclick="filterBookingsAdvanced()" class="px-6 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition duration-300">
+                      Search
+                    </button>
+                  </div>
+                      
                 <div class="flex items-center mb-3 space-x-4">
                   <!-- Inactive Radio Button -->
                   <div class="flex space-x-4 mb-4">
-  <label class="flex items-center space-x-2 cursor-pointer">
-    <input type="radio" name="status" value="upcoming" class="hidden" onchange="filterBookings(this)" checked>
-    <span class="radio-icon w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
-      <i class="fas fa-circle"></i>
-    </span>
-    <span class="text-gray-700">Upcoming Booking</span>
-  </label>
-  <label class="flex items-center space-x-2 cursor-pointer">
-    <input type="radio" name="status" value="past" class="hidden" onchange="filterBookings(this)">
-    <span class="radio-icon w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
-      <i class="fas fa-circle"></i>
-    </span>
-    <span class="text-gray-700">Past Booking</span>
-  </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                      <input type="radio" name="status" value="upcoming" class="hidden" onchange="filterBookings(this)" checked>
+                      <span class="radio-icon w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
+                        <i class="fas fa-circle"></i>
+                      </span>
+                      <span class="text-gray-700">Upcoming Booking</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                      <input type="radio" name="status" value="past" class="hidden" onchange="filterBookings(this)">
+                      <span class="radio-icon w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
+                        <i class="fas fa-circle"></i>
+                      </span>
+                      <span class="text-gray-700">Past Booking</span>
+                    </label>
 
-</div>
+                  </div>
 
                  
                 
@@ -1054,66 +1055,61 @@
                 
                 </div>
                 
-                <div class="space-y-6">
+                <div class="space-y grid grid-cols-1 md:grid-cols-2 items-center gap-3">
                   <!-- Booking Item 1 -->
                   @forelse ($bookingConfirmations as $item)
-                  <div class="booking-card border relative border-cyan-400 rounded-xl shadow-xs p-3 mb-4 transition duration-300"
-                  data-status="{{ $item->verification_status }}" data-booking-id="{{ $item->booking_id }}"> 
-                 
-      <div class="flex gap-x-3 items-center mb-2">
-       
-        <div class="text-sm col-span-2 text-gray-600">
-          <p>
-            <i class="fas fa-calendar-alt mr-2 text-cyan-500"></i>
-            <strong>Date:</strong> {{ \Carbon\Carbon::parse($item->booking_created_at)->format('d/m/y') }}
-          </p>
-        </div>
-      </div>
-
-      <div class="flex flex-col md:flex-row gap-4">
-        <div class="w-full">
-          <div class="grid grid-cols-1 items-center md:grid-cols-3 gap-4">
-            <div class="col-span-2">
-              <h3 class="text-lg font-medium text-gray-800">Booking Id {{ $item->booking_id }}</h3>
-           
-              <p class="text-sm text-gray-600">
-                Quantity: {{ $item->quantity }} 
-              </p>
-              <p class="text-sm text-gray-600">
-                Total Price: {{ number_format($item->total_price, 2) }}
-              </p>
-              <p class="text-sm text-gray-600">
-                Verification Status: {{ ($item->verification_status) }}
-              </p>
-              <p class="text-sm text-gray-600">
-                Gift Product: {{ $item->giftproduct ? 'Yes' : 'No' }}
-              </p>
-            </div>
-          </div>
-
-          @if($item->verification_status === "pending")
-          <div class="w-full justify-between flex gap-x-3 mt-3">
-            <div class="flex w-full justify-end gap-x-3">
-            <a href="{{ route('user.profile.download', $item->id) }}"
-       class="mt-4 inline-flex items-center px-3 py-2 bg-green-100 text-black rounded-lg hover:bg-green-200 transition">
-      <i class="fas fa-download mr-1"></i> Download PDF
-    </a>
-            </div>
-            @endif
-          </div>
-        </div>
-      </div>
-    </div>
-  @empty
-    <p class="text-gray-500 text-center">No bookings found.</p>
-  @endforelse
+                    <div class="booking-card mt-0 border relative border-[#58af0838] rounded-xl shadow-lg p-3 transition duration-300"
+                    data-status="{{ $item->verification_status }}" data-booking-id="{{ $item->booking_id }}"> 
 
 
-                      
+                      <div class="flex flex-col md:flex-row gap-4">
+                        <div class="w-full">
+                          <div class="grid">
+                            <div class="col-span-2">
+                              <h3 class="text-lg font-bold text-gray-800">Booking Id {{ $item->booking_id }}</h3>
+                              <div class="text-sm my-2 text-gray-600">
+                                <p>
+                                  <i class="fas fa-calendar-alt mr-2 text-gray-400"></i>
+                                  <strong>Date:</strong> {{ \Carbon\Carbon::parse($item->booking_created_at)->format('d/m/y') }}
+                                </p>
+                              </div>
+                          
+                              <div class="grid md:grid-cols-2 gap-y-2 gap-x-4">
+                                <p class="text-sm text-gray-600">
+                                  Quantity: {{ $item->quantity }} 
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                  Total Price: {{ number_format($item->total_price, 2) }}
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                  Verification Status: {{ ($item->verification_status) }}
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                  Gift Product: {{ $item->giftproduct ? 'Yes' : 'No' }}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+
+                          @if($item->verification_status === "pending")
+                          <div class="w-full justify-between flex gap-x-3 mt-3">
+                            <div class="flex w-full justify-end gap-x-3">
+                            <a href="{{ route('user.profile.download', $item->id) }}"
+                              class="mt-4 inline-flex items-center px-3 py-2 bg-[#58af0838] text-black rounded-lg hover:bg-green-200 transition">
+                              <i class="fas fa-download mr-1"></i> Download PDF
+                            </a>
+                            </div>
+                            @endif
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    @empty
+                      <p class="text-gray-500 text-center">No bookings found.</p>
                       <!-- Right side icons -->
                      
-  
                     </div>
+                  @endforelse
   
                   </div>
   
@@ -1128,8 +1124,6 @@
               </div>
   
   
-  
-            </div>
   
   
   
@@ -1257,48 +1251,48 @@
                     Continue to Payment
                   </button>
                 </div>
-            </div>
+              </div>
   
-            @push('scripts')
-            <script>
-              const paymentOptions = document.querySelectorAll("#payment-options > div");
-              const paymentDetails = document.getElementById("payment-details");
-              const continueButton = document.getElementById("continue-button");
-              const saveCardCheckbox = document.getElementById("save-card");
-  
-              // Handle payment option selection
-              paymentOptions.forEach((option) => {
-                option.addEventListener("click", () => {
-                  // Reset active state
-                  paymentOptions.forEach((opt) => opt.classList.remove("ring-2", "ring-blue-500"));
-                  option.classList.add("ring-2", "ring-blue-500");
-  
-                  // Hide all details
-                  document.querySelectorAll("#payment-details > div").forEach((detail) => detail.classList.add("hidden"));
-  
-                  // Show relevant details
-                  const method = option.getAttribute("data-method");
-                  document.getElementById(`${method}-details`).classList.remove("hidden");
-  
-                  // Display the payment details section and continue button
-                  paymentDetails.classList.remove("hidden");
-                  continueButton.classList.remove("hidden");
+              @push('scripts')
+              <script>
+                const paymentOptions = document.querySelectorAll("#payment-options > div");
+                const paymentDetails = document.getElementById("payment-details");
+                const continueButton = document.getElementById("continue-button");
+                const saveCardCheckbox = document.getElementById("save-card");
+    
+                // Handle payment option selection
+                paymentOptions.forEach((option) => {
+                  option.addEventListener("click", () => {
+                    // Reset active state
+                    paymentOptions.forEach((opt) => opt.classList.remove("ring-2", "ring-blue-500"));
+                    option.classList.add("ring-2", "ring-blue-500");
+    
+                    // Hide all details
+                    document.querySelectorAll("#payment-details > div").forEach((detail) => detail.classList.add("hidden"));
+    
+                    // Show relevant details
+                    const method = option.getAttribute("data-method");
+                    document.getElementById(`${method}-details`).classList.remove("hidden");
+    
+                    // Display the payment details section and continue button
+                    paymentDetails.classList.remove("hidden");
+                    continueButton.classList.remove("hidden");
+                  });
                 });
-              });
-  
-              // Handle save card checkbox
-              saveCardCheckbox?.addEventListener("change", () => {
-                if (saveCardCheckbox.checked) {
-                  console.log("Card details will be saved for future payments.");
-                  // Store preference securely or call an API to save this setting
-                  localStorage.setItem("saveCardDetails", true);
-                } else {
-                  console.log("Card details will not be saved.");
-                  localStorage.setItem("saveCardDetails", false);
-                }
-              });
-            </script>
-           @endpush
+    
+                // Handle save card checkbox
+                saveCardCheckbox?.addEventListener("change", () => {
+                  if (saveCardCheckbox.checked) {
+                    console.log("Card details will be saved for future payments.");
+                    // Store preference securely or call an API to save this setting
+                    localStorage.setItem("saveCardDetails", true);
+                  } else {
+                    console.log("Card details will not be saved.");
+                    localStorage.setItem("saveCardDetails", false);
+                  }
+                });
+              </script>
+            @endpush
   
           </div>
         </div>
