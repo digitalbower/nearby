@@ -221,12 +221,19 @@
                 </div>
             </div>
 
-            @if ($variant->timer_flag === 1)
+          @php
+            $now = \Carbon\Carbon::now();   
+            $endTime = isset($isoEndTimes[$variant->id]) 
+                ? \Carbon\Carbon::parse($isoEndTimes[$variant->id]) 
+                : null;
+          @endphp
+
+            @if ($variant->timer_flag === 1 && $endTime && $endTime->greaterThan($now))
                 <div class="bg-yellow-100 rounded-lg w-full p-3 my-3 text-base">
                     <div class="flex items-center gap-2 text-gray-800">
                         <i class="fas fa-clock"></i>
-                        <input type="hidden" class="timer" data-variant-id="{{ $item->id }}" value="{{$variant->end_time}}">
-                        <span id="countdown-timer-{{ $item->id }}"></span>
+                        <input type="hidden" class="timer" data-variant-id="{{ $variant->id }}" value="{{ $isoEndTimes[$variant->id] }}">
+                        <span id="countdown-timer-{{ $variant->id }}"></span>
                     </div>
                 </div>
             @endif
@@ -499,13 +506,15 @@ timerElements.forEach((timerElement) => {
     return;
   }
 
-  // Optional extra offset if needed:
-  endDate.setDate(endDate.getDate() + 1);
-  endDate.setHours(endDate.getHours() + 18);
-  endDate.setMinutes(endDate.getMinutes() + 22);
-  endDate.setSeconds(endDate.getSeconds() + 50);
+  const now = new Date(); 
 
-  updateCountdown(endDate, variantId); // First render
+  if (endDate <= now) { 
+    const countdownElement = document.getElementById(`countdown-timer-${variantId}`);
+    if (countdownElement) countdownElement.style.display = 'none';
+    return;
+  }
+
+  updateCountdown(endDate, variantId);
   const timerInterval = setInterval(() => {
     updateCountdown(endDate, variantId, timerInterval);
   }, 1000);
@@ -532,7 +541,9 @@ timerElements.forEach((timerElement) => {
     const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-    countdownElement.textContent = `Sale ends in ${days} day${days !== 1 ? 's' : ''} ${hours}:${minutes}:${seconds}`;
+    countdownElement.textContent =
+      `Sale ends in ${days} day${days !== 1 ? 's' : ''} ` +
+      `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   }
 }
 </script>

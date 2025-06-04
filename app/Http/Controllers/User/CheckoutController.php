@@ -230,7 +230,7 @@ class CheckoutController extends Controller
                     'discounted_price' => number_format($discountedPrice, 2),
                     'original_price' => number_format($originalPrice, 2),
                     'timer_flag' => $variant['timer_flag'],
-                    'end_time' => $variant['end_time'],
+                    'end_time' => \Carbon\Carbon::parse($variant['end_time'])->toIso8601String(),
                     'image' => $imagePath ? asset('storage/' . $imagePath) : 'https://via.placeholder.com/100',
                     'quantity' => $item->quantity,
                     'giftproduct'=>$item->giftproduct

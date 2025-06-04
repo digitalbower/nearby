@@ -860,7 +860,7 @@ function collectItems() {
             </div>
          
             <!-- Timer section -->
-            ${variant.timer_flag === 1 ? `
+            ${variant.timer_flag === 1 && new Date(variant.end_time) > new Date() ? `
               <div class="bg-[#58af0838] rounded-lg w-full p-3 text-base my-2">
                 <div class="flex items-center gap-2 text-gray-800">
                   <i class="fas fa-clock"></i>
@@ -911,11 +911,13 @@ function collectItems() {
       return;
     }
 
-    // Optional extra offset if needed:
-    endDate.setDate(endDate.getDate() + 1);
-    endDate.setHours(endDate.getHours() + 18);
-    endDate.setMinutes(endDate.getMinutes() + 22);
-    endDate.setSeconds(endDate.getSeconds() + 50);
+    const now = new Date(); 
+    // 💡 Requirement 3: Sale already expired on first load? Hide completely.
+    if (endDate <= now) {   
+      const countdownElement = document.getElementById(`countdown-timer-${variantId}`);
+      if (countdownElement) countdownElement.style.display = 'none';
+      return;
+    }
 
     updateCountdown(endDate, variantId); // First render
     const timerInterval = setInterval(() => {
@@ -946,7 +948,9 @@ function collectItems() {
     const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-    countdownElement.textContent = `Sale ends in ${days} day${days !== 1 ? 's' : ''} ${hours}:${minutes}:${seconds}`;
+    countdownElement.textContent =
+      `Sale ends in ${days} day${days !== 1 ? 's' : ''} ` +
+      `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   }
 }
   document.addEventListener("DOMContentLoaded", () => {
