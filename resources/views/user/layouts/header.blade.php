@@ -87,61 +87,61 @@
       <!-- Main header -->
       <div class="flex justify-between w-full gap-x-2 lg:gap-x-4  items-center py-4 bg-white ">
 
-      <a href="{{ $logo->link ?? '/' }}" class="text-2xl font-bold text-gray-900">
-<img src="{{ asset('storage/' . $logo->image) }}" alt="logo" class="w-36 object-fit">
-</a>
+        <a href="{{ $logo->link ?? '/' }}" class="text-2xl font-bold text-gray-900">
+            <img src="{{ asset('storage/' . $logo->image) }}" alt="logo" class="w-36 object-fit">
+        </a>
 
-        <!-- Mobile Menu Toggle -->
-        <button id="mobile-menu-toggle"
-          class="md:hidden text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500">
-          <i class="fas pr-1 text-[#58af0838] fa-bars"></i>
-        </button>
+        <div class="flex items-center gap-x-2">
+            <!-- Search Bar -->
+            <!-- Cart -->
+            @php
+                $cartCount = \App\Models\Cart::getCartCount();
+            @endphp
 
-        <!-- Search Bar -->
-       
-        <!-- Cart -->
-        @php
-    $cartCount = \App\Models\Cart::getCartCount();
-@endphp
+            <a href="{{ route('user.cart') }}" class="relative">
+                <i class="fas pr-1 text-[#58af0838] fa-shopping-cart w-6 h-6 text-gray-700"></i>
+                @if($cartCount > 0)
+                    <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {{ $cartCount }}
+                    </span>
+                @endif
+            </a>
 
-<a href="{{ route('user.cart') }}" class="relative hidden md:block">
-    <i class="fas pr-1 text-[#58af0838] fa-shopping-cart w-6 h-6 text-gray-700"></i>
-    @if($cartCount > 0)
-        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-            {{ $cartCount }}
-        </span>
-    @endif
-</a>
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-toggle" class="md:hidden text-gray-800 focus:outline-none ml-5">
+                <i class="fas pr-1 text-[#58af0838] fa-bars"></i>
+            </button>
+        </div>
       </div>
     </div>
 
     <!-- Mobile menu -->
-    <nav id="mobile-menu" class="hidden fixed md:top-0 top-20 md:h-auto lg:auto z-30 md:relative md:py-0 py-10 w-full px-4 lg:px-0 bg-white border-y md:flex justify-between border-gray-200">
-<div class="container mx-auto lg:px-0 px-4">
-    <ul class="flex py-2 flex-col md:flex-row md:items-center md:space-x-4 text-gray-700">
-    @foreach($lowermenuitem as $menu)
-    @php
-    // Check if it's a named route
-    $url = Route::has($menu->link) ? route($menu->link) : $menu->link;
-@endphp
-    <li> 
-        <a href="{{ $url }}"
-           class="block py-1 lg:px-4 hover:font-semibold hover:border-b-2 border-[#58af0838] hover:text-black">
-            {!! $menu->icon ? '<i class="' . $menu->icon . ' mr-2"></i>' : '' !!}
-            {{ $menu->name }}
-        </a>
-    </li>
-@endforeach
-    </ul>
-</div>
-</nav>
-<div id="page-loader" class="loader-overlay">
-    <div class="travel-loader">
-        <span></span>
-        <span></span>
-        <span></span>
+    <nav id="mobile-menu" class="hidden fixed md:top-0 top-23 md:h-auto lg:auto z-30 md:relative md:py-0 pb-6 w-full px-4 lg:px-0 bg-white md:border-y md:flex justify-between border-gray-200">
+        <div class="container mx-auto lg:px-0 px-4">
+            <ul class="flex md:py-2 flex-col md:flex-row md:items-center md:space-x-4 text-gray-700">
+                @foreach($lowermenuitem as $menu)
+                    @php
+                    // Check if it's a named route
+                    $url = Route::has($menu->link) ? route($menu->link) : $menu->link;
+                    @endphp
+                    <li> 
+                        <a href="{{ $url }}"
+                        class="block py-1 lg:px-4 hover:font-semibold hover:border-b-2 border-[#58af0838] hover:text-black">
+                            {!! $menu->icon ? '<i class="' . $menu->icon . ' mr-2"></i>' : '' !!}
+                            {{ $menu->name }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    </nav>
+    <div id="page-loader" class="loader-overlay">
+        <div class="travel-loader">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </div>
-</div>
 
 <style>
 .loader-overlay {

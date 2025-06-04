@@ -208,14 +208,14 @@
               @foreach ($booking->items as $product_item)
   <div class="border rounded-lg overflow-hidden lg:shadow-lg">
     <div class="p-3">
-      <div class="flex gap-3">
-        <div class="relative w-28 h-28 rounded-lg overflow-hidden">
+      <div class="flex gap-3 flex-col">
+        <div class="relative md:w-28 h-28 w-full rounded-lg overflow-hidden">
           <img src="{{ asset('storage/' . $product_item->variant->product->image) }}" alt="{{ $product_item->variant->product->name }}" class="w-full h-full object-cover">
         </div>
         <div class="flex-1">
-          <h3 class="font-semibold text-base lg:text-xl">{{ $product_item->variant->product->name }}</h3>
+          <h3 class="font-semibold text-sm lg:text-xl">{{ $product_item->variant->product->name }}</h3>
           <p class="text-sm text-gray-500 mt-0">{{ $product_item->variant->title }}</p>
-          <p class="text-sm text-gray-500 mt-0">{{ $product_item->variant->product->short_description }}</p>
+          <p class="md:text-sm text-xs text-gray-500 mt-0">{{ $product_item->variant->product->short_description }}</p>
           <p class="text-sm text-gray-500 mt-2"><strong>Quantity:</strong> {{ $product_item->quantity }}</p>
           {{-- <p class="text-sm text-gray-500 mt-2"><strong>Date:</strong> {{ \Carbon\Carbon::parse($product_item->created_at)->format('d/m/Y') }}</p> --}}
         </div>
@@ -231,9 +231,9 @@
 
           </div>
         </div>
-        <div class="text-right flex justify-center gap-x-4 items-center">
-          <div class="text-4xl font-semibold text-gray-900">AED {{ number_format($product_item->variant->discounted_price, 2) }}</div>
-          <div class="text-2xl text-gray-500 line-through">AED {{ number_format($product_item->variant->unit_price, 2) }}</div>
+        <div class="text-right flex justify-center gap-x-4 items-center whitespace-nowrap">
+          <div class="lg:text-4xl md:text-2xl text-md font-semibold text-gray-900">AED {{ number_format($product_item->variant->discounted_price, 2) }}</div>
+          <div class="md:text-2xl text-md text-gray-500 line-through">AED {{ number_format($product_item->variant->unit_price, 2) }}</div>
         </div>
       </div>
       <hr class="my-2">
@@ -258,7 +258,7 @@
             <div class="border-b pb-4">
               <button 
                 class="faq-toggle w-full flex justify-between items-center text-left py-2 text-sm font-medium text-gray-700 focus:outline-none">
-                <span>How do I redeem my Nearby Voucher?</span>
+                <span class="text-black">How do I redeem my Nearby Voucher?</span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
@@ -272,7 +272,7 @@
             <div class="border-b pb-4">
               <button 
                 class="faq-toggle w-full flex justify-between items-center text-left py-2 text-sm font-medium text-gray-700 focus:outline-none">
-                <span>How can I confirm my booking?</span>
+                <span class="text-black">How can I confirm my booking?</span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
@@ -286,7 +286,7 @@
             <div>
               <button 
                 class="faq-toggle w-full flex justify-between items-center text-left py-2 text-sm font-medium text-gray-700 focus:outline-none">
-                <span>What is a Verification Number?</span>
+                <span class="text-black">What is a Verification Number?</span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
@@ -335,18 +335,20 @@
           <ul class="space-y-5">
             <li class="flex items-center justify-between text-base text-gray-700">
               <div class="flex items-center space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m2 0a6 6 0 10-12 0 6 6 0 0012 0z" />
-                </svg>
+                </svg> -->
+                <i class="fa-solid fa-money-bill-wave"></i>
                 <span>Total Amount</span>
               </div>
               <span class="font-medium text-gray-800">AED {{ number_format($booking->booking_amount, 2) }}</span>
             </li>
                         <li class="flex items-center justify-between text-base text-gray-700">
               <div class="flex items-center space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5-6l3 3-3 3" />
-                </svg>
+                </svg> -->
+                <i class="fa-solid fa-percent"></i>
                 <span>VAT (5%)</span>
               </div>
               <span class="font-medium text-gray-800">AED {{ number_format($booking->vat, 2) }}</span>
@@ -375,9 +377,10 @@
 
             <li class="flex items-center justify-between text-base text-gray-800">
               <div class="flex items-center space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-3.333 0-5 1.667-5 5v5h10v-5c0-3.333-1.667-5-5-5zM7 16v2h10v-2" />
-                </svg>
+                </svg> -->
+                <i class="fa-solid fa-calculator"></i>
                 <span>Grand Total</span>
               </div>
               <span class="font-medium text-gray-800"> AED {{ number_format($booking->total_amount, 2) }}</span>

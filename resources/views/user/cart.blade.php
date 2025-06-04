@@ -209,12 +209,12 @@
                 </div>
 
                 <div class="text-right">
-                    <div class="text-2xl font-bold text-gray-700">
+                    <div class="md:text-2xl text-lg font-bold text-gray-700">
                         AED {{ number_format($variant->discounted_price ?? $variant->unit_price, 2) }}
                     </div>
 
                     @if ($variant->discounted_price && $variant->discounted_price < $variant->unit_price)
-                        <div class="text-lg line-through text-gray-500">
+                        <div class="md:text-lg text-sm line-through text-gray-500">
                             AED {{ number_format($variant->unit_price, 2) }}
                         </div>
                     @endif

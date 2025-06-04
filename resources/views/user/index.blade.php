@@ -182,7 +182,6 @@ body {
 .owl-prev {
     right: 80px;
     top: -45px;
-
 }
 
 .owl-prev,
@@ -262,6 +261,14 @@ body {
     }
 }
 
+
+@media screen and (max-width:767px) {
+
+.owl-prev, .owl-next {
+    top: 25px;
+}
+    
+}
 #cover {
   position: fixed;
   height: 100%;
@@ -623,9 +630,9 @@ body {
     </div>
 </section>
 <section class="bg-[#58af0838] lg:pt-20 py-10 lg:px-4 from-cyan-50 to-blue">
-    <div class="mb-8 container mb-10 mx-auto px-4 lg:px-0">
+    <div class="lg:mb-8 container mx-auto px-4 lg:px-0">
         <div class="flex justify-between items-center mb-4">
-            <h2 class="lg:text-3xl text-base font-bold text-black w-[70%] md:w-[100%]">Deal of the Day – Trending in UAE</h2>
+            <h2 class="lg:text-3xl text-xl font-bold text-black w-full">Deal of the Day – Trending in UAE</h2>
         </div>
 
         <div class="owl-carousel1 owl-carousel owl-theme">
@@ -705,7 +712,7 @@ body {
 
                         <!-- Product Details -->
                         <div class="px-4 pb-4 space-y-2 mt-1 relative z-50">
-                            <h3 class="xxl:text-xl xl:text-lg font-semibold leading-tight h-[55px]">{{ $product->name }}</h3>
+                            <h3 class="xxl:text-xl xl:text-lg text-lg font-semibold leading-tight h-[55px]">{{ $product->name }}</h3>
 
                             <div class="flex items-center text-sm text-gray-500 gap-1">
                                 <i class="fas fa-map-marker-alt"></i>
@@ -744,9 +751,9 @@ body {
 
 
 @foreach($carouselCategories as $categoryName => $products)
-<section class="bg-white lg:p-4  lg:py-20 py-10 ">
+<section class="bg-white lg:p-4  lg:py-20 py-5">
     <div class="container mx-auto lg:px-0 px-4">
-        <h2 class="lg:text-3xl text-base font-bold text-black w-[70%] md:w-[100%] mb-3">What’s Hot in {{$categoryName}}</h2>
+        <h2 class="lg:text-3xl text-xl font-bold text-black w-full mb-3">What’s Hot in {{$categoryName}}</h2>
         <div class="owl-carousel1  owl-carousel owl-theme">
             @foreach($products as $product)
             @php
@@ -825,7 +832,7 @@ body {
 
                         <!-- Content Section -->
                         <div class="px-4 pb-4 space-y-2 mt-1 relative z-50">
-                            <h3 class="xxl:text-xl xl:text-lg font-semibold leading-tight h-[55px]">
+                            <h3 class="xxl:text-xl xl:text-lg text-lg font-semibold leading-tight h-[55px]">
                                 {{ $product->name }}
                             </h3>
 

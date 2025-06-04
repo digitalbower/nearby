@@ -242,7 +242,8 @@
         <div class="relative bg-[#58af0838] p-4 rounded-lg group">
          
           <div class="relative w-16 h-16 rounded-full bg-[#58af0838] flex items-center justify-center">
-            <i class="fas fa-users text-black text-3xl"></i>
+            <!-- <i class="fas fa-users text-black text-3xl"></i> -->
+             <i class="fa-solid fa-briefcase text-black text-3xl"></i>
           </div>
           <div class="text-2xl font-semibold mb-4 mt-3">Get Discovered</div>
           <p class="text-gray-600 leading-relaxed">We promote your business across digital channels — from social media to search — to help you stand out.</p>
@@ -251,7 +252,8 @@
         <div class="relative bg-[#58af0838] p-4 rounded-lg group">
          
           <div class="relative w-16 h-16 rounded-full bg-[#58af0838] flex items-center justify-center">
-            <i class="fas fa-brain text-black text-3xl"></i>
+            <!-- <i class="fas fa-brain text-black text-3xl"></i> -->
+             <i class="fa-solid fa-money-bill text-black text-3xl"></i>
           </div>
           <div class="text-2xl font-semibold mb-4 mt-3">No Upfront Cost</div>
           <p class="text-gray-600 leading-relaxed">It’s free to list. You only pay when customers redeem your offers.</p>
@@ -269,7 +271,8 @@
         <div class="relative bg-[#58af0838] p-4 rounded-lg group">
          
           <div class="relative w-16 h-16 rounded-full bg-[#58af0838] flex items-center justify-center">
-            <i class="fas fa-map-pin text-black text-3xl"></i>
+            <!-- <i class="fas fa-users text-black text-3xl"></i> -->
+             <svg width="50px" height="50px" viewBox="0 0 1024 1024" class="icon"  version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M512 365.7c60.6 0 109.7-49.1 109.7-109.7S572.6 146.3 512 146.3 402.3 195.4 402.3 256 451.4 365.7 512 365.7z m0-146.3c20.2 0 36.6 16.4 36.6 36.6s-16.4 36.6-36.6 36.6-36.6-16.4-36.6-36.6 16.4-36.6 36.6-36.6zM417.4 398.5L384.8 333c-98 48.7-158.9 146.9-158.9 256.3H299c0.1-81.5 45.4-154.6 118.4-190.8zM378.9 755.5l-45.8 57.1c50.5 40.5 114 62.8 178.8 62.8s128.3-22.3 178.8-62.8l-45.8-57.1c-76 61.1-189.8 61.1-266 0zM724.9 589.3H798c0-109.4-60.9-207.6-158.9-256.3l-32.5 65.5c73 36.2 118.3 109.3 118.3 190.8zM219.4 621.7c-60.6 0-109.7 49.1-109.7 109.7s49.1 109.7 109.7 109.7S329.1 792 329.1 731.4 280 621.7 219.4 621.7z m0 146.3c-20.2 0-36.6-16.4-36.6-36.6 0-20.2 16.4-36.6 36.6-36.6 20.2 0 36.6 16.4 36.6 36.6 0 20.2-16.4 36.6-36.6 36.6zM804.6 621.7c-60.6 0-109.7 49.1-109.7 109.7S744 841.1 804.6 841.1 914.3 792 914.3 731.4s-49.1-109.7-109.7-109.7z m0 146.3c-20.2 0-36.6-16.4-36.6-36.6 0-20.2 16.4-36.6 36.6-36.6s36.6 16.4 36.6 36.6c-0.1 20.2-16.5 36.6-36.6 36.6z" fill="#0F1F3C" /></svg>
           </div>
           <div class="text-2xl font-semibold mb-4 mt-3">Direct Customer Access</div>
           <p class="text-gray-600 leading-relaxed">Get notified when someone buys your offer. We’ll provide basic insights and support to help you grow.</p>

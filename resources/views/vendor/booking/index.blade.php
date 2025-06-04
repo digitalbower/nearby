@@ -25,13 +25,16 @@
 
 
 <div class="md:px-6 px-2 pb-10 h-[100%]">
-    <a href="javascript:void(0);" class="inline-block sidemenu_btn p-3 text-xl"><i class="fa-solid fa-bars"></i></a>
+    <div class="p-3 mb-4 md:mb-0 bg-white md:bg-transparent flex items-center justify-between md:justify-start">
+        <a href="javascript:void(0);"><img src="{{asset('images/admin-logo.svg')}}" class="max-w-[180px] md:hidden" alt="" srcset=""></a>
+        <a href="javascript:void(0);" class="inline-block sidemenu_btn p-3 text-xl"><i class="fa-solid fa-bars"></i></a>
+    </div>
     <h1 class="text-3xl font-extrabold text-gray-900 mb-8">Booking Management</h1>
     <div class="overflow-hidden rounded-lg shadow-lg border bg-white">
-        <div class="relative w-full overflow-x-auto">
-            <table class="w-full table-auto text-sm text-left text-gray-700">
+        <div class="max-w-full overflow-x-auto custom-scrollbar">
+            <table class="w-full min-w-[1102px] table-auto text-sm text-left text-gray-700">
                 <thead class="bg-gray-100 text-gray-600 text-xs uppercase">
-                    <tr>
+                    <tr class="whitespace-nowrap">
                         <th scope="col" class="px-6 py-3">Booking ID</th>
                         <th scope="col" class="px-6 py-3">Product Name</th>
                         <th scope="col" class="px-6 py-3">Variant Name</th>

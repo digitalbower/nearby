@@ -53,7 +53,7 @@ use App\Http\Controllers\Vendor\Auth\VendorForgotPasswordController;
 use App\Http\Controllers\Vendor\Auth\VendorResetPasswordController;
 
 
-
+Route::get('/test-error', [ProfileController::class, 'testErrorPage'])->name('testErrorPage');
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('privacy_policy');
 Route::get('/cookie-policy', [HomeController::class, 'cookiePolicy'])->name('cookie_policy');
@@ -140,6 +140,8 @@ Route::name('user.')->group(function () {
             Route::get('/bookings/{id}/download', [ProfileController::class, 'download'])->name('download');
             Route::delete('/reviews/delete/{id}', [ProfileController::class, 'deleteReview'])->name('review.delete');
             Route::put('/reviews/update/{id}', [ProfileController::class, 'updateReview'])->name('review.update');
+            
+
         });
     });
 });

@@ -208,7 +208,7 @@
 </script>
 @endpush
 @section('content')
-  <main class="flex-grow bg-[#58af0838]  px-4 lg:px-10 py-8">
+  <main class="flex-grow bg-[#ebebeb] px-4 lg:px-10 py-8 lg:py-20">
     <div class="grid container mx-auto md:grid-cols-3 md:space-x-6">
         <div class="md:col-span-2  space-y-6 overflow-hidden">
           {{-- <div class="bg-[#58af0838]  rounded-xl px-4 p-2 lg:p-7">
@@ -306,7 +306,7 @@
         </div>
         @endguest
         <div class="md:mt-0 mt-4 md:hidden block mb-5 md:mb-0">
-          <div class="bg-white rounded-xl shadow p-6 sticky top-4">
+          <div class="bg-white rounded-xl shadow md:p-6 p-3 sticky top-4">
             <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
             <div class="space-y-4">
               <div class="flex justify-between">
@@ -416,12 +416,12 @@
                 <input type="hidden" name="amount" id="amount" value="{{ $total }}">
               
                 <!-- Card Number -->
-                <div>
+                <div class="relative">
                   <label for="cardNumber" class="block text-sm font-semibold text-gray-800">Card Number</label>
                   <div class="mt-2 relative rounded-lg border border-gray-300 focus-within:ring-2 focus-within:ring-[#000] px-4 py-3" id="card-number-element">
                     <!-- Stripe will mount card number here -->
                   </div>
-                  <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+                  <div class="absolute inset-y-0 right-4 top-7 flex items-center pointer-events-none">
                     <i class="fas fa-credit-card text-gray-500"></i>
                   </div>
                   <div id="cardNumberError" class="text-sm text-red-600 mt-1 hidden">Please enter a valid card number.</div>
@@ -815,7 +815,7 @@ function collectItems() {
         const isVisible = index < visibleCount;
         return `
         <div class="product-item border p-4 rounded shadow" style="display: ${isVisible ? 'block' : 'none'};">
-          <div class="p-3">
+          <div class="md:text-2xl text-lg relative font-bold text-gray-700">
             <div class="md:flex gap-3 md:space-y-0 space-y-4">
               <div class="relative md:w-28 w-full h-[200px] md:h-28 max-h-[300px] rounded-lg overflow-hidden">
                 <img src="${variant.image}" alt="${variant.title}" class="w-full h-full object-cover" />
@@ -829,7 +829,7 @@ function collectItems() {
             <div class="flex items-center justify-between mt-2">
               <div class="flex items-center gap-4">
                 <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
-                  <button type="button" class="w-8 h-8 bg-gray-100 text-center text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white" onclick="decrementQty(${variant.id})">
+                  <button type="button" class="w-8 h-8 bg-gray-100 flex items-center justify-center text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white" onclick="decrementQty(${variant.id})">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
                     </svg>
@@ -837,18 +837,16 @@ function collectItems() {
                   <input type="number" name="items[${variant.id}][quantity]" data-variant-id="${variant.id}"
                     id="quantity_${variant.id}" value="${variant.quantity}" min="1" 
                     class="w-8 h-8 text-center text-lg font-semibold text-gray-700" />
-                  <button type="button" class="w-8 h-8 bg-gray-100 text-center text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white" onclick="incrementQty(${variant.id})">
+                  <button type="button" class="w-8 h-8 bg-gray-100 flex items-center justify-center text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white" onclick="incrementQty(${variant.id})">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
                     </svg>
                   </button>
                 </div>
-                <button type="button" class="text-red-500 absolute top-5 right-5 hover:text-red-700" onclick="confirmDelete(${variant.id})">
-                  <i class="fas fa-trash-alt"></i>
-                </button>
+                
               </div>  
                 <div class="text-right">
-                 <div class="text-2xl font-bold text-gray-700"> 
+                 <div class="md:text-2xl text-lg font-bold text-gray-700"> 
                     AED ${variant.discounted_price}   
                   <input type="hidden" name="items[${variant.id}][unit_price]" value="${variant.discounted_price}"/>
                 </div>
@@ -858,7 +856,9 @@ function collectItems() {
                 </div>
               </div>           
             </div>
-         
+            <button type="button" class="text-red-500 hover:text-red-700 absolute md:top-0 md:right-0 top-3 right-3 z-20" onclick="confirmDelete(${variant.id})">
+              <i class="fas fa-trash-alt text-lg"></i>
+            </button>
             <!-- Timer section -->
             ${variant.timer_flag === 1 && new Date(variant.end_time) > new Date() ? `
               <div class="bg-[#58af0838] rounded-lg w-full p-3 text-base my-2">

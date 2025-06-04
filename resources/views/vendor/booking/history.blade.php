@@ -17,13 +17,16 @@
 @endif
 
 <div class="md:px-6 px-2 pb-10 h-[100%]">
-    <a href="javascript:void(0);" class="inline-block sidemenu_btn p-3 text-xl"><i class="fa-solid fa-bars"></i></a>
+    <div class="p-3 mb-4 md:mb-0 bg-white md:bg-transparent flex items-center justify-between md:justify-start">
+        <a href="javascript:void(0);"><img src="{{asset('images/admin-logo.svg')}}" class="max-w-[180px] md:hidden" alt="" srcset=""></a>
+        <a href="javascript:void(0);" class="inline-block sidemenu_btn p-3 text-xl"><i class="fa-solid fa-bars"></i></a>
+    </div>
     <h1 class="text-3xl font-extrabold text-gray-900 mb-8">Booking History</h1>
     <div class="overflow-hidden rounded-lg shadow-lg border bg-white">
         <div class="relative w-full overflow-x-auto">
             <table class="w-full text-sm text-left text-gray-700">
                 <thead class="bg-gray-100 text-gray-600 text-xs uppercase">
-                    <tr>
+                    <tr class="whitespace-nowrap">
                         <th class="px-6 py-3">Booking ID</th>
                         <th class="px-6 py-3">Product Name</th>
                         <th class="px-6 py-3">Quantity</th>
@@ -34,7 +37,7 @@
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                     @foreach ($booking_items as $booking_item)
-                        <tr class="hover:bg-gray-50">
+                        <tr class="hover:bg-gray-50 whitespace-nowrap">
                             <td class="px-6 py-4 font-medium text-gray-900">{{$booking_item->bookingConfirmation->booking_id}}</td>
                             <td class="px-6 py-4">{{$booking_item->variant->product->name}}</td>
                             <td class="px-6 py-4">{{$booking_item->quantity}}</td>
