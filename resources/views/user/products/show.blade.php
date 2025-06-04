@@ -488,7 +488,7 @@
                         @php
                           $total_booking_count = $variant->getBookingCountBasedOnvariant();
                         @endphp
-                        <span class="font-medium">
+                        <span class="font-medium text-[10px] md:text-lg">
                           @if ($total_booking_count === 0)
                               0 booked
                           @elseif ($total_booking_count === 1)
@@ -500,7 +500,7 @@
                       </span>
                       <span class="flex items-center gap-1">
                         {!! $variant->short_legend_icon !!}
-                        <span class="font-medium">{{$variant->short_legend}}</span>
+                        <span class="font-medium  text-[10px] md:text-lg">{{$variant->short_legend}}</span>
                       </span>
                     </div>
                     <input type="hidden" name="variants[{{ $variant->id }}][product_variant_id]" value="{{ $variant->id }}" />

@@ -4,7 +4,7 @@
       class="container mx-auto lg:px-0 px-4 flex  w-full  justify-between items-center py-2 text-sm border-b border-gray-200">
       <div class="flex gap-4">
       @foreach ($uppermenuItems->where('navigation_placement', 'upper') as $menu)
-      <a href="{{ $menu->link }}" class="text-black duration-300">
+      <a href="{{ $menu->link }}" class="text-black text-xs md:text-lg duration-300">
         <i class="fas pr-1 text-cyan-900 {{ $menu->icon }}"></i>
         {{ $menu->name }}
     </a>
@@ -65,10 +65,10 @@
         </div>
     @else
         <div class="flex gap-4">
-            <a href="{{ route('user.login') }}" class="text-black flex items-center">
+            <a href="{{ route('user.login') }}" class="text-black text-xs md:text-lg flex items-center">
                 <i class="fas fa-sign-in-alt pr-1 text-cyan-900"></i> Sign In
             </a>
-            <a href="{{ route('user.signup') }}" class="text-black flex items-center">
+            <a href="{{ route('user.signup') }}" class="text-black text-xs md:text-lg flex items-center">
                 <i class="fas fa-user-plus pr-1 text-cyan-900"></i> Sign Up
             </a>
         </div>
