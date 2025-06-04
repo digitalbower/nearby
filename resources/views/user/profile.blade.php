@@ -424,12 +424,85 @@
             </button>
           </div>
 
-          <div class="space-y-6">
+          <div class="flex items-center mb-3 space-x-4">
+            <!-- Inactive Radio Button -->
+            <div class="flex space-x-4 mb-4">
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="radio" name="status" value="upcoming" class="hidden" onchange="filterBookings(this)" checked>
+                <span class="radio-icon w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
+                  <i class="fas fa-circle"></i>
+                </span>
+                <span class="text-gray-700">Upcoming Booking</span>
+              </label>
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="radio" name="status" value="past" class="hidden" onchange="filterBookings(this)">
+                <span class="radio-icon w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
+                  <i class="fas fa-circle"></i>
+                </span>
+                <span class="text-gray-700">Past Booking</span>
+              </label>
+
+            </div>
+
+            
+          
+            <!-- Active Radio Button -->
+          
+          </div>
+          <div class="space-y grid grid-cols-1 md:grid-cols-2 items-center gap-3">
             <!-- Booking Item 1 -->
+            @forelse ($bookingConfirmations as $item)
+              <div class="booking-card mt-0 border relative border-[#58af0838] rounded-xl shadow-lg p-3 transition duration-300"
+                  data-status="{{ $item->verification_status }}" 
+                  data-booking-id="{{ $item->booking_id }}"> 
+                  <div class="flex flex-col md:flex-row gap-4">
+                      <div class="w-full">
+                          <div class="grid">
+                              <div class="col-span-2">
+                                  <h3 class="text-lg font-bold text-gray-800">Booking Id {{ $item->booking_id }}</h3>
+                                  <div class="text-sm my-2 text-gray-600">
+                                      <p>
+                                          <i class="fas fa-calendar-alt mr-2 text-gray-400"></i>
+                                          <strong>Date:</strong> {{ \Carbon\Carbon::parse($item->booking_created_at)->format('d/m/y') }}
+                                      </p>
+                                  </div>
+                              
+                                  <div class="grid md:grid-cols-2 gap-y-2 gap-x-4">
+                                      <p class="text-sm text-gray-600">
+                                          Quantity: {{ $item->quantity }} 
+                                      </p>
+                                      <p class="text-sm text-gray-600">
+                                          Total Price: {{ number_format($item->total_price, 2) }}
+                                      </p>
+                                      <p class="text-sm text-gray-600">
+                                          Verification Status: {{ $item->verification_status }}
+                                      </p>
+                                      <p class="text-sm text-gray-600">
+                                          Gift Product: {{ $item->giftproduct ? 'Yes' : 'No' }}
+                                      </p>
+                                  </div>
+                              </div>
+                          </div>
 
-
-            <!-- Booking Item 2 -->
-            <!-- <div class="bg-white rounded-xl shadow-lg p-3 transition duration-300 hover:shadow-xl">
+                          @if($item->verification_status === "pending")
+                              <div class="w-full justify-between flex gap-x-3 mt-3">
+                                  <div class="flex w-full justify-end gap-x-3">
+                                      <a href="{{ route('user.profile.download', $item->id) }}"
+                                        class="mt-4 inline-flex items-center px-3 py-2 bg-[#58af0838] text-black rounded-lg hover:bg-green-200 transition">
+                                          <i class="fa-regular fa-file-pdf mr-1"></i> Download PDF
+                                      </a>
+                                  </div>
+                              </div>
+                          @endif
+                      </div>
+                  </div>
+              </div>
+            @empty
+                <p class="text-gray-500 text-center">No bookings found.</p>
+            @endforelse
+          </div>
+          <!-- <div class="space-y-6">
+            <div class="bg-white rounded-xl shadow-lg p-3 transition duration-300 hover:shadow-xl">
               <div class="flex flex-col md:flex-row gap-2">
                 <div class="w-full md:w-20">
                   <img src="/images/banner.png" alt="West Town 3rd Floor" class="w-full h-20 object-cover rounded-lg" />
@@ -470,12 +543,8 @@
                   </div>
                 </div>
               </div>
-            </div> -->
-
-            
-
-
-          </div>
+            </div>
+          </div> -->
         </div>
       </div>
 
@@ -666,7 +735,8 @@
           <nav class="space-y-1" id="sidebar">
             <button data-tab="personal-info"
               class="flex items-center space-x-3 px-4 py-3 w-full text-left rounded-lg bg-gray-100 text-gray-900">
-              <i class="fas fa-user"></i>
+              <!-- <i class="fas fa-user"></i> -->
+               <svg width="20px" height="20px" viewBox="0 0 1024 1024" fill="#000000" class="icon"  version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M512 0C229.611606 0 0 229.611606 0 512s229.611606 512 512 512 512-229.611606 512-512S794.258081 0 512 0z m309.102571 815.890048c-9.773479-52.776788-32.83889-102.686689-67.502164-144.386867a38.937541 38.937541 0 0 0-54.99211-4.951896 38.937541 38.937541 0 0 0-4.951896 54.99211c35.184525 42.351743 54.601171 95.91041 54.601171 151.032833 0 0.912191 0.260626 1.824383 0.260626 2.736574-68.023416 44.436752-149.20845 70.369051-236.518198 70.369051s-168.364469-25.932298-236.518198-70.369051c0-0.912191 0.260626-1.69407 0.260626-2.736574 0-130.182744 105.944515-236.257572 236.257572-236.257572 121.712395 0 220.750318-99.037923 220.750318-220.750318s-99.037923-220.750318-220.750318-220.750318-220.750318 99.037923-220.750318 220.750318c0 70.499364 33.229829 133.179944 84.8338 173.576992-89.003818 42.872996-154.811911 126.533978-173.186053 226.614405C125.7521 737.571901 78.187834 630.193942 78.187834 512 78.187834 272.745228 272.745228 78.187834 512 78.187834s433.812166 194.557394 433.812166 433.812166c-0.130313 118.193942-47.694579 225.571901-124.709595 303.890048zM369.307203 415.698651c0-78.578773 63.983711-142.562484 142.562484-142.562484s142.562484 63.983711 142.562484 142.562484c0 78.709086-63.983711 142.562484-142.562484 142.562484S369.307203 494.277424 369.307203 415.698651z" /></svg>
               <span>Personal info</span>
             </button>
             <button data-tab="booking"
@@ -676,7 +746,7 @@
             </button>
              <button data-tab="reviews"
               class="flex items-center space-x-3 px-4 py-3 w-full text-left rounded-lg text-gray-900">
-              <i class="fas fa-user"></i>
+              <i class="fas fa-star"></i>
               <span>Reviews</span>
             </button>
             <button data-tab="change-password"
@@ -870,7 +940,105 @@
                 </div>
               </form>
             </div>
-  
+  <div id="booking" class="tab-content  max-w-4xl mx-auto p-8">
+              <div class="">
+                <div class="flex justify-between items-center mb-8">
+                  <h1 class="text-3xl font-bold text-gray-800">My Bookings</h1>
+                </div>
+                <div class="flex gap-4 mb-8">
+                    <input type="text" id="searchInput" placeholder="Search by booking ID"
+                      class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent" />
+                    <button onclick="filterBookingsAdvanced()" class="px-6 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition duration-300">
+                      Search
+                    </button>
+                  </div>
+                      
+                <div class="flex items-center mb-3 space-x-4">
+                  <!-- Inactive Radio Button -->
+                  <div class="flex space-x-4 mb-4">
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                      <input type="radio" name="status" value="upcoming" class="hidden" onchange="filterBookings(this)" checked>
+                      <span class="radio-icon w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
+                        <i class="fas fa-circle"></i>
+                      </span>
+                      <span class="text-gray-700">Upcoming Booking</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                      <input type="radio" name="status" value="past" class="hidden" onchange="filterBookings(this)">
+                      <span class="radio-icon w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
+                        <i class="fas fa-circle"></i>
+                      </span>
+                      <span class="text-gray-700">Past Booking</span>
+                    </label>
+
+                  </div>
+
+                 
+                
+                  <!-- Active Radio Button -->
+                
+                </div>
+                
+                <div class="space-y grid grid-cols-1 md:grid-cols-2 items-center gap-3">
+                  <!-- Booking Item 1 -->
+                  @forelse ($bookingConfirmations as $item)
+                    <div class="booking-card mt-0 border relative border-[#58af0838] rounded-xl shadow-lg p-3 transition duration-300"
+                    data-status="{{ $item->verification_status }}" data-booking-id="{{ $item->booking_id }}"> 
+
+
+                      <div class="flex flex-col md:flex-row gap-4">
+                        <div class="w-full">
+                          <div class="grid">
+                            <div class="col-span-2">
+                              <h3 class="text-lg font-bold text-gray-800">Booking Id {{ $item->booking_id }}</h3>
+                              <div class="text-sm my-2 text-gray-600">
+                                <p>
+                                  <i class="fas fa-calendar-alt mr-2 text-gray-400"></i>
+                                  <strong>Date:</strong> {{ \Carbon\Carbon::parse($item->booking_created_at)->format('d/m/y') }}
+                                </p>
+                              </div>
+                          
+                              <div class="grid md:grid-cols-2 gap-y-2 gap-x-4">
+                                <p class="text-sm text-gray-600">
+                                  Quantity: {{ $item->quantity }} 
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                  Total Price: {{ number_format($item->total_price, 2) }}
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                  Verification Status: {{ ($item->verification_status) }}
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                  Gift Product: {{ $item->giftproduct ? 'Yes' : 'No' }}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+
+                          @if($item->verification_status === "pending")
+                          <div class="w-full justify-between flex gap-x-3 mt-3">
+                            <div class="flex w-full justify-end gap-x-3">
+                            <a href="{{ route('user.profile.download', $item->id) }}"
+                              class="mt-4 inline-flex items-center px-3 py-2 bg-[#58af0838] text-black rounded-lg hover:bg-green-200 transition">
+                              <i class="fa-regular fa-file-pdf mr-1"></i> Download PDF
+                            </a>
+                            </div>
+                            @endif
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    @empty
+                      <p class="text-gray-500 text-center">No bookings found.</p>
+                      <!-- Right side icons -->
+                     @endforelse
+                    </div>
+					
+				</div>
+
+                  <!-- Booking Item 2 -->
+
+    </div>
   <div id="reviews" class="tab-content max-w-4xl mx-auto p-8 hidden">
   <h2 class="text-2xl font-bold text-gray-800 mb-6">
     <i class="fas fa-star text-yellow-500 mr-2"></i> My Reviews
@@ -1016,112 +1184,8 @@
 
             </div>
   
-            <div id="booking" class="tab-content  max-w-4xl mx-auto p-8">
-              <div class="">
-                <div class="flex justify-between items-center mb-8">
-                  <h1 class="text-3xl font-bold text-gray-800">My Bookings</h1>
-                </div>
-                <div class="flex gap-4 mb-8">
-                    <input type="text" id="searchInput" placeholder="Search by booking ID"
-                      class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent" />
-                    <button onclick="filterBookingsAdvanced()" class="px-6 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition duration-300">
-                      Search
-                    </button>
-                  </div>
-                      
-                <div class="flex items-center mb-3 space-x-4">
-                  <!-- Inactive Radio Button -->
-                  <div class="flex space-x-4 mb-4">
-                    <label class="flex items-center space-x-2 cursor-pointer">
-                      <input type="radio" name="status" value="upcoming" class="hidden" onchange="filterBookings(this)" checked>
-                      <span class="radio-icon w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
-                        <i class="fas fa-circle"></i>
-                      </span>
-                      <span class="text-gray-700">Upcoming Booking</span>
-                    </label>
-                    <label class="flex items-center space-x-2 cursor-pointer">
-                      <input type="radio" name="status" value="past" class="hidden" onchange="filterBookings(this)">
-                      <span class="radio-icon w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
-                        <i class="fas fa-circle"></i>
-                      </span>
-                      <span class="text-gray-700">Past Booking</span>
-                    </label>
-
-                  </div>
-
-                 
-                
-                  <!-- Active Radio Button -->
-                
-                </div>
-                
-                <div class="space-y grid grid-cols-1 md:grid-cols-2 items-center gap-3">
-                  <!-- Booking Item 1 -->
-                  @forelse ($bookingConfirmations as $item)
-                    <div class="booking-card mt-0 border relative border-[#58af0838] rounded-xl shadow-lg p-3 transition duration-300"
-                    data-status="{{ $item->verification_status }}" data-booking-id="{{ $item->booking_id }}"> 
-
-
-                      <div class="flex flex-col md:flex-row gap-4">
-                        <div class="w-full">
-                          <div class="grid">
-                            <div class="col-span-2">
-                              <h3 class="text-lg font-bold text-gray-800">Booking Id {{ $item->booking_id }}</h3>
-                              <div class="text-sm my-2 text-gray-600">
-                                <p>
-                                  <i class="fas fa-calendar-alt mr-2 text-gray-400"></i>
-                                  <strong>Date:</strong> {{ \Carbon\Carbon::parse($item->booking_created_at)->format('d/m/y') }}
-                                </p>
-                              </div>
-                          
-                              <div class="grid md:grid-cols-2 gap-y-2 gap-x-4">
-                                <p class="text-sm text-gray-600">
-                                  Quantity: {{ $item->quantity }} 
-                                </p>
-                                <p class="text-sm text-gray-600">
-                                  Total Price: {{ number_format($item->total_price, 2) }}
-                                </p>
-                                <p class="text-sm text-gray-600">
-                                  Verification Status: {{ ($item->verification_status) }}
-                                </p>
-                                <p class="text-sm text-gray-600">
-                                  Gift Product: {{ $item->giftproduct ? 'Yes' : 'No' }}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-
-                          @if($item->verification_status === "pending")
-                          <div class="w-full justify-between flex gap-x-3 mt-3">
-                            <div class="flex w-full justify-end gap-x-3">
-                            <a href="{{ route('user.profile.download', $item->id) }}"
-                              class="mt-4 inline-flex items-center px-3 py-2 bg-[#58af0838] text-black rounded-lg hover:bg-green-200 transition">
-                              <i class="fas fa-download mr-1"></i> Download PDF
-                            </a>
-                            </div>
-                            @endif
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    @empty
-                      <p class="text-gray-500 text-center">No bookings found.</p>
-                      <!-- Right side icons -->
-                     
-                    </div>
-                  @endforelse
-  
-                  </div>
-  
-  
-                  <!-- Booking Item 2 -->
-  
-  
-  
-  
-  
-                </div>
-              </div>
+            
+              
   
   
   
@@ -1252,7 +1316,6 @@
                   </button>
                 </div>
               </div>
-  
               @push('scripts')
               <script>
                 const paymentOptions = document.querySelectorAll("#payment-options > div");
@@ -1293,13 +1356,9 @@
                 });
               </script>
             @endpush
-  
-          </div>
-        </div>
-      </div>
-  
     </div>
   </div>
+</div>    
   @endsection
   @push('scripts')
   <script>

@@ -25,8 +25,8 @@
 
 
 <div class="md:px-6 px-2 pb-10 h-[100%]">
-    <div class="p-3 mb-4 bg-white flex items-center justify-between md:hidden">
-        <a href="javascript:void(0);"><img src="{{asset('images/admin-logo.svg')}}" class="max-w-[180px]" alt="" srcset=""></a>
+    <div class="p-3 mb-4 md:mb-0 bg-white md:bg-transparent flex items-center justify-between md:justify-start">
+        <a href="javascript:void(0);"><img src="{{asset('images/admin-logo.svg')}}" class="max-w-[180px] md:hidden" alt="" srcset=""></a>
         <a href="javascript:void(0);" class="inline-block sidemenu_btn p-3 text-xl"><i class="fa-solid fa-bars"></i></a>
     </div>
     <h1 class="text-3xl font-extrabold text-gray-900 mb-8">Booking Management</h1>
