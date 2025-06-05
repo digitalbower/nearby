@@ -53,7 +53,40 @@ use App\Http\Controllers\Vendor\Auth\VendorForgotPasswordController;
 use App\Http\Controllers\Vendor\Auth\VendorResetPasswordController;
 
 
-Route::get('/test-error', [ProfileController::class, 'testErrorPage'])->name('testErrorPage');
+
+function showCustomError($code)
+{
+    $errors = [
+        400 => ['Bad Request', 'The request could not be understood by the server.'],
+        401 => ['Unauthorized', 'You are not authorized to view this page.'],
+        403 => ['Forbidden', 'Access to this resource is denied.'],
+        404 => ['Page Not Found', 'The page you’re looking for doesn’t exist or has been moved.'],
+        405 => ['Method Not Allowed', 'The requested HTTP method is not allowed.'],
+        417 => ['Expectation Failed', 'The server cannot meet the requirements of the Expect header.'],
+        419 => ['Page Expired', 'Your session has expired. Please refresh the page.'],
+        429 => ['Too Many Requests', 'You have made too many requests in a short period.'],
+        
+    ];
+
+    $title = $errors[$code][0] ?? 'Error';
+    $message = $errors[$code][1] ?? 'An unexpected error occurred.';
+
+    return response()->view('user.errors.custom', [
+        'code' => $code,
+        'title' => $title,
+        'message' => $message,
+    ], $code);
+}
+
+// Routes below here
+Route::get('/test-error/{code}', function ($code) {
+    return showCustomError((int) $code);
+});
+
+Route::fallback(function () {
+    return showCustomError(404);
+});
+
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('privacy_policy');
 Route::get('/cookie-policy', [HomeController::class, 'cookiePolicy'])->name('cookie_policy');
@@ -396,17 +429,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 
 
- 
-    
-    
-
-    
-    
- 
-
 });
-Route::prefix('vendor')->group(function () {
+
+ Route::prefix('vendor')->group(function () {
+    // Only redirect specific paths that don't exist in your vendor routes
     Route::get('{any}', function ($any) {
-        return redirect()->away("https://vendor.nearbyvouchers.com/{$any}");
+        // Check if this is actually a 404 case for vendor routes
+        $validVendorRoutes = ['login', 'booking', 'payment', 'report']; // Add your valid routes
+        
+        if (!in_array(explode('/', $any)[0], $validVendorRoutes)) {
+            return redirect()->away("https://vendor.nearbyvouchers.com/{$any}");
+        }
+        
+        abort(404); // Let Laravel handle the 404 normally
     })->where('any', '.*');
 });
+
+
