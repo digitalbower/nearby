@@ -291,13 +291,72 @@ class HomeController extends Controller
       }
     
     public function privacyPolicy(){
-        return view('user.privacy_policy');
-    }
-    public function cookiePolicy(){
-        return view('user.cookie_policy');
+          $uppermenuItems = NavigationMenu::where('active', 1)
+        ->where('navigation_placement', 'upper')
+        ->get(); 
+
+        $lowermenuitem = NavigationMenu::where('active', 1)
+        ->where('navigation_placement', 'lower')
+        ->get();
+
+        $logo = Logo::where('status', 1)
+        ->where('type', 'header') 
+        ->first(); 
+        
+        $topDestinations = Footer::where('type', 'Top Destination')
+                              ->where('status', 1)
+                              ->get();
+    
+        $informationLinks = Footer::where('type', 'Information')
+                            ->where('status', 1)
+                            ->get();
+
+        $followus = Footer::where('type', 'Follow Us')
+        ->where('status', 1)
+        ->get();
+
+        $payment_channels = Footer::where('type', 'payment_channels')
+        ->where('status', 1)
+        ->get();    
+        $currentPath = request()->path();
+        $seo = MainSeo::where('page_url', $currentPath)->first()
+        ?? MainSeo::where('page_url', 'default')->first();  
+        return view('user.privacy_policy',compact('seo','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+        'followus','payment_channels'));
     }
     public function termsAndConditions(){
-        return view('user.terms_and_conditions');
+        $uppermenuItems = NavigationMenu::where('active', 1)
+        ->where('navigation_placement', 'upper')
+        ->get(); 
+
+        $lowermenuitem = NavigationMenu::where('active', 1)
+        ->where('navigation_placement', 'lower')
+        ->get();
+
+        $logo = Logo::where('status', 1)
+        ->where('type', 'header') 
+        ->first(); 
+        
+        $topDestinations = Footer::where('type', 'Top Destination')
+                              ->where('status', 1)
+                              ->get();
+    
+        $informationLinks = Footer::where('type', 'Information')
+                            ->where('status', 1)
+                            ->get();
+
+        $followus = Footer::where('type', 'Follow Us')
+        ->where('status', 1)
+        ->get();
+
+        $payment_channels = Footer::where('type', 'payment_channels')
+        ->where('status', 1)
+        ->get();    
+        $currentPath = request()->path();
+        $seo = MainSeo::where('page_url', $currentPath)->first()
+        ?? MainSeo::where('page_url', 'default')->first();  
+        return view('user.terms_and_conditions',compact('seo','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+        'followus','payment_channels'));
     }
    
 
