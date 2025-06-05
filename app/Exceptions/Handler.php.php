@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
+
 class Handler extends ExceptionHandler
 {
-    protected $levels = [
+         protected $levels = [
         //
     ];
 
@@ -28,13 +29,24 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
-
-        $this->renderable(function (NotFoundHttpException|ModelNotFoundException $e, $request) {
-            return response()->view('user.errors.custom', [], 404);
-        });
-
-        $this->renderable(function (Throwable $e, $request) {
-            return response()->view('user.errors.custom', [], 500);
-        });
     }
+
+    /**
+     * Render an exception into an HTTP response.
+     */
+    public function render($request, Throwable $exception)
+    {
+        // Handle 404 errors
+        if ($exception instanceof NotFoundHttpException || $exception instanceof ModelNotFoundException) {
+            if ($request->expectsJson()) {
+                return response()->json(['error' => 'Not found'], 404);
+            }
+            
+            return response()->view('errors.404', [], 404);
+        }
+
+        return parent::render($request, $exception);
+    }
+   
+
 }

@@ -791,7 +791,7 @@
             </svg>
         </div>
     @endif
-    </div>
+     </div>
 
     <!-- Upload Button -->
     
