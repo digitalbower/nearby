@@ -373,20 +373,26 @@ class ProductController extends Controller
         $end = Carbon::parse($firstVariant->timer_end_time);
         $totalDays = $start->diffInDays($end);
     }
-
+    $isoEndTimes = [];
     // Calculate total amount from all items
     foreach ($cartItems as $item) {
         $quantity = $item->quantity ?? 1;
         $price = $item->productVariant?->discounted_price ?? $item->productVariant?->unit_price ?? 0;
         $totalQuantity += $quantity;
         $totalAmount += ($price * $quantity);
+        $variant = $item->productVariant;
+
+        if ($variant && $variant->end_time) {
+            $isoEndTimes[$variant->id] = Carbon::parse($variant->end_time)->toIso8601String();
+        }
     }
         
        
         
         
        return view('user.cart', compact('seo','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
-       'followus','payment_channels','cartItems', 'totalAmount', 'totalQuantity','totalDays','end','total'));
+       'followus','payment_channels','cartItems', 'totalAmount', 'totalQuantity','totalDays','end','total',
+    'isoEndTimes'));
     }
     public function updateCart(Request $request)
     {
