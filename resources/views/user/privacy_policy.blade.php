@@ -1,15 +1,64 @@
 @extends('user.layouts.main')
 @push('styles')
-<style>
- 
+  <style>
+  .to-blue-500 {
+    --tw-gradient-to: #3b82f6 var(--tw-gradient-to-position);
+  }
+
+  /* Update the body to use the Poppins font */
   body {
-    font-family: "Poppins", sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 400;
   }
-    </style>
+  .w-8{
+    width: 40px !important;
+  }
+         
+        
+
+  .from-cyan-500 {
+    --tw-gradient-from: #06b6d4 var(--tw-gradient-from-position);
+    --tw-gradient-to: rgb(6 182 212 / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+
+  .bg-gradient-to-r {
+    background-image: linear-gradient(to right, var(--tw-gradient-stops));
+  }
+  .bg-custom {
+            background: linear-gradient(135deg, #2b3147 0%, #1a1f2e 100%);
+        }
+        .product-card {
+            background: linear-gradient(135deg, #3a4259 0%, #2b3147 100%);
+        }
+        .color-dot {
+            width: 16px;
+            background-color: #000;
+            color: #000;
+            height: 16px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .swiper-pagination-bullet-active{
+          background-color: #2b3147 !important;
+          backdrop-filter: blur(10px);
+        }
+        .swiper-pagination{
+          color: #fff !important;
+          overflow: visible;
+          bottom: 10px !important;
+          z-index: 999999;
+        }
+        .swiper-pagination-bullet{
+       
+          border-radius: 10px !important;
+          width: 60px !important;
+          height: 4px !important;
+        }
+</style>
 @endpush
 @push('scripts')
-<script>
+  <script>
   tailwind.config = {
     darkMode: "class",
     theme: {
@@ -37,7 +86,7 @@
         },
       },
       fontFamily: {
-        body: ["Poppins", "sans-serif"] /* Set Poppins as the body font */,
+        body: ["Poppins", "sans-serif"],  /* Set Poppins as the body font */
         sans: [
           "Arial",
           "ui-sans-serif",
@@ -59,6 +108,34 @@
     },
   };
 </script>
+
+<script>
+  window.onscroll = function() {
+    const header = document.getElementById('header');
+    const sticky = header.offsetTop;
+
+    if (window.pageYOffset > sticky) {
+      header.classList.add('fixed-header');
+    } else {
+      header.classList.remove('fixed-header');
+    }
+  };
+</script>
+@endpush
+@push('styles')
+<style>
+   .fixed-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #fff; /* Blue color */
+      color: white;
+     
+      z-index: 10;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    </style>
 @endpush
 @section('content')
     <div class="container mx-auto px-4 py-8">
@@ -269,7 +346,7 @@
            <ul class="list-disc pl-6 space-y-1">
             <li>Automatic session timeout after 2 hours of inactivity</li>
             <li>Secure session token generation and management</li>
-            <li>Protection against session hijacking and fixation/li>
+            <li>Protection against session hijacking and fixation</li>
             <li>Regular session security monitoring</li>
            </ul><br>
         </section>
@@ -612,3 +689,65 @@
       </div>
 
 @endsection
+@push('scripts')
+<script>
+  function toggleFooterSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    const icon = document.getElementById(`${sectionId}-icon`);
+    if (section.classList.contains('hidden')) {
+      section.classList.remove('hidden');
+      icon.classList.remove('fa-chevron-down');
+      icon.classList.add('fa-chevron-up');
+    } else {
+      section.classList.add('hidden');
+      icon.classList.remove('fa-chevron-up');
+      icon.classList.add('fa-chevron-down');
+    }
+  }
+</script>
+<script>
+    function togglePassword() {
+        const passwordInput = document.getElementById('password');
+        const passwordToggle = document.getElementById('passwordToggle');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            passwordToggle.classList.remove('fa-eye');
+            passwordToggle.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            passwordToggle.classList.remove('fa-eye-slash');
+            passwordToggle.classList.add('fa-eye');
+        }
+    }
+</script>
+<script>
+  const toggle = document.getElementById("mobile-menu-toggle");
+  const menu = document.getElementById("mobile-menu"); // Ensure this matches the id in the HTML
+  toggle.addEventListener("click", () => {
+    menu.classList.toggle("hidden");
+  });
+</script>
+
+<script>
+  const dropdown = document.getElementById("dropdown");
+
+  function showDropdown() {
+    dropdown.classList.remove("hidden");
+  }
+
+  function toggleDropdown() {
+    dropdown.classList.toggle("hidden");
+  }
+
+  // Hide dropdown when clicking outside
+  document.addEventListener("click", (event) => {
+    if (
+      !event.target.closest("#dropdown") &&
+      !event.target.closest("#search-input") &&
+      !event.target.closest("button")
+    ) {
+      dropdown.classList.add("hidden");
+    }
+  });
+</script>
+@endpush
