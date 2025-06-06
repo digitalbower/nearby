@@ -432,14 +432,14 @@
                 <span class="radio-icon w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
                   <i class="fas fa-circle"></i>
                 </span>
-                <span class="text-gray-700">Upcoming Booking</span>
+                <span class="text-gray-700 md:text-lg text-xs">Upcoming Booking</span>
               </label>
               <label class="flex items-center space-x-2 cursor-pointer">
                 <input type="radio" name="status" value="past" class="hidden" onchange="filterBookings(this)">
                 <span class="radio-icon w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
                   <i class="fas fa-circle"></i>
                 </span>
-                <span class="text-gray-700">Past Booking</span>
+                <span class="text-gray-700 md:text-lg text-xs">Past Booking</span>
               </label>
 
             </div>
@@ -459,7 +459,7 @@
                       <div class="w-full">
                           <div class="grid">
                               <div class="col-span-2">
-                                  <h3 class="text-lg font-bold text-gray-800">Booking Id {{ $item->booking_id }}</h3>
+                                  <h3 class="md:text-lg font-bold text-gray-800">Booking Id {{ $item->booking_id }}</h3>
                                   <div class="text-sm my-2 text-gray-600">
                                       <p>
                                           <i class="fas fa-calendar-alt mr-2 text-gray-400"></i>
