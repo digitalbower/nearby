@@ -106,7 +106,8 @@ public function attachments(): array
                 try {
                     $pdf->save($pdfPath);
                 } catch (\Exception $e) {
-                    Log::error('PDF Save Failed:', $e->getMessage());
+                    Log::error('PDF Save Failed:', ['error' => $e->getMessage()]);
+                    continue;
                 }
                 
                 $attachments[] = Attachment::fromPath($pdfPath)

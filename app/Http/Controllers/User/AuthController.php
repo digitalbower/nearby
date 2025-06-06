@@ -67,7 +67,7 @@ class AuthController extends Controller
         // Attempt to authenticate user
         if (Auth::attempt($request->only('email', 'password'))) {
             $redirectUrl = $request->input('redirect', route('home.index'));
-            return redirect()->to($redirectUrl)->with('success', 'Logged in successfully!');
+            return redirect()->to($redirectUrl);
         }
 
         // If authentication fails, return back with error
@@ -227,7 +227,7 @@ class AuthController extends Controller
                 }
     
                 Auth::login($existingUser);
-                return redirect()->to($redirectUrl)->with('success', 'Logged in successfully via Google!');
+                return redirect()->to($redirectUrl);
             }
     
             return redirect()->route('user.login')->with('error', 'Invalid action.');

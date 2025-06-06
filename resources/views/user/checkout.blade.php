@@ -702,6 +702,7 @@ clearErrorOnInputChange(cardCvc);
           headers: {
             "Content-Type": "application/json",
             "X-CSRF-TOKEN": csrfToken,
+            'Accept': 'application/json'
           },
           body: JSON.stringify({
             payment_intent_id: paymentIntent.id,
@@ -751,11 +752,13 @@ clearErrorOnInputChange(cardCvc);
         loader.style.display = 'flex';
       
 
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-       handlePayment();  
-        }, 50);
-      });
+      try {
+        await handlePayment();  
+      } catch (error) {
+        showError("Unexpected error occurred");
+      } finally {
+        loader.style.display = 'none'; 
+      }
     });
   });
 });

@@ -407,11 +407,11 @@
         <p class="text-xl text-gray-600 mb-8">Join us during our launch phase and enjoy priority visibility and dedicated onboarding support.</p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <button onclick="document.getElementById('myModal').classList.remove('hidden')" class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-            Be Among
+            List Your Business Now
           </button>
-          <button class="border-2 border-black w-full hover:bg-[#4a910954] hover:text-black p-2 rounded-md">
+          {{-- <button class="border-2 border-black w-full hover:bg-[#4a910954] hover:text-black p-2 rounded-md">
             Schedule Demo
-          </button>
+          </button> --}}
         </div>
       </div>
     </div>

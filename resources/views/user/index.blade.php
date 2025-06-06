@@ -1012,14 +1012,14 @@ body {
                         @foreach($countryCodes as $country)
                         <option value="{{ $country->id }}"
                             {{ old('country_code_id', isset($user) ? $user->country_code_id : '') == $country->id ? 'selected' : '' }}>
-                            {{ $country->phonecode }}
+                            +{{ $country->phonecode }}
                         </option>
                         @endforeach
 
                         <!-- Add more country codes as needed -->
                     </select>
                     <input type="tel" id="phone" name="phone"
-                        class="mt-2 p-3 border border-transparent rounded-lg w-full bg-white focus:ring-2 focus:ring-blue-400 transition-all"
+                        class="mt-2 p-3 border border-transparent rounded-lg w-full bg-white focus:ring-2 focus:ring-blue-400 transition-all phone"
                         placeholder="Enter phone number" required>
                 </div>
             </div>
@@ -1336,5 +1336,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </script>
 @endif
-
+<script>
+$(document).ready(function () {
+  $('#modalForm').on('input', '.phone', function () {
+    this.value = this.value.replace(/[^0-9]/g, '');
+  });
+});
+</script>
 @endpush

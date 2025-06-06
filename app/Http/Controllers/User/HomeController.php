@@ -161,7 +161,10 @@ class HomeController extends Controller
                           });
                           
            
-            $countryCodes = Country::all(); 
+            $countries = Country::all(); 
+            $countryCodes = collect($countries)
+                ->unique('phonecode') 
+                ->values();     
 
             $currentPath = request()->path();
             $seo = MainSeo::where('page_url', $currentPath)->first()

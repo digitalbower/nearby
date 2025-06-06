@@ -198,7 +198,7 @@
           </div>
       @endif
     
-        <form method="POST" action="{{ route('user.register') }}" class="space-y-6">
+        <form method="POST" action="{{ route('user.register') }}" class="space-y-6" id="signupForm">
         @csrf
           <!-- Name fields -->
           <div class="grid grid-cols-2 gap-4">
@@ -231,7 +231,7 @@
 
     <!-- Phone Number Input -->
     <input
-        class="w-3/4 rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        class="w-3/4 rounded-md border border-gray-300 bg-gray-50 px-3 py-4 text-base placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 phone"
         type="tel" name="phone" placeholder="Phone Number" value="{{ old('phone', $user->phone ?? '') }}" required>
 </div>
 
@@ -308,13 +308,13 @@
   <div class="flex items-center ml-2">
     <input type="checkbox" id="terms" name="terms" class="rounded w-4 h-4 border-[#E2E8F0]" {{ old('terms') ? 'checked' : '' }}>
     <label for="terms" class="ml-2 text-base text-[#718096]">
-      I agree to the <a href="#" class="text-primary hover:underline">Terms and Conditions</a>
+      I agree to the <a href="{{route('privacy_policy')}}" class="text-primary hover:underline">Terms and Conditions</a>
     </label>
   </div>
   <div class="flex items-center ml-2 mt-2">
     <input type="checkbox" id="market_policy" name="market_policy" class="rounded w-4 h-4 border-[#E2E8F0]" {{ old('market_policy') ? 'checked' : '' }}>
     <label for="market_policy" class="ml-2 text-base text-[#718096]">
-      I agree to the <a href="#" class="text-primary hover:underline">market policies</a>
+      I agree to receive marketing emails and promotional offers</a>
     </label>
   </div>
 
@@ -433,6 +433,12 @@
       icon.classList.add('fa-eye');
     }
   }
+  $(document).ready(function () {
+    // Real-time filtering for phone input
+    $('#signupForm').on('input', '.phone', function () {
+      this.value = this.value.replace(/[^0-9]/g, '');
+    });
+  });
 </script>
 
 @endpush

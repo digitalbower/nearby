@@ -261,7 +261,7 @@
           <!-- Form Start -->
           <!-- resources/views/user/profile/mobile-profile.blade.php -->
 
-          <form action="{{ route('user.profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6" id="personal-info-form">
+          <form action="{{ route('user.profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6 personal-info-form" id="personal-info-form"> 
             @csrf
 
             <!-- Profile Image -->
@@ -342,7 +342,7 @@
                 <input type="tel" id="phone" name="phone"
                       value="{{ old('phone', $user->phone) }}"
                       placeholder="+91 1234567890"
-                      class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                      class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-blue-500 focus:border-blue-500 phone">
             </div>
 
             <!-- Email (Readonly) -->
@@ -472,14 +472,24 @@
                                           Quantity: {{ $item->quantity }} 
                                       </p>
                                       <p class="text-sm text-gray-600">
-                                          Total Price: {{ number_format($item->total_price, 2) }}
+                                          Total Price: AED {{ number_format($item->total_price, 2) }}
                                       </p>
+                                      @if($item->verification_status ==="pending")
                                       <p class="text-sm text-gray-600">
-                                          Verification Status: {{ $item->verification_status }}
+                                          Active
                                       </p>
+                                      @elseif($item->verification_status ==="redeemed")
                                       <p class="text-sm text-gray-600">
+                                         Redeemed
+                                      </p>
+                                      @elseif($item->verification_status ==="expired")
+                                      <p class="text-sm text-gray-600">
+                                         Expired
+                                      </p>
+                                      @endif
+                                      {{-- <p class="text-sm text-gray-600">
                                           Gift Product: {{ $item->giftproduct ? 'Yes' : 'No' }}
-                                      </p>
+                                      </p> --}}
                                   </div>
                               </div>
                           </div>
@@ -774,7 +784,7 @@
    
     
               <!-- Form Start -->
-              <form action="{{ route('user.profile.update') }}" method="POST" enctype="multipart/form-data"  class="space-y-6" id="personal-info-form">
+              <form action="{{ route('user.profile.update') }}" method="POST" enctype="multipart/form-data"  class="space-y-6 personal-info-form" id="personal-info-form">
               @csrf
 
              
@@ -871,7 +881,7 @@
                     <input type="tel" id="phone" name="phone"
     placeholder="+91 1234567890"
     value="{{ old('phone', $user->phone ?? '') }}"
-    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent phone">
                   </div>
                   <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
@@ -1003,14 +1013,24 @@
                                   Quantity: {{ $item->quantity }} 
                                 </p>
                                 <p class="text-sm text-gray-600">
-                                  Total Price: {{ number_format($item->total_price, 2) }}
+                                  Total Price: AED {{ number_format($item->total_price, 2) }}
                                 </p>
+                                @if($item->verification_status ==="pending")
                                 <p class="text-sm text-gray-600">
-                                  Verification Status: {{ ($item->verification_status) }}
+                                    Active
                                 </p>
+                                @elseif($item->verification_status ==="redeemed")
                                 <p class="text-sm text-gray-600">
+                                    Redeemed
+                                </p>
+                                @elseif($item->verification_status ==="expired")
+                                <p class="text-sm text-gray-600">
+                                    Expired
+                                </p>
+                                @endif
+                                {{-- <p class="text-sm text-gray-600">
                                   Gift Product: {{ $item->giftproduct ? 'Yes' : 'No' }}
-                                </p>
+                                </p> --}}
                               </div>
                             </div>
                           </div>
@@ -1680,6 +1700,14 @@ function updateStars(value, containerId = 'editReviewModal') {
   function closeEditForm() {
     document.getElementById('edit-review-form').classList.add('hidden');
   }
+</script>
+<script>
+  $(document).ready(function () {
+    // Real-time filtering for phone input
+    $('.personal-info-form').on('input', '.phone', function () {
+      this.value = this.value.replace(/[^0-9]/g, '');
+    });
+  });
 </script>
 
 @endpush
