@@ -164,12 +164,12 @@
           
         
           <!-- Booking Details -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-1">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:gap-6 gap-y-2 mb-1">
             <div>
               <p class="text-gray-800 text-sm">Booking ID</p>
               <p class="font-semibold text-gray-800">{{ $bookingConfirmation->booking_id }}</p>
             </div>
-            <div class="text-right">
+            <div class="md:text-right">
               <p class="text-gray-800 text-sm">Booked for</p>
               <p class="font-semibold text-gray-800">{{ $user->first_name }}</p>
             </div>

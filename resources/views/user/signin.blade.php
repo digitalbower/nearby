@@ -141,7 +141,7 @@
 
 
 
-   <div class="overflow-hidden z-10 py-12 mb-10 bg-[#ebebeb] border-b-2 border-[#ebebeb]">
+   <div class="overflow-hidden z-10 py-20 bg-[#ebebeb] border-b-2 border-[#ebebeb]">
 
     <div
     class="relative lg:flex container px-4 mx-auto w-full  ">
