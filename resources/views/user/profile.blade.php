@@ -727,7 +727,7 @@
     </div>
   </div>
 
-  <div class="]   text-gray-900 border-b-2 border-[#58af0838]">
+<div class="text-gray-900 border-b-2 border-[#58af0838]">
     <div class="container mx-auto   ">
       <div class="lg:flex flex-col lg:flex-row  hidden">
         <div class="lg:w-1/4 py-8 px-4 lg:px-10  bg-[#58af0838]">
@@ -784,13 +784,13 @@
              src="{{ asset('storage/' . $user->profile_picture) }}" 
              alt="Profile Picture"
              class="w-28 h-28 rounded-full object-cover border border-gray-300">
-    @else
-        <div class="w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center border border-gray-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
-            </svg>
-        </div>
-    @endif
+        @else
+            <div class="w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center border border-gray-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+                </svg>
+            </div>
+        @endif
      </div>
 
     <!-- Upload Button -->

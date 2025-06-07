@@ -146,7 +146,7 @@
     </style>
     @endpush
     @section('content')
-  <div class="relative lg:flex mx-auto mb-10 py-12 w-full overflow-hidden bg-[#ebebeb] border-b-2 border-[#ebebeb] border-b-2 ">
+  <div class="relative lg:flex mx-auto py-20 w-full overflow-hidden bg-[#ebebeb] border-b-2 border-[#ebebeb] border-b-2 ">
     <!-- Left side with illustration -->
 
     <div class="w-full absolute top-0 z0 h-full w-full overflow-hidden">

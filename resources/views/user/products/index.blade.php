@@ -10,7 +10,7 @@
      <div class="flex justify-between items-center">
       <div class="flex gap-x-3 items-center">
         <button @click="showFilter = !showFilter"
-        class="w-auto px-9 py-3 bg-[#58af0838]  text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex gap-x-2 items-center">
+        class="w-auto md:px-9 px-3 py-3 bg-[#58af0838]  text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex gap-x-2 items-center">
         <i :class="showFilter ? 'fas fa-times' : 'fas fa-filter'"></i>
         <span class="md:block hidden" x-text="showFilter ? 'Hide Filter' : 'Show Filter'"></span>
       </button>
@@ -27,7 +27,7 @@
           <!-- Dropdown Toggle Button -->
           <button
             @click="showFilters = !showFilters"
-            class="w-full border border-gray-300 rounded-lg bg-white px-2 md:pl-12 md:pr-8 py-3 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 flex items-center justify-between"
+            class="w-full border border-gray-300 rounded-lg bg-white px-8 md:pl-12 md:pr-8 py-3 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 flex items-center justify-between"
           >
             <span class="flex items-center gap-2">
               <i class="fas" :class="showFilters ? 'fa-times text-red-500' : 'fa-filter text-blue-500'"></i>
@@ -45,21 +45,21 @@
         >
         <li @click="setSort('price_low_high')"
           :class="sortBy === 'price_low_high' ? 'bg-blue-100' : ''"
-            class="px-4 py-2 flex items-center gap-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+            class="px-4 py-2 flex items-center gap-2 md:text-sm text-xs text-gray-700 hover:bg-gray-100 cursor-pointer">
             <i class="fas fa-arrow-down text-green-500"></i>
             Price: Low to High
           </li>
       
           <li @click="setSort('price_high_low')"
             :class="sortBy === 'price_high_low' ? 'bg-blue-100' : ''"
-            class="px-4 py-2 flex items-center gap-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+            class="px-4 py-2 flex items-center gap-2 md:text-sm text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
             >
               <i class="fas fa-arrow-up text-red-500"></i>
               Price: High to Low
             </li>
           <li @click="setSort('rating')"
             :class="sortBy === 'rating' ? 'bg-blue-100' : ''"
-            class="px-4 py-2 flex items-center gap-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+            class="px-4 py-2 flex items-center gap-2 md:text-sm text-xs text-gray-700 hover:bg-gray-100 cursor-pointer"
             >
               <i class="fas fa-star text-yellow-500"></i>
               Rating
