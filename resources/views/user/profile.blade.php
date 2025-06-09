@@ -459,7 +459,7 @@
                       <div class="w-full">
                           <div class="grid">
                               <div class="col-span-2">
-                                  <h3 class="md:text-lg font-bold text-gray-800">Booking Id {{ $item->booking_id }}</h3>
+                                  <h3 class="md:text-lg font-bold text-gray-800 pr-10">Booking Id {{ $item->booking_id }}</h3>
                                   <div class="text-sm my-2 text-gray-600">
                                       <p>
                                           <i class="fas fa-calendar-alt mr-2 text-gray-400"></i>
@@ -475,15 +475,15 @@
                                           Total Price: AED {{ number_format($item->total_price, 2) }}
                                       </p>
                                       @if($item->verification_status ==="pending")
-                                      <p class="text-sm text-gray-600">
+                                      <p class="text-sm text-gray-600 bg-[#008000] text-white rounded-lg px-2 py-1 absolute top-5 right-2">
                                           Active
                                       </p>
                                       @elseif($item->verification_status ==="redeemed")
-                                      <p class="text-sm text-gray-600">
+                                      <p class="text-sm text-gray-600 bg-yellow text-white absolute rounded-lg px-2 py-1 top-5 right-2">
                                          Redeemed
                                       </p>
                                       @elseif($item->verification_status ==="expired")
-                                      <p class="text-sm text-gray-600">
+                                      <p class="text-sm text-gray-600 bg-red text-white absolute rounded-lg px-2 py-1 top-5 right-2">
                                          Expired
                                       </p>
                                       @endif
@@ -771,7 +771,7 @@
   
         <div class="lg:w-3/4 bg-white">
           <div id="tab-content">
-            <div id="personal-info" class="tab-content active py-10 lg:py-8  px-4 lg:p-8 max-w-4xl mx-auto">
+            <div id="personal-info" class="tab-content active py-10 lg:py-8  px-4 lg:p-8 max-w-5xl mx-auto">
               <!-- Title -->
               <h2 class="text-2xl font-semibold text-gray-800 mb-8 flex items-center gap-3">
                 <i class="fas fa-user-circle text-blue-500"></i> Profile Information
@@ -950,7 +950,7 @@
                 </div>
               </form>
             </div>
-  <div id="booking" class="tab-content  max-w-4xl mx-auto p-8">
+  <div id="booking" class="tab-content  max-w-5xl mx-auto p-8">
               <div class="">
                 <div class="flex justify-between items-center mb-8">
                   <h1 class="text-3xl font-bold text-gray-800">My Bookings</h1>
@@ -1016,15 +1016,15 @@
                                   Total Price: AED {{ number_format($item->total_price, 2) }}
                                 </p>
                                 @if($item->verification_status ==="pending")
-                                <p class="text-sm text-gray-600">
+                                <p class="text-sm text-gray-600 bg-[#008000] text-white rounded-lg px-2 py-1 absolute top-5 right-2">
                                     Active
                                 </p>
                                 @elseif($item->verification_status ==="redeemed")
-                                <p class="text-sm text-gray-600">
+                                <p class="text-sm text-gray-600 bg-yellow text-white absolute rounded-lg px-2 py-1 top-5 right-2">
                                     Redeemed
                                 </p>
                                 @elseif($item->verification_status ==="expired")
-                                <p class="text-sm text-gray-600">
+                                <p class="text-sm text-gray-600 bg-red text-white absolute rounded-lg px-2 py-1 top-5 right-2">
                                     Expired
                                 </p>
                                 @endif
@@ -1059,7 +1059,7 @@
                   <!-- Booking Item 2 -->
 
     </div>
-  <div id="reviews" class="tab-content max-w-4xl mx-auto p-8 hidden">
+  <div id="reviews" class="tab-content max-w-5xl mx-auto p-8 hidden">
   <h2 class="text-2xl font-bold text-gray-800 mb-6">
     <i class="fas fa-star text-yellow-500 mr-2"></i> My Reviews
   </h2>
@@ -1151,7 +1151,7 @@
   </div>
 </div>
   
-            <div id="change-password" class="tab-content  max-w-4xl mx-auto p-8">
+            <div id="change-password" class="tab-content  max-w-5xl mx-auto p-8">
               <h2 class="text-2xl font-bold text-gray-800 mb-6">
                 <i class="fas fa-lock text-blue-500 mr-2"></i> Change Password
               </h2>
@@ -1211,7 +1211,7 @@
   
   
   
-            <div id="payment-method" class="tab-content max-w-4xl mx-auto p-8">
+            <div id="payment-method" class="tab-content max-w-5xl mx-auto p-8">
               <h2 class="text-2xl font-bold text-gray-800 mb-6">
                 <h2 class="text-2xl font-bold text-gray-800 mb-6">
                   <i class="fas fa-credit-card text-blue-500 mr-2"></i> Payment Method

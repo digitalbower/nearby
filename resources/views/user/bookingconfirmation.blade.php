@@ -208,7 +208,7 @@
               @foreach ($booking->items as $product_item)
   <div class="border rounded-lg overflow-hidden lg:shadow-lg">
     <div class="p-3">
-      <div class="flex gap-3 flex-col">
+      <div class="flex gap-3 flex-col md:flex-row">
         <div class="relative md:w-28 h-28 w-full rounded-lg overflow-hidden">
           <img src="{{ asset('storage/' . $product_item->variant->product->image) }}" alt="{{ $product_item->variant->product->name }}" class="w-full h-full object-cover">
         </div>
@@ -256,14 +256,16 @@
           <div class="space-y-4">
             <!-- FAQ Item 1 -->
             <div class="border-b pb-4">
-              <button 
+              <button  id="faqs-title-01" type="button" @click="expanded = !expanded" :aria-expanded="expanded" aria-controls="faqs-text-01"
                 class="faq-toggle w-full flex justify-between items-center text-left py-2 text-sm font-medium text-gray-700 focus:outline-none">
                 <span class="text-black">How do I redeem my Nearby Voucher?</span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              <div class="faq-content hidden text-sm text-gray-600 pl-6 mt-2">
+              <div class="faq-content grid hidden text-sm text-gray-600 pl-6 mt-2" id="faqs-text-01"
+                        role="region"
+                        aria-labelledby="faqs-title-01" :class="expanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'">
                 <p> Please carefully review the important details in the attached ticket for each item in your booking confirmation. Redemption instructions may vary based on the type of product or service you’ve booked.</p>
               </div>
             </div>

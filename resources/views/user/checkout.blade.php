@@ -140,6 +140,10 @@
         background-image: url("path-to-your-right-arrow-icon.svg");
         /* Replace with your custom right icon */
       }
+
+      input[type="radio"]:checked + span {
+        display: block;
+      }
     </style>
 @endpush
 @push('scripts')
@@ -226,22 +230,117 @@
             </div>
           </div> --}}
 
-          <div class="bg-white rounded-xl py-6 px-2 lg:px-8 lg:py-10">
-            <h2 class="text-2xl font-semibold mb-2 lg:mb-6 text-gray-800">
-              Checkout ({{$count}} items)
-            </h2>
-          
-              <!-- Scrollable Product List -->
-              <div id="product-list" class="lg:space-y-8 space-y-4">
-                <!-- Items are dynamically loaded -->
+          <div class="p-4 bg-white rounded-xl">
+            <h5 class="font-semibold text-xl text-gray-800 mb-4">Checkout</h5>
+
+            <!-- <div class="grid sm:grid-cols-4 gap-6 mb-6">
+              <label for="plan-hobby" class="relative flex flex-col bg-white p-5 rounded-lg shadow-md cursor-pointer">
+                <span class="font-semibold text-gray-500 leading-tight uppercase">Delivery</span>
+                <input type="radio" name="plan" id="plan-hobby" value="hobby" class="absolute h-0 w-0 appearance-none" />
+                <span aria-hidden="true" class="hidden absolute inset-0 border-2 border-green-500 bg-green-200 bg-opacity-10 rounded-lg">
+                  <span class="absolute top-4 right-4 h-6 w-6 inline-flex items-center justify-center rounded-full bg-green-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5 text-green-600">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                </span>
+              </label>
+              <label for="plan-growth" class="relative flex flex-col bg-white p-5 rounded-lg shadow-md cursor-pointer">
+                <span class="font-semibold text-gray-500 leading-tight uppercase">Pick Up</span>
+                <input type="radio" name="plan" id="plan-growth" value="growth" class="absolute h-0 w-0 appearance-none" checked />
+                <span aria-hidden="true" class="hidden absolute inset-0 border-2 border-green-500 bg-green-200 bg-opacity-10 rounded-lg">
+                  <span class="absolute top-4 right-4 h-6 w-6 inline-flex items-center justify-center rounded-full bg-green-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5 text-green-600">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                </span>
+              </label>
+            </div> -->
+
+            <div class="mt-4">
+              <!-- Tabs -->
+              <ul id="tabs" class="inline-flex pt-2 px-1 w-full">
+                <li class="px-4 text-gray-800 font-semibold py-2 bg-[#58af0838] rounded -mb-px"><a id="default-tab" href="#first">All Guest</a></li>
+                <li class="px-4 text-gray-800 font-semibold py-2 rounded"><a href="#second">Guest One</a></li>
+                <li class="px-4 text-gray-800 font-semibold py-2 rounded"><a href="#third">Guest Two</a></li>
+                <li class="px-4 text-gray-800 font-semibold py-2 rounded"><a href="#fourth">Guest Three</a></li>
+              </ul>
+
+              <!-- Tab Contents -->
+              <div id="tab-contents">
+                <div id="first" class="p-4">
+                  <div class="grid grid-cols-2 gap-6">
+                    <div class="relative">
+                      <label class="text-sm block text-sm font-semibold text-gray-800" for="">Name</label>
+                      <input type="text" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2">
+                    </div>
+                    <div class="relative">
+                      <label class="text-sm block text-sm font-semibold text-gray-800" for="">Email Address</label>
+                      <input type="email" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2">
+                    </div>
+                  </div>
+                </div>
+                <div id="second" class="hidden p-4">
+                  <div class="grid grid-cols-2 gap-6">
+                    <div class="relative">
+                      <label class="text-sm block text-sm font-semibold text-gray-800" for="">Name</label>
+                      <input type="text" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2">
+                    </div>
+                    <div class="relative">
+                      <label class="text-sm block text-sm font-semibold text-gray-800" for="">Email Address</label>
+                      <input type="email" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2">
+                    </div>
+                  </div>
+                </div>
+                <div id="third" class="hidden p-4">
+                  <div class="grid grid-cols-2 gap-6">
+                    <div class="relative">
+                      <label class="text-sm block text-sm font-semibold text-gray-800" for="">Name</label>
+                      <input type="text" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2">
+                    </div>
+                    <div class="relative">
+                      <label class="text-sm block text-sm font-semibold text-gray-800" for="">Email Address</label>
+                      <input type="email" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2">
+                    </div>
+                  </div>
+                </div>
+                <div id="fourth" class="hidden p-4">
+                  <div class="grid grid-cols-2 gap-6">
+                    <div class="relative">
+                      <label class="text-sm block text-sm font-semibold text-gray-800" for="">Name</label>
+                      <input type="text" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2">
+                    </div>
+                    <div class="relative">
+                      <label class="text-sm block text-sm font-semibold text-gray-800" for="">Email Address</label>
+                      <input type="email" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            
+          </div>
+
+          <!-- <div class="p-4 bg-white rounded-xl mt-4">
+            <h5 class="font-semibold text-xl text-gray-800 mb-4">Shipping information</h5>
+            <div class="grid grid-cols-2 gap-6">
+              <div class="user mt-0 border relative border-[#58af0838] rounded-xl shadow-lg p-3 transition duration-300">
+                <h4 class="text-lg font-medium">Varun Kumar</h4>
+                <p class="text-sm my-1"><strong class="text-gray-800">Email:</strong> varunkumar@gmail.com</p>
+                <p class="text-sm"><strong class="text-gray-800">Quantity:</strong> 5</p>
               </div>
 
-              <!-- Load More Button -->
-              <button id="load-more-btn" type="button"
-                class="px-6 py-2 bg-[#58af0838]  lg:w-auto w-full rounded-lg text-black hover:text-black font-semibold transition-all duration-300 hover:shadow-lg mt-4">
-                See More
-              </button>
+              <div class="user mt-0 border relative border-[#58af0838] rounded-xl shadow-lg p-3 transition duration-300">
+                <h4 class="text-lg font-medium">Varun Kumar</h4>
+                <p class="text-sm my-1"><strong class="text-gray-800">Email:</strong> varunkumar@gmail.com</p>
+                <p class="text-sm"><strong class="text-gray-800">Quantity:</strong> 5</p>
+              </div>
             </div>
+          </div> -->
+
+          
 
             @guest
             <div class="bg-white rounded-xl px-4 p-4 lg:p-7">
@@ -305,6 +404,7 @@
           </div>
         </div>
         @endguest
+        
         <div class="md:mt-0 mt-4 md:hidden block mb-5 md:mb-0">
           <div class="bg-white rounded-xl shadow md:p-6 p-3 sticky top-4">
             <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
@@ -479,8 +579,22 @@
       <input type="hidden" name="order_id" id="order_id" value="{{ $order_id }}">
 
       <div class="md:mt-0 mt-4 md:block hidden mb-5 md:mb-0">
+        <!-- <div class="bg-white rounded-xl py-6 mb-4 px-2 lg:px-8 lg:py-10">        
+          
+        </div> -->
         <div class="bg-white rounded-xl shadow p-6 sticky top-4">
-          <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
+          <h2 class="text-xl font-semibold mb-4">Order Summary ({{$count}} items)</h2>
+          <div class=" mb-8">
+            <!-- Scrollable Product List -->
+            <div id="product-list" class="lg:space-y-8 space-y-4">
+              <!-- Items are dynamically loaded -->
+            </div>
+            <!-- Load More Button -->
+            <button id="load-more-btn" type="button"
+              class="px-6 py-2 bg-[#58af0838]  lg:w-auto w-full rounded-lg text-black hover:text-black font-semibold transition-all duration-300 hover:shadow-lg mt-4">
+              See More
+            </button>
+          </div>
           <div class="space-y-4">
             <div class="flex justify-between">
               <span>Total Amount</span>
@@ -595,6 +709,34 @@
 </script>
 
 <script>
+
+  import { Application, Controller } from "https://unpkg.com/@hotwired/stimulus/dist/stimulus.js"
+  window.Stimulus = Application.start()
+
+  Stimulus.register("tabs", class extends Controller {
+    static targets = [ "tab", "panel" ]
+    static values = { index: Number }
+
+    initialize() {
+      this.showTab()
+    }
+
+    change(event) {
+      event.preventDefault()
+      this.indexValue = this.tabTargets.indexOf(event.currentTarget)
+      this.showTab()
+    }
+
+    showTab() {
+      this.panelTargets.forEach((el, index) => {
+        index == this.indexValue ? el.classList.remove("hidden") : el.classList.add("hidden")
+      })
+      this.tabTargets.forEach((el, index) => {
+        index == this.indexValue ? el.classList.add("bg-gray-100") : el.classList.remove("bg-gray-100")
+      })
+    }
+  })
+
  document.addEventListener("DOMContentLoaded", function () {
   const stripe = Stripe(stripePublicKey);
   const elements = stripe.elements();
@@ -824,7 +966,7 @@ function collectItems() {
                 <img src="${variant.image}" alt="${variant.title}" class="w-full h-full object-cover" />
               </div>
               <div class="flex-1">
-                <h3 class="font-semibold text-base lg:text-xl">${variant.product_name}</h3>
+                <h3 class="font-semibold text-base lg:text-lg pr-5">${variant.product_name}</h3>
                 <p class="text-sm text-gray-500 mt-2">${variant.title}</p>
                 <p class="text-sm text-gray-500 mt-2">${variant.short_description}</p>
               </div>
@@ -849,7 +991,7 @@ function collectItems() {
                 
               </div>  
                 <div class="text-right">
-                 <div class="md:text-2xl text-lg font-bold text-gray-700"> 
+                 <div class="md:text-xl text-lg font-bold text-gray-700"> 
                     AED ${variant.discounted_price}   
                   <input type="hidden" name="items[${variant.id}][unit_price]" value="${variant.discounted_price}"/>
                 </div>
@@ -871,7 +1013,7 @@ function collectItems() {
                   <span id="countdown-timer-${variant.id}"></span>
                 </div>
               </div>
-            ` : '<br>'}
+            ` : ''}
           </div>
         </div>
       `;
@@ -1266,6 +1408,33 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   }
+});
+
+let tabsContainer = document.querySelector("#tabs");
+
+let tabTogglers = tabsContainer.querySelectorAll("#tabs a");
+
+console.log(tabTogglers);
+
+tabTogglers.forEach(function(toggler) {
+  toggler.addEventListener("click", function(e) {
+    e.preventDefault();
+
+    let tabName = this.getAttribute("href");
+
+    let tabContents = document.querySelector("#tab-contents");
+
+    for (let i = 0; i < tabContents.children.length; i++) {
+      
+      tabTogglers[i].parentElement.classList.remove("bg-[#58af0838]");  tabContents.children[i].classList.remove("hidden");
+      if ("#" + tabContents.children[i].id === tabName) {
+        continue;
+      }
+      tabContents.children[i].classList.add("hidden");
+      
+    }
+    e.target.parentElement.classList.add("bg-[#58af0838]");
+  });
 });
 
 </script>
