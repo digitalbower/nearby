@@ -156,15 +156,15 @@
         <div id="follow-payment" class="hidden">
           <div class="flex gap-4 mb-8">
             @foreach ($followus as $item)
-              <a href="{{ $item->link ?? '#' }}" class="bg-[#58af0838] rounded-full p-2 hover:bg-cyan-600 transition-colors">
+              <a href="{{ $item->link ?? '#' }}" class="bg-[#58af0838] rounded-full p-2 hover:bg-cyan-600 transition-colors w-10 h-10 text-center">
                 <i class="{{ $item->icon }}"></i>
               </a>
             @endforeach
           </div>
           <h3 class="text-black text-base lg:text-xl font-bold mb-6">We Accept</h3>
-          <div class="grid grid-cols-4 gap-4">
+          <div class="grid grid-cols-5 gap-2">
             @foreach ($payment_channels as $item)
-            <img src="{{ $item->icon }}" class="h-8">
+            <img src="{{ $item->icon }}" class="h-10 w-full object-cover">
             @endforeach
           </div>
           <button
