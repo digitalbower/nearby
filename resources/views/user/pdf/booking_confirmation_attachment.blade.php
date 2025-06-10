@@ -111,12 +111,19 @@
    
     <div class="section-title">📅 Booking Date & Details</div>
     <p><strong>Validity From:</strong>{{$variant['validity_from']}}</p>
-    <p><strong>Validity Until:</strong>{{$variant['validity_to']}}
+    <p><strong>Validity Until:</strong>{{$variant['validity_to']}}</p>
     <p><strong>Fulfilled By:</strong> {{$variant['vendor']}}</p>
+
+
+    <div class="section-title">Guest Info</div>
+    @foreach ($variant['guests'] as $guest)
+       <p><strong>Guest Name:</strong>{{$guest['guest_first_name']}}</p>
+       <p><strong>Guest Email:</strong>{{$guest['guest_email']}}</p>
+    @endforeach
 
     {{-- Section 3: Verification Number --}}
     <div class="section-title">🔐 Verification Number</div>
-    <h3 style="color: red;"><strong>{{$variant['verification_number']}}</strong></h3>
+    <h2 style="color: red;"><strong>{{$variant['verification_number']}}</strong></h2>
     <p style="color: red;">Do not share this on the phone.</p>
 
   <div class="section-title">📜 Voucher Details:</div>

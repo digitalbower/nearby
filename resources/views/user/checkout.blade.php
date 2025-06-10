@@ -261,10 +261,10 @@
             <div class="mt-4">
               <!-- Tabs -->
               <ul id="tabs" class="inline-flex pt-2 px-1 w-full">
-                <li class="px-4 text-gray-800 font-semibold py-2 bg-[#58af0838] rounded -mb-px"><a id="default-tab" href="#first">All Guest</a></li>
-                <li class="px-4 text-gray-800 font-semibold py-2 rounded"><a href="#second">Guest One</a></li>
-                <li class="px-4 text-gray-800 font-semibold py-2 rounded"><a href="#third">Guest Two</a></li>
-                <li class="px-4 text-gray-800 font-semibold py-2 rounded"><a href="#fourth">Guest Three</a></li>
+                <li class="px-4 text-gray-800 font-semibold py-2 bg-[#58af0838] rounded -mb-px"><a id="default-tab" href="#first">Main Guest</a></li>
+                @for ($i=1;$i<$max_quantity_in_checkout;$i++)
+                  <li class="px-4 text-gray-800 font-semibold py-2 rounded"><a href="#second_{{$i}}">Guest {{$i}}</a></li>
+                @endfor
               </ul>
 
               <!-- Tab Contents -->
@@ -273,50 +273,42 @@
                   <div class="grid grid-cols-2 gap-6">
                     <div class="relative">
                       <label class="text-sm block text-sm font-semibold text-gray-800" for="">Name</label>
-                      <input type="text" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2">
+                      <input type="text" name="name" value="{{$user_first_name}}" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2" disabled>
                     </div>
                     <div class="relative">
                       <label class="text-sm block text-sm font-semibold text-gray-800" for="">Email Address</label>
-                      <input type="email" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2">
+                      <input type="email" name="email" value="{{$user_email}}" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2" disabled>
                     </div>
                   </div>
                 </div>
-                <div id="second" class="hidden p-4">
-                  <div class="grid grid-cols-2 gap-6">
-                    <div class="relative">
-                      <label class="text-sm block text-sm font-semibold text-gray-800" for="">Name</label>
-                      <input type="text" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2">
-                    </div>
-                    <div class="relative">
-                      <label class="text-sm block text-sm font-semibold text-gray-800" for="">Email Address</label>
-                      <input type="email" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2">
-                    </div>
-                  </div>
-                </div>
-                <div id="third" class="hidden p-4">
-                  <div class="grid grid-cols-2 gap-6">
-                    <div class="relative">
-                      <label class="text-sm block text-sm font-semibold text-gray-800" for="">Name</label>
-                      <input type="text" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2">
-                    </div>
-                    <div class="relative">
-                      <label class="text-sm block text-sm font-semibold text-gray-800" for="">Email Address</label>
-                      <input type="email" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2">
-                    </div>
-                  </div>
-                </div>
-                <div id="fourth" class="hidden p-4">
-                  <div class="grid grid-cols-2 gap-6">
-                    <div class="relative">
-                      <label class="text-sm block text-sm font-semibold text-gray-800" for="">Name</label>
-                      <input type="text" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2">
-                    </div>
-                    <div class="relative">
-                      <label class="text-sm block text-sm font-semibold text-gray-800" for="">Email Address</label>
-                      <input type="email" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2">
-                    </div>
-                  </div>
-                </div>
+@for ($i=1;$i<$max_quantity_in_checkout;$i++)                     
+<div id="second_{{$i}}" class="hidden p-4">                       
+    <div class="grid grid-cols-2 gap-6">                         
+        <div class="relative">                           
+            <label class="text-sm block text-sm font-semibold text-gray-800" for="">Name</label>                           
+            <input type="text" 
+                   name="guests[{{$i}}][guest_first_name]" 
+                   value="{{ old('guests.'.$i.'.guest_first_name') }}"
+                   class="mt-2 w-full relative rounded-lg focus:outline-none border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2 
+                          {{ $errors->has('guests.'.$i.'.guest_first_name') ? 'border-red-500 focus-visible:ring-red-500' : 'border-gray-300' }}">
+            @error('guests.'.$i.'.guest_first_name')
+                <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
+            @enderror                         
+        </div>                         
+        <div class="relative">                           
+            <label class="text-sm block text-sm font-semibold text-gray-800" for="">Email Address</label>                           
+            <input type="email" 
+                   name="guests[{{$i}}][guest_email]" 
+                   value="{{ old('guests.'.$i.'.guest_email') }}"
+                   class="mt-2 w-full relative rounded-lg focus:outline-none border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2 
+                          {{ $errors->has('guests.'.$i.'.guest_email') ? 'border-red-500 focus-visible:ring-red-500' : 'border-gray-300' }}">
+            @error('guests.'.$i.'.guest_email')
+                <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
+            @enderror                         
+        </div>                       
+    </div>                     
+</div>                 
+@endfor
               </div>
             </div>
 
@@ -570,6 +562,7 @@
         </div>
     
       </div>
+      <input type="hidden" name="max_quantity_in_checkout" id="max_quantity_in_checkout" value="{{ $max_quantity_in_checkout }}">
       <input type="hidden" name="booking_amount" id="booking_amount" value="{{ $bookingAmount }}">
       <input type="hidden" name="voucher_savings" id="voucher_savings" value="{{ $voucherSavings }}">
       <input type="hidden" name="vat_amount" id="vat_amount" value="{{ $vat }}">
@@ -708,7 +701,7 @@
 
 </script>
 
-<script>
+<script type="module">
 
   import { Application, Controller } from "https://unpkg.com/@hotwired/stimulus/dist/stimulus.js"
   window.Stimulus = Application.start()
@@ -736,7 +729,8 @@
       })
     }
   })
-
+</script>
+<script>
  document.addEventListener("DOMContentLoaded", function () {
   const stripe = Stripe(stripePublicKey);
   const elements = stripe.elements();
@@ -775,6 +769,84 @@ clearErrorOnInputChange(cardNumber);
 clearErrorOnInputChange(cardExpiry);
 clearErrorOnInputChange(cardCvc);
 
+function collectGuests() {
+  const maxQuantityElement = document.getElementById("max_quantity_in_checkout"); 
+  const maxQuantity = parseInt(maxQuantityElement.value, 10);
+  const guests = [];
+  const errors = [];
+  
+  // Helper function to clear previous JS error styling
+  function clearJSErrors() {
+    const errorElements = document.querySelectorAll('.js-error-message');
+    errorElements.forEach(el => el.remove());
+    
+    const inputsWithErrors = document.querySelectorAll('.js-error-input');
+    inputsWithErrors.forEach(input => {
+      input.classList.remove('js-error-input');
+      // Reset border color to original state
+      if (input.classList.contains('border-red-500')) {
+        input.classList.remove('border-red-500');
+        input.classList.add('border-gray-300');
+      }
+    });
+  }
+  
+  // Helper function to display JS error message
+  function showJSError(inputElement, message) {
+    inputElement.classList.add('js-error-input');
+    inputElement.classList.remove('border-gray-300');
+    inputElement.classList.add('border-red-500');
+    
+    const errorSpan = document.createElement('span');
+    errorSpan.className = 'js-error-message text-red-500 text-xs mt-1 block';
+    errorSpan.textContent = message;
+    
+    inputElement.parentNode.appendChild(errorSpan);
+  }
+  
+  // Clear any previous JS errors (keep Laravel errors)
+  clearJSErrors();
+  
+  for (let i = 1; i < maxQuantity; i++) {
+    const guestNameInput = document.querySelector(`input[name="guests[${i}][guest_first_name]"]`);
+    const guestEmailInput = document.querySelector(`input[name="guests[${i}][guest_email]"]`);
+    
+    if (guestNameInput && guestEmailInput) {
+      const guestName = guestNameInput.value.trim();
+      const guestEmail = guestEmailInput.value.trim();
+      
+      let hasError = false;
+      
+      // Check if name is required
+      if (!guestName) {
+        showJSError(guestNameInput, 'Name is required');
+        errors.push(`Guest ${i}: Name is required`);
+        hasError = true;
+      }
+      
+      // Check if email is required
+      if (!guestEmail) {
+        showJSError(guestEmailInput, 'Email is required');
+        errors.push(`Guest ${i}: Email is required`);
+        hasError = true;
+      }
+      
+      // Only add guest if no errors
+      if (!hasError) {
+        guests.push({
+          guest_first_name: guestName,
+          guest_email: guestEmail
+        });
+      }
+    }
+  }
+  
+  return {
+    guests: guests,
+    errors: errors,
+    isValid: errors.length === 0
+  };
+}
 
   async function handlePayment() {
     const amountElement = document.getElementById("amount");
@@ -786,6 +858,12 @@ clearErrorOnInputChange(cardCvc);
     const promocodeElement = document.getElementById("promocode");
     const promocodeDiscountAmountElement = document.getElementById("promocode_discount_amount");
 
+    // Validate guests first
+    const guestValidation = collectGuests();
+    if (!guestValidation.isValid) {
+      showError("Please fill in all required guest information");
+      return;
+    }
 
     // Check if the required elements exist
     if (!amountElement || !orderIdElement || !bookingAmountElement || !voucherSavingsElement || !totalAmountElement || !vatAmountElement) {
@@ -839,6 +917,7 @@ clearErrorOnInputChange(cardCvc);
 
       if (paymentIntent.status === "succeeded") {
         const items = collectItems();
+        const guests = guestValidation.guests; // Use already validated guests
         const finalizeRes = await fetch("/api/stripe/finalize-booking", {
           method: "POST",
           headers: {
@@ -856,6 +935,7 @@ clearErrorOnInputChange(cardCvc);
             promocode,
             promo_discount_amount,
             items,
+            guests
           })
         });
 

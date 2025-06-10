@@ -134,6 +134,9 @@ class CheckoutController extends Controller
         $promoCode = session('promocode');
 
         foreach ($products as $checkout) { 
+            $user_first_name = $checkout->user->first_name;
+            $user_email= $checkout->user->email;
+            $max_quantity_in_checkout = $checkout->items->max('quantity'); 
             $count = count($checkout->items);
             foreach ($checkout->items as $item) {
                 $variant = $item->variant; 
@@ -201,7 +204,7 @@ class CheckoutController extends Controller
     
         return view('user.checkout',compact('seo','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels','count','bookingAmount','voucherSavings','vat','total','promo_discount',
-        'promocode_discount_amount','discountedPrice','order_id','isPromoApplied','promoCode')); 
+        'promocode_discount_amount','discountedPrice','order_id','isPromoApplied','promoCode','max_quantity_in_checkout','user_first_name','user_email')); 
     }
     public function getCheckoutItems(){
         
@@ -226,7 +229,7 @@ class CheckoutController extends Controller
                     'checkout_id' => $checkout->id,
                     'product_name'=>$variant['product']['name'],
                     'title' => $variant['title'],
-                    'short_description' => $variant['short_description'],
+                    'short_description' => $variant['product']['short_description'],
                     'discounted_price' => number_format($discountedPrice, 2),
                     'original_price' => number_format($originalPrice, 2),
                     'timer_flag' => $variant['timer_flag'],

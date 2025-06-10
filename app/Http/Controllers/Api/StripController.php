@@ -109,7 +109,13 @@ class StripController extends Controller
                 'updated_at' => now(),
             ]);
         }
-
+        foreach($request->guests as $guest){
+            DB::table('booking_guest_infos')->insert([
+                'booking_confirmation_id' => $bookingConfirmation->id,
+                'guest_first_name' => $guest['guest_first_name'],
+                'guest_email' => $guest['guest_email']
+            ]);
+        }
         // Cleanup
         Cart::where('user_id', $user->id)->delete();
         CheckoutItem::where('checkout_id', $request->order_id)->delete();
@@ -132,6 +138,13 @@ class StripController extends Controller
         }
 
 
+        $guests = [];
+        foreach ($booking->guests as $booking_guest) { 
+             $guests[] = [
+                'guest_first_name' => $booking_guest['guest_first_name'],
+                'guest_email' => $booking_guest['guest_email'],
+            ];
+        }
         $items = [];
         $importantinfo = null;
         $nbv_terms = null;
@@ -165,6 +178,7 @@ class StripController extends Controller
                 'nbv_terms' => $product_variant->product?->nbvTerms?->terms,
                 'vendor_terms_title' => $product_variant->product?->vendorTerms?->title,
                 'vendor_terms' => $product_variant->product?->vendorTerms?->terms,
+                'guests'=>$guests
             ];
         }
 
