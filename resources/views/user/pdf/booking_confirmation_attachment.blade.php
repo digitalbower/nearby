@@ -118,12 +118,13 @@
     <p><strong>Validity From:</strong>{{$variant['validity_from']}}</p>
     <p><strong>Validity Until:</strong>{{$variant['validity_to']}}</p>
     <p><strong>Fulfilled By:</strong> {{$variant['vendor']}}</p>
-
     <div class="section-title">🧾 Guest Info</div>
         @if($variant['quantity'] == 1)
-            <p><strong>Main Guest Name:</strong>{{$variant['guest_name']}}</p>
-            <p><strong>Main Guest Email:</strong>{{$variant['email']}}</p>
+            <p><strong>Main Guest Name:</strong> {$variant['guest_name']}}</p>
+            <p><strong>Main Guest Email:</strong> {{$variant['email']}}</p>
         @else
+          <p><strong>Main Guest Name:</strong> {{$variant['guest_name']}}</p>
+          <p><strong>Main Guest Email:</strong> {{$variant['email']}}</p>
           @if($variant['guests'])
             <p><i>Accompanying Guests:</i></p>
             <ul class="list-disc pl-6 space-y-1"> 
