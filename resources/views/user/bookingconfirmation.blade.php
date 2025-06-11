@@ -248,7 +248,7 @@
           
           
           
-        <hr class="my-8">
+        <!-- <hr class="my-8"> -->
 
         <!-- Accordion component -->
       <div class="divide-y divide-slate-200">
