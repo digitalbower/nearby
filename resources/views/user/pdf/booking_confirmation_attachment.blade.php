@@ -111,7 +111,7 @@
 
 
     <div class="section-title">🔐 Verification Number</div>
-    <h2 style="color: red;"><strong>{{$variant['verification_number']}}</strong></h2>
+    <h3 style="color: red;"><strong>{{$variant['verification_number']}}</strong></h3>
     <p style="color: red;">Only share the verification code at the service location — never during advance booking</p>
    
     <div class="section-title">📅 Booking Date & Details</div>
@@ -120,7 +120,7 @@
     <p><strong>Fulfilled By:</strong> {{$variant['vendor']}}</p>
     <div class="section-title">🧾 Guest Info</div>
         @if($variant['quantity'] == 1)
-            <p><strong>Main Guest Name:</strong> {$variant['guest_name']}}</p>
+            <p><strong>Main Guest Name:</strong> {{$variant['guest_name']}}</p>
             <p><strong>Main Guest Email:</strong> {{$variant['email']}}</p>
         @else
           <p><strong>Main Guest Name:</strong> {{$variant['guest_name']}}</p>
