@@ -147,7 +147,8 @@ class ProfileController extends Controller
         $booking = bookingConfirmation::findOrFail($item->booking_confirmation_id);
 
         $product = $item->variant->product;
-    
+        $guests = $booking->guests;
+
         $nbvTerms = NbvTerm::find($product->nbv_terms_id);
         $vendorTerms = VendorTerm::find($product->vendor_terms_id);
         $vendor = Vendor::find($product->vendor_id); 
@@ -162,6 +163,7 @@ class ProfileController extends Controller
             'order_date'=> $order_date->format('Y-m-d'),
             'validUntil' => $item->validity,
             'userId'    =>  $userId,
+            'guests' => $guests
         ]);
 
         return $pdf->download('Booking-'.$item->booking_id.'.pdf');

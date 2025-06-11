@@ -273,7 +273,7 @@ class HomeController extends Controller
         $booking = bookingConfirmation::findOrFail($item->booking_confirmation_id);
 
         $product = $item->variant->product;
-    
+        $guests = $booking->guests;
         $nbvTerms = \App\Models\NbvTerm::find($product->nbv_terms_id);
         $vendorTerms = \App\Models\VendorTerm::find($product->vendor_terms_id);
         $vendor = \App\Models\Vendor::find($product->vendor_id); 
@@ -288,6 +288,7 @@ class HomeController extends Controller
             'order_date'=> $order_date->format('Y-m-d'),
             'validUntil' => $item->validity,
             'userId'    =>  $userId,
+            'guests' => $guests
         ]);
     
         return $pdf->download('booking_item_' . $item->id . '.pdf');

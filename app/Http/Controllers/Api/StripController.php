@@ -113,7 +113,9 @@ class StripController extends Controller
             DB::table('booking_guest_infos')->insert([
                 'booking_confirmation_id' => $bookingConfirmation->id,
                 'guest_first_name' => $guest['guest_first_name'],
-                'guest_email' => $guest['guest_email']
+                'guest_email' => $guest['guest_email'],
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
         // Cleanup

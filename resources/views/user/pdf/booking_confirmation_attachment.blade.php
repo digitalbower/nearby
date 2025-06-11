@@ -108,6 +108,11 @@
     <p><strong>Guest Name:</strong> {{$variant['guest_name']}}</p>
     <p><strong>Email:</strong>{{$variant['email']}}</p>
     <p><strong>Platform/Website:</strong> https://nearbyvouchers.com/ </p>
+
+
+    <div class="section-title">🔐 Verification Number</div>
+    <h2 style="color: red;"><strong>{{$variant['verification_number']}}</strong></h2>
+    <p style="color: red;">Only share the verification code at the service location — never during advance booking</p>
    
     <div class="section-title">📅 Booking Date & Details</div>
     <p><strong>Validity From:</strong>{{$variant['validity_from']}}</p>
@@ -115,16 +120,13 @@
     <p><strong>Fulfilled By:</strong> {{$variant['vendor']}}</p>
 
 
-    <div class="section-title">Guest Info</div>
-    @foreach ($variant['guests'] as $guest)
-       <p><strong>Guest Name:</strong>{{$guest['guest_first_name']}}</p>
-       <p><strong>Guest Email:</strong>{{$guest['guest_email']}}</p>
-    @endforeach
-
-    {{-- Section 3: Verification Number --}}
-    <div class="section-title">🔐 Verification Number</div>
-    <h2 style="color: red;"><strong>{{$variant['verification_number']}}</strong></h2>
-    <p style="color: red;">Do not share this on the phone.</p>
+    @if($variant['guests'])
+      <div class="section-title">🧾Guest Info</div>
+      @foreach ($variant['guests'] as $guest)
+        <p><strong>Guest Name:</strong>{{$guest['guest_first_name']}}</p>
+        <p><strong>Guest Email:</strong>{{$guest['guest_email']}}</p>
+      @endforeach   
+    @endif 
 
   <div class="section-title">📜 Voucher Details:</div>
       {!! $variant['voucher_details'] !!}

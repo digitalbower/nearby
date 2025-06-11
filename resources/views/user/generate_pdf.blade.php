@@ -110,16 +110,22 @@
     <p><strong>Email:</strong> {{ $userId->email ?? 'N/A' }}</p>
     <p><strong>Website:</strong> https://nearbyvouchers.com/ </p>
    
+    <div class="section-title">🔐 Verification Number</div>
+    <h3 style="color: red;"><strong>{{ $item->verification_number}}</strong></h3>
+    <p style="color: red;">Only share the verification code at the service location — never during advance booking</p>
+
     <div class="section-title">📅 Booking Date & Details</div>
     <p><strong>Validity From:</strong> {{ $order_date }}</p>
     <p><strong>Validity Until:</strong>{{ $validUntil }}
     <p><strong>Fulfilled By:</strong> {{ $vendor?->name ?? 'N/A' }}</p>
-   
-    {{-- Section 3: Verification Number --}}
-    <div class="section-title">🔐 Verification Number</div>
-    <h3 style="color: red;"><strong>{{ $item->verification_number}}</strong></h3>
-    <p style="color: red;">Do not share this on the phone.</p>
 
+    @if($guests)
+      <div class="section-title">🧾Guest Info</div>
+      @foreach ($guests as $guest)
+        <p><strong>Guest Name:</strong>{{$guest['guest_first_name']}}</p>
+        <p><strong>Guest Email:</strong>{{$guest['guest_email']}}</p>
+      @endforeach   
+    @endif
     <div class="section-title">📜 Voucher Details:</div>
       {!!$item->variant?->product?->email_about  !!}
     <div class="section-title">⚠️ Important Details:</div>
