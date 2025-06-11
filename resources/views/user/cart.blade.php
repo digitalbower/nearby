@@ -199,7 +199,7 @@
                         <input type="number" id="quantity_{{ $item->id }}"
                             name="orders[{{ $item->id }}][quantity]"
                             value="{{ old('quantity', $item->quantity ?? 1) }}"
-                            class="w-10 text-center text-lg" />
+                            class="w-10 text-center text-lg" readonly />
 
                        <button type="button" 
     id="incrementBtn_{{ $item->id }}"
