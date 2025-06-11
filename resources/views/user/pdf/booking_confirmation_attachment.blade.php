@@ -111,7 +111,7 @@
 
 
     <div class="section-title">🔐 Verification Number</div>
-    <h3 style="color: red;"><strong>{{$variant['verification_number']}}</strong></h3>
+    <h2 style="color: red;"><strong>{{$variant['verification_number']}}</strong></h2>
     <p style="color: red;">Only share the verification code at the service location — never during advance booking</p>
    
     <div class="section-title">📅 Booking Date & Details</div>
