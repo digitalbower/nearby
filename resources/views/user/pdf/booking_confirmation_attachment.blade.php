@@ -119,15 +119,21 @@
     <p><strong>Validity Until:</strong>{{$variant['validity_to']}}</p>
     <p><strong>Fulfilled By:</strong> {{$variant['vendor']}}</p>
 
-
-    @if($variant['guests'])
-      <div class="section-title">🧾Guest Info</div>
-      @foreach ($variant['guests'] as $guest)
-        <p><strong>Guest Name:</strong>{{$guest['guest_first_name']}}</p>
-        <p><strong>Guest Email:</strong>{{$guest['guest_email']}}</p>
-      @endforeach   
-    @endif 
-
+    <div class="section-title">🧾 Guest Info</div>
+        @if($variant['quantity'] == 1)
+            <p><strong>Main Guest Name:</strong>{{$variant['guest_name']}}</p>
+            <p><strong>Main Guest Email:</strong>{{$variant['email']}}</p>
+        @else
+          @if($variant['guests'])
+            <p><i>Accompanying Guests:</i></p>
+            <ul class="list-disc pl-6 space-y-1"> 
+            @foreach ($variant['guests'] as $index => $guest)
+                <li><strong>Guest {{ $index + 1 }} Name:</strong> {{ $guest['guest_first_name'] }}</li>
+                <li><strong>Guest {{ $index + 1 }} Email:</strong> {{ $guest['guest_email'] }}</li>
+            @endforeach
+            </ul>
+          @endif
+        @endif
   <div class="section-title">📜 Voucher Details:</div>
       {!! $variant['voucher_details'] !!}
       <div class="section-title">Important Details:</div>

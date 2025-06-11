@@ -119,12 +119,21 @@
     <p><strong>Validity Until:</strong>{{ $validUntil }}
     <p><strong>Fulfilled By:</strong> {{ $vendor?->name ?? 'N/A' }}</p>
 
-    @if($guests)
-      <div class="section-title">🧾Guest Info</div>
-      @foreach ($guests as $guest)
-        <p><strong>Guest Name:</strong>{{$guest['guest_first_name']}}</p>
-        <p><strong>Guest Email:</strong>{{$guest['guest_email']}}</p>
-      @endforeach   
+   
+    <div class="section-title">🧾 Guest Info</div>
+    @if($item->quantity == 1)
+        <p><strong>Main Guest Name:</strong>{{$userId->first_name}}</p>
+        <p><strong>Main Guest Email:</strong>{{$userId->email}}</p>
+    @else
+      @if($guests)
+        <p><i>Accompanying Guests:</i></p>
+        <ul class="list-disc pl-6 space-y-1"> 
+        @foreach ($guests as $index =>$guest)
+          <li><strong>Guest {{ $index + 1 }} Name:</strong>{{$guest['guest_first_name']}}</li>
+          <li><strong>Guest {{ $index + 1 }} Email:</strong>{{$guest['guest_email']}}</li>
+        @endforeach   
+        </ul>
+      @endif
     @endif
     <div class="section-title">📜 Voucher Details:</div>
       {!!$item->variant?->product?->email_about  !!}
