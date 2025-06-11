@@ -201,10 +201,13 @@
                             value="{{ old('quantity', $item->quantity ?? 1) }}"
                             class="w-10 text-center text-lg" />
 
-                        <button type="button" onclick="incrementQty({{ $item->id }})"
-                            class="w-8 h-8 flex justify-center items-center bg-gray-100 text-gray-600 rounded-r-md">
-                            +
-                        </button>
+                       <button type="button" 
+    id="incrementBtn_{{ $item->id }}"
+    onclick="incrementQty({{ $item->id }})"
+    class="w-8 h-8 flex justify-center items-center bg-gray-100 text-gray-600 rounded-r-md">
+    +
+</button>
+
                     </div>
                 </div>
 
@@ -580,24 +583,40 @@ timerElements.forEach((timerElement) => {
   }
 
   // Function to decrement the quantity
-  function decrementQty(Id) {
-    const quantityInput = document.getElementById('quantity_' + Id); 
-    let currentValue = parseInt(quantityInput.value);
+function decrementQty(Id) {
+  const quantityInput = document.getElementById('quantity_' + Id); 
+  const incrementBtn = document.getElementById('incrementBtn_' + Id);
+  let currentValue = parseInt(quantityInput.value);
 
-    if (currentValue > 1) { // Prevent decrementing below 1 (if you don't want 0 quantities)
-      quantityInput.value = currentValue - 1;
-      updateCartQuantity(Id, quantityInput.value); // Save quantity after decrement
-    }
+  if (currentValue > 1) {
+    quantityInput.value = currentValue - 1;
+    updateCartQuantity(Id, quantityInput.value);
   }
 
-  // Function to increment the quantity
-  function incrementQty(Id) {
-    const quantityInput = document.getElementById('quantity_' + Id);
-    let currentValue = parseInt(quantityInput.value) || 0; // Ensure a valid number
-
-    quantityInput.value = currentValue + 1; // Increment quantity
-    updateCartQuantity(Id, quantityInput.value); // Save quantity after increment
+  // Re-enable the increment button if it was disabled
+  if (parseInt(quantityInput.value) < 5) {
+    incrementBtn.disabled = false;
+    incrementBtn.classList.remove('opacity-50', 'cursor-not-allowed');
   }
+}
+
+function incrementQty(Id) {
+  const quantityInput = document.getElementById('quantity_' + Id);
+  const incrementBtn = document.getElementById('incrementBtn_' + Id);
+  let currentValue = parseInt(quantityInput.value) || 0;
+
+  if (currentValue < 5) {
+    quantityInput.value = currentValue + 1;
+    updateCartQuantity(Id, quantityInput.value);
+  }
+
+  // Disable the button if value is now 5
+  if (parseInt(quantityInput.value) >= 5) {
+    incrementBtn.disabled = true;
+    incrementBtn.classList.add('opacity-50', 'cursor-not-allowed');
+  }
+}
+
 
   function showValidationMessage() {
     const validationPopup = document.getElementById('validationPopup');
