@@ -248,29 +248,116 @@
           
           
           
-          <hr class="my-8">
-               
+        <hr class="my-8">
+
+        <!-- Accordion component -->
+      <div class="divide-y divide-slate-200">
+          <!-- Accordion item -->
+          <div x-data="{ expanded: false }" class="py-2">
+              <h2>
+                  <button
+                      id="faqs-title-01"
+                      type="button"
+                      class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-700 py-2"
+                      @click="expanded = !expanded"
+                      :aria-expanded="expanded"
+                      aria-controls="faqs-text-01"
+                  >
+                      <span>How do I redeem my Nearby Voucher?</span>
+                      <i class="fa-solid text-xl fa-angle-down transform origin-center transition duration-200 ease-out" :class="{'!rotate-180': expanded}"></i>
+                  </button>
+              </h2>
+              <div
+                  id="faqs-text-01"
+                  role="region"
+                  aria-labelledby="faqs-title-01"
+                  class="grid text-sm text-slate-600 overflow-hidden transition-all duration-300 ease-in-out"
+                  :class="expanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'"
+                  >
+                  <div class="overflow-hidden">
+                      <p class="pb-3">
+                          Please carefully review the important details in the attached ticket for each item in your booking confirmation. Redemption instructions may vary based on the type of product or service you’ve booked.
+                      </p>
+                  </div>
+              </div>
+          </div>
+          <!-- Accordion item -->
+          <div x-data="{ expanded: false }" class="py-2">
+              <h2>
+                  <button
+                      id="faqs-title-02"
+                      type="button"
+                      class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-700 py-2"
+                      @click="expanded = !expanded"
+                      :aria-expanded="expanded"
+                      aria-controls="faqs-text-02"
+                  >
+                      <span>How can I confirm my booking?</span>
+                      <i class="fa-solid text-xl fa-angle-down transform origin-center transition duration-200 ease-out" :class="{'!rotate-180': expanded}"></i>
+                  </button>
+              </h2>
+              <div
+                  id="faqs-text-02"
+                  role="region"
+                  aria-labelledby="faqs-title-02"
+                  class="grid text-sm text-slate-600 overflow-hidden transition-all duration-300 ease-in-out"
+                  :class="expanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'"
+                  >
+                  <div class="overflow-hidden">
+                      <p class="pb-3">
+                          To confirm bookings, within the voucher's validity period, you must contact the service provider directly and visit the location. Make sure to carry a copy of the ticket attached in the confirmation email and provide the Verification Number to the receptionist to verify your booking.
+                      </p>
+                  </div>
+              </div>
+          </div> 
+          <!-- Accordion item -->
+          <div x-data="{ expanded: false }" class="py-2">
+              <h2>
+                  <button
+                      id="faqs-title-03"
+                      type="button"
+                      class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-700 py-2"
+                      @click="expanded = !expanded"
+                      :aria-expanded="expanded"
+                      aria-controls="faqs-text-03"
+                  >
+                      <span>What is a Verification Number?</span>
+                      <i class="fa-solid text-xl fa-angle-down transform origin-center transition duration-200 ease-out" :class="{'!rotate-180': expanded}"></i>
+                  </button>
+              </h2>
+              <div
+                  id="faqs-text-03"
+                  role="region"
+                  aria-labelledby="faqs-title-03"
+                  class="grid text-sm text-slate-600 overflow-hidden transition-all duration-300 ease-in-out"
+                  :class="expanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'"
+                  >
+                  <div class="overflow-hidden">
+                      <p class="pb-3">
+                          The Verification Number is a unique code associated with your booking or voucher. It ensures that your booking or redemption is valid and helps us track the status of your service. Keep this number safe as you may need it for confirmation or any support inquiries.
+                      </p>
+                  </div>
+              </div>
+          </div>                                                                                            
+      </div>
+      <!-- End: Accordion component -->
         <!-- FAQs -->
-        <div class="lg:p-0">
+        <!-- <div class="lg:p-0">
           <h3 class="text-lg font-bold mb-4 text-gray-800">Frequently Asked Questions (FAQ)</h3>
           <div class="space-y-4">
-            <!-- FAQ Item 1 -->
             <div class="border-b pb-4">
-              <button  id="faqs-title-01" type="button" @click="expanded = !expanded" :aria-expanded="expanded" aria-controls="faqs-text-01"
+              <button 
                 class="faq-toggle w-full flex justify-between items-center text-left py-2 text-sm font-medium text-gray-700 focus:outline-none">
                 <span class="text-black">How do I redeem my Nearby Voucher?</span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              <div class="faq-content grid hidden text-sm text-gray-600 pl-6 mt-2" id="faqs-text-01"
-                        role="region"
-                        aria-labelledby="faqs-title-01" :class="expanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'">
+              <div class="faq-content hidden text-sm text-gray-600 pl-6 mt-2">
                 <p> Please carefully review the important details in the attached ticket for each item in your booking confirmation. Redemption instructions may vary based on the type of product or service you’ve booked.</p>
               </div>
             </div>
         
-            <!-- FAQ Item 2 -->
             <div class="border-b pb-4">
               <button 
                 class="faq-toggle w-full flex justify-between items-center text-left py-2 text-sm font-medium text-gray-700 focus:outline-none">
@@ -284,7 +371,6 @@
               </div>
             </div>
         
-            <!-- FAQ Item 3 -->
             <div>
               <button 
                 class="faq-toggle w-full flex justify-between items-center text-left py-2 text-sm font-medium text-gray-700 focus:outline-none">
@@ -298,10 +384,10 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         @push('scripts')
         <!-- JavaScript for FAQ Toggle -->
-        <script>
+        <!-- <script>
           document.querySelectorAll('.faq-toggle').forEach(button => {
             button.addEventListener('click', () => {
               const content = button.nextElementSibling;
@@ -314,7 +400,7 @@
               icon.classList.toggle('rotate-180');
             });
           });
-        </script>
+        </script> -->
         @endpush
         
       </div>

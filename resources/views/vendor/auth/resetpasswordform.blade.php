@@ -2,6 +2,16 @@
 @section('content')
 <main class="login-form w-full max-w-sm rounded-2xl border-gray-600 border mx-auto bg-white/10 backdrop-blur-lg border-0 shadow-2xl">
   <div class="p-6">
+    <div class="flex justify-center mb-10">
+        <div class="relative bg-gradient-to-r from-blue-200 via-blue-100 to-cyan-500 p-2 rounded-full">
+            <img src="{{asset('images/NearByVoucherswide.svg')}}" 
+                    class="w-[200px]  p-5 mx-auto" 
+                    alt="Logo" />
+            <div class="absolute -bottom-2 -right-2 bg-white/20 rounded-full h-4 w-4"></div>
+            <div class="absolute -top-2 -left-2 bg-white/20 rounded-full h-4 w-4"></div>
+        </div>
+    </div>
+    
     <div class="card">
         <h2 class="text-2xl font-semibold text-white text-left">Reset Password</h2>
         <div class="card-body">

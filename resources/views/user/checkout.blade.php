@@ -213,8 +213,8 @@
 @endpush
 @section('content')
   <main class="flex-grow bg-[#ebebeb] px-4 lg:px-10 py-8 lg:py-20">
-    <div class="grid container mx-auto md:grid-cols-3 md:space-x-6">
-        <div class="md:col-span-2  space-y-6 overflow-hidden">
+    <div class="lg:flex container mx-auto lg:space-x-6">
+        <div class="md:w-full lg:w-[50%] xl:w-[65%] md:mb-6 lg:mb-0 space-y-6 overflow-hidden">
           {{-- <div class="bg-[#58af0838]  rounded-xl px-4 p-2 lg:p-7">
             <div class="flex items-center justify-between flex-wrap gap-4">
               <div>
@@ -270,7 +270,7 @@
               <!-- Tab Contents -->
               <div id="tab-contents">
                 <div id="first" class="p-4">
-                  <div class="grid grid-cols-2 gap-6">
+                  <div class="grid md:grid-cols-2 gap-6">
                     <div class="relative">
                       <label class="text-sm block text-sm font-semibold text-gray-800" for="">Name</label>
                       <input type="text" name="name" value="{{$user_first_name}}" class="mt-2 w-full relative rounded-lg focus:outline-none border border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-2 py-2" disabled>
@@ -283,7 +283,7 @@
                 </div>
 @for ($i=1;$i<$max_quantity_in_checkout;$i++)                     
 <div id="second_{{$i}}" class="hidden p-4">                       
-    <div class="grid grid-cols-2 gap-6">                         
+    <div class="grid md:grid-cols-2 gap-6">                         
         <div class="relative">                           
             <label class="text-sm block text-sm font-semibold text-gray-800" for="">Name</label>                           
             <input type="text" 
@@ -571,7 +571,7 @@
       <input type="hidden" name="total_amount" id="total_amount" value="{{ $total }}">
       <input type="hidden" name="order_id" id="order_id" value="{{ $order_id }}">
 
-      <div class="md:mt-0 mt-4 md:block hidden mb-5 md:mb-0">
+      <div class="md:mt-0 mt-4 md:w-full lg:w-[50%] xl:w-[35%] md:block hidden mb-5 md:mb-0">
         <!-- <div class="bg-white rounded-xl py-6 mb-4 px-2 lg:px-8 lg:py-10">        
           
         </div> -->
