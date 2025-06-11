@@ -180,7 +180,8 @@ class StripController extends Controller
                 'nbv_terms' => $product_variant->product?->nbvTerms?->terms,
                 'vendor_terms_title' => $product_variant->product?->vendorTerms?->title,
                 'vendor_terms' => $product_variant->product?->vendorTerms?->terms,
-                'guests'=>$guests
+                'guests'=>$guests,
+                'quantity'=>$booking_item->quantity
             ];
         }
 

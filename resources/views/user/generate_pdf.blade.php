@@ -111,21 +111,32 @@
     <p><strong>Website:</strong> https://nearbyvouchers.com/ </p>
    
     <div class="section-title">🔐 Verification Number</div>
-    <h3 style="color: red;"><strong>{{ $item->verification_number}}</strong></h3>
+    <h2 style="color: red;"><strong>{{ $item->verification_number}}</strong></h2>
     <p style="color: red;">Only share the verification code at the service location — never during advance booking</p>
 
     <div class="section-title">📅 Booking Date & Details</div>
     <p><strong>Validity From:</strong> {{ $order_date }}</p>
     <p><strong>Validity Until:</strong>{{ $validUntil }}
     <p><strong>Fulfilled By:</strong> {{ $vendor?->name ?? 'N/A' }}</p>
-
-    @if($guests)
-      <div class="section-title">🧾Guest Info</div>
-      @foreach ($guests as $guest)
-        <p><strong>Guest Name:</strong>{{$guest['guest_first_name']}}</p>
-        <p><strong>Guest Email:</strong>{{$guest['guest_email']}}</p>
-      @endforeach   
+    <div class="section-title">🧾 Guest Info</div>
+    @if($item->quantity == 1)
+        <p><strong>Main Guest Name: </strong>{{$userId->first_name}}</p>
+        <p><strong>Main Guest Email: </strong>{{$userId->email}}</p>
+    @else
+      <p><strong>Main Guest Name: </strong>{{$userId->first_name}}</p>
+      <p><strong>Main Guest Email: </strong>{{$userId->email}}</p>
+      @if($guests)
+        <p><i>Accompanying Guests:</i></p>
+        <ul class="list-disc pl-6 space-y-1"> 
+        @foreach ($guests as $index =>$guest)
+          <li><strong>Guest {{ $index + 1 }} Name:</strong> {{$guest['guest_first_name']}}</li>
+          <li><strong>Guest {{ $index + 1 }} Email:</strong> {{$guest['guest_email']}}</li>
+        @endforeach   
+        </ul>
+      @endif
     @endif
+
+
     <div class="section-title">📜 Voucher Details:</div>
       {!!$item->variant?->product?->email_about  !!}
     <div class="section-title">⚠️ Important Details:</div>
