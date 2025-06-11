@@ -16,7 +16,7 @@
         <h2 class="text-2xl font-semibold text-white text-left">Reset Password</h2>
         <div class="card-body">
             @if (Session::has('message'))
-                <div class="alert alert-success" role="alert">
+                <div class="alert alert-success text-white" role="alert">
                     {{ Session::get('message') }}
                 </div>
             @endif
