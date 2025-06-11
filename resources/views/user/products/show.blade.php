@@ -436,24 +436,28 @@
                             $cart = $user ? $user->carts()->where('product_variant_id', $variant->id)->first() : null;
                             @endphp
                             <input
-                              type="number" name="variants[{{ $variant->id }}][quantity]" data-variant-id="{{ $variant->id }}"
-                              id="quantity_{{ $variant->id }}" 
-                              value="{{ old('quantity', $cart->quantity ?? 0) }}"                               
-                              min="0"
-                              class="w-6 h-6 lg:w-12 lg:h-8 text-center flex justify-center rounded-lg lg:text-lg text-sm font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 variant-quantity"
-                              aria-label="Quantity" />
+      type="number" name="variants[{{ $variant->id }}][quantity]" data-variant-id="{{ $variant->id }}"
+      id="quantity_{{ $variant->id }}" 
+      value="{{ old('quantity', $cart->quantity ?? 0) }}"                               
+      min="0"
+      readonly
+      class="w-6 h-6 lg:w-12 lg:h-8 text-center flex justify-center rounded-lg lg:text-lg text-sm font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 variant-quantity"
+      aria-label="Quantity" />
+
                             
                             <!-- Increment Button -->
-                            <button
-                              type="button"
-                              class="w-6 h-6 lg:w-8 lg:h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
-                              onclick="incrementQty({{ $variant->id }})" 
-                              aria-label="Increase Quantity">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
-                              </svg>
-                            </button>
+                           <button
+    type="button"
+    id="increment-btn-{{ $variant->id }}"
+    class="w-6 h-6 lg:w-8 lg:h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
+    onclick="incrementQty({{ $variant->id }})"
+    aria-label="Increase Quantity">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+    </svg>
+</button>
+
                           </div>
                          
                         </div>
@@ -519,12 +523,20 @@
               Continue
             </button>
             @endauth --}}
-            <button type="button" onclick="checkAuthAndSubmit()"
-            class="relative px-6 w-full py-3  bg-[#58af0838] hover:bg-[#4a910954] text-black font-semibold rounded-lg shadow-md  transition-transform transform  duration-300 ease-in-out"
-            >
-            <i class="fas fa-shopping-cart mr-2"></i>
-            Add to Cart
-            </button>
+           @php
+    $cartCount = \App\Models\Cart::where('user_id', Auth::id())->count();
+@endphp
+
+<div id="cart-limit-message" class="hidden text-red-600 text-sm font-semibold mb-2">
+    ⚠️ You can only add up to 5 products in your cart.
+</div>
+
+<button type="button"
+        onclick="checkAuthAndSubmit({{ $cartCount }})"
+        class="relative px-6 w-full py-3 bg-[#58af0838] hover:bg-[#4a910954] text-black font-semibold rounded-lg shadow-md transition-transform transform duration-300 ease-in-out">
+    <i class="fas fa-shopping-cart mr-2"></i>
+    Add to Cart
+</button>
               </div>
           </form>
           @endif
@@ -559,16 +571,29 @@ function isAnyVariantSelected() {
     return isValid;
 }
 
-function checkAuthAndSubmit() { 
+function checkAuthAndSubmit(cartCount) {
+    const messageBox = document.getElementById('cart-limit-message');
+
+    // 🚫 Show error if cart already has 5 products
+    if (cartCount >= 5) {
+        messageBox.classList.remove('hidden');
+        return;
+    }
+
+    // ✅ Check login
     if (!isUserLoggedIn) {
         const redirectUrl = "/login?redirect=" + encodeURIComponent(window.location.href);
         window.location.href = redirectUrl;
-    } else {
-        if (isAnyVariantSelected()) {
-            document.getElementById('addCartForm').submit(); 
-        }
+        return;
+    }
+
+    // ✅ Proceed if a variant is selected
+    if (typeof isAnyVariantSelected === "function" && isAnyVariantSelected()) {
+        messageBox.classList.add('hidden'); // hide message if previously shown
+        document.getElementById('addCartForm').submit();
     }
 }
+
 function submitAndRedirectToCart() {
     if (isAnyVariantSelected()) {
         document.getElementById('redirect_to_cart').value = "1";
@@ -836,22 +861,41 @@ if (defaultTab && document.getElementById(defaultTabContentId)) {
 }
 });
 
-// Function to decrement the quantity
+
 function decrementQty(variantId) {
-  const quantityInput = document.getElementById('quantity_' + variantId); 
-  let currentValue = parseInt(quantityInput.value);
+    const input = document.getElementById('quantity_' + variantId);
+    const incrementBtn = document.getElementById('increment-btn-' + variantId);
 
-if (currentValue > 0) { // Prevent decrementing below zero
-  quantityInput.value = currentValue - 1;
-}
+    let value = parseInt(input.value) || 0;
+    if (value > 0) {
+        value--;
+        input.value = value;
+    }
+
+    // Enable increment if was disabled
+    if (value < 5 && incrementBtn.disabled) {
+        incrementBtn.disabled = false;
+        incrementBtn.classList.remove('cursor-not-allowed', 'opacity-50');
+    }
 }
 
-// Function to increment the quantity
 function incrementQty(variantId) {
-  const quantityInput = document.getElementById('quantity_' + variantId);
-  let currentValue = parseInt(quantityInput.value) || 0; // Ensure a valid number
-quantityInput.value = currentValue + 1;
+    const input = document.getElementById('quantity_' + variantId);
+    const incrementBtn = document.getElementById('increment-btn-' + variantId);
+
+    let value = parseInt(input.value) || 0;
+
+    if (value < 5) {
+        value++;
+        input.value = value;
+
+        if (value === 5) {
+            incrementBtn.disabled = true;
+            incrementBtn.classList.add('cursor-not-allowed', 'opacity-50');
+        }
+    }
 }
+
 </script>
 {{-- <script>
    function checkAuthAndSubmit() {
@@ -900,5 +944,6 @@ quantityInput.value = currentValue + 1;
     });
   });
 </script> --}}
+
 
 @endpush
