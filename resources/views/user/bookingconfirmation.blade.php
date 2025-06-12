@@ -232,7 +232,7 @@
           </div>
         </div>
         <div class="text-right flex justify-center gap-x-4 items-center whitespace-nowrap">
-          <div class="lg:text-4xl md:text-2xl text-md font-semibold text-gray-900">AED {{ number_format($product_item->variant->discounted_price, 2) }}</div>
+          <div class="lg:text-3xl md:text-2xl text-md font-semibold text-gray-900">AED {{ number_format($product_item->variant->discounted_price, 2) }}</div>
           <div class="md:text-2xl text-md text-gray-500 line-through">AED {{ number_format($product_item->variant->unit_price, 2) }}</div>
         </div>
       </div>
@@ -254,19 +254,17 @@
       <div class="divide-y divide-slate-200">
           <!-- Accordion item -->
           <div x-data="{ expanded: false }" class="py-2">
-              <h2>
-                  <button
-                      id="faqs-title-01"
-                      type="button"
-                      class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-700 py-2"
-                      @click="expanded = !expanded"
-                      :aria-expanded="expanded"
-                      aria-controls="faqs-text-01"
-                  >
-                      <span>How do I redeem my Nearby Voucher?</span>
-                      <i class="fa-solid text-xl fa-angle-down transform origin-center transition duration-200 ease-out" :class="{'!rotate-180': expanded}"></i>
-                  </button>
-              </h2>
+              <button
+                  id="faqs-title-01"
+                  type="button"
+                  class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-700 py-2"
+                  @click="expanded = !expanded"
+                  :aria-expanded="expanded"
+                  aria-controls="faqs-text-01"
+              >
+                  How do I redeem my Nearby Voucher?
+                  <i class="fa-solid text-xl fa-angle-down transform origin-center transition duration-200 ease-out" :class="{'!rotate-180': expanded}"></i>
+              </button>
               <div
                   id="faqs-text-01"
                   role="region"
@@ -283,19 +281,17 @@
           </div>
           <!-- Accordion item -->
           <div x-data="{ expanded: false }" class="py-2">
-              <h2>
-                  <button
-                      id="faqs-title-02"
-                      type="button"
-                      class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-700 py-2"
-                      @click="expanded = !expanded"
-                      :aria-expanded="expanded"
-                      aria-controls="faqs-text-02"
-                  >
-                      <span>How can I confirm my booking?</span>
-                      <i class="fa-solid text-xl fa-angle-down transform origin-center transition duration-200 ease-out" :class="{'!rotate-180': expanded}"></i>
-                  </button>
-              </h2>
+              <button
+                  id="faqs-title-02"
+                  type="button"
+                  class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-700 py-2"
+                  @click="expanded = !expanded"
+                  :aria-expanded="expanded"
+                  aria-controls="faqs-text-02"
+              >
+                  How can I confirm my booking?
+                  <i class="fa-solid text-xl fa-angle-down transform origin-center transition duration-200 ease-out" :class="{'!rotate-180': expanded}"></i>
+              </button>
               <div
                   id="faqs-text-02"
                   role="region"
@@ -312,19 +308,17 @@
           </div> 
           <!-- Accordion item -->
           <div x-data="{ expanded: false }" class="py-2">
-              <h2>
-                  <button
-                      id="faqs-title-03"
-                      type="button"
-                      class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-700 py-2"
-                      @click="expanded = !expanded"
-                      :aria-expanded="expanded"
-                      aria-controls="faqs-text-03"
-                  >
-                      <span>What is a Verification Number?</span>
-                      <i class="fa-solid text-xl fa-angle-down transform origin-center transition duration-200 ease-out" :class="{'!rotate-180': expanded}"></i>
-                  </button>
-              </h2>
+              <button
+                  id="faqs-title-03"
+                  type="button"
+                  class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-700 py-2"
+                  @click="expanded = !expanded"
+                  :aria-expanded="expanded"
+                  aria-controls="faqs-text-03"
+              >
+                  What is a Verification Number?
+                  <i class="fa-solid text-xl fa-angle-down transform origin-center transition duration-200 ease-out" :class="{'!rotate-180': expanded}"></i>
+              </button>
               <div
                   id="faqs-text-03"
                   role="region"
