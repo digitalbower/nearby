@@ -1059,14 +1059,27 @@ function collectItems() {
                       <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
                     </svg>
                   </button>
-                  <input type="number" name="items[${variant.id}][quantity]" data-variant-id="${variant.id}"
-                    id="quantity_${variant.id}" value="${variant.quantity}" min="1" 
-                    class="w-8 h-8 text-center text-lg font-semibold text-gray-700" />
-                  <button type="button" class="w-8 h-8 bg-gray-100 flex items-center justify-center text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white" onclick="incrementQty(${variant.id})">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
-                    </svg>
-                  </button>
+               <input 
+  type="number" 
+  name="items[${variant.id}][quantity]" 
+  data-variant-id="${variant.id}"
+  id="quantity_${variant.id}" 
+  value="${variant.quantity}" 
+  min="1" 
+  readonly
+  class="w-8 h-8 text-center text-lg font-semibold text-gray-700" 
+/>
+
+<button 
+  type="button" 
+  id="incrementBtn_${variant.id}"
+  class="w-8 h-8 bg-gray-100 flex items-center justify-center text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white" 
+  onclick="incrementQty(${variant.id})">
+  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+  </svg>
+</button>
+
                 </div>
                 
               </div>  
@@ -1228,24 +1241,36 @@ function collectItems() {
   }
 
   // Function to decrement the quantity
-  function decrementQty(variantId) {
-    const quantityInput = document.getElementById('quantity_' + variantId); 
-    let currentValue = parseInt(quantityInput.value);
+ function incrementQty(id) {
+  const qtyInput = document.getElementById('quantity_' + id);
+  const incrementBtn = document.getElementById('incrementBtn_' + id);
+  let currentValue = parseInt(qtyInput.value) || 0;
 
-    if (currentValue > 1) { // Prevent decrementing below 1 (if you don't want 0 quantities)
-      quantityInput.value = currentValue - 1;
-      updateCartQuantity(variantId, quantityInput.value); // Save quantity after decrement
+  if (currentValue < 5) {
+    qtyInput.value = currentValue + 1;
+
+    if (parseInt(qtyInput.value) === 5) {
+      incrementBtn.disabled = true;
+      incrementBtn.classList.add('opacity-50', 'cursor-not-allowed');
     }
   }
+}
 
-  // Function to increment the quantity
-  function incrementQty(variantId) {
-    const quantityInput = document.getElementById('quantity_' + variantId);
-    let currentValue = parseInt(quantityInput.value) || 0; // Ensure a valid number
+function decrementQty(id) {
+  const qtyInput = document.getElementById('quantity_' + id);
+  const incrementBtn = document.getElementById('incrementBtn_' + id);
+  let currentValue = parseInt(qtyInput.value);
 
-    quantityInput.value = currentValue + 1; // Increment quantity
-    updateCartQuantity(variantId, quantityInput.value); // Save quantity after increment
+  if (currentValue > 1) {
+    qtyInput.value = currentValue - 1;
+
+    if (parseInt(qtyInput.value) < 5) {
+      incrementBtn.disabled = false;
+      incrementBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+    }
   }
+}
+
   function confirmDelete(variantId) {
   Swal.fire({
     title: 'Are you sure?',
