@@ -260,7 +260,7 @@
 
             <div class="mt-4">
               <!-- Tabs -->
-              <ul id="tabs" class="inline-flex pt-2 px-1 w-full">
+              <ul id="tabs" class="inline-flex whitespace-nowrap overflow-y-hidden pt-2 px-1 w-full">
                 <li class="px-4 text-gray-800 font-semibold py-2 bg-[#58af0838] rounded -mb-px"><a id="default-tab" href="#first">Main Guest</a></li>
                 @for ($i=1;$i<$max_quantity_in_checkout;$i++)
                   <li class="px-4 text-gray-800 font-semibold py-2 rounded"><a href="#second_{{$i}}">Guest {{$i}}</a></li>
@@ -1040,7 +1040,7 @@ function collectItems() {
         const isVisible = index < visibleCount;
         return `
         <div class="product-item border p-4 rounded shadow" style="display: ${isVisible ? 'block' : 'none'};">
-          <div class="md:text-2xl text-lg relative font-bold text-gray-700">
+          <div class="md:text-2xl text-lg relative text-gray-700">
             <div class="md:flex gap-3 md:space-y-0 space-y-4">
               <div class="relative md:w-28 w-full h-[200px] md:h-28 max-h-[300px] rounded-lg overflow-hidden">
                 <img src="${variant.image}" alt="${variant.title}" class="w-full h-full object-cover" />
