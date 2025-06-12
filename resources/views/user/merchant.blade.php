@@ -306,7 +306,12 @@
                     Join thousands of successful businesses reaching new heights with our platform.
                   </p>
                 </div>
-                @if (session('success'))
+           
+                <div class="backdrop-blur-sm  rounded-xl">
+                  <form action="{{route('user.merchant_store')}}" id="merchantForm" method="POST">
+                    @csrf
+                    <div class="space-y-4 p-0">
+                           @if (session('success'))
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
                   <strong class="font-bold">Success!</strong>
                   <span class="block sm:inline">{{ session('success') }}</span>
@@ -321,10 +326,6 @@
                       </ul>
                   </div>
                 @endif
-                <div class="backdrop-blur-sm  rounded-xl">
-                  <form action="{{route('user.merchant_store')}}" id="merchantForm" method="POST">
-                    @csrf
-                    <div class="space-y-4 p-0">
                       <div class="grid gap-4 md:grid-cols-2">
                         <div>
                           <input type="text" name="business_name" placeholder="Business Name" class="w-full bg-white p-2 rounded-md border py-3 text-gray-800" />
@@ -334,7 +335,23 @@
                         </div>
                       </div>
                       <input type="email" name="email" placeholder="Email Address" class="bg-white p-2 rounded-md border py-3 text-gray-800 w-full" />
-                      <input type="tel" name="phone" placeholder="Phone Number" class="bg-white p-2 rounded-md border py-3 text-gray-800 w-full" />
+                     <div class="flex w-full">
+    {{-- Country Code Dropdown --}}
+    <select name="country_code_id" class="bg-white p-2 rounded-l-md border-y border-l text-gray-800">
+        @foreach($countries as $country)
+            <option value="{{ $country->id }}"
+                {{ old('country_code_id', $user->country_code_id ?? '') == $country->id ? 'selected' : '' }}>
+                +{{ $country->phonecode }} 
+            </option>
+        @endforeach
+    </select>
+
+    {{-- Phone Number Field --}}
+    <input type="tel" name="phone" placeholder="Phone Number"
+        class="bg-white p-2 rounded-r-md border-y border-r text-gray-800 w-full" 
+        value="{{ old('phone', $user->phone ?? '') }}" />
+</div>
+
 
                       <select name="category_id" class="bg-white p-2 rounded-md border py-3 text-gray-800 w-full">
                         @foreach ($categories as $category)
@@ -343,12 +360,12 @@
                       </select>
 
                       <button class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-                        Start Free Trial
+                        Submit
                       </button>
                   
-                      <p class="text-sm text-center text-gray-500">
+                      <!-- <p class="text-sm text-center text-gray-500">
                         No credit card required • 14-day free trial
-                      </p>
+                      </p> -->
                     </div>
                   </form>
                 </div>
@@ -547,6 +564,24 @@ closeBtn.addEventListener('click', () => {
   setTimeout(() => {
     modal.classList.add('hidden');
   }, 300);
+});
+</script>
+
+<script>
+// Your existing functions (keep them as they are)
+function openModal() {
+    document.getElementById('myModal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('myModal').classList.add('hidden');
+}
+
+// ADD ONLY THIS PART - Auto-open modal if there are success messages or errors
+document.addEventListener('DOMContentLoaded', function() {
+    @if (session('success') || $errors->any())
+        openModal();
+    @endif
 });
 </script>
 @endpush

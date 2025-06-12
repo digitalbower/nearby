@@ -41,7 +41,7 @@ class ProductVariant extends Model
         return $this->belongsTo(Product::class);
     }
     public function getBookingCountBasedOnvariant(){
-        $totalBooking = $this->bookingConfirmationItems->where('verification_status','redeemed')->count();
+        $totalBooking = $this->bookingConfirmationItems->count();
         return $totalBooking;
     }
 

@@ -41,13 +41,18 @@ class MerchantController extends Controller
         $payment_channels = Footer::where('type', 'payment_channels')
         ->where('status', 1)
         ->get();  
+        
         $categories = Category::where('status',1)->get();
 
         $currentPath = request()->path();
+
         $seo = MainSeo::where('page_url', $currentPath)->first()
             ?? MainSeo::where('page_url', 'default')->first();  
+
+        $countries = \App\Models\Country::orderBy('name')->get();
+
         return view('user.merchant',compact('uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
-        'followus','payment_channels','categories','seo'));
+        'followus','payment_channels','categories','seo','countries'));
     }
     public function storeMerchant(Request $request){
 
@@ -56,8 +61,12 @@ class MerchantController extends Controller
             'name' => 'required',
             'email' => 'required|email',
             'category_id' => 'required|exists:categories,id',
+            'country_code_id' => 'required',
+            'phone' => 'required',
         ]);
         Merchant::create($request->all());
         return redirect()->route('user.merchant')->with('success', 'Data created successfully!');
+
+        
     }
 }
