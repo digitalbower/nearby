@@ -86,31 +86,7 @@
         <li><strong>Booking ID:</strong> {{ $orderNumber }}</li>
       </ul>
 
-      <div class="section-title">🛒 Items Booked:</div>
-      <table class="items-table">
-        <thead>
-          <tr>
-            <th>Product Name</th>
-            <th>Variant</th>
-            <th>Quantity</th>
-            <th>Total Price</th>
-            <th>Verification #</th>
-            <th>Validity</th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach($items as $item)
-            <tr>
-              <td>{{ $item['product_name'] }}</td>
-              <td>{{ $item['product_variant_name'] }}</td>
-              <td>{{ $item['quantity'] }}</td>
-              <td>AED {{ $item['total_price'] }}</td>
-              <td>{{ $item['verification_number'] }}</td>
-              <td>{{ $item['validity_from'] }} to {{ $item['validity_to'] }}</td>
-            </tr>
-          @endforeach
-        </tbody>
-      </table>
+      
 
       <p style="margin-top: 20px;">👉 <a href="{{ url('/vendor/login') }}" target="_blank">View Booking in Vendor Portal</a></p>
 

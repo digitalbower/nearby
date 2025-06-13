@@ -26,6 +26,6 @@ class VendorBookingNotification extends Mailable
     public function build()
     {
         return $this->subject('New Booking - ' . $this->orderNumber)
-                    ->view('users.emails.vendor-booking-notification');
+                    ->view('user.emails.vendor-booking-notification');
     }
 }
