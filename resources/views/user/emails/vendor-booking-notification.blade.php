@@ -39,19 +39,6 @@
       font-size: 18px;
       color: #000;
     }
-    .items-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }
-    .items-table th, .items-table td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-    }
-    .items-table th {
-      background-color: #f0f0f0;
-    }
     .footer {
       background: linear-gradient(90deg, #F0F6F8 0%, #DDE4E6 0.01%);
       padding: 20px;
@@ -86,7 +73,17 @@
         <li><strong>Booking ID:</strong> {{ $orderNumber }}</li>
       </ul>
 
-      
+      <div class="section-title">🛒 Items Booked:</div>
+      <ul>
+        @foreach($items as $item)
+          <li>
+            <strong>Product:</strong> {{ $item['product_name'] }}<br>
+            <strong>Variant:</strong> {{ $item['product_variant_name'] }}<br>
+            <strong>Quantity:</strong> {{ $item['quantity'] }}
+          </li>
+          <br>
+        @endforeach
+      </ul>
 
       <p style="margin-top: 20px;">👉 <a href="{{ url('/vendor/login') }}" target="_blank">View Booking in Vendor Portal</a></p>
 
