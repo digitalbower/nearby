@@ -10,19 +10,22 @@ class VendorBookingNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $vendorName, $orderNumber, $orderDate, $items;
 
-    public function __construct($vendorName, $orderNumber, $orderDate, $items)
+    public $vendorName, $orderNumber, $orderDate, $items, $customerName, $customerEmail;
+
+    public function __construct($vendorName, $orderNumber, $orderDate, $items, $customerName, $customerEmail)
     {
         $this->vendorName = $vendorName;
         $this->orderNumber = $orderNumber;
         $this->orderDate = $orderDate;
         $this->items = $items;
+        $this->customerName = $customerName;
+        $this->customerEmail = $customerEmail;
     }
 
     public function build()
     {
-        return $this->subject('New Booking Received - ' . $this->orderNumber)
-                    ->view('vendor.emails.vendor-booking-notification');
+        return $this->subject('New Booking - ' . $this->orderNumber)
+                    ->view('users.emails.vendor-booking-notification');
     }
 }

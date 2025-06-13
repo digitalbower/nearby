@@ -218,17 +218,18 @@ class StripController extends Controller
         }
 
         // Send email to each vendor with their items
-        foreach ($vendorItems as $vendorInfo) {
-            Mail::to($vendorInfo['vendor_email'])->send(
-                new \App\Mail\VendorBookingNotification(
-                    $vendorInfo['vendor_name'],
-                    $order_number,
-                    $order_date,
-                    $vendorInfo['items']
-                )
-            );
-        }
-
+      foreach ($vendorItems as $vendorInfo) {
+    Mail::to($vendorInfo['vendor_email'])->send(
+        new \App\Mail\VendorBookingNotification(
+            $vendorInfo['vendor_name'],
+            $order_number,
+            $order_date,
+            $vendorInfo['items'],
+            $user->first_name . ' ' . $user->last_name,
+            $user->email
+        )
+    );
+  }
         DB::commit();
         return response()->json(['success' => true, 'message' => '
          confirmed.']);

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>New Vendor Booking</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f9fb;
+      margin: 0;
+      padding: 0;
+    }
+    .email-wrapper {
+      max-width: 700px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    .header {
+      background: linear-gradient(90deg, #F0F6F8 0%, #DDE4E6 0.01%);
+      padding: 20px;
+      text-align: center;
+    }
+    .header img {
+      max-width: 150px;
+    }
+    .content {
+      padding: 30px;
+      color: #333;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .section-title {
+      font-weight: bold;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      font-size: 18px;
+      color: #000;
+    }
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    .items-table th, .items-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .items-table th {
+      background-color: #f0f0f0;
+    }
+    .footer {
+      background: linear-gradient(90deg, #F0F6F8 0%, #DDE4E6 0.01%);
+      padding: 20px;
+      font-size: 12px;
+      text-align: center;
+      color: #777;
+    }
+    a {
+      color: #007BFF;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <!-- Header -->
+    <div class="header">
+      <img src="{{ asset('assets/img/logo.png') }}" alt="NearBy Vouchers Logo">
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <p>Hi {{ $vendorName }},</p>
+
+      <p>You’ve just received a new booking through <strong>NearbyVouchers</strong>!</p>
+
+      <div class="section-title">📌 Booking Summary:</div>
+      <ul>
+        <li><strong>Customer:</strong> {{ $customerName ?? 'N/A' }}</li>
+        <li><strong>Email:</strong> {{ $customerEmail ?? 'N/A' }}</li>
+        <li><strong>Booking ID:</strong> {{ $orderNumber }}</li>
+      </ul>
+
+      <div class="section-title">🛒 Items Booked:</div>
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th>Product Name</th>
+            <th>Variant</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+            <th>Verification #</th>
+            <th>Validity</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach($items as $item)
+            <tr>
+              <td>{{ $item['product_name'] }}</td>
+              <td>{{ $item['product_variant_name'] }}</td>
+              <td>{{ $item['quantity'] }}</td>
+              <td>AED {{ $item['total_price'] }}</td>
+              <td>{{ $item['verification_number'] }}</td>
+              <td>{{ $item['validity_from'] }} to {{ $item['validity_to'] }}</td>
+            </tr>
+          @endforeach
+        </tbody>
+      </table>
+
+      <p style="margin-top: 20px;">👉 <a href="{{ url('/vendor/login') }}" target="_blank">View Booking in Vendor Portal</a></p>
+
+      <p>If you need any support, reach us at <a href="mailto:support@nearbyvouchers.com">support@nearbyvouchers.com</a>.</p>
+
+      <p>Thanks,<br>
+      <strong>Team NearbyVouchers</strong></p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      © nearbyvouchers.com {{ date('Y') }}, All rights reserved.
+    </div>
+  </div>
+</body>
+</html>
