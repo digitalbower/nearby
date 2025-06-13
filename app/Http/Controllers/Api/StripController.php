@@ -187,8 +187,51 @@ class StripController extends Controller
 
          Mail::to($user->email)->send(new BookingConfirmationEmail($user->first_name,$order_date,$order_number,$grand_total,$vat,$promocode,$promo_discount,$promocode_discount_amount,$importantinfo, $nbv_terms,$items,$variants));
 
+         // Group booking items by vendor
+        $vendorItems = [];
+
+        foreach ($booking->items as $booking_item) {
+            $product_variant = ProductVariant::find($booking_item['product_varient_id']);
+            $vendor = $product_variant->product?->vendor;
+
+            if ($vendor) {
+                $vendorId = $vendor->id;
+
+                if (!isset($vendorItems[$vendorId])) {
+                    $vendorItems[$vendorId] = [
+                        'vendor_email' => $vendor->email,
+                        'vendor_name' => $vendor->name,
+                        'items' => [],
+                    ];
+                }
+
+                $vendorItems[$vendorId]['items'][] = [
+                    'product_name' => $product_variant->product->name ?? '',
+                    'product_variant_name' => $product_variant->title ?? '',
+                    'quantity' => $booking_item['quantity'],
+                    'total_price' => $booking_item['total_price'],
+                    'verification_number' => $booking_item['verification_number'],
+                    'validity_from' => $order_date,
+                    'validity_to' => $booking_item['validity'],
+                ];
+            }
+        }
+
+        // Send email to each vendor with their items
+        foreach ($vendorItems as $vendorInfo) {
+            Mail::to($vendorInfo['vendor_email'])->send(
+                new \App\Mail\VendorBookingNotification(
+                    $vendorInfo['vendor_name'],
+                    $order_number,
+                    $order_date,
+                    $vendorInfo['items']
+                )
+            );
+        }
+
         DB::commit();
-        return response()->json(['success' => true, 'message' => 'Booking confirmed.']);
+        return response()->json(['success' => true, 'message' => '
+         confirmed.']);
     } catch (\Exception $e) {
         DB::rollBack();
         return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
