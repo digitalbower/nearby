@@ -254,7 +254,7 @@
       <div class="divide-y divide-slate-200">
           <!-- Accordion item -->
           <div x-data="{ expanded: false }" class="py-2">
-              <button
+              <a href="javascript:void(0);"
                   id="faqs-title-01"
                   type="button"
                   class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-700 py-2"
@@ -262,9 +262,9 @@
                   :aria-expanded="expanded"
                   aria-controls="faqs-text-01"
               >
-                  How do I redeem my Nearby Voucher?
+                  <span>How do I redeem my Nearby Voucher?</span>
                   <i class="fa-solid text-xl fa-angle-down transform origin-center transition duration-200 ease-out" :class="{'!rotate-180': expanded}"></i>
-              </button>
+              </a>
               <div
                   id="faqs-text-01"
                   role="region"
@@ -281,7 +281,7 @@
           </div>
           <!-- Accordion item -->
           <div x-data="{ expanded: false }" class="py-2">
-              <button
+              <a href="javascript:void(0);"
                   id="faqs-title-02"
                   type="button"
                   class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-700 py-2"
@@ -289,9 +289,9 @@
                   :aria-expanded="expanded"
                   aria-controls="faqs-text-02"
               >
-                  How can I confirm my booking?
+                  <span>How can I confirm my booking?</span>
                   <i class="fa-solid text-xl fa-angle-down transform origin-center transition duration-200 ease-out" :class="{'!rotate-180': expanded}"></i>
-              </button>
+              </a>
               <div
                   id="faqs-text-02"
                   role="region"
@@ -308,7 +308,7 @@
           </div> 
           <!-- Accordion item -->
           <div x-data="{ expanded: false }" class="py-2">
-              <button
+              <a href="javascript:void(0);"
                   id="faqs-title-03"
                   type="button"
                   class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-700 py-2"
@@ -316,9 +316,9 @@
                   :aria-expanded="expanded"
                   aria-controls="faqs-text-03"
               >
-                  What is a Verification Number?
+                  <span>What is a Verification Number?</span>
                   <i class="fa-solid text-xl fa-angle-down transform origin-center transition duration-200 ease-out" :class="{'!rotate-180': expanded}"></i>
-              </button>
+              </a>
               <div
                   id="faqs-text-03"
                   role="region"
