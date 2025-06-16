@@ -8,7 +8,9 @@
         <div class="card-body shadow-lg bg-white rounded-3">
             <div class="d-flex justify-content-between mb-3">
                 <h4 class="text-center mb-4">Nbv Terms List</h4>
+                @if(auth()->guard('admin')->user()->hasPermission('create_nbvterms'))
                 <a href="{{ route('admin.products.nbv_terms.create') }}" class="btn btn-primary d-flex align-items-center">Add NbvTerms</a>
+                @endif
             </div>
             @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
@@ -41,18 +43,25 @@
                             <td>{{$term->type}}</td>
                             <td class="d-flex align-items-center gap-2">
                                 <!-- Toggle Switch -->
+                                
+                                @if(auth()->guard('admin')->user()->hasPermission('changestatus_nbvterms'))
                                 <div class="form-check form-switch">
                                     <input class="form-check-input toggle-status" type="checkbox" 
                                            data-id="{{ $term->id }}" 
                                            {{ $term->status ? 'checked' : '' }}>
                                 </div>
+                                @endif
+                            @if(auth()->guard('admin')->user()->hasPermission('edit_nbvterms'))
                             <a href="{{ route('admin.products.nbv_terms.edit', $term) }}" class="btn btn-warning btn-sm">Edit</a>
+                            @endif
+                            @if(auth()->guard('admin')->user()->hasPermission('delete_nbvterms'))
                             <form action="{{ route('admin.products.nbv_terms.destroy', $term->id) }}" method="POST" class="d-inline" 
                                 onsubmit="return confirm('Are you sure you want to delete this nbv term?');">
                               @csrf
                               @method('DELETE')
                               <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                           </form>
+                          @endif
                             </td>
                         </tr>
                     @empty

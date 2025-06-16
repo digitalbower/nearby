@@ -20,9 +20,11 @@
         <div class="card-body bg-white">
             <div class="d-flex align-items-center justify-content-between">
                 <h4 class="mb-0">Commission Listing</h4>
+                 @if(auth()->guard('admin')->user()->hasPermission('download_commission'))
                 <div class="d-flex justify-content-end mb-3">
                     <a href="{{ route('admin.commission.export') }}" class="btn btn-success">Download Excel</a>
                 </div>
+                @endif
             </div>
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">

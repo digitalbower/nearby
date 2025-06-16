@@ -22,7 +22,9 @@
             <div id="status-message"></div>
             <div class="d-flex align-items-center justify-content-between mb-3">
                 <h4 class="text-start">Vendor Terms</h4>
+                @if(auth()->guard('admin')->user()->hasPermission('create_vendorterms'))
                 <a href="{{ route('admin.products.vendor_terms.create') }}" class="btn btn-primary">Add New Vendor Terms</a>
+                @endif
             </div>
 
             <table class="table table-bordered">
@@ -42,15 +44,18 @@
                             <td>{{ $vendor_term->name }}</td>
                             <td class="d-flex align-items-center gap-2">
                                 <!-- Toggle Switch -->
+                                @if(auth()->guard('admin')->user()->hasPermission('changestatus_vendorterms'))
                                 <div class="form-check form-switch">
                                     <input class="form-check-input toggle-status" type="checkbox" 
                                            data-id="{{ $vendor_term->id }}" 
                                            {{ $vendor_term->status ? 'checked' : '' }}>
                                 </div>
-                            
+                                @endif
+                                @if(auth()->guard('admin')->user()->hasPermission('edit_vendorterms'))
                                 <!-- Edit Button -->
                                 <a href="{{ route('admin.products.vendor_terms.edit', $vendor_term->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            
+                                @endif
+                                @if(auth()->guard('admin')->user()->hasPermission('delete_vendorterms'))
                                 <!-- Delete Form -->
                                 <form action="{{ route('admin.products.vendor_terms.destroy', $vendor_term->id) }}" method="POST" class="d-inline" 
                                       onsubmit="return confirm('Are you sure you want to delete this vendor term?');">
@@ -58,6 +63,7 @@
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                 </form>
+                                @endif
                             </td>                            
                         </tr>
                     @empty

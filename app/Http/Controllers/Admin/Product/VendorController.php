@@ -34,14 +34,12 @@ class VendorController extends Controller
         $request->validate([
             'name' => 'required|min:3',
             'email' => 'required|email',
-            'password' => 'required|string|min:6|confirmed',
             'phone' => 'required',
             'validityfrom' => 'required',
             'validityto' => 'required',
         ]);
 
         $data = $request->all();
-        $data['password'] = Hash::make($request->password);
         Vendor::create($data); 
         return redirect()->route('admin.products.vendors.index')->with('success', 'New Vendor created successfully!');
 
@@ -62,17 +60,12 @@ class VendorController extends Controller
         $request->validate([
             'name' => 'required|min:3',
             'email' => 'required|email',
-            'password' => 'nullable|string|min:6|confirmed',
             'phone' => 'required',
             'validityfrom' => 'required',
             'validityto' => 'required',
         ]);
         $data = $request->all();
-        if (!empty($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
-        } else {
-            unset($data['password']);
-        }
+
         $vendor->update($data);
         return redirect()->route('admin.products.vendors.index')->with('success', 'Vendor updated successfully!');
 

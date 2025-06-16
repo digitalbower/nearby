@@ -58,9 +58,8 @@ class NbvTermController extends Controller
             ->whereDate('validity_from', '<=', $today)
             ->whereDate('validity_to', '>=', $today)
             ->whereHas('vendor', function ($query) use ($today) {
-                $query->where('status', 1)
-                    ->whereDate('validityfrom', '<=', $today)
-                    ->whereDate('validityto', '>=', $today);
+                $query->where('expired',1)
+                ->where('status',1);
             })
             ->exists();
 

@@ -1,7 +1,3 @@
-@php
-    $admin = Auth::guard('admin')->user();
-    $role = $admin?->user_role_id;
-@endphp
 <style>
 .sidebar[data-background-color=dark] .nav>.nav-item a > p {
     width: 162px;
@@ -45,7 +41,6 @@
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
-                @if(in_array($role, [1,2]))
                 <li class="nav-item active">
                     <a
                     data-bs-toggle="collapse"
@@ -74,6 +69,7 @@
                     </span>
                     <h4 class="text-section">Components</h4>
                 </li>
+                @if(auth()->guard('admin')->user()->hasPermission('view_logos') || auth()->guard('admin')->user()->hasPermission('view_navigations') || auth()->guard('admin')->user()->hasPermission('view_emirates') || auth()->guard('admin')->user()->hasPermission('view_footer'))
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#base">
                     <!-- <i class="fas fa-layer-group"></i> -->
@@ -83,32 +79,40 @@
                     </a>
                     <div class="collapse" id="base">
                     <ul class="nav nav-collapse">
+                        @if(auth()->guard('admin')->user()->hasPermission('view_logos'))
                         <li>
                         <a href="{{ route('admin.logos.index') }}">
                             <span class="sub-item">Logo Management</span>
                         </a>
                         </li>
-                       
+                       @endif
+                       @if(auth()->guard('admin')->user()->hasPermission('view_navigations'))
                         <li>
                         <a href="{{ route('admin.navigation.index') }}">
                             <span class="sub-item">Navigation Menu Items Management</span>
                         </a>
                         </li>
+
+                        @endif
+                        @if(auth()->guard('admin')->user()->hasPermission('view_emirates'))
                         <li>
                         <a href="{{ route('admin.locations.index') }}">
                             <span class="sub-item">Location Scope Management</span>
                         </a>
                         </li> 
+                        @endif
+                        @if(auth()->guard('admin')->user()->hasPermission('view_footer'))
                         <li>
                         <a href="{{ route('admin.footer.index') }}">
                             <span class="sub-item">Footer Management</span>
                         </a>
                         </li>
-                        
+                        @endif
                     </ul>
                     </div>
                 </li>
-
+                @endif
+                @if(auth()->guard('admin')->user()->hasPermission('view_category') || auth()->guard('admin')->user()->hasPermission('view_subcategory') || auth()->guard('admin')->user()->hasPermission('view_category_unit'))
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#home">
                     <!-- <i class="fas fa-layer-group"></i> -->
@@ -118,30 +122,33 @@
                     </a>
                     <div class="collapse" id="home">
                     <ul class="nav nav-collapse">
-                       
+                       @if(auth()->guard('admin')->user()->hasPermission('view_category'))
                         <li>
                         <a href="{{ route('admin.categories.index') }}">
                             <span class="sub-item">Category Section Management</span>
                         </a>
                         </li>
-
+                        @endif
+                        @if(auth()->guard('admin')->user()->hasPermission('view_subcategory'))
                         <li>
                         <a href="{{ route('admin.subcategories.index') }}">
                             <span class="sub-item">SubCategory Section Management</span>
                         </a>
                         </li>
-
+                        @endif
+                        @if(auth()->guard('admin')->user()->hasPermission('view_category_unit'))
                         <li>
                         <a href="{{ route('admin.category_unit.index') }}">
                             <span class="sub-item">Category UnitTypes Section Management</span>
                         </a>
                         </li>
-
+                        @endif
                       
                     </ul>
                     </div>
                 </li>
-
+                @endif
+                @if(auth()->guard('admin')->user()->hasPermission('view_nbvterms') || auth()->guard('admin')->user()->hasPermission('view_vendor') || auth()->guard('admin')->user()->hasPermission('view_vendorterms') || auth()->guard('admin')->user()->hasPermission('view_salesperson') || auth()->guard('admin')->user()->hasPermission('view_promo') || auth()->guard('admin')->user()->hasPermission('view_producttype'))
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#contractLayouts">
                     <!-- <i class="fas fa-th-list"></i> -->
@@ -160,41 +167,56 @@
                     </a>
                     <div class="collapse" id="contractLayouts">
                     <ul class="nav nav-collapse">
+                        @if(auth()->guard('admin')->user()->hasPermission('view_nbvterms'))
+
                         <li>
                             <a href="{{route('admin.products.nbv_terms.index')}}">
                                 <span class="sub-item">NbvTerms</span>
                             </a>
                         </li>
+                        @endif
+                        @if(auth()->guard('admin')->user()->hasPermission('view_vendor'))
+
                         <li>
                             <a href="{{route('admin.products.vendors.index')}}">
                                 <span class="sub-item">Vendors</span>
                             </a>
                         </li>
+                        @endif
+                        @if(auth()->guard('admin')->user()->hasPermission('view_vendorterms'))
                         <li>
                             <a href="{{route('admin.products.vendor_terms.index')}}">
                                 <span class="sub-item">Vendor Terms</span>
                             </a>
                         </li>
+                        @endif
+                        @if(auth()->guard('admin')->user()->hasPermission('view_salesperson'))
                         <li>
                             <a href="{{route('admin.products.sales_person.index')}}">
                                 <span class="sub-item">Sales Person</span>
                             </a>
                         </li>
+                        @endif
+                        @if(auth()->guard('admin')->user()->hasPermission('view_promo'))
                          <li>
                             <a href="{{route('admin.products.promos.index')}}">
                                 <span class="sub-item">Promocodes</span>
                             </a>
                         </li>
+                        @endif
+                        @if(auth()->guard('admin')->user()->hasPermission('view_producttype'))
                         <li>
                             <a href="{{route('admin.products.product_types.index')}}">
                                 <span class="sub-item">Product Types</span>
                             </a>
-                        </li>
+                         </li>
+                        @endif
+
                     </ul>
                     </div>
                 </li>
                 @endif
-                @if(in_array($role, [1,2,3]))
+                @if(auth()->guard('admin')->user()->hasPermission('view_products') || auth()->guard('admin')->user()->hasPermission('view_productvariants'))
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#sidebarLayouts">
                     <!-- <i class="fas fa-th-list"></i> -->
@@ -205,23 +227,25 @@
                     <div class="collapse" id="sidebarLayouts">
                     <ul class="nav nav-collapse">
                         
-                      
+                        @if(auth()->guard('admin')->user()->hasPermission('view_products'))
                         <li>
                             <a href="{{route('admin.products.index')}}">
                                 <span class="sub-item">Products</span>
                             </a>
                         </li>
-
+                        @endif
+                        @if(auth()->guard('admin')->user()->hasPermission('view_productvariants'))
                         <li>
                             <a href="{{route('admin.products.product_variants.index')}}">
                                 <span class="sub-item">Product Variants</span>
                             </a>
                         </li>
+                        @endif
                     </ul>
                     </div>
                 </li>
                 @endif
-                @if(in_array($role, [1,2]))
+                @if(auth()->guard('admin')->user()->hasPermission('view_report') || auth()->guard('admin')->user()->hasPermission('view_commission'))
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#reportLayouts">
                     <!-- <i class="fas fa-th-list"></i> -->
@@ -240,19 +264,26 @@
                     </a>
                     <div class="collapse" id="reportLayouts">
                     <ul class="nav nav-collapse">
+                        @if(auth()->guard('admin')->user()->hasPermission('view_report'))
+
                         <li>
                             <a href="{{route('admin.reports.reviews.index')}}">
                                 <span class="sub-item">Review Report</span>
                             </a>
                         </li>
+                        @endif
+                        @if(auth()->guard('admin')->user()->hasPermission('view_commission'))
                         <li>
                             <a href="{{route('admin.commission.commission')}}">
                                 <span class="sub-item">Commission Listing</span>
                             </a>
                         </li> 
+                        @endif
                     </ul>
                     </div>
                 </li>
+                @endif
+                @if(auth()->guard('admin')->user()->hasPermission('view_seo'))
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#seoLayouts">
                     <!-- <i class="fas fa-th-list"></i> -->
@@ -291,14 +322,18 @@
                     </a>
                     <div class="collapse" id="seoLayouts">
                     <ul class="nav nav-collapse">
+                        @if(auth()->guard('admin')->user()->hasPermission('view_seo'))
                         <li>
                             <a href="{{route('admin.seo.index')}}">
                                 <span class="sub-item">Main Pages</span>
                             </a>
                         </li>
+                        @endif
                     </ul>
                     </div>
                 </li>
+                @endif
+                @if(auth()->guard('admin')->user()->hasPermission('view_adminusers') || auth()->guard('admin')->user()->hasPermission('view_vendor_credential'))
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#adminLayouts">
                     <!-- <i class="fas fa-th-list"></i> -->
@@ -308,11 +343,20 @@
                     </a>
                     <div class="collapse" id="adminLayouts">
                     <ul class="nav nav-collapse">
+                        @if(auth()->guard('admin')->user()->hasPermission('view_adminusers'))
                         <li>
                             <a href="{{route('admin.users.index')}}">
                                 <span class="sub-item">Admin Users</span>
                             </a>
                         </li>
+                        @endif
+                        @if(auth()->guard('admin')->user()->hasPermission('view_vendor_credential'))
+                        <li>
+                            <a href="{{route('admin.vendors.index')}}">
+                                <span class="sub-item">Vendor Credentials</span>
+                            </a>
+                        </li>
+                        @endif
                     </ul>
                     </div>
                 </li>

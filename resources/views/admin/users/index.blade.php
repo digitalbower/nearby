@@ -13,7 +13,9 @@
             <div id="status-message"></div>
             <div class="d-flex align-items-center justify-content-between mb-3">
                 <h3 class="mb-0">Admin Users</h3>
+                @if(auth()->guard('admin')->user()->hasPermission('create_adminusers'))
                 <a href="{{ route('admin.users.create') }}" class="btn btn-primary">Add New Admin User</a>
+                @endif
             </div>
 
             <div class="table-responsive">
@@ -36,8 +38,10 @@
                                 <td>{{ $user->role?->role_name ?? 'N/A' }}</td>
                                 <td class="d-flex align-items-center gap-2">
                                     <!-- Edit Button -->
+                                    @if(auth()->guard('admin')->user()->hasPermission('edit_adminusers'))
                                     <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-warning btn-sm">Edit</a>
-                                
+                                    @endif
+                                    @if(auth()->guard('admin')->user()->hasPermission('delete_adminusers'))
                                     <!-- Delete Form -->
                                     <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline" 
                                         onsubmit="return confirm('Are you sure you want to delete this user?');">
@@ -45,6 +49,7 @@
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                     </form>
+                                    @endif
                                 </td>                            
                             </tr>
                         @empty

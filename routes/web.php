@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AdminVendorController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\AuthController;
@@ -385,6 +386,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::resource('users', AdminUserController::class);
 
+        Route::prefix('vendors')->name('vendors.')->group(function () {
+            Route::get('/', [AdminVendorController::class, 'index'])->name('index');
+            Route::get('/{id}/edit', [AdminVendorController::class, 'edit'])->name('edit'); 
+            Route::put('/{id}', [AdminVendorController::class, 'update'])->name('update'); 
+        });
     });
 
     Route::prefix('blog')->group(function () {

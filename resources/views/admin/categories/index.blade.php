@@ -7,7 +7,9 @@
     <div class="card-body shadow-lg bg-white">
         <div class="d-flex mb-3 align-items-center justify-content-between">
             <h2>Categories</h2>
+            @if(auth()->guard('admin')->user()->hasPermission('create_category'))
             <a href="{{ route('admin.categories.create') }}" class="btn btn-primary mb-3">Add Category</a>
+            @endif
         </div>
 
         @if(session('success'))
@@ -37,12 +39,16 @@
                             <td>{{ $category->status ? 'Active' : 'Inactive' }}</td>
                             <td>{{ $category->enable_homecarousel ? 'Yes' : 'No' }}</td>
                             <td>
+                                @if(auth()->guard('admin')->user()->hasPermission('edit_category'))
                                 <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                @endif
+                                @if(auth()->guard('admin')->user()->hasPermission('delete_category'))
                                 <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
                                 </form>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

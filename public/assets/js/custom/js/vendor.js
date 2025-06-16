@@ -1,10 +1,4 @@
 $(document).ready(function () {
-    $.validator.addMethod("pwcheck", function(value) {
-        return /[A-Z]/.test(value) &&    // at least one uppercase letter
-               /[a-z]/.test(value) &&    // at least one lowercase letter
-               /[0-9]/.test(value) &&    // at least one digit
-               /[@$!%*?&#]/.test(value); // at least one special character
-    });
     $("#vendorForm").validate({
         rules: {
             name: { required: true, minlength: 3 },
@@ -12,15 +6,6 @@ $(document).ready(function () {
             phone: { required: true },
             validityfrom: { required: true },
             validityto: { required: true },
-            password: {
-                required: true,
-                minlength: 6,
-                pwcheck: true // custom rule
-            },
-            password_confirmation: {
-                required: true,
-                equalTo: "#password" // match password field
-            }
         },
         messages: {
             name: { required: "Vendor name is required", minlength: "Must be at least 3 characters" },
@@ -28,15 +13,6 @@ $(document).ready(function () {
             phone: { required: "Phone is required"},
             validityfrom: { required: "Validity From is required" },
             validityto: {required: "Validity To is required" },
-            password: {
-                required: "Password is required",
-                minlength: "Password must be at least 6 characters",
-                pwcheck: "Password must contain uppercase, lowercase, number, and special character"
-            },
-            password_confirmation: {
-                required: "Please confirm your password",
-                equalTo: "Passwords do not match"
-            }
         }
     });
     $("#vendorUpdateForm").validate({
@@ -46,27 +22,6 @@ $(document).ready(function () {
             phone: { required: true },
             validityfrom: { required: true },
             validityto: { required: true },
-            password: {
-                minlength: {
-                    param: 6,
-                    depends: function(element) {
-                        return $(element).val().length > 0;
-                    }
-                },
-                pwcheck: {
-                    depends: function(element) {
-                        return $(element).val().length > 0;
-                    }
-                }
-            },
-            password_confirmation: {
-                equalTo: "#password",
-                required: {
-                    depends: function(element) {
-                        return $("#password").val().length > 0;
-                    }
-                }
-            }
         },
         messages: {
             name: { required: "Vendor name is required", minlength: "Must be at least 3 characters" },
@@ -74,14 +29,6 @@ $(document).ready(function () {
             phone: { required: "Phone is required"},
             validityfrom: { required: "Validity From is required" },
             validityto: {required: "Validity To is required" },
-            password: {
-                minlength: "Password must be at least 6 characters",
-                pwcheck: "Password must contain uppercase, lowercase, number, and special character"
-            },
-            password_confirmation: {
-                required: "Please confirm your password",
-                equalTo: "Passwords do not match"
-            }
         }
     });
 

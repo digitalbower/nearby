@@ -15,7 +15,9 @@
             <div id="status-message"></div>
             <div class="d-flex align-items-center justify-content-between mb-3">
                 <h3 class="text-start">Products</h3>
+                @if(auth()->guard('admin')->user()->hasPermission('create_products'))
                 <a href="{{ route('admin.products.create') }}" class="btn btn-primary">Add New Product</a>
+                @endif
             </div>
             <div class="table-responsive">
                 <table class="table table-bordered">
@@ -45,14 +47,17 @@
                                 </td>
                                 <td class="d-flex align-items-center gap-2">
                                     <!-- Toggle Switch -->
+                                    @if(auth()->guard('admin')->user()->hasPermission('changestatus_products'))
                                     <div class="form-check form-switch">
                                         <input class="form-check-input toggle-status" type="checkbox" 
                                             data-id="{{ $product->id }}" 
                                             {{ $product->status ? 'checked' : '' }}>
                                     </div>
-                                
+                                    @endif
+                                    @if(auth()->guard('admin')->user()->hasPermission('edit_products'))
                                     <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                
+                                    @endif
+                                    @if(auth()->guard('admin')->user()->hasPermission('delete_products'))
                                     <!-- Delete Form -->
                                     <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" class="d-inline" 
                                         onsubmit="return confirm('Are you sure you want to delete this product?');">
@@ -60,6 +65,7 @@
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                     </form>
+                                    @endif
                                 </td>
                             </tr>
                         @empty

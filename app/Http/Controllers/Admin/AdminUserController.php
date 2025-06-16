@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Permission;
 use App\Models\Role;
+use App\Models\SalesPerson;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -30,7 +32,9 @@ class AdminUserController extends Controller
     public function create()
     {
         $roles = Role::whereIn('id', [2, 3])->get();
-         return view('admin.users.create')->with(['roles'=>$roles]);
+        $permissions = Permission::all();
+        $sales_persons = SalesPerson::where('status',1)->get();
+        return view('admin.users.create')->with(['roles'=>$roles,'permissions'=>$permissions,'sales_persons'=>$sales_persons]);
     }
 
     /**
@@ -42,12 +46,19 @@ class AdminUserController extends Controller
             'name' => 'required|min:3',
             'email' => 'required|email|unique:admins,email',
             'password' => 'required|string|min:6|confirmed',
-            'user_role_id' => 'required',
+            'user_role_id' => 'required|exists:roles,id',
+            'permissions' => 'array',
+            'permissions.*' => 'exists:permissions,id',
+            'view_report' => 'nullable|numeric|exists:sales_people,id'
         ]);
 
         $data = $request->all();
         $data['password'] = Hash::make($request->password); 
-        Admin::create($data); 
+        $data['view_report'] = $request->view_report != 0 ? $request->view_report : null;
+        $admin = Admin::create($data); 
+        if ($request->has('permissions')) {
+        $admin->permissions()->sync($request->permissions);
+    }
         return redirect()->route('admin.users.index')->with('success', 'New Admin User created successfully!');
 
     }
@@ -66,7 +77,9 @@ class AdminUserController extends Controller
     public function edit(Admin $user)
     {
         $roles = Role::whereIn('id', [2, 3])->get();
-        return view('admin.users.edit')->with(['user'=>$user,'roles'=>$roles]);
+        $permissions = Permission::all();
+        $sales_persons = SalesPerson::where('status',1)->get();
+        return view('admin.users.edit')->with(['user'=>$user,'roles'=>$roles,'permissions'=>$permissions,'sales_persons'=>$sales_persons]);
 
     }
 
@@ -77,14 +90,29 @@ class AdminUserController extends Controller
     {
         $request->validate([
             'name' => 'required|min:3',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:admins,email,' . $user->id,
             'password' => 'nullable|string|min:6|confirmed',
             'user_role_id' => 'required',
+            'user_role_id' => 'required|exists:roles,id',
+            'permissions' => 'array',
+            'permissions.*' => 'exists:permissions,id',
+            'view_report' => 'nullable|numeric|exists:sales_people,id'
         ]);
 
         $data = $request->all();
-        $data['password'] = Hash::make($request->password);
+        if (!empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']);
+        }
+        $data['view_report'] = $request->view_report != 0 ? $request->view_report : null;
         $user->update($data); 
+        if ($request->has('permissions')) {
+            $user->permissions()->sync($request->permissions);
+        } else {
+            $user->permissions()->sync([]);
+        }
+       
         return redirect()->route('admin.users.index')->with('success', ' Admin User updated successfully!');
     }
 
