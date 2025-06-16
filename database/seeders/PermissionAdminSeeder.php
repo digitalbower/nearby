@@ -23,7 +23,7 @@ class PermissionAdminSeeder extends Seeder
                 'created_at' => $now,
                 'updated_at' => $now,
             ];
-        }, range(1, 82));
+        }, range(1, 80));
 
         DB::table('permission_admins')->insert($adminPermissions);
 
