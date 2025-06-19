@@ -1,54 +1,84 @@
-@extends('admin.layouts.masteradmin')
+@extends('admin.layouts.masteradmin') 
 
 @section('content')
-<div class="container mt-5">
-    <h2>Edit Navigation</h2>
+<div class="card shadow-none bg-transparent px-4 mt-5">
+    <div class="card-body shadow-lg bg-white">
+<div class="container">
+    <h2>Edit Blog Header/Footer</h2>
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <form action="{{ route('admin.navigation.update', $navigation->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.blog.blognavigation.update', $navigation->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
+        {{-- Logo --}}
         <div class="mb-3">
-            <label for="navigation_placement" class="form-label">Placement</label>
-            <select name="navigation_placement" id="navigation_placement" class="form-control" required>
-                <option value="">Select Placement</option>
-                <option value="header" {{ old('navigation_placement', $navigation->navigation_placement) == 'header' ? 'selected' : '' }}>Header</option>
-                <option value="footer" {{ old('navigation_placement', $navigation->navigation_placement) == 'footer' ? 'selected' : '' }}>Footer</option>
-            </select>
+            <label for="logo" class="form-label">Logo</label><br>
+            @if ($navigation->logo)
+                <img src="{{ asset('storage/' . $navigation->logo) }}" alt="Logo" width="120">
+            @endif
+            
+
+                <div class="mb-3"> 
+                        <label for="logo" class="form-label">Upload New Logo</label>
+                        <input type="file" class="form-control" id="logo" name="logo" accept=".jpeg,.jpg,.png,.gif,.svg">
+                        <small class="text-muted">Leave empty if you don't want to change.</small>
+                    </div>
+
+            @error('logo') <div class="text-danger">{{ $message }}</div> @enderror
         </div>
 
+        {{-- Main Title --}}
         <div class="mb-3">
             <label for="main_title" class="form-label">Main Title</label>
-            <input type="text" name="main_title" id="main_title" class="form-control" value="{{ old('main_title', $navigation->main_title) }}" required>
+            <input type="text" name="main_title" class="form-control" value="{{ old('main_title', $navigation->main_title) }}">
+            @error('main_title') <div class="text-danger">{{ $message }}</div> @enderror
         </div>
 
+        {{-- Description --}}
         <div class="mb-3">
-            <label for="logo" class="form-label">Logo</label>
-            <input type="file" name="logo" id="logo" class="form-control">
-            @if (!empty($navigation->logo))
-                <img src="{{ asset('storage/' . $navigation->logo) }}" height="40" class="mt-2">
-            @endif
+            <label for="description" class="form-label">Description</label>
+            <textarea name="description" class="form-control" rows="3">{{ old('description', $navigation->description) }}</textarea>
+            @error('description') <div class="text-danger">{{ $message }}</div> @enderror
         </div>
 
+        {{-- Main Image --}}
         <div class="mb-3">
-            <label for="main_image" class="form-label">Main Image</label>
-            <input type="file" name="main_image" id="main_image" class="form-control">
-            @if (!empty($navigation->main_image))
-                <img src="{{ asset('storage/' . $navigation->main_image) }}" height="40" class="mt-2">
+            <label for="main_image" class="form-label">Main Image</label><br>
+            @if ($navigation->main_image)
+                <img src="{{ asset('storage/' . $navigation->main_image) }}" alt="Main Image" width="120">
             @endif
+            <input type="file" name="main_image" class="form-control mt-2">
+            @error('main_image') <div class="text-danger">{{ $message }}</div> @enderror
         </div>
 
-        <button type="submit" class="btn btn-success">Update</button>
+        {{-- Button Text --}}
+        <div class="mb-3">
+            <label for="button_text" class="form-label">Button Text</label>
+            <input type="text" name="button_text" class="form-control" value="{{ old('button_text', $navigation->button_text) }}">
+            @error('button_text') <div class="text-danger">{{ $message }}</div> @enderror
+        </div>
+
+        {{-- Button Link --}}
+        <div class="mb-3">
+            <label for="button_link" class="form-label">Button Link</label>
+            <input type="url" name="button_link" class="form-control" value="{{ old('button_link', $navigation->button_link) }}">
+            @error('button_link') <div class="text-danger">{{ $message }}</div> @enderror
+        </div>
+
+        {{-- Button Hide --}}
+        <div class="mb-3 form-check">
+            <input type="checkbox" name="button_hide" class="form-check-input" id="button_hide"
+                {{ old('button_hide', $navigation->button_hide) ? 'checked' : '' }}>
+            <label class="form-check-label" for="button_hide">Hide Button</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
     </form>
+</div>
+</div>
 </div>
 @endsection

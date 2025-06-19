@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             GenderSeeder::class,
             MainSeoSeeder::class,
             RoleSeeder::class,
+            BlogHeaderFooterSeeder::class,
 
         ]);
     }

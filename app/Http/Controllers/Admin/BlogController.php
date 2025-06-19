@@ -23,7 +23,7 @@ class BlogController extends Controller
     {
         $request->validate(['title' => 'required']);
         Blog::create($request->all());
-        return redirect()->route('admin.blogs.index')->with('success', 'Blog created successfully.');
+        return redirect()->route('admin.blog.blogs.index')->with('success', 'Blog created successfully.');
     }
 
     public function edit(Blog $blog)
@@ -35,12 +35,12 @@ class BlogController extends Controller
     {
         $request->validate(['title' => 'required']);
         $blog->update($request->all());
-        return redirect()->route('admin.blogs.index')->with('success', 'Blog updated successfully.');
+        return redirect()->route('admin.blog.blogs.index')->with('success', 'Blog updated successfully.');
     }
 
     public function destroy(Blog $blog)
     {
         $blog->delete();
-        return redirect()->route('admin.blogs.index')->with('success', 'Blog deleted successfully.');
+        return redirect()->route('admin.blog.blogs.index')->with('success', 'Blog deleted successfully.');
     }
 }

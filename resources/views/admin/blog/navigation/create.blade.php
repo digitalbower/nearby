@@ -1,6 +1,8 @@
 @extends('admin.layouts.masteradmin')
 
 @section('content')
+<div class="card shadow-none bg-transparent px-4 mt-5">
+    <div class="card-body shadow-lg bg-white">
 <div class="container mt-5">
     <h2>{{ isset($navigation) ? 'Edit Navigation' : 'Add Navigation' }}</h2>
 
@@ -10,14 +12,8 @@
             @method('PUT')
         @endif
 
-        {{-- Placement --}}
-        <div class="mb-3">
-            <label class="form-label">Navigation Placement</label>
-            <select name="navigation_placement" id="navigationPlacement" class="form-control" required>
-                <option value="header" {{ old('navigation_placement', $navigation->navigation_placement ?? '') == 'header' ? 'selected' : '' }}>Header</option>
-                <option value="footer" {{ old('navigation_placement', $navigation->navigation_placement ?? '') == 'footer' ? 'selected' : '' }}>Footer</option>
-            </select>
-        </div>
+      
+      
 
         {{-- HEADER Fields --}}
         <div id="headerFields">
@@ -63,53 +59,13 @@
             </div>
         </div>
 
-        {{-- FOOTER Fields --}}
-        <div id="footerFields" style="display: none;">
-            <hr>
-            <h4>Footer Specific Fields</h4>
+      
 
-            <div class="mb-3">
-                <label class="form-label">Social Media Icons</label>
-                @php
-                    $icons = old('social_media_icons', $navigation->social_media_icons ?? []);
-                    if (!is_array($icons)) $icons = json_decode($icons, true);
-                @endphp
-                @foreach($icons as $icon)
-                    <input type="url" class="form-control mb-2" name="social_media_icons[]" value="{{ $icon }}" placeholder="https://facebook.com/...">
-                @endforeach
-                <input type="url" class="form-control mb-2" name="social_media_icons[]" placeholder="Add another icon">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Footer Text</label>
-                <textarea class="form-control" name="footer_text">{{ old('footer_text', $navigation->footer_text ?? '') }}</textarea>
-            </div>
-        </div>
-
-        <button type="submit" class="btn btn-success">{{ isset($navigation) ? 'Update' : 'Save' }}</button>
+        <button type="submit" class="btn btn-success"> Save</button>
     </form>
 </div>
+                    </div>
+                    </div>
 @endsection
 
-@push('scripts')
-<script>
-    function toggleFooterFields() {
-        const placement = document.getElementById('navigationPlacement').value;
-        const footerSection = document.getElementById('footerFields');
-        const headerSection = document.getElementById('headerFields');
 
-        if (placement === 'footer') {
-            footerSection.style.display = 'block';
-            headerSection.style.display = 'none';
-        } else {
-            footerSection.style.display = 'none';
-            headerSection.style.display = 'block';
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        toggleFooterFields();
-        document.getElementById('navigationPlacement').addEventListener('change', toggleFooterFields);
-    });
-</script>
-@endpush

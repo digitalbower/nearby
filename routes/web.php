@@ -10,6 +10,7 @@ use App\Http\Controllers\Vendor\Auth\AuthController as VendorAuthController;
 use App\Http\Controllers\Admin\Product\CompanyTermController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LogoController;
+use App\Http\Controllers\Admin\BlogFooterController;
 use App\Http\Controllers\Admin\Product\ProductController;
 use App\Http\Controllers\Admin\Product\VendorController;
 use App\Http\Controllers\Admin\Product\VendorTermController;
@@ -51,6 +52,7 @@ use App\Http\Controllers\Vendor\PaymentManagementController;
 use App\Http\Controllers\Vendor\ReportManagementController;
 use App\Http\Controllers\Vendor\Auth\VendorForgotPasswordController;
 use App\Http\Controllers\Vendor\Auth\VendorResetPasswordController;
+
 
 
 
@@ -387,16 +389,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     });
 
-    Route::prefix('blog')->group(function () {
+     Route::prefix('blog')->name('blog.')->group(function () {
 
         // Navigation Routes
-        Route::get('/navigation', [BlogNavigationController::class, 'index'])->name('navigation.index');
-        Route::get('/navigation/create', [BlogNavigationController::class, 'create'])->name('navigation.create');
-        Route::post('/navigation', [BlogNavigationController::class, 'store'])->name('navigation.store');
-        Route::get('/navigation/{navigation}/edit', [BlogNavigationController::class, 'edit'])->name('navigation.edit');
-        Route::put('/navigation/{navigation}', [BlogNavigationController::class, 'update'])->name('navigation.update');
-        Route::delete('/navigation/{id}', [BlogNavigationController::class, 'destroy'])->name('navigation.destroy');
     
+
+        Route::prefix('blognavigation')->name('blognavigation.')->group(function () {
+        Route::get('/', [BlogNavigationController::class, 'index'])->name('index');
+        Route::get('/{id}/edit', [BlogNavigationController::class, 'edit'])->name('edit');
+
+        Route::post('/', [BlogNavigationController::class, 'store'])->name('store');
+        Route::put('/{id}', [BlogNavigationController::class, 'update'])->name('update');
+        Route::delete('/{id}', [BlogNavigationController::class, 'destroy'])->name('destroy');
+     });
+
         // Featured Items Routes
         Route::prefix('featured-items')->name('featured-items.')->group(function () {
             Route::get('/', [FeaturedItemController::class, 'index'])->name('index');       
@@ -424,8 +430,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/{blog_detail}', [BlogDetailController::class, 'update'])->name('update');
             Route::delete('/{blog_detail}', [BlogDetailController::class, 'destroy'])->name('destroy');
         });
+
+            Route::prefix('footer')->name('footer.')->group(function () {
+        Route::get('/', [BlogFooterController::class, 'index'])->name('index');
+        Route::get('/create', [BlogFooterController::class, 'create'])->name('create');
+        Route::post('/', [BlogFooterController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [BlogFooterController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [BlogFooterController::class, 'update'])->name('update');
+        Route::delete('/{id}', [BlogFooterController::class, 'destroy'])->name('destroy');
+    });
+
     
     });
+
+    
 
 
 });
