@@ -47,6 +47,39 @@
                         @endforeach
                     </select>
                 </div>
+                 <div class="mb-4">
+                    <label for="view_report" class="form-label">View Report</label>
+                    <select class="form-control" name="view_report" id="view_report">
+                        <option value="">All Sales Person</option>
+                        @foreach ($sales_persons as $sales_person)
+                            <option value="{{ $sales_person->id }}" {{ old('view_report') == $sales_person->id ? 'selected' : '' }}>
+                                {{ $sales_person->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Assign Permissions</label>
+                    <div class="permissions-wrapper">
+                    <div class="row">
+                        @foreach($permissions as $permission)
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input"
+                                        type="checkbox"
+                                        name="permissions[]"
+                                        value="{{ $permission->id }}"
+                                        id="permission_{{ $permission->id }}">
+                                    <label class="form-check-label" for="permission_{{ $permission->id }}">
+                                        {{ ucfirst(str_replace('_', ' ', $permission->name)) }}
+                                    </label>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    </div>
+                </div>
+
                 <button type="submit" class="btn btn-success">Create</button>
                 <a href="{{ route('admin.users.index') }}" class="btn btn-secondary ms-3">Cancel</a>
             </form>
@@ -62,6 +95,10 @@
                /[0-9]/.test(value) &&    // at least one digit
                /[@$!%*?&#]/.test(value); // at least one special character
     });
+      // Custom checkbox group validator
+    $.validator.addMethod("permissionRequired", function(value, element, param) {
+        return $('input[name="permissions[]"]:checked').length > 0;
+    }, "Please select at least one permission.");
     $("#adminUserForm").validate({
         rules: {
             name: { required: true, minlength: 3 },
@@ -75,6 +112,9 @@
             password_confirmation: {
                 required: true,
                 equalTo: "#password" // match password field
+            },
+            'permissions[]': {
+                permissionRequired: true
             }
         },
         messages: {
@@ -89,6 +129,16 @@
             password_confirmation: {
                 required: "Please confirm your password",
                 equalTo: "Passwords do not match"
+            },
+            'permissions[]': {
+                permissionRequired: "Please select at least one permission"
+            }
+        },
+        errorPlacement: function (error, element) {
+            if (element.attr("name") === "permissions[]") {
+                error.appendTo(".permissions-wrapper");
+            } else {
+                error.insertAfter(element);
             }
         }
     });

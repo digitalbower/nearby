@@ -51,7 +51,7 @@ class DealsController extends Controller
         
         $query = Product::with('vendor')
         ->whereHas('vendor', function ($query) {
-            $query->where('status', 1);
+            $query->where('expired',1)->where('status',1);
         })
         ->where('trending',1);
         $categories = Category::where('status', 1)

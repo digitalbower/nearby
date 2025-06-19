@@ -33,6 +33,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             BlogHeaderFooterSeeder::class,
 
+            PermissionSeeder::class,
+            PermissionAdminSeeder::class
         ]);
     }
 }

@@ -23,8 +23,9 @@ class ProductVariantController extends Controller
             $query->where('status', 1)
                   ->whereNull('deleted_at')
                   ->whereHas('vendor', function ($vendorQuery) {
-                      $vendorQuery->where('status', 1)
-                                  ->whereNull('deleted_at');
+                      $vendorQuery->where('expired',1)
+                                ->where('status',1)
+                                ->whereNull('deleted_at');
                   });
         })
         ->get();
@@ -43,7 +44,7 @@ class ProductVariantController extends Controller
     {
         $products = Product::with('vendor')
         ->whereHas('vendor', function ($query) {
-            $query->where('status', 1);
+            $query->where('expired',1)->where('status',1);
         })
         ->where('status', 1) 
         ->get(); 
@@ -121,7 +122,7 @@ class ProductVariantController extends Controller
     {
         $products = Product::with('vendor')
         ->whereHas('vendor', function ($query) {
-            $query->where('status', 1);
+            $query->where('expired',1)->where('status',1);
         })
         ->where('status', 1) 
         ->get();

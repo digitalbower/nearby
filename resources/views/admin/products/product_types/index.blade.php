@@ -15,7 +15,9 @@
             <div id="status-message"></div>
             <div class="d-flex align-items-center justify-content-between mb-3">
                 <h3 class="text-start mb-0">Product Types</h3>
+                 @if(auth()->guard('admin')->user()->hasPermission('create_producttype'))
                 <a href="{{ route('admin.products.product_types.create') }}" class="btn btn-primary">Add Product Type</a>
+                @endif
             </div>
 
             <div class="table-responsive">
@@ -36,22 +38,27 @@
                                 <td>{{ $type->validity }}</td>
                                 <td class="d-flex align-items-center gap-2">
                                     <!-- Toggle Switch -->
+                                    @if(auth()->guard('admin')->user()->hasPermission('changestatus_producttype'))
                                     <div class="form-check form-switch">
                                         <input class="form-check-input toggle-status" type="checkbox" 
                                             data-id="{{ $type->id }}" 
                                             {{ $type->status ? 'checked' : '' }}>
                                     </div>
-                                
+                                    @endif
                                     <!-- Edit Button -->
+                                    @if(auth()->guard('admin')->user()->hasPermission('edit_producttype'))
                                     <a href="{{ route('admin.products.product_types.edit', $type->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                
+                                    @endif
                                     <!-- Delete Form -->
+                                    @if(auth()->guard('admin')->user()->hasPermission('delete_producttype'))
                                     <form action="{{ route('admin.products.product_types.destroy', $type->id) }}" method="POST" class="d-inline" 
                                         onsubmit="return confirm('Are you sure you want to delete this product type?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                     </form>
+                                    @endif
+
                                 </td>                            
                             </tr>
                         @empty

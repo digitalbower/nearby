@@ -33,12 +33,16 @@
                             <td>{{ $logo->type }}</td>
                             <td>{{ $logo->status ? 'Active' : 'Inactive' }}</td>
                             <td>
+                                @if(auth()->guard('admin')->user()->hasPermission('edit_logos'))
                                 <a href="{{ route('admin.logos.edit', $logo->id) }}" class="btn btn-warning">Edit</a>
+                                @endif
+                                @if(auth()->guard('admin')->user()->hasPermission('delete_logos'))
                                 <form action="{{ route('admin.logos.destroy', $logo->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
                                 </form>
+                                @endif
                             </td>
                         </tr>
                         @endforeach

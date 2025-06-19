@@ -16,7 +16,9 @@
             <div id="status-message"></div>
             <div class="d-flex align-items-center justify-content-between mb-3">
                 <h3 class="text-start mb-0">Product Variants</h3>
+                @if(auth()->guard('admin')->user()->hasPermission('create_productvariants'))
                 <a href="{{ route('admin.products.product_variants.create') }}" class="btn btn-primary">Add New Product Variant</a>
+                @endif
             </div>
             <div class="table-responsive">
                 <table class="table table-bordered">
@@ -42,13 +44,17 @@
                                 <td>{{ $variant->validity_to }}</td>
                                 <td class="d-flex align-items-center gap-2">
                                     <!-- Toggle Switch -->
+                                    @if(auth()->guard('admin')->user()->hasPermission('changestatus_productvariants'))
                                     <div class="form-check form-switch">
                                         <input class="form-check-input toggle-status" type="checkbox" 
                                             data-id="{{ $variant->id }}" 
                                             {{ $variant->status ? 'checked' : '' }}>
                                     </div>
+                                    @endif
+                                    @if(auth()->guard('admin')->user()->hasPermission('edit_productvariants'))
                                     <a href="{{ route('admin.products.product_variants.edit', $variant->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                
+                                    @endif
+                                    @if(auth()->guard('admin')->user()->hasPermission('delete_productvariants'))
                                     <!-- Delete Form -->
                                     <form action="{{ route('admin.products.product_variants.destroy', $variant->id) }}" method="POST" class="d-inline" 
                                         onsubmit="return confirm('Are you sure you want to delete this variant?');">
@@ -56,6 +62,7 @@
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                     </form>
+                                    @endif
                                 </td>
                             </tr>
                         @empty

@@ -8,9 +8,11 @@
         <div class="card-body bg-white">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2 class="mb-0">Navigation Menu List</h2>
+                @if(auth()->guard('admin')->user()->hasPermission('create_navigations'))
                 <a href="{{ route('admin.navigation.create') }}" class="btn btn-primary btn-lg">
                     <i class="fas fa-plus"></i> Add Menu Item
                 </a>
+                @endif
             </div>
             
 
@@ -50,8 +52,10 @@
                                 </span>
                             </td>
                             <td>
+                                @if(auth()->guard('admin')->user()->hasPermission('edit_navigations'))
                                 <a href="{{ route('admin.navigation.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                
+                                @endif
+                                @if(auth()->guard('admin')->user()->hasPermission('delete_navigations'))
                                 <form action="{{ route('admin.navigation.destroy', $item->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
@@ -59,6 +63,7 @@
                                         Delete
                                     </button>
                                 </form>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

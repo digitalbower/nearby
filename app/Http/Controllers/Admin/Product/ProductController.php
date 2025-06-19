@@ -27,7 +27,7 @@ class ProductController extends Controller
     {
         $products = Product::with('vendor')
         ->whereHas('vendor', function ($query) {
-            $query->where('status', 1);
+            $query->where('expired',1)->where('status',1);
         })
         ->get();
         return view('admin.products.index')->with(['products'=>$products]);
@@ -38,10 +38,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $today = Carbon::today();
-        $vendors =  Vendor::where('status', 1)
-        ->whereDate('validityfrom', '<=', $today)
-        ->whereDate('validityto', '>=', $today)
+        $vendors =  Vendor::where('expired',1)->where('status',1)
         ->get();
         $categories = Category::where('status',1)->latest()->get();
         $tags = Tags::where('status',1)->latest()->get();
@@ -153,10 +150,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $today = Carbon::today();
-        $vendors =  Vendor::where('status', 1)
-        ->whereDate('validityfrom', '<=', $today)
-        ->whereDate('validityto', '>=', $today)
+        $vendors =  Vendor::where('expired',1)->where('status',1)
         ->get();
         $categories = Category::where('status',1)->latest()->get();
         $tags = Tags::where('status',1)->latest()->get();

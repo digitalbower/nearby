@@ -17,7 +17,9 @@
         <div class="card-body bg-white">
             <div class="d-flex align-items-center justify-content-between">
                 <h4 class="mb-0">Commission Listing</h4>
+                 @if(auth()->guard('admin')->user()->hasPermission('download_commission'))
                 <a href="{{ route('admin.commission.export') }}" class="btn btn-success">Download Excel</a>
+                 @endif
             </div>
 
             {{-- Filter Fields --}}
@@ -37,7 +39,7 @@
                 <div class="col-md-3 d-flex align-items-end">
                     <button class="btn btn-primary me-2" onclick="filterTable()">Filter</button>
                     <button class="btn btn-secondary" onclick="resetFilters()">Reset</button>
-                </div>
+               
             </div>
 
             {{-- Table --}}

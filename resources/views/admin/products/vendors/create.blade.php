@@ -29,14 +29,6 @@
                     <input type="text" class="form-control" id="email" name="email" value="{{old('email') }}">
                 </div>
                 <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" value="{{old('password') }}">
-                </div>
-                <div class="mb-3">
-                    <label for="password_confirmation" class="form-label">Password Confirmation</label>
-                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" value="{{old('password_confirmation') }}">
-                </div>
-                <div class="mb-3">
                     <label for="phone" class="form-label">Phone</label>
                     <input type="text" class="form-control" id="phone" name="phone" value="{{old('phone') }}">
                 </div>

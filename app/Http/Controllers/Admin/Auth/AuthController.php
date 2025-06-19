@@ -47,12 +47,9 @@ class AuthController extends Controller
                     'last_activity' => now()->timestamp, 
                 ]
             );
-           // 🎯 REDIRECT BASED ON ROLE
-            if ($admin->user_role_id == 2) {
-                return redirect()->route('admin.products.index'); 
-            } else {
-                return redirect()->intended('/admin');
-            }
+           
+            return redirect()->intended('/admin');
+            
         }
 
         $admin = Admin::where('email', $request->email)->first();

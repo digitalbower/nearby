@@ -18,7 +18,7 @@ class VendorTermController extends Controller
     {
         $vendor_terms = VendorTerm::latest()
         ->whereHas('vendor', function ($query) {
-            $query->where('status', 1) // Only vendors with status = 1
+            $query->where('expired',1)->where('status',1)
                   ->whereNull('deleted_at'); // Exclude soft-deleted vendors
         })
         ->get();        
@@ -30,7 +30,7 @@ class VendorTermController extends Controller
      */
     public function create()
     {
-        $vendors = Vendor::where('status',1)->latest()->get();
+        $vendors = Vendor::where('expired',1)->where('status',1)->latest()->get();
         return view('admin.products.vendor_terms.create')->with(['vendors'=>$vendors]);
     }
 
@@ -56,7 +56,7 @@ class VendorTermController extends Controller
      */
     public function edit(VendorTerm $vendor_term)
     {
-        $vendors = Vendor::where('status',1)->latest()->get();
+        $vendors = Vendor::where('expired',1)->where('status',1)->latest()->get();
         return view('admin.products.vendor_terms.edit')->with(['vendors'=>$vendors,'vendor_term'=>$vendor_term]);
     }
 
@@ -88,9 +88,8 @@ class VendorTermController extends Controller
             ->whereDate('validity_from', '<=', $today)
             ->whereDate('validity_to', '>=', $today)
             ->whereHas('vendor', function ($query) use ($today) {
-                $query->where('status', 1)
-                    ->whereDate('validityfrom', '<=', $today)
-                    ->whereDate('validityto', '>=', $today);
+                $query->where('expired',1)
+                ->where('status',1);
             })
             ->exists();
         if ($isUsed) {

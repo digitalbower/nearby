@@ -38,12 +38,14 @@
                                 <td>{{ $review->review_rating}}</td>
                                 <td class="d-flex align-items-center gap-2">
                                     <!-- Toggle Switch -->
+                                    @if(auth()->guard('admin')->user()->hasPermission('changestatus_report'))
                                     <div class="form-check form-switch">
                                         <input class="form-check-input toggle-status" type="checkbox" 
                                             data-id="{{ $review->id }}" 
                                             {{ $review->status ? 'checked' : '' }}>
                                     </div>
-                                        
+                                    @endif
+                                    @if(auth()->guard('admin')->user()->hasPermission('delete_report'))   
                                     <!-- Delete Form -->
                                     <form action="{{ route('admin.reports.reviews.destroy', $review->id) }}" method="POST" class="d-inline" 
                                         onsubmit="return confirm('Are you sure you want to delete this product review?');">
@@ -51,6 +53,7 @@
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                     </form>
+                                    @endif
                                 </td>                            
                             </tr>
                         @empty

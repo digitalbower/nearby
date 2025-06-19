@@ -19,11 +19,8 @@ class AuthController extends Controller
         ]);
     
         $vendor = \App\Models\Vendor::where('email', $credentials['email'])
-        ->where('status', 1)
-        ->where(function($query) {
-            $query->whereNull('validityto')
-                  ->orWhere('validityto', '>=', now());
-        })
+        ->where('expired',1)
+        ->where('status',1)
         ->first();
 
             // Check if vendor exists and password matches

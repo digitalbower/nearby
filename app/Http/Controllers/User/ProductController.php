@@ -62,10 +62,8 @@ class ProductController extends Controller
         $today = Carbon::today();
 
         $query = Product::with('vendor')
-        ->whereHas('vendor', function ($q) use ($today) {
-            $q->where('status', 1)
-              ->whereDate('validityfrom', '<=', $today)
-              ->whereDate('validityto', '>=', $today);
+        ->whereHas('vendor', function ($q){
+            $q->where('expired',1)->where('status',1);
         })
         ->whereDate('validity_from', '<=', $today)
         ->whereDate('validity_to', '>=', $today);

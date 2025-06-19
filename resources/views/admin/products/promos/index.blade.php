@@ -15,7 +15,9 @@
             <div id="status-message"></div>
             <div class="d-flex align-items=center justify-content-between mb-3">
                 <h4 class="mb-0">Promo codes</h4>
+                @if(auth()->guard('admin')->user()->hasPermission('create_promo'))
                 <a href="{{ route('admin.products.promos.create') }}" class="btn btn-primary">Add Promo codes</a>
+                @endif
             </div>
 
             <div class="table-responsive">
@@ -40,15 +42,18 @@
                                 <td>{{ $promo->validity_to   }}</td>
                                 <td class="d-flex align-items-center gap-2">
                                     <!-- Toggle Switch -->
+                                     @if(auth()->guard('admin')->user()->hasPermission('changestatus_promo'))
                                     <div class="form-check form-switch">
                                         <input class="form-check-input toggle-status" type="checkbox" 
                                             data-id="{{ $promo->id }}" 
                                             {{ $promo->status ? 'checked' : '' }}>
                                     </div>
-                                
+                                    @endif
+                                    @if(auth()->guard('admin')->user()->hasPermission('edit_promo'))
                                     <!-- Edit Button -->
                                     <a href="{{ route('admin.products.promos.edit', $promo->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                
+                                    @endif
+                                    @if(auth()->guard('admin')->user()->hasPermission('delete_promo'))
                                     <!-- Delete Form -->
                                     <form action="{{ route('admin.products.promos.destroy', $promo->id) }}" method="POST" class="d-inline" 
                                         onsubmit="return confirm('Are you sure you want to delete this promo?');">
@@ -56,6 +61,7 @@
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                     </form>
+                                    @endif
                                 </td>                            
                             </tr>
                         @empty

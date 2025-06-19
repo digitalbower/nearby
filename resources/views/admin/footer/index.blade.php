@@ -22,6 +22,7 @@
             </div>
             @endif
             {{-- Add New Footer Item --}}
+            @if(auth()->guard('admin')->user()->hasPermission('add_footer'))
             <h5>Add New Footer Item</h5>
             <form action="{{ route('admin.footer.store') }}" id="footerForm" method="POST">
                 @csrf
@@ -75,8 +76,9 @@
                 </div>
                 <button type="submit" class="btn btn-success mt-3">Add</button>
             </form>
-
+            @endif
             {{-- Existing Footer Items --}}
+            @if(auth()->guard('admin')->user()->hasPermission('view_footer'))
             <h5 class="mt-5 mb-3">Existing Footer Items</h5>
             <div class="table-responsive">
                 <table class="table table-bordered">
@@ -96,16 +98,19 @@
                             <td>{{ $footer->icon ?? 'N/A' }}</td>
                             <td>{{ $footer->status ? 'Active' : 'Inactive' }}</td>
                             <td>
+                                @if(auth()->guard('admin')->user()->hasPermission('delete_footer'))
                                 <form action="{{ route('admin.footer.delete', $footer->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                 </form>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
                 </table>
             </div>
+            @endif
         </div>
     </div>
 </div>
