@@ -128,7 +128,7 @@ Route::name('user.')->group(function () {
         Route::post('/register', [AuthController::class, 'register'])->name('register');
         Route::post('/login', [AuthController::class, 'loginsubmit'])->name('login.submit');
 
-    });
+    }); 
 
     // ✅ Authenticated Routes (Only for Logged-in Users)
     Route::middleware('auth.custom')->group(function () {
