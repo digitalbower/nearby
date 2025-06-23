@@ -1,8 +1,11 @@
 @extends('admin.layouts.masteradmin')
 @section('content')
+
+<div class="card shadow-none bg-transparent px-4 mt-5">
+    <div class="card-body shadow-lg bg-white">
 <div class="container">
     <h2>Edit Blog Detail</h2>
-    <form action="{{ route('admin.blog-details.update', $blog_detail->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.blog.blog-details.update', $blog_detail->id) }}" method="POST" enctype="multipart/form-data">
         @csrf @method('PUT')
         <div class="form-group">
             <label>Blog</label>
@@ -23,5 +26,7 @@
         <div class="form-group"><label>Validity Date</label><input type="date" name="validity_date" class="form-control" value="{{ $blog_detail->validity_date }}"></div>
         <button class="btn btn-primary mt-2">Update</button>
     </form>
+</div>
+</div>
 </div>
 @endsection
