@@ -107,9 +107,9 @@ table {
     <div class="container mx-auto py-10 px-4 lg:px-0 ">
 
       <!-- Main Content -->
-      <div class="lg:grid md:grid-cols-12 grid-cols-1 relative gap-10">
+      <div class="lg:grid md:grid-cols-2 grid-cols-1 relative gap-10">
         <!-- Left Column -->
-        <div class="col-span-7">
+        <div class="col-span-1">
           <!-- Deal Title -->
           <h1 class="md:text-2xl text-base font-bold text-gray-800 mb-4">
           {{$product->name}}
@@ -451,7 +451,7 @@ table {
         </div>
 
         <!-- Right Column -->
-        <div class=" lg:mt-0 mt-5 w-full pb-20 col-span-5 sticky top-0 h-[100vh] xl:h-[120vh] bg-[#58af0838] rounded-lg  p-3 lg:p-5 space-y-6">
+        <div class=" lg:mt-0 mt-5 w-full pb-20 col-span-1 sticky top-0 h-[100vh] xl:h-[120vh] bg-[#58af0838] rounded-lg  p-3 lg:p-5 space-y-6">
           <!-- Option Selector -->
         <!-- Options -->
         @if($variants && $variants->isNotEmpty())
@@ -475,8 +475,13 @@ table {
               </div>
               @endif
                 @foreach ($variants as $index=>$variant)
+                <label class="mb-4 block" for="hs-checked-checkbox">
                 <div
                   class="rounded-lg border bg-white text-card-foreground shadow-sm w-full overflow-hidden hover:shadow-xl f transition-all duration-300 ease-in-out transform hover:border-cyan-300 hover:ring-2 hover:ring-cyan-600">
+                  <div class="absolute top-3 right-3 ">
+                    <input type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" id="hs-checked-checkbox" checked="">
+                    <!-- <label for="hs-checked-checkbox" class="text-sm text-gray-500 ms-3 dark:text-neutral-400">Checked checkbox</label> -->
+                  </div>
                   <div class="flex flex-col space-y-2 p-4 pb-2">
                     <h3 class="tracking-tight text-base lg:text-2xl font-bold">{{$variant->title}}</h3>
                     <div class="gap-x-4 flex items-center">
@@ -489,10 +494,16 @@ table {
                     </div>
                   </div>
                 
-                  <div class="md:p-4 px-2 pt-0 space-y-3 relative">
+                  <div class="md:p-4 px-2 md:pt-2 space-y-3 relative">
+                    <div
+                      class="text-xs  bg-[#58af0838] rounded-md p-2 text-black flex gap-x-4 items-center rounded-lg p-3">
+                      <p class="font-medium">{!! $variant->short_info !!}</p>
+                      {{-- <p class="text-primary font-semibold">Learn more</p> --}}
+                    </div>
+
                     <div class="flex md:items-center items-end justify-between">
-                      <div class="space-y-1">
-                        <div class="flex items-center gap-2 mb-2">
+                      <div class="space-y-1 w-full">
+                        <div class="flex items-center gap-2">
                           <span class="text-sm font-medium text-muted-foreground">From</span>
                           <span class="text-sm line-through text-muted-foreground">{{$variant->unit_price}}</span>
                           <div
@@ -500,61 +511,60 @@ table {
                             data-v0-t="badge">-{{$variant->discounted_percentage}}%</div>
                         </div>
 
-                        <div class="absolute top-2 flex align-items-center left-[180px]">
-                          <div class="mr-3" id="showdate">
-                            <input type="text" class="w-[150px] h-[30px] text-xs text-gray-400 border p-2 rounded focus:outline-none" placeholder="dd/mm/yyyy" id="datepicker" autocomplete="off">
+                        
+                        <div class="flex items-center justify-between gap-2 py-3">
+                          <div class="">
+                            <span class="lg:text-3xl text-sm font-bold text-primary">AED {{$variant->discounted_price}}</span>
+                            <span class="md:text-sm text-xs text-muted-foreground">/{{$unit_type}}</span>
                           </div>
-                          <input type="text" class="w-[150px] h-[30px] text-xs text-gray-400 border p-2 rounded focus:outline-none" id="daterangepickker" placeholder="dd/mm/yyyy">
-                        </div>
-                        <div class="flex items-center gap-2">
-                          <span class="lg:text-3xl text-sm font-bold text-primary">AED {{$variant->discounted_price}}</span>
-                          <span class="md:text-sm text-xs text-muted-foreground">/{{$unit_type}}</span>
                 
-                          <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
-                            <!-- Decrement Button -->
-                            <button
-                              type="button"
-                              class="w-6 h-6 decrementQty lg:w-8 lg:h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-300"
-                             onclick="decrementQty({{ $variant->id }})"
-                              aria-label="Decrease Quantity">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
-                              </svg>
-                            </button>
-                
-                            <!-- Quantity Display -->
-                            @php
-                            $cart = $user ? $user->carts()->where('product_variant_id', $variant->id)->first() : null;
-                            @endphp
-                            <input
-      type="number" name="variants[{{ $variant->id }}][quantity]" data-variant-id="{{ $variant->id }}"
-      id="quantity_{{ $variant->id }}" 
-      value="{{ old('quantity', $cart->quantity ?? 0) }}"                               
-      min="0"
-      readonly
-      class="w-6 h-6 lg:w-12 lg:h-8 text-center flex justify-center rounded-lg lg:text-lg text-sm font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 variant-quantity"
-      aria-label="Quantity" />
-
+                          <div class="flex items-center">
+                            <label class="text-md mr-3" for="">Quantity</label>
                             
-                            <!-- Increment Button -->
-                           <button
-    type="button"
-    id="increment-btn-{{ $variant->id }}"
-    class="w-6 h-6 incrementQty lg:w-8 lg:h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
-    onclick="incrementQty({{ $variant->id }})"
-    aria-label="Increase Quantity">
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-        stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
-    </svg>
-</button>
+                            <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
+                              <!-- Decrement Button -->
+                              <button
+                                type="button"
+                                class="w-6 h-6 decrementQty lg:w-8 lg:h-8 flex items-center justify-center bg-white border-r text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-300"
+                              onclick="decrementQty({{ $variant->id }})"
+                                aria-label="Decrease Quantity">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                  stroke="currentColor" stroke-width="2">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
+                                </svg>
+                              </button>
+                  
+                              <!-- Quantity Display -->
+                              @php
+                              $cart = $user ? $user->carts()->where('product_variant_id', $variant->id)->first() : null;
+                              @endphp
+                              <input
+                                type="number" name="variants[{{ $variant->id }}][quantity]" data-variant-id="{{ $variant->id }}"
+                                id="quantity_{{ $variant->id }}" 
+                                value="{{ old('quantity', $cart->quantity ?? 0) }}"                               
+                                min="0"
+                                readonly
+                                class="w-6 h-6 lg:w-12 lg:h-8 text-center flex justify-center rounded-lg lg:text-lg text-sm font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 variant-quantity"
+                                aria-label="Quantity" />
 
+                              
+                              <!-- Increment Button -->
+                            <button
+                                  type="button"
+                                  id="increment-btn-{{ $variant->id }}"
+                                  class="w-6 h-6 incrementQty lg:w-8 lg:h-8 flex items-center border-l justify-center bg-white text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
+                                  onclick="incrementQty({{ $variant->id }})"
+                                  aria-label="Increase Quantity">
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                      stroke="currentColor" stroke-width="2">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+                                  </svg>
+                              </button>
+                            </div>
                           </div>
-                         
                         </div>
                       </div>
-                      <div
+                      <!-- <div
                         class="bg-primary text-primary-foreground rounded-full md:p-2 p-1 hover:bg-primary/90 transition-colors duration-200 cursor-pointer">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -562,15 +572,24 @@ table {
                           <path d="M5 12h14"></path>
                           <path d="m12 5 7 7-7 7"></path>
                         </svg>
-                      </div>
+                      </div> -->
                     </div>
                     <span id="quantity-error-{{$variant->id}}"></span>
-                    <div
-                      class="text-xs  bg-[#58af0838] rounded-md p-2 text-black flex gap-x-4 items-center rounded-lg p-3">
-                      <p class="font-medium">{!! $variant->short_info !!}</p>
-                      {{-- <p class="text-primary font-semibold">Learn more</p> --}}
+                    
+                    <div class="p-4 bg-[#f9f9f9] border rounded-lg border-dashed" id="showdate">
+                      <p class="font-medium text-[16px]">Select Your Dates</p>
+                      <div class="grid grid-cols-2 mt-3 align-items-center">
+                        <div class="mr-3">
+                          <label class="text-sm w-full" for="">Start Date</label>
+                          <input type="text" class="w-full h-[40px] text-xs text-gray-400 border p-2 rounded focus:outline-none" placeholder="dd/mm/yyyy" id="datepicker" autocomplete="off">
+                        </div>
+                        <div class="">
+                          <label class="text-sm w-full" for="">End Date</label>
+                          <input type="text" class="w-full h-[40px] text-xs text-gray-400 border p-2 rounded focus:outline-none" id="datepickertwo" placeholder="dd/mm/yyyy">
+                        </div>
+                      </div>
                     </div>
-                
+
                     <div class="flex items-center justify-between text-sm text-muted-foreground">
                       <span class="flex items-center gap-1">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -584,7 +603,7 @@ table {
                         @php
                           $total_booking_count = $variant->getBookingCountBasedOnvariant();
                         @endphp
-                        <span class="font-medium text-[10px] md:text-lg">
+                        <span class="font-medium text-[10px] md:text-[14px]">
                           @if ($total_booking_count === 0)
                               0 booked
                           @elseif ($total_booking_count === 1)
@@ -596,12 +615,13 @@ table {
                       </span>
                       <span class="flex items-center gap-1">
                         {!! $variant->short_legend_icon !!}
-                        <span class="font-medium  text-[10px] md:text-lg">{{$variant->short_legend}}</span>
+                        <span class="font-medium  text-[10px] md:text-[14px]">{{$variant->short_legend}}</span>
                       </span>
                     </div>
                     <input type="hidden" name="variants[{{ $variant->id }}][product_variant_id]" value="{{ $variant->id }}" />
                   </div>
                 </div>
+                </label>
                 @endforeach
                 <input type="hidden" name="redirect_to_cart" id="redirect_to_cart" value="0" />
 
@@ -641,8 +661,6 @@ table {
 <script src="{{asset('assets/js/custom//front/product.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script>
 const isUserLoggedIn = @json(auth()->check());
 
@@ -998,88 +1016,96 @@ $( function() {
     duration: "fast",
     todayHighlight: true
 	});
-} );
+
+  $( "#datepickertwo" ).datepicker({
+		dateFormat: "dd-mm-yy",	
+    duration: "fast",
+    todayHighlight: true
+	});
+});
 
 $(document).ready(function() {
-    // Initial setup with proper selectors
-    const $qtyInput = $('#quantity_1');
-    const $targetDiv = $('#showdate');
-    
-    // Function to update quantity and visibility
-    function updateQuantity(change) {
-        let currentVal = parseInt($qtyInput.val()) || 0;
-        let newVal = currentVal + change;
-        
-        // Ensure quantity doesn't go below 0
-        newVal = Math.max(newVal, 0);
-        $qtyInput.val(newVal);
-        
-        // Update visibility
-        $targetDiv.toggle(newVal > 0);
+  const $quantityInput = $('#quantity_1');
+  const $messageBox = $('#showdate');
+  
+  // Initialize with current value
+  toggleMessage($quantityInput.val());
+  
+  // Increment button click
+  $('.incrementQty').click(function(e) {
+    e.preventDefault();
+    const currentVal = parseInt($quantityInput.val()) || 0;
+    $quantityInput.val(currentVal + 1);
+    toggleMessage(currentVal + 1);
+  });
+  
+  // Decrement button click
+  $('.decrementQty').click(function(e) {
+    e.preventDefault();
+    const currentVal = parseInt($quantityInput.val()) || 0;
+    const newVal = Math.max(currentVal - 1, 0);
+    $quantityInput.val(newVal);
+    toggleMessage(newVal);
+  });
+  
+  // Handle direct input changes
+  $quantityInput.on('input', function() {
+    const value = parseInt($(this).val()) || 0;
+    toggleMessage(value);
+  });
+  
+  // Function to toggle message visibility
+  function toggleMessage(quantity) {
+    if (quantity > 0) {
+      $messageBox.slideDown();
+    } else {
+      $messageBox.slideUp();
     }
-
-    // Initial check on page load
-    updateQuantity(0);
-
-    // Increment button click with proper event delegation
-    $(document).off('click', '.incrementQty').on('click', '.incrementQty', function(e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        updateQuantity(1);
-    });
-
-    // Decrement button click
-    $(document).off('click', '.decrementQty').on('click', '.decrementQty', function(e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        updateQuantity(-1);
-    });
-
-    // Handle direct input changes
-    $qtyInput.off('input').on('input', function() {
-        updateQuantity(0);
-    });
+  }
 });
 
 
-// $('#daterangepickker').dateRangePicker({
-//   inline: true,
-//   format: 'MM-DD-YYYY',
-//   container: '#ccc',
-//   alwaysOpen: false,
-//   singleMonth: true,
-//   showTopbar: false,
-//   setValue: function(s)
-// 	{
-		
-// 			$(this).val('12-01-2017');
-// 	}
-// })
 
+// $(document).ready(function() {
+//     // Initial setup with proper selectors
+//     const $qtyInput = $('#quantity_1');
+//     const $targetDiv = $('#showdate');
+    
+//     // Function to update quantity and visibility
+//     function updateQuantity(change) {
+//         let currentVal = parseInt($qtyInput.val()) || 0;
+//         let newVal = currentVal + change;
+        
+//         // Ensure quantity doesn't go below 0
+//         newVal = Math.max(newVal, 0);
+//         $qtyInput.val(newVal);
+        
+//         // Update visibility
+//         $targetDiv.toggle(newVal > 0);
+//     }
 
-$(document).ready(function () {
-    // Get the first day of the current month
-    const startOfMonth = moment().startOf('month');
-    // Get the current date
-    const currentDate = moment();
+//     // Initial check on page load
+//     updateQuantity(0);
 
-    // Initialize the date range picker with default start and end dates
-    $("#daterangepickker").daterangepicker({
-        startDate: startOfMonth,
-        endDate: currentDate
-    });
+//     // Increment button click with proper event delegation
+//     $(document).off('click', '.incrementQty').on('click', '.incrementQty', function(e) {
+//         e.preventDefault();
+//         e.stopImmediatePropagation();
+//         updateQuantity(1);
+//     });
 
-    // Handle the 'apply' event when the user selects a date range
-    $("#daterangepickker").on('apply.daterangepicker', function (e, picker) {
-        e.preventDefault();
-        const obj = {
-            "key": dates.length + 1,
-            "start": picker.startDate.format('MM/DD/YYYY'),
-            "end": picker.endDate.format('MM/DD/YYYY')
-        };
-        dates.push(obj);
-    });
-});
+//     // Decrement button click
+//     $(document).off('click', '.decrementQty').on('click', '.decrementQty', function(e) {
+//         e.preventDefault();
+//         e.stopImmediatePropagation();
+//         updateQuantity(-1);
+//     });
+
+//     // Handle direct input changes
+//     $qtyInput.off('input').on('input', function() {
+//         updateQuantity(0);
+//     });
+// });
 </script>
 {{-- <script>
    function checkAuthAndSubmit() {
