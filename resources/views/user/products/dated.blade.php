@@ -2,6 +2,7 @@
 @extends('user.layouts.main')
 @push('styles')
 <link rel="stylesheet" href="{{asset('assets/css/custom/front/product.css')}}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <style>
   #about  ul {
     list-style: disc;
@@ -14,7 +15,91 @@
   a {
     background-color: transparent;
   }
-</style>
+
+  #ui-datepicker-div {
+	display: none;
+	background-color: #fff;
+	box-shadow: 0 0.125rem 0.5rem rgba(0,0,0,0.1);
+	margin-top: 0.25rem;
+	border-radius: 0.5rem;
+	padding: 0.5rem;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+.ui-datepicker-calendar thead th {
+	padding: 0.25rem 0;
+	text-align: center;
+	font-size: 0.75rem;
+	font-weight: 400;
+	color: #78909C;
+}
+.ui-datepicker-calendar tbody td {
+	width: 2.5rem;
+	text-align: center;
+	padding: 0;
+}
+.ui-datepicker-calendar tbody td a {
+	display: block;
+	border-radius: 0.25rem;
+	line-height: 2rem;
+	transition: 0.3s all;
+	color: #546E7A;
+	font-size: 0.875rem;
+	text-decoration: none;
+}
+.ui-datepicker-calendar tbody td a:hover {	
+	background-color: #E0F2F1;
+}
+.ui-datepicker-calendar tbody td a.ui-state-active {
+	background-color: #009688;
+	color: white;
+}
+.ui-datepicker-header a.ui-corner-all {
+	cursor: pointer;
+	position: absolute;
+	top: 0;
+	width: 2rem;
+	height: 2rem;
+	margin: 0.5rem;
+	border-radius: 0.25rem;
+	transition: 0.3s all;
+}
+.ui-datepicker-header a.ui-corner-all:hover {
+	background-color: #ECEFF1;
+}
+.ui-datepicker-header a.ui-datepicker-prev {	
+	left: 0;	
+	background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMyIgaGVpZ2h0PSIxMyIgdmlld0JveD0iMCAwIDEzIDEzIj48cGF0aCBmaWxsPSIjNDI0NzcwIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik03LjI4OCA2LjI5NkwzLjIwMiAyLjIxYS43MS43MSAwIDAgMSAuMDA3LS45OTljLjI4LS4yOC43MjUtLjI4Ljk5OS0uMDA3TDguODAzIDUuOGEuNjk1LjY5NSAwIDAgMSAuMjAyLjQ5Ni42OTUuNjk1IDAgMCAxLS4yMDIuNDk3bC00LjU5NSA0LjU5NWEuNzA0LjcwNCAwIDAgMS0xLS4wMDcuNzEuNzEgMCAwIDEtLjAwNi0uOTk5bDQuMDg2LTQuMDg2eiIvPjwvc3ZnPg==");
+	background-repeat: no-repeat;
+	background-size: 0.5rem;
+	background-position: 50%;
+	transform: rotate(180deg);
+}
+.ui-datepicker-header a.ui-datepicker-next {
+	right: 0;
+	background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMyIgaGVpZ2h0PSIxMyIgdmlld0JveD0iMCAwIDEzIDEzIj48cGF0aCBmaWxsPSIjNDI0NzcwIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik03LjI4OCA2LjI5NkwzLjIwMiAyLjIxYS43MS43MSAwIDAgMSAuMDA3LS45OTljLjI4LS4yOC43MjUtLjI4Ljk5OS0uMDA3TDguODAzIDUuOGEuNjk1LjY5NSAwIDAgMSAuMjAyLjQ5Ni42OTUuNjk1IDAgMCAxLS4yMDIuNDk3bC00LjU5NSA0LjU5NWEuNzA0LjcwNCAwIDAgMS0xLS4wMDcuNzEuNzEgMCAwIDEtLjAwNi0uOTk5bDQuMDg2LTQuMDg2eiIvPjwvc3ZnPg==');
+	background-repeat: no-repeat;
+	background-size: 10px;
+	background-position: 50%;
+}
+.ui-datepicker-header a>span {
+	display: none;
+}
+.ui-datepicker-title {
+	text-align: center;
+	line-height: 2rem;
+	margin-bottom: 0.25rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+	padding-bottom: 0.25rem;
+}
+.ui-datepicker-week-col {
+	color: #78909C;
+	font-weight: 400;
+	font-size: 0.75rem;
+}
 </style>
 @endpush
 @section('content')
@@ -404,7 +489,7 @@
                     </div>
                   </div>
                 
-                  <div class="md:p-4 px-2 pt-0 space-y-3">
+                  <div class="md:p-4 px-2 pt-0 space-y-3 relative">
                     <div class="flex md:items-center items-end justify-between">
                       <div class="space-y-1">
                         <div class="flex items-center gap-2 mb-2">
@@ -414,6 +499,13 @@
                             class="inline-flex items-center rounded-full border px-2 py-1 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-secondary/80 text-green-600 bg-green-100 font-semibold"
                             data-v0-t="badge">-{{$variant->discounted_percentage}}%</div>
                         </div>
+
+                        <div class="absolute top-2 flex align-items-center left-[180px]">
+                          <div class="mr-3" id="showdate">
+                            <input type="text" class="w-[150px] h-[30px] text-xs text-gray-400 border p-2 rounded focus:outline-none" placeholder="dd/mm/yyyy" id="datepicker" autocomplete="off">
+                          </div>
+                          <input type="text" class="w-[150px] h-[30px] text-xs text-gray-400 border p-2 rounded focus:outline-none" id="daterangepickker" placeholder="dd/mm/yyyy">
+                        </div>
                         <div class="flex items-center gap-2">
                           <span class="lg:text-3xl text-sm font-bold text-primary">AED {{$variant->discounted_price}}</span>
                           <span class="md:text-sm text-xs text-muted-foreground">/{{$unit_type}}</span>
@@ -422,7 +514,7 @@
                             <!-- Decrement Button -->
                             <button
                               type="button"
-                              class="w-6 h-6 lg:w-8 lg:h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-300"
+                              class="w-6 h-6 decrementQty lg:w-8 lg:h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-300"
                              onclick="decrementQty({{ $variant->id }})"
                               aria-label="Decrease Quantity">
                               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
@@ -449,7 +541,7 @@
                            <button
     type="button"
     id="increment-btn-{{ $variant->id }}"
-    class="w-6 h-6 lg:w-8 lg:h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
+    class="w-6 h-6 incrementQty lg:w-8 lg:h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
     onclick="incrementQty({{ $variant->id }})"
     aria-label="Increase Quantity">
     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
@@ -548,6 +640,9 @@
 @push('scripts')
 <script src="{{asset('assets/js/custom//front/product.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script>
 const isUserLoggedIn = @json(auth()->check());
 
@@ -896,6 +991,95 @@ function incrementQty(variantId) {
     }
 }
 
+// INCLUDE JQUERY & JQUERY UI 1.12.1
+$( function() {
+	$( "#datepicker" ).datepicker({
+		dateFormat: "dd-mm-yy",	
+    duration: "fast",
+    todayHighlight: true
+	});
+} );
+
+$(document).ready(function() {
+    // Initial setup with proper selectors
+    const $qtyInput = $('#quantity_1');
+    const $targetDiv = $('#showdate');
+    
+    // Function to update quantity and visibility
+    function updateQuantity(change) {
+        let currentVal = parseInt($qtyInput.val()) || 0;
+        let newVal = currentVal + change;
+        
+        // Ensure quantity doesn't go below 0
+        newVal = Math.max(newVal, 0);
+        $qtyInput.val(newVal);
+        
+        // Update visibility
+        $targetDiv.toggle(newVal > 0);
+    }
+
+    // Initial check on page load
+    updateQuantity(0);
+
+    // Increment button click with proper event delegation
+    $(document).off('click', '.incrementQty').on('click', '.incrementQty', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        updateQuantity(1);
+    });
+
+    // Decrement button click
+    $(document).off('click', '.decrementQty').on('click', '.decrementQty', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        updateQuantity(-1);
+    });
+
+    // Handle direct input changes
+    $qtyInput.off('input').on('input', function() {
+        updateQuantity(0);
+    });
+});
+
+
+// $('#daterangepickker').dateRangePicker({
+//   inline: true,
+//   format: 'MM-DD-YYYY',
+//   container: '#ccc',
+//   alwaysOpen: false,
+//   singleMonth: true,
+//   showTopbar: false,
+//   setValue: function(s)
+// 	{
+		
+// 			$(this).val('12-01-2017');
+// 	}
+// })
+
+
+$(document).ready(function () {
+    // Get the first day of the current month
+    const startOfMonth = moment().startOf('month');
+    // Get the current date
+    const currentDate = moment();
+
+    // Initialize the date range picker with default start and end dates
+    $("#daterangepickker").daterangepicker({
+        startDate: startOfMonth,
+        endDate: currentDate
+    });
+
+    // Handle the 'apply' event when the user selects a date range
+    $("#daterangepickker").on('apply.daterangepicker', function (e, picker) {
+        e.preventDefault();
+        const obj = {
+            "key": dates.length + 1,
+            "start": picker.startDate.format('MM/DD/YYYY'),
+            "end": picker.endDate.format('MM/DD/YYYY')
+        };
+        dates.push(obj);
+    });
+});
 </script>
 {{-- <script>
    function checkAuthAndSubmit() {
