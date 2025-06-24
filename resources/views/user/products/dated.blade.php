@@ -100,6 +100,43 @@ table {
 	font-weight: 400;
 	font-size: 0.75rem;
 }
+
+.checkbox-input {
+  clip: rect(0 0 0 0);
+  -webkit-clip-path: inset(100%);
+          clip-path: inset(100%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+.checkbox-input:checked + .checkbox-tile {
+  background: #daedc9;
+  border-color: #daedc9;
+  color: #000000;
+}
+.checkbox-input:checked + .checkbox-tile:before {
+  transform: scale(1);
+  opacity: 1;
+  background-color: #daedc9;
+  border-color: #daedc9;
+}
+
+.checkbox-input:focus + .checkbox-tile:before {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.checkbox-tile {
+  border-radius: 0.5rem;
+  border: 2px solid #daedc9;
+  background-color: #fff;
+  /* box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); */
+  transition: 0.15s ease;
+  cursor: pointer;
+  position: relative;
+}
 </style>
 @endpush
 @section('content')
@@ -461,7 +498,7 @@ table {
             <h2 class="md:text-2xl text-base font-bold text-gray-800 mb-3">
               Choose a Variant
             </h2>
-            <div class="space-y-4 overflow-x-hidden xl:max-h-[955px] max-h-[785px] pr-[5px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
+            <div class="space-y-4 overflow-x-hidden 2xl:max-h-[790px] xl:max-h-[580px] max-h-[785px] pr-[5px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
 
           
 
@@ -478,10 +515,14 @@ table {
                 <label class="mb-4 block" for="hs-checked-checkbox">
                 <div
                   class="rounded-lg border bg-white text-card-foreground shadow-sm w-full overflow-hidden hover:shadow-xl f transition-all duration-300 ease-in-out transform hover:border-cyan-300 hover:ring-2 hover:ring-cyan-600">
-                  <div class="absolute top-3 right-3 ">
-                    <input type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" id="hs-checked-checkbox" checked="">
-                    <!-- <label for="hs-checked-checkbox" class="text-sm text-gray-500 ms-3 dark:text-neutral-400">Checked checkbox</label> -->
+                  
+                  <div class="checkbox absolute top-3 right-3">
+                    <label class="checkbox-wrapper">
+                      <input type="checkbox" class="checkbox-input" />
+                      <span class="checkbox-tile px-2 py-1 text-[14px]">Selected</span>
+                    </label>
                   </div>
+
                   <div class="flex flex-col space-y-2 p-4 pb-2">
                     <h3 class="tracking-tight text-base lg:text-2xl font-bold">{{$variant->title}}</h3>
                     <div class="gap-x-4 flex items-center">
@@ -576,16 +617,16 @@ table {
                     </div>
                     <span id="quantity-error-{{$variant->id}}"></span>
                     
-                    <div class="p-4 bg-[#f9f9f9] border rounded-lg border-dashed" id="showdate">
+                    <div class="p-4 bg-[#f9f9f9] showdate border rounded-lg border-dashed" id="">
                       <p class="font-medium text-[16px]">Select Your Dates</p>
                       <div class="grid grid-cols-2 mt-3 align-items-center">
                         <div class="mr-3">
                           <label class="text-sm w-full" for="">Start Date</label>
-                          <input type="text" class="w-full h-[40px] text-xs text-gray-400 border p-2 rounded focus:outline-none" placeholder="dd/mm/yyyy" id="datepicker" autocomplete="off">
+                          <input type="text" class="w-full h-[40px] datepicker text-xs text-gray-400 border p-2 rounded focus:outline-none" placeholder="dd/mm/yyyy" id="" autocomplete="off">
                         </div>
                         <div class="">
                           <label class="text-sm w-full" for="">End Date</label>
-                          <input type="text" class="w-full h-[40px] text-xs text-gray-400 border p-2 rounded focus:outline-none" id="datepickertwo" placeholder="dd/mm/yyyy">
+                          <input type="text" class="w-full h-[40px] datepickertwo text-xs text-gray-400 border p-2 rounded focus:outline-none" id="" placeholder="dd/mm/yyyy">
                         </div>
                       </div>
                     </div>
@@ -626,7 +667,7 @@ table {
                 <input type="hidden" name="redirect_to_cart" id="redirect_to_cart" value="0" />
 
             </div>
-            <div class="space-y-4 mt-6">
+            <div class="space-y-4">
               <div id="variant-error-msg" class="hidden text-red-500 text-sm font-medium mt-2"></div>
             <!-- Continue Button -->
             {{-- @auth
@@ -1009,102 +1050,72 @@ function incrementQty(variantId) {
     }
 }
 
+
 // INCLUDE JQUERY & JQUERY UI 1.12.1
 $( function() {
-	$( "#datepicker" ).datepicker({
+	$( ".datepicker" ).datepicker({
 		dateFormat: "dd-mm-yy",	
     duration: "fast",
     todayHighlight: true
 	});
 
-  $( "#datepickertwo" ).datepicker({
+  $( ".datepickertwo" ).datepicker({
 		dateFormat: "dd-mm-yy",	
     duration: "fast",
     todayHighlight: true
 	});
 });
 
-$(document).ready(function() {
-  const $quantityInput = $('#quantity_1');
-  const $messageBox = $('#showdate');
-  
-  // Initialize with current value
-  toggleMessage($quantityInput.val());
-  
-  // Increment button click
-  $('.incrementQty').click(function(e) {
-    e.preventDefault();
-    const currentVal = parseInt($quantityInput.val()) || 0;
-    $quantityInput.val(currentVal + 1);
-    toggleMessage(currentVal + 1);
+$(document).ready(function(){
+  $(".showdate").slideUp();
+  $(".decrementQty").click(function(){
+      $(".showdate").slideUp();
+  });
+
+  $(".incrementQty").click(function(){
+      $(".showdate").slideDown();
   });
   
-  // Decrement button click
-  $('.decrementQty').click(function(e) {
-    e.preventDefault();
-    const currentVal = parseInt($quantityInput.val()) || 0;
-    const newVal = Math.max(currentVal - 1, 0);
-    $quantityInput.val(newVal);
-    toggleMessage(newVal);
-  });
-  
-  // Handle direct input changes
-  $quantityInput.on('input', function() {
-    const value = parseInt($(this).val()) || 0;
-    toggleMessage(value);
-  });
-  
-  // Function to toggle message visibility
-  function toggleMessage(quantity) {
-    if (quantity > 0) {
-      $messageBox.slideDown();
-    } else {
-      $messageBox.slideUp();
-    }
-  }
 });
-
-
 
 // $(document).ready(function() {
-//     // Initial setup with proper selectors
-//     const $qtyInput = $('#quantity_1');
-//     const $targetDiv = $('#showdate');
-    
-//     // Function to update quantity and visibility
-//     function updateQuantity(change) {
-//         let currentVal = parseInt($qtyInput.val()) || 0;
-//         let newVal = currentVal + change;
-        
-//         // Ensure quantity doesn't go below 0
-//         newVal = Math.max(newVal, 0);
-//         $qtyInput.val(newVal);
-        
-//         // Update visibility
-//         $targetDiv.toggle(newVal > 0);
+//   const $quantityInput = $('#quantity_1');
+//   const $messageBox = $('#showdate');
+  
+//   // Initialize with current value
+//   toggleMessage($quantityInput.val());
+  
+//   // Increment button click
+//   $('.incrementQty').click(function(e) {
+//     e.preventDefault();
+//     const currentVal = parseInt($quantityInput.val()) || 0;
+//     $quantityInput.val(currentVal + 1);
+//     toggleMessage(currentVal + 1);
+//   });
+  
+//   // Decrement button click
+//   $('.decrementQty').click(function(e) {
+//     e.preventDefault();
+//     const currentVal = parseInt($quantityInput.val()) || 0;
+//     const newVal = Math.max(currentVal - 1, 0);
+//     $quantityInput.val(newVal);
+//     toggleMessage(newVal);
+//   });
+  
+//   // Handle direct input changes
+//   $quantityInput.on('input', function() {
+//     const value = parseInt($(this).val()) || 0;
+//     toggleMessage(value);
+//   });
+  
+//   // Function to toggle message visibility
+//   function toggleMessage(quantity) {
+//     if (quantity > 0) {
+//       $messageBox.slideDown();
+//     } else {
+//       $messageBox.slideUp();
 //     }
-
-//     // Initial check on page load
-//     updateQuantity(0);
-
-//     // Increment button click with proper event delegation
-//     $(document).off('click', '.incrementQty').on('click', '.incrementQty', function(e) {
-//         e.preventDefault();
-//         e.stopImmediatePropagation();
-//         updateQuantity(1);
-//     });
-
-//     // Decrement button click
-//     $(document).off('click', '.decrementQty').on('click', '.decrementQty', function(e) {
-//         e.preventDefault();
-//         e.stopImmediatePropagation();
-//         updateQuantity(-1);
-//     });
-
-//     // Handle direct input changes
-//     $qtyInput.off('input').on('input', function() {
-//         updateQuantity(0);
-//     });
+//   }
 // });
 </script>
 {{-- <script>
