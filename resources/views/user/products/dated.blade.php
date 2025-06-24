@@ -516,7 +516,7 @@ table {
                 <div
                   class="rounded-lg border bg-white text-card-foreground shadow-sm w-full overflow-hidden hover:shadow-xl f transition-all duration-300 ease-in-out transform hover:border-cyan-300 hover:ring-2 hover:ring-cyan-600">
                   
-                  <div class="checkbox absolute top-3 right-3">
+                  <div class="checkbox absolute top-4 right-4">
                     <label class="checkbox-wrapper">
                       <input type="checkbox" class="checkbox-input" />
                       <span class="checkbox-tile px-2 py-1 text-[14px]">Selected</span>
@@ -1066,17 +1066,17 @@ $( function() {
 	});
 });
 
-$(document).ready(function(){
-  $(".showdate").slideUp();
-  $(".decrementQty").click(function(){
-      $(".showdate").slideUp();
-  });
+// $(document).ready(function(){
+//   $(".showdate").slideUp();
+//   $(".decrementQty").click(function(){
+//       $(".showdate").slideUp();
+//   });
 
-  $(".incrementQty").click(function(){
-      $(".showdate").slideDown();
-  });
+//   $(".incrementQty").click(function(){
+//       $(".showdate").slideDown();
+//   });
   
-});
+// });
 
 // $(document).ready(function() {
 //   const $quantityInput = $('#quantity_1');
