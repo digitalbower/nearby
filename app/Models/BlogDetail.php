@@ -17,6 +17,7 @@ class BlogDetail extends Model
         'images',
         'is_featured',
         'validity_date',
+        'slug',
     ];
 
     protected $casts = [

@@ -13,8 +13,6 @@ return new class extends Migration
     {
         Schema::create('blog_header_footers', function (Blueprint $table) {
             $table->id();
-            $table->enum('navigation_placement', ['header', 'footer']); // 'upper' = header, 'lower' = footer
-            $table->string('type'); // optional (ex: home, about, etc.)
             $table->string('logo')->nullable();
             $table->string('main_title')->nullable();
             $table->text('description')->nullable();

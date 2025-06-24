@@ -34,7 +34,7 @@ class FeaturedItemController extends Controller
         }
 
         FeaturedItem::create($data);
-        return redirect()->route('admin.blog.featured_items.index')->with('success', 'Featured item added successfully.');
+        return redirect()->route('admin.blog.featured-items.index')->with('success', 'Featured item added successfully.');
     }
 
     public function edit(FeaturedItem $featured_item)
@@ -59,7 +59,7 @@ class FeaturedItemController extends Controller
         }
 
         $featured_item->update($data);
-        return redirect()->route('admin.featured-items.index')->with('success', 'Updated successfully.');
+        return redirect()->route('admin.blog.featured-items.index')->with('success', 'Updated successfully.');
     }
 
     public function destroy(FeaturedItem $featured_item)

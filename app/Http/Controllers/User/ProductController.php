@@ -420,4 +420,81 @@ class ProductController extends Controller
             return response()->json(['success' => false, 'message' => 'Item not found.'], 404);
         }
     }
+
+
+
+
+     public function dated($id)
+    { 
+        $uppermenuItems = NavigationMenu::where('active', 1)
+        ->where('navigation_placement', 'upper')
+        ->get(); 
+
+        $lowermenuitem = NavigationMenu::where('active', 1)
+        ->where('navigation_placement', 'lower')
+        ->get();
+
+        $logo = Logo::where('status', 1)
+        ->where('type', 'header') 
+        ->first(); 
+        
+        $topDestinations = Footer::where('type', 'Top Destination')
+                              ->where('status', 1)
+                              ->get();
+    
+        $informationLinks = Footer::where('type', 'Information')
+                            ->where('status', 1)
+                            ->get();
+
+        $followus = Footer::where('type', 'Follow Us')
+        ->where('status', 1)
+        ->get();
+
+        $payment_channels = Footer::where('type', 'payment_channels')
+        ->where('status', 1)
+        ->get();    
+        $nbvterms = NbvTerm::all();
+        $currentPath = request()->path();  
+        $slug = str_replace('products/', '', $currentPath);
+        $slug = trim($id, '/');
+        $seo = Product::where('id', $id)->first();
+        $product = Product::where('id',$id)->first(); 
+        $tagNames = $product->tag()->toArray();
+        $tag_name = implode(', ', $tagNames); 
+        $gallery = json_decode($product->gallery, true);
+        $reviews =  $product->reviews; 
+        $totalRatings = $reviews->sum('review_rating');
+        $totalReviews = $reviews->count();
+        $averageRating = $totalReviews > 0 ? $totalRatings / $totalReviews : 0;
+        $averageRating = number_format($averageRating, 1);
+        $ratingCounts = [
+            5 => $reviews->where('review_rating', 5)->count(),
+            4 => $reviews->where('review_rating', 4)->count(),
+            3 => $reviews->where('review_rating', 3)->count(),
+            2 => $reviews->where('review_rating', 2)->count(),
+            1 => $reviews->where('review_rating', 1)->count(),
+        ];
+
+        $percentages = [];
+        foreach ($ratingCounts as $rating => $count) {
+            $percentages[$rating] = $totalReviews > 0 ? ($count / $totalReviews) * 100 : 0;
+        }
+        $today = Carbon::today();
+        $variants = ($product->variants ?? collect([]))->filter(function ($variant) use ($today) {
+                return 
+                       Carbon::parse($variant->validity_from)->lte($today) &&
+                       Carbon::parse($variant->validity_to)->gte($today);
+            });
+        $user = Auth::user();
+        $unit_type = $product->category->categoryType->unitType->unit_type;
+        // $variantsWithType = $variants->map(function ($variant) {
+        //     $typeName = $variant->types ? $variant->types->name : 'No Type Available';
+        //     $variant->product_type = $typeName;
+        //     return $variant;
+        // });
+        return view('user.products.dated', compact('seo','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+        'followus','payment_channels','product','tag_name','gallery','nbvterms','variants','reviews',
+        'totalReviews','averageRating','percentages','unit_type','user'));
+    }
+       
 }

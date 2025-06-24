@@ -1,10 +1,12 @@
 @extends('admin.layouts.masteradmin')
 
 @section('content')
+<div class="card shadow-none bg-transparent px-4 mt-5">
+    <div class="card-body shadow-lg bg-white">
 <div class="container mt-5">
     <h2>Navigation List</h2>
 
-    <a href="{{ route('admin.navigation.create') }}" class="btn btn-primary mb-3">Add Navigation</a>
+   
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -13,7 +15,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Placement</th>
+                
                 <th>Main Title</th>
                 <th>Logo</th>
                 <th>Main Image</th>
@@ -21,9 +23,9 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($navigations as $nav)
+            @forelse($navigation as $nav)
             <tr>
-                <td>{{ ucfirst($nav->navigation_placement) }}</td>
+                
                 <td>{{ $nav->main_title }}</td>
                 <td>
                     @if($nav->logo)
@@ -40,8 +42,8 @@
                     @endif
                 </td>
                 <td>
-                    <a href="{{ route('admin.navigation.edit', $nav->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                    <form action="{{ route('admin.navigation.destroy', $nav->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this item?')">
+                    <a href="{{ route('admin.blog.blognavigation.edit', $nav->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                    <form action="{{ route('admin.blog.blognavigation.destroy', $nav->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this item?')">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-sm btn-danger">Delete</button>
@@ -55,5 +57,7 @@
             @endforelse
         </tbody>
     </table>
+</div>
+</div>
 </div>
 @endsection
