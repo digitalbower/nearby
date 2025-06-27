@@ -105,6 +105,14 @@
     <div class="section-title">🧾 Your Voucher Summary</div>
      <p><strong>Product:</strong> {{$item->variant?->product?->name}}</p>
     <p><strong>Product Variant:</strong> {{$item->variant?->title}}</p>
+    @if($item->dated_product == 1)
+    @if($item->variant?->holiday_length == 1)
+    <p><strong>Check-In Date:</strong> {{$item->check_in_date}}</p>
+    @else
+      <p><strong>Check-In Date:</strong> {{$item->check_in_date}}</p>
+      <p><strong>Check-Out Date:</strong> {{$item->check_out_date}}</p>
+    @endif
+    @endif
     <p><strong>Voucher Number:</strong> {{ $item->bookingConfirmation?->booking_id ?? 'N/A' }}</p>
     <p><strong>Guest Name:</strong> {{ $userId->first_name ?? 'Guest' }}</p>
     <p><strong>Email:</strong> {{ $userId->email ?? 'N/A' }}</p>

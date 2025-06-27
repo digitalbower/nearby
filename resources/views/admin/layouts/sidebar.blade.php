@@ -41,35 +41,28 @@
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
-              
-
-                
-                <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#sidebarLayouts">
-                    <!-- <i class="fas fa-th-list"></i> -->
-                     <svg class="me-3" width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.5391 8.67606V15.5524C20.5512 15.8014 20.4327 16.0559 20.1845 16.196L13.0531 20.2197C12.4152 20.5797 11.6357 20.5807 10.9969 20.2223L3.82016 16.1968C3.5659 16.0542 3.44711 15.7917 3.46487 15.5374V8.69449C3.44687 8.44374 3.56156 8.18452 3.80996 8.0397L10.9664 3.86752C11.6207 3.48606 12.4299 3.4871 13.0832 3.87025L20.1945 8.04063C20.4357 8.18211 20.5503 8.43167 20.5391 8.67606Z" stroke="#b9babf"/><path d="M3.82019 9.25312C3.3487 8.98865 3.34307 8.31197 3.81009 8.03969L10.9665 3.86751C11.6209 3.48605 12.43 3.48709 13.0834 3.87024L20.1946 8.04062C20.6596 8.31329 20.6539 8.98739 20.1845 9.25227L13.0531 13.276C12.4152 13.636 11.6357 13.637 10.9969 13.2786L3.82019 9.25312Z" stroke="#b9babf"/></svg>
-                    <p>Product Section</p>
+                <li class="nav-item active">
+                    <a
+                    data-bs-toggle="collapse"
+                    href="#dashboard"
+                    class="collapsed"
+                    aria-expanded="false"
+                    >
+                    <!-- <i class="fas fa-home"></i> -->
+                     <svg class="me-3" width="23px" height="23px" viewBox="0 0 24 24" id="meteor-icon-kit__regular-dashboard" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"/><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M3 2C2.44772 2 2 2.44772 2 3V6C2 6.55228 2.44772 7 3 7H6C6.55228 7 7 6.55228 7 6V3C7 2.44772 6.55228 2 6 2H3ZM3 0H6C7.65685 0 9 1.34315 9 3V6C9 7.65685 7.65685 9 6 9H3C1.34315 9 0 7.65685 0 6V3C0 1.34315 1.34315 0 3 0ZM14 16H21C22.6569 16 24 17.3431 24 19V21C24 22.6569 22.6569 24 21 24H14C12.3431 24 11 22.6569 11 21V19C11 17.3431 12.3431 16 14 16ZM14 18C13.4477 18 13 18.4477 13 19V21C13 21.5523 13.4477 22 14 22H21C21.5523 22 22 21.5523 22 21V19C22 18.4477 21.5523 18 21 18H14ZM3 11H6C7.65685 11 9 12.3431 9 14V21C9 22.6569 7.65685 24 6 24H3C1.34315 24 0 22.6569 0 21V14C0 12.3431 1.34315 11 3 11ZM3 13C2.44772 13 2 13.4477 2 14V21C2 21.5523 2.44772 22 3 22H6C6.55228 22 7 21.5523 7 21V14C7 13.4477 6.55228 13 6 13H3ZM21 0C22.6569 0 24 1.34315 24 3V11C24 12.6569 22.6569 14 21 14H14C12.3431 14 11 12.6569 11 11V3C11 1.34315 12.3431 0 14 0H21ZM13 3V11C13 11.5523 13.4477 12 14 12H21C21.5523 12 22 11.5523 22 11V3C22 2.44772 21.5523 2 21 2H14C13.4477 2 13 2.44772 13 3Z" fill="#b9babf"/></g></svg>
+                    <p>Dashboard</p>
                     <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="sidebarLayouts">
+                    <div class="collapse" id="dashboard">
                     <ul class="nav nav-collapse">
-                        
-                      
                         <li>
-                            <a href="{{route('admin.products.index')}}">
-                                <span class="sub-item">Products</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="{{route('admin.products.product_variants.index')}}">
-                                <span class="sub-item">Product Variants</span>
-                            </a>
+                        <a href="../demo1/index.html">
+                            <span class="sub-item">Dashboard 1</span>
+                        </a>
                         </li>
                     </ul>
                     </div>
                 </li>
-               
                 <li class="nav-section">
                     <span class="sidebar-mini-icon">
                     <i class="fa fa-ellipsis-h"></i>
@@ -367,8 +360,9 @@
                     </ul>
                     </div>
                 </li>
-
-                  <li class="nav-item">
+                @endif
+                
+                <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#blogLayouts">
                     <!-- <i class="fas fa-th-list"></i> -->
                       <svg class="me-3" width="30px" height="30px" viewBox="0 0 24 24" fill="none"
@@ -414,7 +408,6 @@
                     </ul>
                     </div>
                 </li>
-                @endif
             </ul>
         </div>
     </div>

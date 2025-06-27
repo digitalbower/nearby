@@ -10,7 +10,7 @@ class CheckoutItem extends Model
 {
     use HasFactory,SoftDeletes;
 
-    protected $fillable=['checkout_id','product_variant_id','quantity','unit_price','total_price','giftproduct'];
+    protected $fillable=['checkout_id','product_variant_id','quantity','unit_price','total_price','giftproduct','check_in_date','check_out_date','dated_product'];
 
     public function variant()
     {

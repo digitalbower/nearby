@@ -170,7 +170,10 @@
         <input type="hidden" name="orders[{{ $item->id }}][product_variant_id]" value="{{ $variant->id }}" />
         <input type="hidden" name="orders[{{ $item->id }}][unit_price]" value="{{ $variant->discounted_price }}"/>
         <input type="hidden" name="orders[{{ $item->id }}][total_price]" value="{{ $totalprice }}"/>
-       
+        <input type="hidden" name="orders[{{ $item->id }}][check_in_date]" value="{{ $item->check_in_date }}"/>
+        <input type="hidden" name="orders[{{ $item->id }}][check_out_date]" value="{{ $item->check_out_date }}"/>
+        <input type="hidden" name="orders[{{ $item->id }}][dated_product]" value="{{ $item->dated_product }}"/>
+
 
         <div class="border rounded-lg relative overflow-hidden shadow-lg p-3 my-4">
             <div class="md:flex gap-3">
@@ -185,6 +188,14 @@
                     <h3 class="font-semibold text-base lg:text-xl">{{ $product->name }}</h3>
                     <p class="text-sm text-gray-500 mt-2">{{$variant->title}}</p>
                     <p class="text-sm text-gray-500 mt-2">{{ $product->short_description }}</p>
+                    @if($product->types->product_type == "Fixed Date")
+                      @if($variant->holiday_length == 1)
+                        <p class="text-sm text-gray-500 mt-2"><strong>Check-In Date:</strong> {{$item->check_in_date}}</p>
+                      @else  
+                        <p class="text-sm text-gray-500 mt-2"><strong>Check-In Date:</strong> {{$item->check_in_date}}</p>
+                        <p class="text-sm text-gray-500 mt-2"><strong>Check-Out Date:</strong> {{$item->check_out_date}}</p>
+                      @endif
+                    @endif
                 </div>
             </div>
 

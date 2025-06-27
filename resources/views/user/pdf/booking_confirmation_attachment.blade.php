@@ -104,6 +104,14 @@
     <div class="section-title">🧾 Your Voucher Summary</div>
     <p><strong>Product:</strong> {{$variant['product_name']}}</p>
     <p><strong>Product Variant:</strong> {{$variant['product_variant_name']}}</p>
+    @if($variant['dated_product'] == 1)
+    @if($variant['holiday_length'] == 1)
+    <p><strong>Check-In Date:</strong> {{$variant['check_in_date']}}</p>
+    @else
+      <p><strong>Check-In Date:</strong> {{$variant['check_in_date']}}</p>
+      <p><strong>Check-Out Date:</strong> {{$variant['check_out_date']}}</p>
+    @endif
+    @endif
     <p><strong>Voucher Number:</strong> {{$variant['voucher_number']}}</p>
     <p><strong>Guest Name:</strong> {{$variant['guest_name']}}</p>
     <p><strong>Email:</strong>{{$variant['email']}}</p>

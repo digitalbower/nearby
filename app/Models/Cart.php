@@ -11,7 +11,7 @@ class Cart extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'product_variant_id', 'quantity'];
+    protected $fillable = ['user_id', 'product_variant_id', 'quantity','check_in_date','check_out_date','dated_product'];
 
     public $timestamps = true;
 

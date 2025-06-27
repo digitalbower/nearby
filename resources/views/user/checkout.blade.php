@@ -1000,12 +1000,19 @@ function collectItems() {
     );
     const giftCheckbox = document.querySelector(`input[name="items[${variantId}][giftproduct]"]:checked`);
     const giftproduct = giftCheckbox ? 1 : 0;
+    const checkInDate = document.querySelector(`input[name="items[${variantId}][check_in_date]"]`)?.value || null;
+    const checkOutDate = document.querySelector(`input[name="items[${variantId}][check_out_date]"]`)?.value || null;
+    const datedProductRaw = document.querySelector(`input[name="items[${variantId}][dated_product]"]`)?.value;
+    const datedProduct = datedProductRaw ? parseInt(datedProductRaw, 10) : 0;
 
     items[variantId] = {
       quantity,
       unit_price: unitPrice,
       total_price: totalPrice,
       giftproduct,
+      check_in_date: checkInDate,
+      check_out_date: checkOutDate,
+      dated_product: datedProduct,
     };
   });
 
@@ -1035,7 +1042,7 @@ function collectItems() {
     });
   });
   function renderProducts() {
-    const allProductsHTML = products.map((variant, index) => {
+    const allProductsHTML = products.map((variant, index) => { 
         const total = variant.discounted_price * variant.quantity;
         const isVisible = index < visibleCount;
         return `
@@ -1049,6 +1056,16 @@ function collectItems() {
                 <h3 class="font-semibold text-base lg:text-lg pr-5">${variant.product_name}</h3>
                 <p class="text-sm text-gray-500 mt-2">${variant.title}</p>
                 <p class="text-sm text-gray-500 mt-2">${variant.short_description}</p>
+                
+                ${variant.product_type === "Fixed Date" ? `
+                      <p class="text-sm text-gray-500 mt-2"><strong>Check-In Date:</strong> ${variant.check_in_date}</p>
+                      <input type="hidden" name="items[${variant.id}][check_in_date]" value="${variant.check_in_date }"/>
+                      ${variant.check_out_date ? `
+                      <p class="text-sm text-gray-500 mt-2"><strong>Check-Out Date:</strong> ${variant.check_out_date}</p>
+                      <input type="hidden" name="items[${variant.id}][check_out_date]" value="${variant.check_out_date }"/>
+                    ` : ''}
+                      <input type="hidden" name="items[${variant.id}][dated_product]" value="${variant.dated_product }"/>
+                      ` : ''}
               </div>
             </div>
             <div class="flex items-center justify-between mt-2">
@@ -1065,7 +1082,7 @@ function collectItems() {
   readonly
   class="w-8 h-8 text-center text-lg font-semibold text-gray-700" 
 />
-
+    
 
 
                 </div>
@@ -1076,6 +1093,8 @@ function collectItems() {
                     AED ${variant.discounted_price}   
                   <input type="hidden" name="items[${variant.id}][unit_price]" value="${variant.discounted_price}"/>
                 </div>
+
+
                <div class="text-lg line-through text-gray-500">
                     AED ${variant.original_price}   
                    <input type="hidden" name="items[${variant.id}][total_price]" value="${total.toFixed(2)}"/>

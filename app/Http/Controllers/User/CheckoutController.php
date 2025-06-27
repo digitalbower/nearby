@@ -70,6 +70,9 @@ class CheckoutController extends Controller
                     'unit_price'=> $order['unit_price'],
                     'total_price'=> $order['total_price'],
                     'giftproduct'=> $order['giftproduct'] ?? 0,
+                    'check_in_date' => $order['check_in_date'],
+                    'check_out_date' => $order['check_out_date'],
+                    'dated_product' => $order['dated_product'] ?? 0,
                 ]);
             
             }
@@ -78,6 +81,9 @@ class CheckoutController extends Controller
                 $item->unit_price = $order['unit_price'];
                 $item->total_price = $order['total_price'];
                 $item->giftproduct = $order['giftproduct'] ?? 0;
+                $item->check_in_date = $order['check_in_date'];
+                $item->check_out_date = $order['check_out_date'];
+                $item->dated_product = $order['dated_product'] ?? 0;
                 $item->save();
             }
          
@@ -230,17 +236,21 @@ class CheckoutController extends Controller
                     'product_name'=>$variant['product']['name'],
                     'title' => $variant['title'],
                     'short_description' => $variant['product']['short_description'],
+                    'product_type'=>$variant['product']->types->product_type,
                     'discounted_price' => number_format($discountedPrice, 2),
                     'original_price' => number_format($originalPrice, 2),
                     'timer_flag' => $variant['timer_flag'],
                     'end_time' => \Carbon\Carbon::parse($variant['end_time'])->toIso8601String(),
                     'image' => $imagePath ? asset('storage/' . $imagePath) : 'https://via.placeholder.com/100',
                     'quantity' => $item->quantity,
-                    'giftproduct'=>$item->giftproduct
+                    'giftproduct'=>$item->giftproduct,
+                    'check_in_date' => $item->check_in_date,
+                    'check_out_date' =>$item->check_out_date,
+                    'dated_product' => $item->dated_product,
+                    'holiday_length'=>$variant['holiday_length']
                 ];
             }
-        } 
-
+        }  
         return response()->json($product_array);
         
     }

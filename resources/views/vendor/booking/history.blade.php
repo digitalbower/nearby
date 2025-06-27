@@ -31,6 +31,8 @@
                         <th class="px-6 py-3">Product Name</th>
                         <th class="px-6 py-3">Quantity</th>
                         <th class="px-6 py-3">Date</th>
+                        <th class="px-6 py-3">Check In Date</th>
+                        <th class="px-6 py-3">Check Out Date</th>
                         <th class="px-6 py-3">Customer Name</th>
                         <th class="px-6 py-3">Status</th>
                     </tr>
@@ -42,7 +44,8 @@
                             <td class="px-6 py-4">{{$booking_item->variant->product->name}}</td>
                             <td class="px-6 py-4">{{$booking_item->quantity}}</td>
                             <td class="px-6 py-4">{{$booking_item->bookingConfirmation->created_at->format('Y-m-d')}}</td>
-                            <td class="px-6 py-4">{{$booking_item->bookingConfirmation->user->first_name}}</td>
+                            <td class="px-6 py-4">{{$booking_item->check_in_date}}</td>
+                            <td class="px-6 py-4">{{$booking_item->check_out_date}}</td><td class="px-6 py-4">{{$booking_item->bookingConfirmation->user->first_name}}</td>
                             <td class="px-6 py-4">
                                 <span
                                     class="inline-block px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
@@ -54,7 +57,7 @@
                     <!-- Repeat for more rows -->
                 </tbody>
             </table>
-            <div class="pagination">
+              <div class="pagination">
                 {{ $booking_items->links() }}
             </div>
         </div>

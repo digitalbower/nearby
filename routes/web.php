@@ -141,6 +141,8 @@ Route::name('user.')->group(function () {
         Route::prefix('products')->name('products.')->group(function () {
             Route::post('/store-review', [UserProductController::class, 'storeReview'])->name('store_review');
             Route::post('/add-cart', [UserProductController::class, 'addCart'])->name('add_cart');
+            Route::post('/add-dated-cart', [UserProductController::class, 'addDatedCart'])->name('add_dated_cart');
+            
         });
         // ✅ E-commerce & Booking Routes
         // web.php

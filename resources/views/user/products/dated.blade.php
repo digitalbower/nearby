@@ -2,6 +2,7 @@
 @extends('user.layouts.main')
 @push('styles')
 <link rel="stylesheet" href="{{asset('assets/css/custom/front/product.css')}}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <style>
   #about  ul {
     list-style: disc;
@@ -14,7 +15,128 @@
   a {
     background-color: transparent;
   }
-</style>
+
+  #ui-datepicker-div {
+	display: none;
+	background-color: #fff;
+	box-shadow: 0 0.125rem 0.5rem rgba(0,0,0,0.1);
+	margin-top: 0.25rem;
+	border-radius: 0.5rem;
+	padding: 0.5rem;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+.ui-datepicker-calendar thead th {
+	padding: 0.25rem 0;
+	text-align: center;
+	font-size: 0.75rem;
+	font-weight: 400;
+	color: #78909C;
+}
+.ui-datepicker-calendar tbody td {
+	width: 2.5rem;
+	text-align: center;
+	padding: 0;
+}
+.ui-datepicker-calendar tbody td a {
+	display: block;
+	border-radius: 0.25rem;
+	line-height: 2rem;
+	transition: 0.3s all;
+	color: #546E7A;
+	font-size: 0.875rem;
+	text-decoration: none;
+}
+.ui-datepicker-calendar tbody td a:hover {	
+	background-color: #E0F2F1;
+}
+.ui-datepicker-calendar tbody td a.ui-state-active {
+	background-color: #009688;
+	color: white;
+}
+.ui-datepicker-header a.ui-corner-all {
+	cursor: pointer;
+	position: absolute;
+	top: 0;
+	width: 2rem;
+	height: 2rem;
+	margin: 0.5rem;
+	border-radius: 0.25rem;
+	transition: 0.3s all;
+}
+.ui-datepicker-header a.ui-corner-all:hover {
+	background-color: #ECEFF1;
+}
+.ui-datepicker-header a.ui-datepicker-prev {	
+	left: 0;	
+	background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMyIgaGVpZ2h0PSIxMyIgdmlld0JveD0iMCAwIDEzIDEzIj48cGF0aCBmaWxsPSIjNDI0NzcwIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik03LjI4OCA2LjI5NkwzLjIwMiAyLjIxYS43MS43MSAwIDAgMSAuMDA3LS45OTljLjI4LS4yOC43MjUtLjI4Ljk5OS0uMDA3TDguODAzIDUuOGEuNjk1LjY5NSAwIDAgMSAuMjAyLjQ5Ni42OTUuNjk1IDAgMCAxLS4yMDIuNDk3bC00LjU5NSA0LjU5NWEuNzA0LjcwNCAwIDAgMS0xLS4wMDcuNzEuNzEgMCAwIDEtLjAwNi0uOTk5bDQuMDg2LTQuMDg2eiIvPjwvc3ZnPg==");
+	background-repeat: no-repeat;
+	background-size: 0.5rem;
+	background-position: 50%;
+	transform: rotate(180deg);
+}
+.ui-datepicker-header a.ui-datepicker-next {
+	right: 0;
+	background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMyIgaGVpZ2h0PSIxMyIgdmlld0JveD0iMCAwIDEzIDEzIj48cGF0aCBmaWxsPSIjNDI0NzcwIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik03LjI4OCA2LjI5NkwzLjIwMiAyLjIxYS43MS43MSAwIDAgMSAuMDA3LS45OTljLjI4LS4yOC43MjUtLjI4Ljk5OS0uMDA3TDguODAzIDUuOGEuNjk1LjY5NSAwIDAgMSAuMjAyLjQ5Ni42OTUuNjk1IDAgMCAxLS4yMDIuNDk3bC00LjU5NSA0LjU5NWEuNzA0LjcwNCAwIDAgMS0xLS4wMDcuNzEuNzEgMCAwIDEtLjAwNi0uOTk5bDQuMDg2LTQuMDg2eiIvPjwvc3ZnPg==');
+	background-repeat: no-repeat;
+	background-size: 10px;
+	background-position: 50%;
+}
+.ui-datepicker-header a>span {
+	display: none;
+}
+.ui-datepicker-title {
+	text-align: center;
+	line-height: 2rem;
+	margin-bottom: 0.25rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+	padding-bottom: 0.25rem;
+}
+.ui-datepicker-week-col {
+	color: #78909C;
+	font-weight: 400;
+	font-size: 0.75rem;
+}
+
+.checkbox-input {
+  clip: rect(0 0 0 0);
+  -webkit-clip-path: inset(100%);
+          clip-path: inset(100%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+.checkbox-input:checked + .checkbox-tile {
+  background: #daedc9;
+  border-color: #daedc9;
+  color: #000000;
+}
+.checkbox-input:checked + .checkbox-tile:before {
+  transform: scale(1);
+  opacity: 1;
+  background-color: #daedc9;
+  border-color: #daedc9;
+}
+
+.checkbox-input:focus + .checkbox-tile:before {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.checkbox-tile {
+  border-radius: 0.5rem;
+  border: 2px solid #daedc9;
+  background-color: #fff;
+  /* box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); */
+  transition: 0.15s ease;
+  cursor: pointer;
+  position: relative;
+}
 </style>
 @endpush
 @section('content')
@@ -22,9 +144,9 @@
     <div class="container mx-auto py-10 px-4 lg:px-0 ">
 
       <!-- Main Content -->
-      <div class="lg:grid md:grid-cols-12 grid-cols-1 relative gap-10">
+      <div class="lg:grid md:grid-cols-2 grid-cols-1 relative gap-10">
         <!-- Left Column -->
-        <div class="col-span-7">
+        <div class="col-span-1">
           <!-- Deal Title -->
           <h1 class="md:text-2xl text-base font-bold text-gray-800 mb-4">
           {{$product->name}}
@@ -366,32 +488,31 @@
         </div>
 
         <!-- Right Column -->
-        <div class=" lg:mt-0 mt-5 w-full pb-20 col-span-5 sticky top-0 h-[100vh] xl:h-[120vh] bg-[#58af0838] rounded-lg  p-3 lg:p-5 space-y-6">
+        <div class=" lg:mt-0 mt-5 w-full pb-20 col-span-1 sticky top-0 h-[100vh] xl:h-[120vh] bg-[#58af0838] rounded-lg  p-3 lg:p-5 space-y-6">
           <!-- Option Selector -->
         <!-- Options -->
         @if($variants && $variants->isNotEmpty())
-          <form action="{{route('user.products.add_cart')}}" id="addCartForm" method="POST">
+          <form action="{{route('user.products.add_dated_cart')}}" id="addCartForm" method="POST">
             @csrf
 
             <h2 class="md:text-2xl text-base font-bold text-gray-800 mb-3">
               Choose a Variant
             </h2>
-            <div class="space-y-4 overflow-x-hidden xl:max-h-[955px] max-h-[785px] pr-[5px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
+            <div class="space-y-4 overflow-x-hidden 2xl:max-h-[790px] xl:max-h-[580px] max-h-[785px] pr-[5px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
 
           
-
-              @if ($errors->any())
-              <div class="bg-red-500 text-white p-4 rounded-lg shadow-md">
-                  <ul>
-                      @foreach ($errors->all() as $error)
-                          <li>{{ $error }}</li>
-                      @endforeach
-                  </ul>
-              </div>
-              @endif
-                @foreach ($variants as $index=>$variant)
+              @foreach ($variants as $index=>$variant)
+                <label class="mb-4 block" for="hs-checked-checkbox">
                 <div
                   class="rounded-lg border bg-white text-card-foreground shadow-sm w-full overflow-hidden hover:shadow-xl f transition-all duration-300 ease-in-out transform hover:border-cyan-300 hover:ring-2 hover:ring-cyan-600">
+                  
+                  <div class="checkbox absolute top-4 right-4">
+                    <label class="checkbox-wrapper">
+                      <input type="checkbox" class="checkbox-input" />
+                      <span class="checkbox-tile px-2 py-1 text-[14px]">Selected</span>
+                    </label>
+                  </div>
+
                   <div class="flex flex-col space-y-2 p-4 pb-2">
                     <h3 class="tracking-tight text-base lg:text-2xl font-bold">{{$variant->title}}</h3>
                     <div class="gap-x-4 flex items-center">
@@ -404,65 +525,77 @@
                     </div>
                   </div>
                 
-                  <div class="md:p-4 px-2 pt-0 space-y-3">
+                  <div class="md:p-4 px-2 md:pt-2 space-y-3 relative">
+                    <div
+                      class="text-xs  bg-[#58af0838] rounded-md p-2 text-black flex gap-x-4 items-center rounded-lg p-3">
+                      <p class="font-medium">{!! $variant->short_info !!}</p>
+                      {{-- <p class="text-primary font-semibold">Learn more</p> --}}
+                    </div>
+
                     <div class="flex md:items-center items-end justify-between">
-                      <div class="space-y-1">
-                        <div class="flex items-center gap-2 mb-2">
+                      <div class="space-y-1 w-full">
+                        <div class="flex items-center gap-2">
                           <span class="text-sm font-medium text-muted-foreground">From</span>
                           <span class="text-sm line-through text-muted-foreground">{{$variant->unit_price}}</span>
                           <div
                             class="inline-flex items-center rounded-full border px-2 py-1 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-secondary/80 text-green-600 bg-green-100 font-semibold"
                             data-v0-t="badge">-{{$variant->discounted_percentage}}%</div>
                         </div>
-                        <div class="flex items-center gap-2">
-                          <span class="lg:text-3xl text-sm font-bold text-primary">AED {{$variant->discounted_price}}</span>
-                          <span class="md:text-sm text-xs text-muted-foreground">/{{$unit_type}}</span>
-                
-                          <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
-                            <!-- Decrement Button -->
-                            <button
-                              type="button"
-                              class="w-6 h-6 lg:w-8 lg:h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-300"
-                             onclick="decrementQty({{ $variant->id }})"
-                              aria-label="Decrease Quantity">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
-                              </svg>
-                            </button>
-                
-                            <!-- Quantity Display -->
-                            @php
-                            $cart = $user ? $user->carts()->where('product_variant_id', $variant->id)->first() : null;
-                            @endphp
-                            <input
-      type="number" name="variants[{{ $variant->id }}][quantity]" data-variant-id="{{ $variant->id }}"
-      id="quantity_{{ $variant->id }}" 
-      value="{{ old('quantity', $cart->quantity ?? 0) }}"                               
-      min="0"
-      readonly
-      class="w-6 h-6 lg:w-12 lg:h-8 text-center flex justify-center rounded-lg lg:text-lg text-sm font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 variant-quantity"
-      aria-label="Quantity" />
 
-                            
-                            <!-- Increment Button -->
-                           <button
-    type="button"
-    id="increment-btn-{{ $variant->id }}"
-    class="w-6 h-6 lg:w-8 lg:h-8 flex items-center justify-center bg-gray-100 text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
-    onclick="incrementQty({{ $variant->id }})"
-    aria-label="Increase Quantity">
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-        stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
-    </svg>
-</button>
-
+                        
+                        <div class="flex items-center justify-between gap-2 py-3">
+                          <div class="">
+                            <span class="lg:text-3xl text-sm font-bold text-primary">AED {{$variant->discounted_price}}</span>
+                            <span class="md:text-sm text-xs text-muted-foreground">/{{$unit_type}}</span>
                           </div>
-                         
+                
+                          <div class="flex items-center">
+                            <label class="text-md mr-3" for="">Quantity</label>
+                            
+                            <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
+                              <!-- Decrement Button -->
+                              <button
+                                type="button"
+                                class="w-6 h-6 decrementQty lg:w-8 lg:h-8 flex items-center justify-center bg-white border-r text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-300"
+                              onclick="decrementQty({{ $variant->id }})"
+                                aria-label="Decrease Quantity">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                  stroke="currentColor" stroke-width="2">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
+                                </svg>
+                              </button>
+                  
+                              <!-- Quantity Display -->
+                              @php
+                              $cart = $user ? $user->carts()->where('product_variant_id', $variant->id)->first() : null;
+                              @endphp
+                              <input
+                                type="number" name="variants[{{ $variant->id }}][quantity]" data-variant-id="{{ $variant->id }}"
+                                id="quantity_{{ $variant->id }}" 
+                                value="{{ old('quantity', $cart->quantity ?? 0) }}"                               
+                                min="0"
+                                readonly
+                                class="w-6 h-6 lg:w-12 lg:h-8 text-center flex justify-center rounded-lg lg:text-lg text-sm font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 variant-quantity"
+                                aria-label="Quantity" />
+
+                              
+                              <!-- Increment Button -->
+                            <button
+                                  type="button"
+                                  id="increment-btn-{{ $variant->id }}"
+                                  class="w-6 h-6 incrementQty lg:w-8 lg:h-8 flex items-center border-l justify-center bg-white text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
+                                  onclick="incrementQty({{ $variant->id }})"
+                                  aria-label="Increase Quantity">
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                      stroke="currentColor" stroke-width="2">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+                                  </svg>
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div
+                      <!-- <div
                         class="bg-primary text-primary-foreground rounded-full md:p-2 p-1 hover:bg-primary/90 transition-colors duration-200 cursor-pointer">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -470,15 +603,35 @@
                           <path d="M5 12h14"></path>
                           <path d="m12 5 7 7-7 7"></path>
                         </svg>
-                      </div>
+                      </div> -->
                     </div>
                     <span id="quantity-error-{{$variant->id}}"></span>
-                    <div
-                      class="text-xs  bg-[#58af0838] rounded-md p-2 text-black flex gap-x-4 items-center rounded-lg p-3">
-                      <p class="font-medium">{!! $variant->short_info !!}</p>
-                      {{-- <p class="text-primary font-semibold">Learn more</p> --}}
+                    
+                    <div class="p-4 bg-[#f9f9f9] showdate border rounded-lg border-dashed" id="">
+                      <p class="font-medium text-[16px]">Select Your Dates</p>
+                      <div class="grid grid-cols-2 mt-3 align-items-center">
+                        <div class="mr-3">
+                          <label class="text-sm w-full" for="">Start Date</label>
+                          <input type="text" name="variants[{{ $variant->id }}][check_in_date]" data-holiday-length="{{ $variant->holiday_length }}" 
+                          data-variant-id="{{ $variant->id }}"class="w-full h-[40px] datepicker text-xs text-gray-400 border p-2 rounded focus:outline-none" placeholder="dd/mm/yyyy" autocomplete="off">
+                        </div>
+                        <div class="end-date-wrapper" id="end-date-wrapper-{{ $variant->id }}" style="{{ $variant->holiday_length == 1 ? 'display:none;' : '' }}">
+                          <label class="text-sm w-full" for="">End Date</label>
+                          <input type="text" 
+                            class="w-full h-[40px] datepickertwo text-xs text-gray-400 border p-2 rounded focus:outline-none" 
+                            id="checkout-display-{{ $variant->id }}" 
+                            placeholder="dd/mm/yyyy" 
+                            readonly disabled>
+
+                          <!-- Hidden input for submission -->
+                          <input type="hidden" 
+                                name="variants[{{ $variant->id }}][check_out_date]" 
+                                id="checkout-hidden-{{ $variant->id }}">
+
+                        </div>
+                      </div>
                     </div>
-                
+
                     <div class="flex items-center justify-between text-sm text-muted-foreground">
                       <span class="flex items-center gap-1">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -492,7 +645,7 @@
                         @php
                           $total_booking_count = $variant->getBookingCountBasedOnvariant();
                         @endphp
-                        <span class="font-medium text-[10px] md:text-lg">
+                        <span class="font-medium text-[10px] md:text-[14px]">
                           @if ($total_booking_count === 0)
                               0 booked
                           @elseif ($total_booking_count === 1)
@@ -504,18 +657,34 @@
                       </span>
                       <span class="flex items-center gap-1">
                         {!! $variant->short_legend_icon !!}
-                        <span class="font-medium  text-[10px] md:text-lg">{{$variant->short_legend}}</span>
+                        <span class="font-medium  text-[10px] md:text-[14px]">{{$variant->short_legend}}</span>
                       </span>
                     </div>
                     <input type="hidden" name="variants[{{ $variant->id }}][product_variant_id]" value="{{ $variant->id }}" />
+                    @php
+                      $blackoutDates = $variant->blackoutDates->pluck('date')->map(function ($date) {
+                          return \Carbon\Carbon::parse($date)->format('d-m-Y');
+                      });
+                    @endphp           
+                    <input type="hidden" name="blackout_dates" id="blackout-dates-{{ $variant->id }}" value='@json($blackoutDates)'>
+                    <div id="blackout-error-message-{{ $variant->id }}" class="hidden text-red-500 text-sm font-medium mt-2">
+                  ❌ Booking includes blackout dates. Please choose a different date.
+                  </div>
+                    @error("variants.{$variant->id}.check_in_date")
+                      <div class="text-red-500 text-sm font-medium mt-2">{{ $message }}</div>
+                    @enderror
                   </div>
                 </div>
-                @endforeach
+                </label>
+              @endforeach
                 <input type="hidden" name="redirect_to_cart" id="redirect_to_cart" value="0" />
-
-            </div>
-            <div class="space-y-4 mt-6">
+                
+                
+              </div>
+            <div class="space-y-4">
               <div id="variant-error-msg" class="hidden text-red-500 text-sm font-medium mt-2"></div>
+              
+
             <!-- Continue Button -->
             {{-- @auth
             <button type="button" onclick="submitAndRedirectToCart()" 
@@ -548,6 +717,7 @@
 @push('scripts')
 <script src="{{asset('assets/js/custom//front/product.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script>
 const isUserLoggedIn = @json(auth()->check());
 
@@ -896,6 +1066,95 @@ function incrementQty(variantId) {
     }
 }
 
+
+// INCLUDE JQUERY & JQUERY UI 1.12.1
+$( function() {
+$(".datepicker").datepicker({
+  dateFormat: "dd-mm-yy",
+  duration: "fast",
+  todayHighlight: true,
+   minDate: 0,
+   beforeShowDay: function(date) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+
+    if (d.getTime() === today.getTime() || d.getTime() === tomorrow.getTime()) {
+      return [false,"Unavailable"];
+    }
+
+    return [true,  "Available"];
+  }
+});
+
+
+
+
+
+
+  $( ".datepickertwo" ).datepicker({
+		dateFormat: "dd-mm-yy",	
+    duration: "fast",
+    todayHighlight: true
+	});
+});
+
+// $(document).ready(function(){
+//   $(".showdate").slideUp();
+//   $(".decrementQty").click(function(){
+//       $(".showdate").slideUp();
+//   });
+
+//   $(".incrementQty").click(function(){
+//       $(".showdate").slideDown();
+//   });
+  
+// });
+
+// $(document).ready(function() {
+//   const $quantityInput = $('#quantity_1');
+//   const $messageBox = $('#showdate');
+  
+//   // Initialize with current value
+//   toggleMessage($quantityInput.val());
+  
+//   // Increment button click
+//   $('.incrementQty').click(function(e) {
+//     e.preventDefault();
+//     const currentVal = parseInt($quantityInput.val()) || 0;
+//     $quantityInput.val(currentVal + 1);
+//     toggleMessage(currentVal + 1);
+//   });
+  
+//   // Decrement button click
+//   $('.decrementQty').click(function(e) {
+//     e.preventDefault();
+//     const currentVal = parseInt($quantityInput.val()) || 0;
+//     const newVal = Math.max(currentVal - 1, 0);
+//     $quantityInput.val(newVal);
+//     toggleMessage(newVal);
+//   });
+  
+//   // Handle direct input changes
+//   $quantityInput.on('input', function() {
+//     const value = parseInt($(this).val()) || 0;
+//     toggleMessage(value);
+//   });
+  
+//   // Function to toggle message visibility
+//   function toggleMessage(quantity) {
+//     if (quantity > 0) {
+//       $messageBox.slideDown();
+//     } else {
+//       $messageBox.slideUp();
+//     }
+//   }
+// });
 </script>
 {{-- <script>
    function checkAuthAndSubmit() {
@@ -944,6 +1203,97 @@ function incrementQty(variantId) {
     });
   });
 </script> --}}
+<script>
+  function formatDate(date) {
+  const day = ('0' + date.getDate()).slice(-2);
+  const month = ('0' + (date.getMonth() + 1)).slice(-2);
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+}
+
+$(document).ready(function () {
+  $(document).on('change', '.datepicker', function () {
+    const $input = $(this);
+    const startDateStr = $input.val().trim();
+    const holidayLength = parseInt($input.data('holiday-length')); 
+    const variantId = $input.data('variant-id');
+
+    const blackoutInput = document.getElementById('blackout-dates-' + variantId); console.log(blackoutInput);
+    const blackoutDates = blackoutInput ? JSON.parse(blackoutInput.value) : [];
+ 
+    const $endDateDisplay = $('#checkout-display-' + variantId);
+    const $endDateHidden = $('#checkout-hidden-' + variantId);
+    const $endDateWrapper = $('#end-date-wrapper-' + variantId);
+    const $errorBox = $('#blackout-error-message-' + variantId);    
+    if (!startDateStr || isNaN(holidayLength)) return;
+
+    const parts = startDateStr.split('-');
+    if (parts.length !== 3) return;
+
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const year = parseInt(parts[2], 10);
+    if (isNaN(day) || isNaN(month) || isNaN(year)) return;
+
+    const startDate = new Date(year, month, day);
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + holidayLength - 1); // Adjust for inclusive range
+
+    let hasBlackout = false;
+
+    // 🔁 Loop through each day in the booking range
+    const current = new Date(startDate);
+    while (current <= endDate) {
+      const formatted = formatDate(current);
+      if (blackoutDates.includes(formatted)) {
+        hasBlackout = true;
+        break;
+      }
+      current.setDate(current.getDate() + 1);
+    }
+
+    if (hasBlackout) {
+      $endDateDisplay.val('');
+      $endDateHidden.val('');
+      $errorBox.removeClass('hidden');
+      return;
+    }
+    else {
+      $errorBox.addClass('hidden');
+    }
+    // ✅ Set end date only if not single-day
+    if (holidayLength === 1) {
+      $endDateWrapper.hide();
+      $endDateDisplay.val('');
+      $endDateHidden.val('');
+
+      const checkInFormatted = formatDate(startDate); 
+    if (blackoutDates.includes(checkInFormatted)) {
+      $errorBox.text('❌ This check-in date is unavailable. Please select another.').removeClass('hidden');
+      return;
+    } else {
+      $errorBox.addClass('hidden');
+    }
+
+    return;
+    } else {
+      $endDateWrapper.show();
+
+      const formattedEndDate =
+        ('0' + endDate.getDate()).slice(-2) + '/' +
+        ('0' + (endDate.getMonth() + 1)).slice(-2) + '/' +
+        endDate.getFullYear();
+
+      $endDateDisplay.val(formattedEndDate);
+      $endDateHidden.val(formattedEndDate);
+    }
+  });
+});
+</script>
+
+
+
+
 
 
 @endpush

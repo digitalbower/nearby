@@ -19,6 +19,12 @@ $(document).ready(function () {
             available_quantity: { required: true },
             validity_from: { required: true },
             validity_to: { required: true },
+            holiday_length: { required: true },
+            bookable_start_date : { required: true },
+            bookable_end_date : { required: true },
+            blackout_dates : { required: true },
+
+
         },
         messages: {
             product_id: { required: "Product is required" },
@@ -33,7 +39,11 @@ $(document).ready(function () {
             discounted_price: { required: "Discounted Price is required" },
             available_quantity: { required: "Available quantity is required" },
             validity_from: { required: "Validity from is required" },
+            holiday_length: { required: "Holiday length is required" },
+            bookable_start_date : { required: "Bookable start date is required" },
+            bookable_end_date : { required: "Bookable end date is required" },
             validity_to: { required: "Validity to is required" },
+            blackout_dates : { required: "Blackout dates is required" },
         },
         errorPlacement: function (error, element) {
             if (element.attr("id") === "short_info") {
@@ -102,9 +112,19 @@ $(document).ready(function () {
 
     $('#product_id').on('change', function() { 
         var unitTypeId = $('#unit_type').val();
-        var categoryId = $('#product_id option:selected').data('category'); 
-        $('#unit_type_id').html('<option value="">Loading...</option>');
+        var selectedOption = $('#product_id option:selected');
+        var categoryId = selectedOption.data('category');
+        var productType = selectedOption.data('type');
     
+        if (productType === 'Fixed Date') {
+            $('#fixed_date_container').show();
+        } else {
+            $('#fixed_date_container').hide();
+            $('#fixed_date_option').val(''); 
+        }
+
+
+        $('#unit_type_id').html('<option value="">Loading...</option>');
         if (categoryId) {
             $.ajax({
                 url: "/admin/products/unit-types",

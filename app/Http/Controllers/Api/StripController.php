@@ -99,6 +99,9 @@ class StripController extends Controller
                 'booking_confirmation_id' => $bookingConfirmation->id,
                 'product_varient_id' => $variantId,
                 'quantity' => $item['quantity'],
+                'check_in_date'  => $item['check_in_date'],
+                'check_out_date' => $item['check_out_date'],
+                'dated_product'  => $item['dated_product'] ?? 0,
                 'unit_price' => $item['unit_price'],
                 'total_price' => $item['total_price'],
                 'verification_number' => rand(100000, 999999),
@@ -181,7 +184,11 @@ class StripController extends Controller
                 'vendor_terms_title' => $product_variant->product?->vendorTerms?->title,
                 'vendor_terms' => $product_variant->product?->vendorTerms?->terms,
                 'guests'=>$guests,
-                'quantity'=>$booking_item->quantity
+                'quantity'=>$booking_item->quantity,
+                'check_in_date' => $booking_item->check_in_date,
+                'check_out_date' => $booking_item->check_out_date,
+                'dated_product' => $booking_item->dated_product,
+                'holiday_length'=>$product_variant->holiday_length
             ];
         }
 
@@ -213,6 +220,10 @@ class StripController extends Controller
                     'verification_number' => $booking_item['verification_number'],
                     'validity_from' => $order_date,
                     'validity_to' => $booking_item['validity'],
+                    'dated_product' => $booking_item['dated_product'],
+                    'check_in_date' => $booking_item['check_in_date'],
+                    'check_out_date' => $booking_item['check_out_date'],
+                    'holiday_length' => $product_variant->holiday_length,
                 ];
             }
         }

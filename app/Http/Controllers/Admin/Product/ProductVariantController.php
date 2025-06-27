@@ -42,7 +42,7 @@ class ProductVariantController extends Controller
 
     public function create()
     {
-        $products = Product::with('vendor')
+        $products = Product::with(['vendor','types'])
         ->whereHas('vendor', function ($query) {
             $query->where('expired',1)->where('status',1);
         })
@@ -82,6 +82,9 @@ class ProductVariantController extends Controller
         }
     }
   ],
+            'holiday_length' => 'required',
+            'bookable_start_date' => 'required',
+            'bookable_end_date' => 'required',
             'available_quantity' => 'required',
             'validity_from' => 'required',
             'validity_to' => 'required',
@@ -103,7 +106,17 @@ class ProductVariantController extends Controller
         } else {
             $data['discounted_percentage'] = 0; 
         }        
-        ProductVariant::create($data);
+        $variant = ProductVariant::create($data);
+
+        $dates = explode(',', $request->blackout_dates);  
+
+        foreach ($dates as $date) {
+            $variant->blackoutDates()->create([
+                'product_variant_id'=>$variant->id,
+                'date' => $date
+            ]);
+        }
+        
         return redirect()->route('admin.products.product_variants.index')->with('success', 'New Product Variant created successfully!');
     }
 
@@ -120,14 +133,15 @@ class ProductVariantController extends Controller
      */
     public function edit(ProductVariant $product_variant)
     {
-        $products = Product::with('vendor')
+        $products = Product::with(['vendor','types'])
         ->whereHas('vendor', function ($query) {
             $query->where('expired',1)->where('status',1);
         })
         ->where('status', 1) 
         ->get();
-        
-        return view('admin.products.product_variants.edit')->with(['products'=>$products,'product_variant'=>$product_variant]);
+        $blackoutDates = $product_variant->blackoutDates->pluck('date')->toArray();
+
+        return view('admin.products.product_variants.edit')->with(['products'=>$products,'product_variant'=>$product_variant,'blackoutDates'=>$blackoutDates]);
 
     }
 
@@ -153,6 +167,9 @@ class ProductVariantController extends Controller
             'available_quantity' => 'required',
             'validity_from' => 'required',
             'validity_to' => 'required',
+            'holiday_length' => 'required',
+            'bookable_start_date' => 'required',
+            'bookable_end_date' => 'required',
             'markup' => ['required','numeric','min:0',
             function ($attribute, $value, $fail) use ($categoryMarkupLimit) {
                 if ((float) $value < $categoryMarkupLimit) {
@@ -173,6 +190,15 @@ class ProductVariantController extends Controller
             $data['discounted_percentage'] = 0; 
         } 
         $product_variant->update($data);
+
+        $product_variant->blackoutDates()->delete();
+
+        // Add new blackout dates
+        $dates = explode(',', $request->blackout_dates);
+        foreach ($dates as $date) {
+            $product_variant->blackoutDates()->create(['date' => $date]);
+        }
+
         return redirect()->route('admin.products.product_variants.index')->with('success', 'Product Variant updated successfully!');
     }
 
@@ -181,6 +207,7 @@ class ProductVariantController extends Controller
      */
     public function destroy(ProductVariant $product_variant)
     {
+        $product_variant->blackoutDates()->delete();
         $product_variant->delete();
         return redirect()->route('admin.products.product_variants.index')
         ->with('success', 'Product Variant deleted successfully.');

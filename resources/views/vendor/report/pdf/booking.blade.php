@@ -109,6 +109,14 @@
     <p><strong>Product Variant:</strong> {{ $booking->variant->title }}</p>
     <p><strong>Quantity:</strong> {{ $booking->quantity }}</p>
     <p><strong>Booking Date:</strong>{{ $booking->bookingConfirmation->created_at->format('Y-m-d') }}</p>
+    @if($booking->variant->product->types->product_type == "Fixed Date")
+      @if($booking->variant->holiday_length === 1)
+        <p><strong>Check In Date:</strong> {{ $booking->check_in_date }}</p>
+      @else
+        <p><strong>Check In Date:</strong> {{ $booking->check_in_date }}</p>
+        <p><strong>Check Out Date:</strong> {{ $booking->check_out_date }}</p>
+      @endif
+    @endif
     <p><strong>Customer Name:</strong> {{ $booking->bookingConfirmation->user->first_name }}</p>
     <p><strong>Redeemed Date:</strong> {{ $booking->redeemed_date }}</p>
     <p><strong>Expiry Date:</strong> {{ $booking->validity }}</p>

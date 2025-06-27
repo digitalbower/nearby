@@ -18,6 +18,9 @@ class BookingConfirmationItem extends Model
         'verification_status',
         'validity',
         'giftproduct',
+        'check_in_date',
+        'check_out_date',
+        'dated_product'
     ];
 
     public function bookingConfirmation()

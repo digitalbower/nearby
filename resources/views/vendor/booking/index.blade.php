@@ -40,6 +40,8 @@
                         <th scope="col" class="px-6 py-3">Variant Name</th>
                         <th scope="col" class="px-6 py-3">Quantity</th>
                         <th scope="col" class="px-6 py-3">Date</th>
+                        <th scope="col" class="px-6 py-3">Check In Date</th>
+                        <th scope="col" class="px-6 py-3">Check Out Date</th>
                         <th scope="col" class="px-6 py-3">Expiry Date</th>
                         <th scope="col" class="px-6 py-3">Customer Name</th>
                         <th scope="col" class="px-6 py-3">Status</th>
@@ -54,6 +56,8 @@
                             <td class="px-6 py-4">{{$booking_item->variant?->title}}</td>
                             <td class="px-6 py-4">{{$booking_item->quantity}}</td>
                             <td class="px-6 py-4">{{$booking_item->bookingConfirmation->created_at->format('Y-m-d')}}</td>
+                            <td class="px-6 py-4">{{$booking_item->check_in_date}}</td>
+                            <td class="px-6 py-4">{{$booking_item->check_out_date}}</td>
                             <td class="px-6 py-4">{{$booking_item->validity}}</td>
                             <td class="px-6 py-4">{{$booking_item->bookingConfirmation?->user?->first_name}}</td>
                             <td class="px-6 py-4">

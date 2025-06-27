@@ -79,7 +79,15 @@
           <li>
             <strong>Product:</strong> {{ $item['product_name'] }}<br>
             <strong>Variant:</strong> {{ $item['product_variant_name'] }}<br>
-            <strong>Quantity:</strong> {{ $item['quantity'] }}
+            <strong>Quantity:</strong> {{ $item['quantity'] }}<br>
+            @if($item['dated_product'] == 1)
+              @if($item['holiday_length'] == 1)
+                <strong>Check In Date:</strong> {{ $item['check_in_date'] }}<br>
+              @else
+                <strong>Check In Date:</strong> {{ $item['check_in_date'] }}<br>
+                <strong>Check Out Date:</strong> {{ $item['check_out_date'] }}<br>
+              @endif
+            @endif
           </li>
           <br>
         @endforeach

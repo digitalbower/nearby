@@ -24,6 +24,8 @@
                                 <th scope="col" class="py-3 px-6 text-center"><i class="fas fa-calendar-alt mr-2"></i>Customer Name</th>
                                 <th scope="col" class="py-3 px-6 text-center"><i class="fas fa-calendar-alt mr-2"></i>Redeemed Date</th>
                                 <th scope="col" class="py-3 px-6 text-center"><i class="fas fa-calendar-alt mr-2"></i>Expiry Date</th> 
+                                <th scope="col" class="py-3 px-6 text-center"><i class="fas fa-calendar-alt mr-2"></i>Check In  Date</th> 
+                                <th scope="col" class="py-3 px-6 text-center"><i class="fas fa-calendar-alt mr-2"></i>Check Out Date</th> 
                                 <th scope="col" class="py-3 px-6 text-center">Action</th>
                             </tr>
                         </thead>
@@ -54,7 +56,13 @@
                                 </td>
                                 <td class="py-3 px-6 text-center">
                                     <span>{{ $booking_item->validity }}</span>
-                                </td> 
+                                </td>
+                                <td class="py-3 px-6 text-center">
+                                    <span>{{ $booking_item->check_in_date }}</span>
+                                </td>
+                                <td class="py-3 px-6 text-center">
+                                    <span>{{ $booking_item->check_out_date }}</span>
+                                </td>
                                 <td class="py-3 px-6 text-center">
                                     <a href="{{ route('vendor.report.download_pdf', $booking_item->id) }}"
                                         class="blue-card text-white py-1 px-3 rounded-full text-xs hover:bg-secondary transition duration-300 ease-in-out"

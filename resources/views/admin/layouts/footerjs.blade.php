@@ -52,7 +52,10 @@
  <script src="{{asset('assets/js/kaiadmin.min.js')}}"></script>
 <script src="{{asset('assets/js/plugin/jquery.validate/jquery.validate.min.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 
+<!-- MultiDatesPicker plugin -->
+<script src="https://cdn.jsdelivr.net/gh/dubrox/Multiple-Dates-Picker-for-jQuery-UI/jquery-ui.multidatespicker.js"></script>
 <script>
   var csrf_token = "{{ csrf_token() }}";
 </script>

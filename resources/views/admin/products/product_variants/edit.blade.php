@@ -25,7 +25,7 @@
                 <select class="form-control" name="product_id" id="product_id">
                     <option value="">Select Products</option>
                     @foreach ($products as $product)
-                        <option value="{{ $product->id }}"  data-category="{{ $product->category_id }}" 
+                        <option value="{{ $product->id }}"  data-category="{{ $product->category_id }}" data-type = "{{ $product->types->product_type}}"
                             {{ old('product_id', $product_variant->product_id ?? '') == $product->id ? 'selected' : '' }}>
                             {{ $product->name }}
                         </option>
@@ -75,7 +75,24 @@
                     <option value="">Select Unit Types</option>
                 </select>
             </div>
-
+            <div class="mb-3" id="fixed_date_container" style="display: none;">
+                    <label for="holiday_length">Choose Holiday Length</label>
+                    <select class="form-control" id="holiday_length" name="holiday_length">
+                        <option value="">Select Date</option>
+                        <option value="1" {{ old('holiday_length', $product_variant->holiday_length) == 1 ? 'selected' : '' }}>1</option>
+                        <option value="2" {{ old('holiday_length', $product_variant->holiday_length) == 2 ? 'selected' : '' }}>2</option>
+                        <option value="3" {{ old('holiday_length', $product_variant->holiday_length) == 3 ? 'selected' : '' }}>3</option>
+                        <option value="4" {{ old('holiday_length', $product_variant->holiday_length) == 4 ? 'selected' : '' }}>4</option>
+                        <option value="5" {{ old('holiday_length', $product_variant->holiday_length) == 5 ? 'selected' : '' }}>5</option>
+                        <option value="6" {{ old('holiday_length', $product_variant->holiday_length) == 6 ? 'selected' : '' }}>6</option>
+                        <option value="7" {{ old('holiday_length', $product_variant->holiday_length) == 7 ? 'selected' : '' }}>7</option>
+                        <option value="8" {{ old('holiday_length', $product_variant->holiday_length) == 8 ? 'selected' : '' }}>8</option>
+                        <option value="9" {{ old('holiday_length', $product_variant->holiday_length) == 9 ? 'selected' : '' }}>9</option>
+                        <option value="10" {{ old('holiday_length', $product_variant->holiday_length) == 10 ? 'selected' : '' }}>10</option>
+                        <option value="11" {{ old('holiday_length', $product_variant->holiday_length) == 11 ? 'selected' : '' }}>11</option>
+                        <option value="12" {{ old('holiday_length', $product_variant->holiday_length) == 12 ? 'selected' : '' }}>12</option>
+                    </select>
+                </div>
             <div class="mb-3">
                 <label for="unit_price" class="form-label">Market Unit Price</label>
                 <input type="text" class="form-control" id="unit_price" name="unit_price" value="{{$product_variant->unit_price }}">
@@ -127,6 +144,18 @@
                 <label for="validity_to" class="form-label">Validity To</label>
                 <input type="date" class="form-control" id="validityto" name="validity_to" value="{{$product_variant->validity_to }}">
             </div>
+             <div class="mb-3">
+                <label for="bookable_start_date" class="form-label">Bookable Date From</label>
+                <input type="date" class="form-control" id="bookable_start_date" name="bookable_start_date" value="{{$product_variant->bookable_start_date }}">
+            </div>
+            <div class="mb-3">
+                <label for="bookable_end_date" class="form-label">Bookable Date To</label>
+                <input type="date" class="form-control" id="bookable_end_date" name="bookable_end_date" value="{{$product_variant->bookable_end_date }}">
+            </div>
+            <div class="mb-3">
+                    <label for="blackout_dates" class="form-label">Blackout Dates</label>
+                    <input type="text" class="form-control" id="blackout_dates" name="blackout_dates" readonly>
+            </div>
             <div class="mb-3">
                 <label for="timer_flag" class="form-label">Timer</label>
                 <select class="form-control" name="timer_flag" id="timer_flag">
@@ -154,7 +183,7 @@
 </div>
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/js/custom/js/product_variant.js') }}"></script>
+<script src="{{ asset('assets/js/custom/js/product_variant.js') }}?v={{ date('YmdHis') }}"></script>
 <script>
     var quill = new Quill('#editor', {
       theme: 'snow',
@@ -168,23 +197,60 @@
     });
   </script>
   
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const today = new Date().toISOString().split("T")[0];
-        const fromDate = document.getElementById("validityfrom");
-        const toDate = document.getElementById("validityto");
+ <script>
 
-        // Only restrict "validityfrom" min date if it's empty (create mode)
-        if (!fromDate.value) {
-            fromDate.setAttribute("min", today);
-        }
+        document.addEventListener("DOMContentLoaded", function () {
+            const today = new Date().toISOString().split("T")[0];
 
-        // Set min for "validityto" based on selected "validityfrom"
-        fromDate.addEventListener("change", function () {
-            const selectedFromDate = this.value;
-            toDate.value = ""; // Clear "validityto" if needed
-            toDate.setAttribute("min", selectedFromDate);
+            // From-To pair 1
+            const validityFrom = document.getElementById("validityfrom");
+            const validityTo = document.getElementById("validityto");
+
+            // From-To pair 2
+            const bookableFrom = document.getElementById("bookable_start_date");
+            const bookableTo = document.getElementById("bookable_end_date");
+
+            // Disable past dates
+            if (validityFrom) validityFrom.setAttribute("min", today);
+            if (bookableFrom) bookableFrom.setAttribute("min", today);
+
+            // Set min for validity to
+            if (validityFrom && validityTo) {
+                validityFrom.addEventListener("change", function () {
+                    const selectedDate = this.value;
+                    validityTo.value = "";
+                    validityTo.setAttribute("min", selectedDate);
+                });
+            }
+
+            // Set min for bookable to
+            if (bookableFrom && bookableTo) {
+                bookableFrom.addEventListener("change", function () {
+                    const selectedDate = this.value;
+                    bookableTo.value = "";
+                    bookableTo.setAttribute("min", selectedDate);
+                });
+            }
         });
+</script>
+<script>
+         $(function () {
+        const blackoutDates = {!! json_encode($blackoutDates ?? []) !!};
+
+        if (blackoutDates.length > 0) {
+            $('#blackout_dates').multiDatesPicker({
+                dateFormat: 'yy-mm-dd',
+                maxPicks: 30,
+                addDates: blackoutDates,
+                minDate: 0
+            });
+        } else {
+            $('#blackout_dates').multiDatesPicker({
+                dateFormat: 'yy-mm-dd',
+                maxPicks: 30,
+                minDate: 0
+            });
+        }
     });
 </script>
 @endpush

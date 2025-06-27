@@ -12,12 +12,12 @@ use App\Models\MainSeo;
 use App\Models\NavigationMenu;
 use App\Models\NbvTerm;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-
-
+use Carbon\CarbonPeriod;
 
 class ProductController extends Controller
 {
@@ -157,7 +157,7 @@ class ProductController extends Controller
         ]);
     }
     
-    public function show($slug)
+ public function show($slug)
     { 
         $uppermenuItems = NavigationMenu::where('active', 1)
         ->where('navigation_placement', 'upper')
@@ -217,7 +217,7 @@ class ProductController extends Controller
                 return 
                        Carbon::parse($variant->validity_from)->lte($today) &&
                        Carbon::parse($variant->validity_to)->gte($today);
-            });
+            }); 
         $user = Auth::user();
         $unit_type = $product->category->categoryType->unitType->unit_type;
         // $variantsWithType = $variants->map(function ($variant) {
@@ -225,6 +225,11 @@ class ProductController extends Controller
         //     $variant->product_type = $typeName;
         //     return $variant;
         // });
+        if($product->types->product_type == "Fixed Date"){
+            return view('user.products.dated', compact('seo','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
+            'followus','payment_channels','product','tag_name','gallery','nbvterms','variants','reviews',
+            'totalReviews','averageRating','percentages','unit_type','user'));
+        }
         return view('user.products.show', compact('seo','uppermenuItems','lowermenuitem','logo','topDestinations','informationLinks',
         'followus','payment_channels','product','tag_name','gallery','nbvterms','variants','reviews',
         'totalReviews','averageRating','percentages','unit_type','user'));
@@ -315,6 +320,91 @@ class ProductController extends Controller
         }
         return redirect('cart')->with('success', 'Added to cart successfully!');
     }
+   public function addDatedCart(Request $request)
+{
+    $filteredVariants = collect($request->input('variants', []))
+        ->filter(function ($item) {
+            return isset($item['quantity']) && (int) $item['quantity'] > 0;
+        })
+        ->toArray();
+
+    $request->merge(['variants' => $filteredVariants]);
+
+    $request->validate([
+        'variants' => 'required|array|min:1',
+        'variants.*.product_variant_id' => 'required|exists:product_variants,id',
+        'variants.*.quantity' => 'required|integer|min:1',
+        'variants.*.check_in_date' => 'required',
+    ], [
+        'variants.*.quantity.required' => 'Add quantity',
+        'variants.*.quantity.min' => 'Add quantity with minimum value 1',
+        'variants.*.check_in_date' => 'Add check-in date',
+    ]);
+
+    $blackoutErrors = [];
+
+    // First pass: validate blackout dates
+    foreach ($request->variants as $index => $variant) {
+        $checkInRaw = trim($variant['check_in_date'] ?? '');
+        $checkOutRaw = trim($variant['check_out_date'] ?? ''); 
+
+        try {
+            $checkInDate = Carbon::createFromFormat('d-m-Y', $checkInRaw)->format('Y-m-d');
+        } catch (\Exception $e) {
+            continue; // skip invalid
+        }
+
+        try {
+            $checkOutDate = Carbon::createFromFormat('d/m/Y', $checkOutRaw)->format('Y-m-d'); 
+        } catch (\Exception $e) {
+            $checkOutDate = null;
+        }
+
+        $variantModel = ProductVariant::with(['blackoutDates'])->find($variant['product_variant_id']);
+        $variantId = $variant['product_variant_id'];
+
+        $blackoutDates = $variantModel->blackoutDates
+            ->pluck('date')
+            ->map(fn($date) => Carbon::parse($date)->format('Y-m-d'))
+            ->toArray();
+
+        if (in_array($checkInDate, $blackoutDates)) {
+            $blackoutErrors["variants.$variantId.check_in_date"] = 'Selected booking date is unavailable.';
+        }
+       
+    }
+
+    // Stop here if any blackout errors found
+    if (!empty($blackoutErrors)) {
+        return redirect()->back()
+            ->withErrors($blackoutErrors)
+            ->withInput();
+    }
+
+    // Second pass: now that everything is valid, create/update cart
+    foreach ($request->variants as $variant) {
+        $checkInDate = Carbon::createFromFormat('d-m-Y', $variant['check_in_date'])->format('Y-m-d');
+        $checkOutDate = !empty($variant['check_out_date'])
+            ? Carbon::createFromFormat('d/m/Y', $variant['check_out_date'])->format('Y-m-d')
+            : null;
+
+        $cart = Cart::firstOrNew([
+            'product_variant_id' => $variant['product_variant_id'],
+            'user_id' => Auth::id(),
+        ]);
+
+        $cart->quantity = $variant['quantity'];
+        $cart->check_in_date = $checkInDate;
+        $cart->check_out_date = $checkOutDate;
+        $cart->dated_product = 1;
+        $cart->save();
+    }
+
+    return $request->input('redirect_to_cart') == "1"
+        ? redirect()->route('user.cart')
+        : redirect('cart')->with('success', 'Added to cart successfully!');
+}
+
 
 
 
@@ -403,6 +493,9 @@ class ProductController extends Controller
         $cart = Cart::find($id);
         if ($cart) {
             $cart->quantity =$quantity;
+            $cart->check_in_date = $request->check_in_date;
+            $cart->check_out_date = $request->check_out_date;
+            $cart->dated_product = $request->dated_product ?? 0;
             $cart->save();
             return response()->json(['success' => true, 'message' => 'Cart item quantity updated.']);
         }
