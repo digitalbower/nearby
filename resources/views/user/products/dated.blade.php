@@ -509,7 +509,7 @@ table {
                   <div class="checkbox absolute top-4 right-4">
                     <label class="checkbox-wrapper">
                       <input type="checkbox" class="checkbox-input" />
-                      <span class="checkbox-tile px-2 py-1 text-[14px]">Selected</span>
+                      {{-- <span class="checkbox-tile px-2 py-1 text-[14px]">Selected</span> --}}
                     </label>
                   </div>
 
@@ -539,7 +539,7 @@ table {
                           <span class="text-sm line-through text-muted-foreground">{{$variant->unit_price}}</span>
                           <div
                             class="inline-flex items-center rounded-full border px-2 py-1 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-secondary/80 text-green-600 bg-green-100 font-semibold"
-                            data-v0-t="badge">-{{$variant->discounted_percentage}}%</div>
+                            data-v0-t="badge">{{$variant->discounted_percentage}}%</div>
                         </div>
 
                         
@@ -572,7 +572,7 @@ table {
                               <input
                                 type="number" name="variants[{{ $variant->id }}][quantity]" data-variant-id="{{ $variant->id }}"
                                 id="quantity_{{ $variant->id }}" 
-                                value="{{ old('quantity', $cart->quantity ?? 0) }}"                               
+                                value="{{ old('quantity', 0) }}"                               
                                 min="0"
                                 readonly
                                 class="w-6 h-6 lg:w-12 lg:h-8 text-center flex justify-center rounded-lg lg:text-lg text-sm font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 variant-quantity"
@@ -700,7 +700,7 @@ table {
     ⚠️ You can only add up to 5 products in your cart.
 </div>
 
-<button type="button"
+<button type="button" id="submitBtn"
         onclick="checkAuthAndSubmit({{ $cartCount }})"
         class="relative px-6 w-full py-3 bg-[#58af0838] hover:bg-[#4a910954] text-black font-semibold rounded-lg shadow-md transition-transform transform duration-300 ease-in-out">
     <i class="fas fa-shopping-cart mr-2"></i>
@@ -1069,34 +1069,6 @@ function incrementQty(variantId) {
 
 // INCLUDE JQUERY & JQUERY UI 1.12.1
 $( function() {
-$(".datepicker").datepicker({
-  dateFormat: "dd-mm-yy",
-  duration: "fast",
-  todayHighlight: true,
-   minDate: 0,
-   beforeShowDay: function(date) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-
-    const d = new Date(date);
-    d.setHours(0, 0, 0, 0);
-
-    if (d.getTime() === today.getTime() || d.getTime() === tomorrow.getTime()) {
-      return [false,"Unavailable"];
-    }
-
-    return [true,  "Available"];
-  }
-});
-
-
-
-
-
-
   $( ".datepickertwo" ).datepicker({
 		dateFormat: "dd-mm-yy",	
     duration: "fast",
@@ -1204,7 +1176,7 @@ $(".datepicker").datepicker({
   });
 </script> --}}
 <script>
-  function formatDate(date) {
+ function formatDate(date) {
   const day = ('0' + date.getDate()).slice(-2);
   const month = ('0' + (date.getMonth() + 1)).slice(-2);
   const year = date.getFullYear();
@@ -1212,36 +1184,99 @@ $(".datepicker").datepicker({
 }
 
 $(document).ready(function () {
+  const blackoutErrors = {};
+
+  $('.datepicker').each(function () {
+    const $input = $(this);
+    const variantId = $input.data('variant-id');
+    const blackoutInput = document.getElementById('blackout-dates-' + variantId);
+    const blackoutDates = blackoutInput ? JSON.parse(blackoutInput.value) : [];
+
+    // Initialize no error for all variants on page load
+    blackoutErrors[variantId] = false;
+
+    $input.datepicker({
+      dateFormat: "dd-mm-yy",
+      duration: "fast",
+      minDate: 0,
+      beforeShowDay: function (date) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+
+        const d = new Date(date);
+        d.setHours(0, 0, 0, 0);
+
+        const formatted = formatDate(d);
+
+        // Disable today and tomorrow
+        if (d.getTime() === today.getTime() || d.getTime() === tomorrow.getTime()) {
+          return [false, "unavailable", "Unavailable (today/tomorrow)"];
+        }
+
+        // Disable blackout dates for this variant
+        if (blackoutDates.includes(formatted)) {
+          return [false, "blackout", "Blackout Date"];
+        }
+
+        return [true, "available", "Available"];
+      }
+    });
+  });
+
+  function updateSubmitButton() {
+    const hasErrors = Object.values(blackoutErrors).some(Boolean);
+    $('#submitBtn').prop('disabled', hasErrors);
+  }
+
   $(document).on('change', '.datepicker', function () {
     const $input = $(this);
     const startDateStr = $input.val().trim();
-    const holidayLength = parseInt($input.data('holiday-length')); 
+    const holidayLength = parseInt($input.data('holiday-length'));
     const variantId = $input.data('variant-id');
 
-    const blackoutInput = document.getElementById('blackout-dates-' + variantId); console.log(blackoutInput);
+    const blackoutInput = document.getElementById('blackout-dates-' + variantId);
     const blackoutDates = blackoutInput ? JSON.parse(blackoutInput.value) : [];
- 
+
     const $endDateDisplay = $('#checkout-display-' + variantId);
     const $endDateHidden = $('#checkout-hidden-' + variantId);
     const $endDateWrapper = $('#end-date-wrapper-' + variantId);
-    const $errorBox = $('#blackout-error-message-' + variantId);    
-    if (!startDateStr || isNaN(holidayLength)) return;
+    const $errorBox = $('#blackout-error-message-' + variantId);
+
+    if (!startDateStr || isNaN(holidayLength)) {
+      blackoutErrors[variantId] = false;
+      $errorBox.addClass('hidden');
+      updateSubmitButton();
+      return;
+    }
 
     const parts = startDateStr.split('-');
-    if (parts.length !== 3) return;
+    if (parts.length !== 3) {
+      blackoutErrors[variantId] = false;
+      $errorBox.addClass('hidden');
+      updateSubmitButton();
+      return;
+    }
 
     const day = parseInt(parts[0], 10);
     const month = parseInt(parts[1], 10) - 1;
     const year = parseInt(parts[2], 10);
-    if (isNaN(day) || isNaN(month) || isNaN(year)) return;
+    if (isNaN(day) || isNaN(month) || isNaN(year)) {
+      blackoutErrors[variantId] = false;
+      $errorBox.addClass('hidden');
+      updateSubmitButton();
+      return;
+    }
 
     const startDate = new Date(year, month, day);
     const endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + holidayLength - 1); // Adjust for inclusive range
+    endDate.setDate(startDate.getDate() + holidayLength - 1);
 
     let hasBlackout = false;
 
-    // 🔁 Loop through each day in the booking range
+    // Loop through each day in the booking range to check for blackout dates
     const current = new Date(startDate);
     while (current <= endDate) {
       const formatted = formatDate(current);
@@ -1255,27 +1290,32 @@ $(document).ready(function () {
     if (hasBlackout) {
       $endDateDisplay.val('');
       $endDateHidden.val('');
-      $errorBox.removeClass('hidden');
+      $errorBox.removeClass('hidden').text('❌ Booking includes blackout dates. Please choose a different date.');
+      blackoutErrors[variantId] = true; // Mark this variant as having blackout error
+      updateSubmitButton();
       return;
+    } else {
+      $errorBox.addClass('hidden').text('');
+      blackoutErrors[variantId] = false;
     }
-    else {
-      $errorBox.addClass('hidden');
-    }
-    // ✅ Set end date only if not single-day
+
     if (holidayLength === 1) {
       $endDateWrapper.hide();
       $endDateDisplay.val('');
       $endDateHidden.val('');
 
-      const checkInFormatted = formatDate(startDate); 
-    if (blackoutDates.includes(checkInFormatted)) {
-      $errorBox.text('❌ This check-in date is unavailable. Please select another.').removeClass('hidden');
+      const checkInFormatted = formatDate(startDate);
+      if (blackoutDates.includes(checkInFormatted)) {
+        $errorBox.text('❌ This check-in date is unavailable. Please select another.').removeClass('hidden');
+        blackoutErrors[variantId] = true;
+        updateSubmitButton();
+        return;
+      } else {
+        $errorBox.addClass('hidden').text('');
+        blackoutErrors[variantId] = false;
+      }
+      updateSubmitButton();
       return;
-    } else {
-      $errorBox.addClass('hidden');
-    }
-
-    return;
     } else {
       $endDateWrapper.show();
 
@@ -1287,8 +1327,34 @@ $(document).ready(function () {
       $endDateDisplay.val(formattedEndDate);
       $endDateHidden.val(formattedEndDate);
     }
+    updateSubmitButton();
   });
+
+  $('#addCartForm').on('submit', function (e) {
+    console.log('Submit event triggered');
+    console.log('blackoutErrors:', blackoutErrors);
+
+    // Defensive check: also ensure no datepicker has an error even if change event missed
+    let formHasError = false;
+    $('.datepicker').each(function () {
+      const variantId = $(this).data('variant-id');
+      if (blackoutErrors[variantId]) {
+        formHasError = true;
+        return false; // break each loop
+      }
+    });
+
+    if (formHasError) {
+      e.preventDefault();
+      alert('❌ Booking includes blackout dates. Please fix the errors before submitting.');
+      return false;
+    }
+  });
+
+  // Initial submit button state
+  updateSubmitButton();
 });
+
 </script>
 
 

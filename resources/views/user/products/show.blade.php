@@ -412,7 +412,7 @@
                           <span class="text-sm line-through text-muted-foreground">{{$variant->unit_price}}</span>
                           <div
                             class="inline-flex items-center rounded-full border px-2 py-1 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-secondary/80 text-green-600 bg-green-100 font-semibold"
-                            data-v0-t="badge">-{{$variant->discounted_percentage}}%</div>
+                            data-v0-t="badge">{{$variant->discounted_percentage}}%</div>
                         </div>
                         <div class="flex items-center gap-2">
                           <span class="lg:text-3xl text-sm font-bold text-primary">AED {{$variant->discounted_price}}</span>

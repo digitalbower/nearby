@@ -144,15 +144,15 @@
                 <label for="validity_to" class="form-label">Validity To</label>
                 <input type="date" class="form-control" id="validityto" name="validity_to" value="{{$product_variant->validity_to }}">
             </div>
-             <div class="mb-3">
+             <div class="mb-3" id="bookable_start_date_container" style="display: none;">
                 <label for="bookable_start_date" class="form-label">Bookable Date From</label>
                 <input type="date" class="form-control" id="bookable_start_date" name="bookable_start_date" value="{{$product_variant->bookable_start_date }}">
             </div>
-            <div class="mb-3">
+             <div class="mb-3" id="bookable_end_date_container" style="display: none;">
                 <label for="bookable_end_date" class="form-label">Bookable Date To</label>
                 <input type="date" class="form-control" id="bookable_end_date" name="bookable_end_date" value="{{$product_variant->bookable_end_date }}">
             </div>
-            <div class="mb-3">
+            <div class="mb-3" id="blackout_dates_container" style="display: none;">
                     <label for="blackout_dates" class="form-label">Blackout Dates</label>
                     <input type="text" class="form-control" id="blackout_dates" name="blackout_dates" readonly>
             </div>
@@ -202,33 +202,32 @@
         document.addEventListener("DOMContentLoaded", function () {
             const today = new Date().toISOString().split("T")[0];
 
-            // From-To pair 1
             const validityFrom = document.getElementById("validityfrom");
             const validityTo = document.getElementById("validityto");
-
-            // From-To pair 2
             const bookableFrom = document.getElementById("bookable_start_date");
             const bookableTo = document.getElementById("bookable_end_date");
 
-            // Disable past dates
-            if (validityFrom) validityFrom.setAttribute("min", today);
-            if (bookableFrom) bookableFrom.setAttribute("min", today);
 
-            // Set min for validity to
+            // 🔄 Set min for TO-date fields dynamically after FROM-date changes
             if (validityFrom && validityTo) {
                 validityFrom.addEventListener("change", function () {
+                validityFrom.setAttribute("min", today);
                     const selectedDate = this.value;
-                    validityTo.value = "";
-                    validityTo.setAttribute("min", selectedDate);
+                    if (selectedDate) {
+                        validityTo.value = "";
+                        validityTo.setAttribute("min", selectedDate);
+                    }
                 });
             }
 
-            // Set min for bookable to
             if (bookableFrom && bookableTo) {
                 bookableFrom.addEventListener("change", function () {
+                    bookableFrom.setAttribute("min", today);
                     const selectedDate = this.value;
-                    bookableTo.value = "";
-                    bookableTo.setAttribute("min", selectedDate);
+                    if (selectedDate) {
+                        bookableTo.value = "";
+                        bookableTo.setAttribute("min", selectedDate);
+                    }
                 });
             }
         });
