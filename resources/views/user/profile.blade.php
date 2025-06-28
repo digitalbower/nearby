@@ -451,7 +451,7 @@
           </div>
           <div class="space-y grid grid-cols-1 md:grid-cols-2 items-center gap-3">
             <!-- Booking Item 1 -->
-            @forelse ($bookingConfirmations as $item)
+            @forelse ($bookingConfirmations as $item) 
               <div class="booking-card mt-0 border relative border-[#58af0838] rounded-xl shadow-lg p-3 transition duration-300"
                   data-status="{{ $item->verification_status }}" 
                   data-booking-id="{{ $item->booking_id }}"> 
@@ -474,6 +474,20 @@
                                       <p class="text-sm text-gray-600">
                                           Total Price: AED {{ number_format($item->total_price, 2) }}
                                       </p>
+                                      @if($item->variant?->product?->types?->product_type === "Fixed Date")
+                                        @if($item->variant?->holiday_length == 1)
+                                        <p class="text-sm text-gray-600">
+                                            Check In Date: {{ $item->check_in_date }}
+                                        </p>
+                                        @else
+                                        <p class="text-sm text-gray-600">
+                                            Check In Date: {{ $item->check_in_date }}
+                                        </p>
+                                        <p class="text-sm text-gray-600">
+                                            Check Out Date: {{ $item->check_out_date }}
+                                        </p>
+                                        @endif
+                                      @endif
                                       @if($item->verification_status ==="pending")
                                       <p class="text-sm text-gray-600 bg-[#008000] text-white rounded-lg px-2 py-1 absolute top-5 right-2">
                                           Active
@@ -1015,6 +1029,20 @@
                                 <p class="text-sm text-gray-600">
                                   Total Price: AED {{ number_format($item->total_price, 2) }}
                                 </p>
+                                 @if($item->variant?->product?->types?->product_type === "Fixed Date")
+                                  @if($item->variant?->holiday_length == 1)
+                                    <p class="text-sm text-gray-600">
+                                    Check In Date: {{ $item->check_in_date }} 
+                                    </p>
+                                  @else
+                                    <p class="text-sm text-gray-600">
+                                      Check In Date: {{ $item->check_in_date }} 
+                                    </p>
+                                    <p class="text-sm text-gray-600">
+                                      Check Out Date: {{ $item->check_out_date }} 
+                                    </p>
+                                  @endif
+                                @endif
                                 @if($item->verification_status ==="pending")
                                 <p class="text-sm text-gray-600 bg-[#008000] text-white rounded-lg px-2 py-1 absolute top-5 right-2">
                                     Active

@@ -144,15 +144,15 @@
                     <label for="validity_to" class="form-label">Validity To</label>
                     <input type="date" class="form-control" id="validityto" name="validity_to" value="{{old('validity_to') }}">
                 </div>
-                                <div class="mb-3">
+                <div class="mb-3" id="bookable_start_date_container" style="display: none;">
                     <label for="bookable_start_date" class="form-label">Bookable Date From</label>
                     <input type="date" class="form-control" id="bookable_start_date" name="bookable_start_date" value="{{old('bookable_start_date') }}">
                 </div>
-                <div class="mb-3">
+                <div class="mb-3" id="bookable_end_date_container" style="display: none;">
                     <label for="bookable_end_date" class="form-label">Bookable Date To</label>
                     <input type="date" class="form-control" id="bookable_end_date" name="bookable_end_date" value="{{old('bookable_end_date') }}">
                 </div>
-                <div class="mb-3">
+                <div class="mb-3" id="blackout_dates_container" style="display: none;">
                     <label for="blackout_dates" class="form-label">Blackout Dates</label>
                     <input type="text" class="form-control" id="blackout_dates" name="blackout_dates" readonly>
                 </div>

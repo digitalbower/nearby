@@ -216,7 +216,16 @@
           <h3 class="font-semibold text-sm lg:text-xl">{{ $product_item->variant->product->name }}</h3>
           <p class="text-sm text-gray-500 mt-0">{{ $product_item->variant->title }}</p>
           <p class="md:text-sm text-xs text-gray-500 mt-0">{{ $product_item->variant->product->short_description }}</p>
+          @if($product_item->variant->product->types->product_type === "Fixed Date")
+            @if($product_item->variant->holiday_length === 1)
+              <p class="text-sm text-gray-500 mt-2"><strong>Check In Date:</strong> {{ $product_item->check_in_date }}</p>
+            @else
+              <p class="text-sm text-gray-500 mt-2"><strong>Check In Date:</strong> {{ $product_item->check_in_date }}</p>
+              <p class="text-sm text-gray-500 mt-2"><strong>Check Out Date:</strong> {{ $product_item->check_out_date }}</p>
+            @endif
+          @endif
           <p class="text-sm text-gray-500 mt-2"><strong>Quantity:</strong> {{ $product_item->quantity }}</p>
+
           {{-- <p class="text-sm text-gray-500 mt-2"><strong>Date:</strong> {{ \Carbon\Carbon::parse($product_item->created_at)->format('d/m/Y') }}</p> --}}
         </div>
       </div>

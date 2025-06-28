@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\Checkout;
 use App\Models\Emirate;
 use App\Models\Footer;
 use App\Models\Logo;
@@ -18,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -320,7 +322,7 @@ class ProductController extends Controller
         }
         return redirect('cart')->with('success', 'Added to cart successfully!');
     }
-   public function addDatedCart(Request $request)
+public function addDatedCart(Request $request)
 {
     $filteredVariants = collect($request->input('variants', []))
         ->filter(function ($item) {
@@ -330,38 +332,34 @@ class ProductController extends Controller
 
     $request->merge(['variants' => $filteredVariants]);
 
-    $request->validate([
+    // Basic validation rules
+    $rules = [
         'variants' => 'required|array|min:1',
         'variants.*.product_variant_id' => 'required|exists:product_variants,id',
         'variants.*.quantity' => 'required|integer|min:1',
         'variants.*.check_in_date' => 'required',
-    ], [
+    ];
+
+    $messages = [
         'variants.*.quantity.required' => 'Add quantity',
         'variants.*.quantity.min' => 'Add quantity with minimum value 1',
-        'variants.*.check_in_date' => 'Add check-in date',
-    ]);
+        'variants.*.check_in_date.required' => 'Add check-in date',
+    ];
 
-    $blackoutErrors = [];
+    $validator = Validator::make($request->all(), $rules, $messages);
 
-    // First pass: validate blackout dates
-    foreach ($request->variants as $index => $variant) {
+    // Custom blackout validation
+    foreach ($filteredVariants as $index => $variant) {
         $checkInRaw = trim($variant['check_in_date'] ?? '');
-        $checkOutRaw = trim($variant['check_out_date'] ?? ''); 
 
         try {
             $checkInDate = Carbon::createFromFormat('d-m-Y', $checkInRaw)->format('Y-m-d');
         } catch (\Exception $e) {
-            continue; // skip invalid
+            continue;
         }
 
-        try {
-            $checkOutDate = Carbon::createFromFormat('d/m/Y', $checkOutRaw)->format('Y-m-d'); 
-        } catch (\Exception $e) {
-            $checkOutDate = null;
-        }
-
-        $variantModel = ProductVariant::with(['blackoutDates'])->find($variant['product_variant_id']);
-        $variantId = $variant['product_variant_id'];
+        $variantModel = ProductVariant::with('blackoutDates')->find($variant['product_variant_id']);
+        if (!$variantModel) continue;
 
         $blackoutDates = $variantModel->blackoutDates
             ->pluck('date')
@@ -369,20 +367,18 @@ class ProductController extends Controller
             ->toArray();
 
         if (in_array($checkInDate, $blackoutDates)) {
-            $blackoutErrors["variants.$variantId.check_in_date"] = 'Selected booking date is unavailable.';
+            $validator->errors()->add("variants.$index.check_in_date", 'Selected booking date is unavailable.');
         }
-       
     }
 
-    // Stop here if any blackout errors found
-    if (!empty($blackoutErrors)) {
+     if ($validator->fails()) {
         return redirect()->back()
-            ->withErrors($blackoutErrors)
+            ->withErrors($validator)
             ->withInput();
     }
 
-    // Second pass: now that everything is valid, create/update cart
-    foreach ($request->variants as $variant) {
+    // Passed all validations - save cart
+    foreach ($filteredVariants as $variant) {
         $checkInDate = Carbon::createFromFormat('d-m-Y', $variant['check_in_date'])->format('Y-m-d');
         $checkOutDate = !empty($variant['check_out_date'])
             ? Carbon::createFromFormat('d/m/Y', $variant['check_out_date'])->format('Y-m-d')
@@ -493,9 +489,6 @@ class ProductController extends Controller
         $cart = Cart::find($id);
         if ($cart) {
             $cart->quantity =$quantity;
-            $cart->check_in_date = $request->check_in_date;
-            $cart->check_out_date = $request->check_out_date;
-            $cart->dated_product = $request->dated_product ?? 0;
             $cart->save();
             return response()->json(['success' => true, 'message' => 'Cart item quantity updated.']);
         }
@@ -505,13 +498,34 @@ class ProductController extends Controller
     }
     public function destroy(Request $request)
     { 
-        $item = Cart::find($request->id); 
-        if ($item) {
-            $item->delete();
-            return response()->json(['success' => true, 'message' => 'Cart item removed.']);
-        } else {
-            return response()->json(['success' => false, 'message' => 'Item not found.'], 404);
+        $cartItem = Cart::find($request->id);
+        if (!$cartItem) {
+            return response()->json(['success' => false, 'message' => 'Cart item not found.'], 404);
         }
+
+        $variantId = $cartItem->product_variant_id;
+
+        // Find all checkout items with this product_variant_id
+        $checkoutItems = \App\Models\CheckoutItem::where('product_variant_id', $variantId)->get();
+
+        // Collect all checkout IDs related to these checkout items
+        $checkoutIds = $checkoutItems->pluck('checkout_id')->unique();
+
+        // Delete the checkout items
+        \App\Models\CheckoutItem::where('product_variant_id', $variantId)->delete();
+
+        // For each checkout, check if it has any remaining checkout items, if none delete the checkout
+        foreach ($checkoutIds as $checkoutId) {
+            $remainingItemsCount = \App\Models\CheckoutItem::where('checkout_id', $checkoutId)->count();
+            if ($remainingItemsCount === 0) {
+                \App\Models\Checkout::where('id', $checkoutId)->delete();
+            }
+        }
+
+        // Delete the cart item
+        $cartItem->delete();
+
+        return response()->json(['success' => true, 'message' => 'Cart item and related checkout data removed.']);
     }
 
 

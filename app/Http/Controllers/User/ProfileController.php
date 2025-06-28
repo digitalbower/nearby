@@ -65,17 +65,14 @@ class ProfileController extends Controller
         $userId = Auth::id(); 
 
         // Get items only for the logged-in user, joining to booking_confirmations table to verify user_id
-        $bookingConfirmations = DB::table('booking_confirmation_items as bci')
-            ->join('booking_confirmations as bc', 'bci.booking_confirmation_id', '=', 'bc.id')
-            ->where('bc.user_id', $userId)
-            ->select(
-                'bci.*',
-                'bc.booking_id',
-                'bc.created_at as booking_created_at',
-                'bc.total_amount'
-            )
-            ->orderByDesc('bci.created_at')
-            ->get();
+        $bookingConfirmations = BookingConfirmationItem::with(['bookingConfirmation' => function ($query) use ($userId) {
+        $query->where('user_id', $userId);
+            }])
+            ->whereHas('bookingConfirmation', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->orderByDesc('created_at')
+            ->get(); 
 
         $reviews = Review::with('product')->where('user_id', Auth::user()->id)->get();  
 

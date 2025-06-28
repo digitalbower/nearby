@@ -76,7 +76,11 @@
                                         {{ json_encode($booking_item->variant->title ?? 'N/A') }}, 
                                         {{ json_encode($booking_item->bookingConfirmation->user->first_name ?? 'N/A') }}, 
                                         {{ json_encode($booking_item->bookingConfirmation->created_at->format('Y-m-d')) }},
-                                        {{ json_encode($booking_item->validity) }}
+                                        {{ json_encode($booking_item->validity) }},
+                                        {{ json_encode($booking_item->check_in_date) }},
+                                        {{ json_encode($booking_item->check_out_date) }},
+                                        {{ json_encode($booking_item->variant->holiday_length) }},
+                                        {{ json_encode($booking_item->variant->product->types->product_type) }},
 
                                     )">
                                     Approve
@@ -138,6 +142,14 @@
                     <div class="flex items-center justify-between">
                         <span class="font-medium">Expiry Date:</span>
                         <span id="modal-exp-date" class="text-gray-800 font-semibold">Jan 12, 2025</span>
+                    </div>
+                    <div class="flex items-center justify-between hidden">
+                        <span class="font-medium">Check In Date:</span>
+                        <span id="modal-checkin-date" class="text-gray-800 font-semibold">Jan 12, 2025</span>
+                    </div>
+                    <div id="modal-checkout-date-wrapper" class="flex items-center justify-between hidden">
+                        <span class="font-medium">Check Out Date:</span>
+                        <span id="modal-checkout-date" class="text-gray-800 font-semibold">Jan 12, 2025</span>
                     </div>
                 </div>
 
@@ -228,7 +240,7 @@ $(document).ready(function () {
 });
 </script>
 <script>
-    function openModal(id,bookingId, productName,variantName, customerName, date, expDate) {
+    function openModal(id,bookingId, productName,variantName, customerName, date, expDate, checkinDate, checkoutDate,holidayLength, productType) {
         document.getElementById('modal-booking-confirmation-item-id').value = id;
         document.getElementById('modal-booking-id').textContent = bookingId;
         document.getElementById('modal-product-name').textContent = productName;
@@ -236,6 +248,28 @@ $(document).ready(function () {
         document.getElementById('modal-customer-name').textContent = customerName;
         document.getElementById('modal-date').textContent = date;
         document.getElementById('modal-exp-date').textContent = expDate;
+        const checkinElem = document.getElementById('modal-checkin-date');
+        const checkoutElem = document.getElementById('modal-checkout-date');
+        const checkoutWrapper = document.getElementById('modal-checkout-date-wrapper');
+        if (productType === "Fixed Date") {
+            // Always show check-in date
+            checkinElem.textContent = checkinDate;
+            document.getElementById('modal-checkin-date').closest('div').classList.remove('hidden');
+
+            if (holidayLength > 1) {
+                checkoutElem.textContent = checkoutDate;
+                checkoutWrapper.classList.remove('hidden');
+            } else {
+                checkoutElem.textContent = '';
+                checkoutWrapper.classList.add('hidden');
+            }
+        } else {
+            // Hide both dates if not Fixed Date
+            checkinElem.textContent = '';
+            checkoutElem.textContent = '';
+            document.getElementById('modal-checkin-date').closest('div').classList.add('hidden');
+            checkoutWrapper.classList.add('hidden');
+        }
         document.getElementById('otp-modal').classList.remove('hidden');
     }
 

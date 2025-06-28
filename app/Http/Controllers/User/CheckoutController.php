@@ -351,6 +351,9 @@ class CheckoutController extends Controller
             $item = $checkout->items->where('product_variant_id', $product_variant_id)->first();
             if ($item) {
                 $item->delete(); 
+                \App\Models\Cart::where('product_variant_id', $product_variant_id)
+                ->where('user_id', $user_id)
+                ->delete();
 
                 $checkout->load('items.variant');
 

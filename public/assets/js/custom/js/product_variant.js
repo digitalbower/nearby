@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $("#variantForm").validate({
-        ignore: [],
+        ignore: ":hidden:not(#short_info)", 
         rules: {
             product_id: { required: true },
             title: { required: true },
@@ -118,8 +118,15 @@ $(document).ready(function () {
     
         if (productType === 'Fixed Date') {
             $('#fixed_date_container').show();
+            $('#bookable_start_date_container').show();
+            $('#bookable_end_date_container').show();
+            $('#blackout_dates_container').show();
+
         } else {
             $('#fixed_date_container').hide();
+            $('#bookable_start_date_container').hide();
+            $('#bookable_end_date_container').hide();
+            $('#blackout_dates_container').hide();
             $('#fixed_date_option').val(''); 
         }
 

@@ -1066,6 +1066,7 @@ function collectItems() {
                     ` : ''}
                       <input type="hidden" name="items[${variant.id}][dated_product]" value="${variant.dated_product }"/>
                       ` : ''}
+                  <p class="text-sm text-gray-500 mt-2"><strong>Quantity:</strong>${variant.quantity}</p>
               </div>
             </div>
             <div class="flex items-center justify-between mt-2">
@@ -1073,13 +1074,11 @@ function collectItems() {
                 <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
                
                <input 
-  type="number" 
+  type="hidden" 
   name="items[${variant.id}][quantity]" 
   data-variant-id="${variant.id}"
   id="quantity_${variant.id}" 
   value="${variant.quantity}" 
-  min="1" 
-  readonly
   class="w-8 h-8 text-center text-lg font-semibold text-gray-700" 
 />
     

@@ -82,9 +82,9 @@ class ProductVariantController extends Controller
         }
     }
   ],
-            'holiday_length' => 'required',
-            'bookable_start_date' => 'required',
-            'bookable_end_date' => 'required',
+            'holiday_length' => 'nullable',
+            'bookable_start_date' => 'nullable',
+            'bookable_end_date' => 'nullable',
             'available_quantity' => 'required',
             'validity_from' => 'required',
             'validity_to' => 'required',
@@ -107,16 +107,16 @@ class ProductVariantController extends Controller
             $data['discounted_percentage'] = 0; 
         }        
         $variant = ProductVariant::create($data);
-
-        $dates = explode(',', $request->blackout_dates);  
-
-        foreach ($dates as $date) {
-            $variant->blackoutDates()->create([
-                'product_variant_id'=>$variant->id,
-                'date' => $date
-            ]);
-        }
+        if($request->blackout_dates){
+            $dates = explode(',', $request->blackout_dates);  
         
+            foreach ($dates as $date) {
+                $variant->blackoutDates()->create([
+                    'product_variant_id'=>$variant->id,
+                    'date' => $date
+                ]);
+            }
+        }
         return redirect()->route('admin.products.product_variants.index')->with('success', 'New Product Variant created successfully!');
     }
 
@@ -167,9 +167,9 @@ class ProductVariantController extends Controller
             'available_quantity' => 'required',
             'validity_from' => 'required',
             'validity_to' => 'required',
-            'holiday_length' => 'required',
-            'bookable_start_date' => 'required',
-            'bookable_end_date' => 'required',
+            'holiday_length' => 'nullable',
+            'bookable_start_date' => 'nullable',
+            'bookable_end_date' => 'nullable',
             'markup' => ['required','numeric','min:0',
             function ($attribute, $value, $fail) use ($categoryMarkupLimit) {
                 if ((float) $value < $categoryMarkupLimit) {
@@ -194,9 +194,11 @@ class ProductVariantController extends Controller
         $product_variant->blackoutDates()->delete();
 
         // Add new blackout dates
-        $dates = explode(',', $request->blackout_dates);
-        foreach ($dates as $date) {
-            $product_variant->blackoutDates()->create(['date' => $date]);
+        if($request->blackout_dates){
+            $dates = explode(',', $request->blackout_dates);
+            foreach ($dates as $date) {
+                $product_variant->blackoutDates()->create(['date' => $date]);
+            }
         }
 
         return redirect()->route('admin.products.product_variants.index')->with('success', 'Product Variant updated successfully!');
