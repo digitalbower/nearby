@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\BlogNavigationController;
 use App\Http\Controllers\Admin\FeaturedItemController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BlogDetailController;
+use App\Http\Controllers\Admin\TransactionController;
 
 use App\Http\Controllers\Admin\LocationScopeController;
 use App\Http\Controllers\Admin\FooterController;
@@ -382,6 +383,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/{categoryUnitMaster}', [CategoryUnitMasterController::class, 'update'])->name('update'); 
         Route::delete('/{categoryUnitMaster}', [CategoryUnitMasterController::class, 'destroy'])->name('destroy'); 
     });
+
+    Route::prefix('transactions')->name('transactions.')->group(function () {
+    Route::get('/', [TransactionController::class, 'index'])->name('index');
+    Route::get('/{id}/receipt', [TransactionController::class, 'downloadReceipt'])->name('receipt');
+
+});
+
       
     Route::prefix('commission')->name('commission.')->group(function () {
         Route::get('/', [CommissionController::class, 'commission'])->name('commission');

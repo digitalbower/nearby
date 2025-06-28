@@ -16,6 +16,7 @@ class Payment extends Model
         'payment_status',
         'stripe_transaction_id',
         'payment_response',
+        'receipt_url',
     ];
 
     protected $casts = [
@@ -34,4 +35,9 @@ class Payment extends Model
     public function payment(){
         return $this->belongsTo(Payment::class);
     }
+
+    public function paymentdata()
+{
+    return $this->hasOne(BookingConfirmation::class, 'payment_id');
+}
 }

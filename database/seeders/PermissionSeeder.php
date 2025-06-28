@@ -99,6 +99,14 @@ class PermissionSeeder extends Seeder
             'create_unit_type',
             'edit_unit_type',
             'delete_unit_type',
+            'transfer_history',
+            'view_blog_management',
+            'crete_blog_header',
+            'crete_blog_footer',
+            'crete_featured_item',
+            'view_blog_details',
+            'crete_blog',
+
         ];
 
         foreach ($permissions as $permission) {

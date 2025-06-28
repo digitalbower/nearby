@@ -26,8 +26,11 @@ class StripController extends Controller
     
         $intent = \Stripe\PaymentIntent::create([
             'amount' => $amount,
-            'currency' => 'usd',
+            'currency' => 'aed',
             'payment_method_types' => ['card'],
+            'description' => 'Booking payment for user EMAIL: ' . Auth::user()->email,
+            'receipt_email' => Auth::user()->email, 
+            'capture_method' => 'automatic',        
         ]);
     
         return response()->json([
@@ -42,7 +45,13 @@ class StripController extends Controller
     DB::beginTransaction();
     try {
         // Optional: Retrieve payment intent to verify it again if needed
-        $paymentIntent = \Stripe\PaymentIntent::retrieve($request->payment_intent_id);
+        $paymentIntent = \Stripe\PaymentIntent::retrieve($request->payment_intent_id,
+        ['expand' => ['charges']]);
+
+        $charge = \Stripe\Charge::retrieve($paymentIntent->latest_charge);
+       
+
+
         DB::reconnect();
         if ($paymentIntent->status !== 'succeeded') {
             throw new \Exception('Payment not completed.');
@@ -68,7 +77,12 @@ class StripController extends Controller
             'payment_response' => json_encode($paymentIntent),
             'created_at' => now(),
             'updated_at' => now(),
+           
+            'receipt_url' => $charge->receipt_url ?? null,
+
         ]);
+
+        
 
         // Create Booking Confirmation
         $bookingConfirmation = BookingConfirmation::create([
@@ -247,6 +261,7 @@ class StripController extends Controller
     } catch (\Exception $e) {
         DB::rollBack();
         return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+
     }
 }
 

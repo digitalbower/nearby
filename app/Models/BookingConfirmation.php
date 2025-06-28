@@ -8,6 +8,7 @@ class BookingConfirmation extends Model
 {
     protected $table = 'booking_confirmations';
     protected $fillable = [
+        'payment_id',
         'order_id',
         'booking_id',
         'user_id',
@@ -19,6 +20,7 @@ class BookingConfirmation extends Model
         'vat',
         'promocode',
         'promocode_discount_amount'
+        
     ];
 
     protected $casts = [
@@ -68,7 +70,9 @@ class BookingConfirmation extends Model
 
         return $this->hasMany(BookingGuestInfo::class);
     }
-  
+
+
+    
     
     
 }
