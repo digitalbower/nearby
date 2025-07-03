@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Product;
 
 use App\Http\Controllers\Controller;
+use App\Models\BlackoutDate;
 use App\Models\Category;
 use App\Models\CategoryUnitMaster;
 use App\Models\Product;
@@ -64,7 +65,7 @@ class ProductVariantController extends Controller
     { 
         $pr_id = $request->product_id;
         $categoryMarkupLimit = \App\Models\Product::find($pr_id)?->category?->markup;  
-
+        $product_type = \App\Models\Product::find($pr_id)?->types?->product_type;
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'title' => 'required',
@@ -82,9 +83,9 @@ class ProductVariantController extends Controller
         }
     }
   ],
-            'holiday_length' => 'nullable',
-            'bookable_start_date' => 'nullable',
-            'bookable_end_date' => 'nullable',
+            'holiday_length' => $product_type == "Fixed Date" ? 'required' : 'nullable',
+            'bookable_start_date' => $product_type == "Fixed Date" ? 'required|date' : 'nullable|date',
+            'bookable_end_date' => $product_type == "Fixed Date" ? 'required|date|after_or_equal:bookable_start_date' : 'nullable|date',
             'available_quantity' => 'required',
             'validity_from' => 'required',
             'validity_to' => 'required',
@@ -107,16 +108,6 @@ class ProductVariantController extends Controller
             $data['discounted_percentage'] = 0; 
         }        
         $variant = ProductVariant::create($data);
-        if($request->blackout_dates){
-            $dates = explode(',', $request->blackout_dates);  
-        
-            foreach ($dates as $date) {
-                $variant->blackoutDates()->create([
-                    'product_variant_id'=>$variant->id,
-                    'date' => $date
-                ]);
-            }
-        }
         return redirect()->route('admin.products.product_variants.index')->with('success', 'New Product Variant created successfully!');
     }
 
@@ -139,9 +130,8 @@ class ProductVariantController extends Controller
         })
         ->where('status', 1) 
         ->get();
-        $blackoutDates = $product_variant->blackoutDates->pluck('date')->toArray();
 
-        return view('admin.products.product_variants.edit')->with(['products'=>$products,'product_variant'=>$product_variant,'blackoutDates'=>$blackoutDates]);
+        return view('admin.products.product_variants.edit')->with(['products'=>$products,'product_variant'=>$product_variant]);
 
     }
 
@@ -191,16 +181,6 @@ class ProductVariantController extends Controller
         } 
         $product_variant->update($data);
 
-        $product_variant->blackoutDates()->delete();
-
-        // Add new blackout dates
-        if($request->blackout_dates){
-            $dates = explode(',', $request->blackout_dates);
-            foreach ($dates as $date) {
-                $product_variant->blackoutDates()->create(['date' => $date]);
-            }
-        }
-
         return redirect()->route('admin.products.product_variants.index')->with('success', 'Product Variant updated successfully!');
     }
 
@@ -233,4 +213,59 @@ class ProductVariantController extends Controller
             ];
         }));    
     }
+    public function getBlackoutdates($id){
+    $product_variant = ProductVariant::findOrFail($id);
+    $blackoutDateConfig = BlackoutDate::where('product_variant_id', $id)->first();
+
+    $blackoutEntries = BlackoutDate::where('product_variant_id', $id)
+        ->select('date', 'date_type') 
+        ->get();
+
+
+    $jsData = $blackoutEntries->map(function ($entry) {
+        return [
+            'date' => \Carbon\Carbon::parse($entry->date)->format('Y-m-d'),
+            'type' => $entry->date_type,
+        ];
+    });
+    
+    return view('admin.products.blackout_dates.edit')->with(['product_variant'=>$product_variant, 'blackoutDateConfig'=>$blackoutDateConfig, 'blackoutDates'=>$jsData,'id'=>$id]);
+    }
+     /**
+     * Update the specified resource in storage.
+     */
+    public function updateBlackoutdates(Request $request,$id)
+    {
+        $request->validate([
+            'product_variant_id' => 'required|exists:product_variants,id',
+            'date_type' => 'required',
+            'blackout_dates' => 'required|string',
+        ]);
+
+        $variantId = $id;
+        $dateType = $request->date_type;
+        $submittedDates = array_filter(array_map('trim', explode(',', $request->blackout_dates)));
+
+        // 1. Remove old blackout dates not in the new list
+        BlackoutDate::where('product_variant_id', $variantId)
+            ->whereNotIn('date', $submittedDates)
+            ->delete();
+
+        // 2. Update or create blackout dates
+        foreach ($submittedDates as $date) {
+            BlackoutDate::updateOrCreate(
+                [
+                    'product_variant_id' => $variantId,
+                    'date' => $date,
+                ],
+                [
+                    'date_type' => $dateType,
+                ]
+            );
+        }
+
+        return redirect()->route('admin.products.product_variants.index')
+            ->with('success', 'Blackout dates updated successfully!');
+    }
+
 }

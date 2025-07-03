@@ -940,17 +940,15 @@ function collectGuests() {
         });
 
         const result = await finalizeRes.json();
-        if (result.success) {
-          console.log("Booking complete!");
-          window.location.href = "/bookingconfirmation";
-        } else {
-          showError("Booking failed: " + result.error);
-        }
+        return result;
       }
-
+      else {
+      return { success: false, message: "Payment did not succeed." };
+    }
     } catch (err) {
       console.error("Payment error:", err);
       showError(err.message);
+      return { success: false, message: err.message || "Payment failed." };
     }
   }
 
@@ -964,24 +962,31 @@ function collectGuests() {
 
   // Add the 'async' keyword here
   document.querySelectorAll(".pay-now-button").forEach(button => {
-    button.addEventListener("click", async (event) => { 
+    button.addEventListener("click", async (event) => {
       event.preventDefault();
-      const loader = document.getElementById("page-loader");
+      event.stopPropagation();
+    const loader = document.getElementById("page-loader");
       if (!loader) {
         console.error("Loader element not found!");
         return;
       }
-        loader.style.display = 'flex';
-      
-
+      loader.style.display = 'flex';
+    
       try {
-        await handlePayment();  
-      } catch (error) {
-        showError("Unexpected error occurred");
-      } finally {
-        loader.style.display = 'none'; 
+        const result = await handlePayment();
+        if (result.success) {
+          window.location.assign("/bookingconfirmation");
+          return;
+        } else {
+          showError(result.message);
+          loader.style.display = 'none';
+        }
+      } catch (e) {
+        showError("Booking failed: " + (e.message || e));
+        loader.style.display = 'none';
       }
     });
+
   });
 });
 

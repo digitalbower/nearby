@@ -245,6 +245,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::resource('vendor_terms', VendorTermController::class);
             Route::post('/vendor_terms/change-status', [VendorTermController::class, 'changeVendorTermStatus'])->name('vendor_terms.status');
             Route::resource('product_variants', ProductVariantController::class);
+            Route::post('/product_variants/blackoutdates/update/{id}', [ProductVariantController::class, 'updateBlackoutdates'])->name('product_variants.blackout_dates.update');
+            Route::get('/product_variants/blackoutdates/edit/{id}', [ProductVariantController::class, 'getBlackoutdates'])->name('product_variants.blackout_dates.edit');
             Route::post('/product_variants/change-status', [ProductVariantController::class, 'changeVariantStatus'])->name('product_variants.status');
             Route::get('/unit-types', [ProductVariantController::class, 'getCategoryUnitTypes'])->name('unit_types');
             Route::resource('product_types', ProductTypeController::class);

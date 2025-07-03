@@ -10,7 +10,7 @@ class BlackoutDate extends Model
 {
     use HasFactory,SoftDeletes;
 
-    protected $fillable= ['product_variant_id','date'];
+    protected $fillable = ['product_variant_id', 'date', 'date_type'];
     
     public function variant()
     {

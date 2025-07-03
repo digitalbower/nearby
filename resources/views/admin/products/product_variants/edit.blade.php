@@ -152,10 +152,6 @@
                 <label for="bookable_end_date" class="form-label">Bookable Date To</label>
                 <input type="date" class="form-control" id="bookable_end_date" name="bookable_end_date" value="{{$product_variant->bookable_end_date }}">
             </div>
-            <div class="mb-3" id="blackout_dates_container" style="display: none;">
-                    <label for="blackout_dates" class="form-label">Blackout Dates</label>
-                    <input type="text" class="form-control" id="blackout_dates" name="blackout_dates" readonly>
-            </div>
             <div class="mb-3">
                 <label for="timer_flag" class="form-label">Timer</label>
                 <select class="form-control" name="timer_flag" id="timer_flag">
@@ -231,26 +227,6 @@
                 });
             }
         });
-</script>
-<script>
-         $(function () {
-        const blackoutDates = {!! json_encode($blackoutDates ?? []) !!};
-
-        if (blackoutDates.length > 0) {
-            $('#blackout_dates').multiDatesPicker({
-                dateFormat: 'yy-mm-dd',
-                maxPicks: 30,
-                addDates: blackoutDates,
-                minDate: 0
-            });
-        } else {
-            $('#blackout_dates').multiDatesPicker({
-                dateFormat: 'yy-mm-dd',
-                maxPicks: 30,
-                minDate: 0
-            });
-        }
-    });
 </script>
 @endpush
 

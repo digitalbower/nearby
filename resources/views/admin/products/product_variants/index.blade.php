@@ -63,6 +63,11 @@
                                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                     </form>
                                     @endif
+                                    @if($variant->product->types->product_type === "Fixed Date")
+                                        @if(auth()->guard('admin')->user()->hasPermission('edit_blackoutdates'))
+                                        <a href="{{ route('admin.products.product_variants.blackout_dates.edit', $variant->id) }}" class="btn btn-warning btn-sm">Blackout dates</a>
+                                        @endif
+                                    @endif
                                 </td>
                             </tr>
                         @empty

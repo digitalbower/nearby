@@ -662,11 +662,15 @@ table {
                     </div>
                     <input type="hidden" name="variants[{{ $variant->id }}][product_variant_id]" value="{{ $variant->id }}" />
                     @php
-                      $blackoutDates = $variant->blackoutDates->pluck('date')->map(function ($date) {
-                          return \Carbon\Carbon::parse($date)->format('d-m-Y');
-                      });
-                    @endphp           
-                    <input type="hidden" name="blackout_dates" id="blackout-dates-{{ $variant->id }}" value='@json($blackoutDates)'>
+                      $blackoutDates = $variant->blackoutDates
+                          ->pluck('date')
+                          ->filter()
+                          ->map(function ($date) {
+                              return \Carbon\Carbon::parse($date)->format('Y-m-d'); // Use Y-m-d for JS compatibility
+                          })
+                          ->values(); // Reset array keys
+                    @endphp     
+                    <input type="hidden"  name="blackout_dates[]"  id="blackout-dates-{{ $variant->id }}" value='@json($blackoutDates)'>
                     <div id="blackout-error-message-{{ $variant->id }}" class="hidden text-red-500 text-sm font-medium mt-2">
                   ❌ Booking includes blackout dates. Please choose a different date.
                   </div>
@@ -1176,12 +1180,13 @@ $( function() {
   });
 </script> --}}
 <script>
- function formatDate(date) {
+function formatDate(date) {
   const day = ('0' + date.getDate()).slice(-2);
   const month = ('0' + (date.getMonth() + 1)).slice(-2);
   const year = date.getFullYear();
-  return `${day}-${month}-${year}`;
+  return `${year}-${month}-${day}`;
 }
+
 
 $(document).ready(function () {
   const blackoutErrors = {};

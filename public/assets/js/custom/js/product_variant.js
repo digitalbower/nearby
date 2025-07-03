@@ -19,10 +19,21 @@ $(document).ready(function () {
             available_quantity: { required: true },
             validity_from: { required: true },
             validity_to: { required: true },
-            holiday_length: { required: true },
-            bookable_start_date : { required: true },
-            bookable_end_date : { required: true },
-            blackout_dates : { required: true },
+            holiday_length: {
+                required: function () {
+                    return $('#product_id option:selected').data('type') === 'Fixed Date';
+                }
+            },
+            bookable_start_date: {
+                required: function () {
+                    return $('#product_id option:selected').data('type') === 'Fixed Date';
+                }
+            },
+            bookable_end_date: {
+                required: function () {
+                    return $('#product_id option:selected').data('type') === 'Fixed Date';
+                }
+            }
 
 
         },
@@ -56,6 +67,21 @@ $(document).ready(function () {
             $('#short_info').val(quill.root.innerHTML);
             form.submit();
         }
+    });
+     $("#blackoutForm").validate({
+        rules: {
+            product_variant_id: { required: true },
+            date_type: { required: true },
+            blackout_dates: { required: true },
+        },
+        messages: {
+            product_variant_id: { required: "Variant is required" },
+            date_type: { required: "Data Type is required" },
+            blackout_dates : { required: "Blackout dates is required" },
+        }
+    });
+    $('#product_id').on('change', function () {
+         $('#holiday_length, #bookable_start_date, #bookable_end_date').valid();
     });
     $('.toggle-status').change(function () {
         var variantId = $(this).data('id');

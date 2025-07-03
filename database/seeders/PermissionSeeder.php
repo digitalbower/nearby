@@ -106,7 +106,7 @@ class PermissionSeeder extends Seeder
             'crete_featured_item',
             'view_blog_details',
             'crete_blog',
-
+            'edit_blackoutdates',
         ];
 
         foreach ($permissions as $permission) {
