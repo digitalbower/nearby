@@ -454,12 +454,12 @@
             @forelse ($bookingConfirmations as $item) 
               <div class="booking-card mt-0 border relative border-[#58af0838] rounded-xl shadow-lg p-3 transition duration-300"
                   data-status="{{ $item->verification_status }}" 
-                  data-booking-id="{{ $item->booking_id }}"> 
+                  data-booking-id="{{ $item->bookingConfirmation->booking_id }}"> 
                   <div class="flex flex-col md:flex-row gap-4">
                       <div class="w-full">
                           <div class="grid">
                               <div class="col-span-2">
-                                  <h3 class="md:text-lg font-bold text-gray-800 pr-10">Booking Id {{ $item->booking_id }}</h3>
+                                  <h3 class="md:text-lg font-bold text-gray-800 pr-10">Booking Id {{ $item->bookingConfirmation->booking_id }}</h3>
                                   <div class="text-sm my-2 text-gray-600">
                                       <p>
                                           <i class="fas fa-calendar-alt mr-2 text-gray-400"></i>
@@ -964,18 +964,18 @@
                 </div>
               </form>
             </div>
-  <div id="booking" class="tab-content  max-w-5xl mx-auto p-8">
+            <div id="booking" class="tab-content  max-w-5xl mx-auto p-8">
               <div class="">
                 <div class="flex justify-between items-center mb-8">
                   <h1 class="text-3xl font-bold text-gray-800">My Bookings</h1>
                 </div>
                 <div class="flex gap-4 mb-8">
-                    <input type="text" id="searchInput" placeholder="Search by booking ID"
-                      class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent" />
-                    <button onclick="filterBookingsAdvanced()" class="px-6 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition duration-300">
-                      Search
-                    </button>
-                  </div>
+                  <input type="text" id="searchInput" placeholder="Search by booking ID"
+                    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent" />
+                  <button onclick="filterBookingsAdvanced()" class="px-6 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition duration-300">
+                    Search
+                  </button>
+                </div>
                       
                 <div class="flex items-center mb-3 space-x-4">
                   <!-- Inactive Radio Button -->
@@ -1007,14 +1007,14 @@
                   <!-- Booking Item 1 -->
                   @forelse ($bookingConfirmations as $item)
                     <div class="booking-card mt-0 border relative border-[#58af0838] rounded-xl shadow-lg p-3 transition duration-300"
-                    data-status="{{ $item->verification_status }}" data-booking-id="{{ $item->booking_id }}"> 
+                    data-status="{{ $item->verification_status }}" data-booking-id="{{ $item->bookingConfirmation->booking_id }}"> 
 
 
                       <div class="flex flex-col md:flex-row gap-4">
                         <div class="w-full">
                           <div class="grid">
                             <div class="col-span-2">
-                              <h3 class="text-lg font-bold text-gray-800">Booking Id {{ $item->booking_id }}</h3>
+                              <h3 class="text-lg font-bold text-gray-800">Booking Id {{ $item->bookingConfirmation->booking_id }}</h3>
                               <div class="text-sm my-2 text-gray-600">
                                 <p>
                                   <i class="fas fa-calendar-alt mr-2 text-gray-400"></i>
@@ -1029,7 +1029,7 @@
                                 <p class="text-sm text-gray-600">
                                   Total Price: AED {{ number_format($item->total_price, 2) }}
                                 </p>
-                                 @if($item->variant?->product?->types?->product_type === "Fixed Date")
+                                @if($item->variant?->product?->types?->product_type === "Fixed Date")
                                   @if($item->variant?->holiday_length == 1)
                                     <p class="text-sm text-gray-600">
                                     Check In Date: {{ $item->check_in_date }} 
@@ -1071,22 +1071,22 @@
                               <i class="fa-regular fa-file-pdf mr-1"></i> Download PDF
                             </a>
                             </div>
-                            @endif
                           </div>
+                          @endif
                         </div>
+                  
                       </div>
+                     
                     </div>
-                    @empty
-                      <p class="text-gray-500 text-center">No bookings found.</p>
-                      <!-- Right side icons -->
-                     @endforelse
-                    </div>
-					
-				</div>
+                  @empty
+                  <p class="text-gray-500 text-center">No bookings found.</p>
+                  <!-- Right side icons -->
+                  @endforelse
+                </div>
+				      </div>
 
                   <!-- Booking Item 2 -->
-
-    </div>
+            </div>
   <div id="reviews" class="tab-content max-w-5xl mx-auto p-8 hidden">
   <h2 class="text-2xl font-bold text-gray-800 mb-6">
     <i class="fas fa-star text-yellow-500 mr-2"></i> My Reviews

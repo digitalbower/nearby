@@ -107,7 +107,13 @@ class StripController extends Controller
             $product_variant = ProductVariant::find($variantId);
             $order_date = $bookingConfirmation->created_at->copy(); 
             $validity = $product_variant->product->types->validity; 
-            $valid_until = $order_date->copy()->addDays($validity);
+            $product_type = $product_variant->product->types->product_type;
+            if($product_type !== "Fixed Date"){
+                $valid_until = $order_date->copy()->addDays($validity);
+            }
+            else{
+                $valid_until = NULL;
+            }
 
             DB::table('booking_confirmation_items')->insert([
                 'booking_confirmation_id' => $bookingConfirmation->id,
@@ -202,7 +208,8 @@ class StripController extends Controller
                 'check_in_date' => $booking_item->check_in_date,
                 'check_out_date' => $booking_item->check_out_date,
                 'dated_product' => $booking_item->dated_product,
-                'holiday_length'=>$product_variant->holiday_length
+                'holiday_length'=>$product_variant->holiday_length,
+                'product_type'=>$product_variant->product?->types?->product_type,
             ];
         }
 

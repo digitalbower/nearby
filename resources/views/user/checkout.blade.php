@@ -862,13 +862,13 @@ function collectGuests() {
     const guestValidation = collectGuests();
     if (!guestValidation.isValid) {
       showError("Please fill in all required guest information");
-      return;
+      return { success: false, message: "Please fill in all required guest information" };
     }
 
     // Check if the required elements exist
     if (!amountElement || !orderIdElement || !bookingAmountElement || !voucherSavingsElement || !totalAmountElement || !vatAmountElement) {
         showError("Please enter card details");
-        return;
+        return { success: false, message: "Please enter card details" };
     }
 
     const amount = amountElement.value;
@@ -884,11 +884,11 @@ function collectGuests() {
 
     if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
       showError("Invalid amount.");
-      return;
+      return { success: false, message: "Invalid amount." };
     }
     if (!order_id) {
       showError("Order ID is missing.");
-      return;
+      return { success: false, message: "Order ID is missing." };
     }
 
     try {

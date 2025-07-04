@@ -104,8 +104,8 @@
 
     <div class="section-title">🧾 Your Voucher Summary</div>
      <p><strong>Product:</strong> {{$item->variant?->product?->name}}</p>
-    <p><strong>Product Variant:</strong> {{$item->variant?->title}}</p>
-    @if($item->dated_product == 1)
+    <p><strong>Product Variant:</strong> {{$item->variant?->title}}</p> 
+    @if($productType['product_type'] === "Fixed Date")
     @if($item->variant?->holiday_length == 1)
     <p><strong>Check-In Date:</strong> {{$item->check_in_date}}</p>
     @else
@@ -117,14 +117,17 @@
     <p><strong>Guest Name:</strong> {{ $userId->first_name ?? 'Guest' }}</p>
     <p><strong>Email:</strong> {{ $userId->email ?? 'N/A' }}</p>
     <p><strong>Website:</strong> https://nearbyvouchers.com/ </p>
-   
+    <p><strong>Quantity:</strong> {{$item->quantity}}</p>
+
     <div class="section-title">🔐 Verification Number</div>
     <h2 style="color: red;"><strong>{{ $item->verification_number}}</strong></h2>
     <p style="color: red;">Only share the verification code at the service location — never during advance booking</p>
 
     <div class="section-title">📅 Booking Date & Details</div>
+    @if($productType['product_type'] !== "Fixed Date")
     <p><strong>Validity From:</strong> {{ $order_date }}</p>
-    <p><strong>Validity Until:</strong>{{ $validUntil }}
+    <p><strong>Validity Until:</strong>{{ $validUntil }}</p>
+    @endif
     <p><strong>Fulfilled By:</strong> {{ $vendor?->name ?? 'N/A' }}</p>
     <div class="section-title">🧾 Guest Info</div>
     @if($item->quantity == 1)
@@ -134,12 +137,15 @@
       <p><strong>Main Guest Name: </strong>{{$userId->first_name}}</p>
       <p><strong>Main Guest Email: </strong>{{$userId->email}}</p>
       @if($guests)
+        @php
+        $quantity = $item->quantity;
+        @endphp
         <p><i>Accompanying Guests:</i></p>
         <ul class="list-disc pl-6 space-y-1"> 
-        @foreach ($guests as $index =>$guest)
-          <li><strong>Guest {{ $index + 1 }} Name:</strong> {{$guest['guest_first_name']}}</li>
-          <li><strong>Guest {{ $index + 1 }} Email:</strong> {{$guest['guest_email']}}</li>
-        @endforeach   
+         @for($i = 0; $i < $quantity-1; $i++)
+                <li><strong>Guest {{ $i+1 }} Name:</strong> {{ $guests[$i]['guest_first_name'] }}</li>
+                <li><strong>Guest {{ $i+1 }} Email:</strong> {{ $guests[$i]['guest_email'] }}</li>
+          @endfor
         </ul>
       @endif
     @endif

@@ -104,7 +104,7 @@
     <div class="section-title">🧾 Your Voucher Summary</div>
     <p><strong>Product:</strong> {{$variant['product_name']}}</p>
     <p><strong>Product Variant:</strong> {{$variant['product_variant_name']}}</p>
-    @if($variant['dated_product'] == 1)
+    @if($variant['product_type'] === "Fixed Date")
     @if($variant['holiday_length'] == 1)
     <p><strong>Check-In Date:</strong> {{$variant['check_in_date']}}</p>
     @else
@@ -112,19 +112,22 @@
       <p><strong>Check-Out Date:</strong> {{$variant['check_out_date']}}</p>
     @endif
     @endif
+   
     <p><strong>Voucher Number:</strong> {{$variant['voucher_number']}}</p>
     <p><strong>Guest Name:</strong> {{$variant['guest_name']}}</p>
     <p><strong>Email:</strong>{{$variant['email']}}</p>
     <p><strong>Platform/Website:</strong> https://nearbyvouchers.com/ </p>
-
+    <p><strong>Quantity:</strong> {{$variant['quantity']}}</p>
 
     <div class="section-title">🔐 Verification Number</div>
     <h2 style="color: red;"><strong>{{$variant['verification_number']}}</strong></h2>
     <p style="color: red;">Only share the verification code at the service location — never during advance booking</p>
    
     <div class="section-title">📅 Booking Date & Details</div>
+    @if($variant['product_type'] !== "Fixed Date")
     <p><strong>Validity From:</strong>{{$variant['validity_from']}}</p>
     <p><strong>Validity Until:</strong>{{$variant['validity_to']}}</p>
+    @endif
     <p><strong>Fulfilled By:</strong> {{$variant['vendor']}}</p>
     <div class="section-title">🧾 Guest Info</div>
         @if($variant['quantity'] == 1)
@@ -133,13 +136,17 @@
         @else
           <p><strong>Main Guest Name:</strong> {{$variant['guest_name']}}</p>
           <p><strong>Main Guest Email:</strong> {{$variant['email']}}</p>
-          @if($variant['guests'])
+          @if(!empty($variant['guests']) && is_array($variant['guests']))
+          @php 
+            $guests = $variant['guests'];
+            $quantity = $variant['quantity'];
+          @endphp
             <p><i>Accompanying Guests:</i></p>
             <ul class="list-disc pl-6 space-y-1"> 
-            @foreach ($variant['guests'] as $index => $guest)
-                <li><strong>Guest {{ $index + 1 }} Name:</strong> {{ $guest['guest_first_name'] }}</li>
-                <li><strong>Guest {{ $index + 1 }} Email:</strong> {{ $guest['guest_email'] }}</li>
-            @endforeach
+            @for($i = 0; $i < $quantity-1; $i++)
+                <li><strong>Guest {{ $i+1 }} Name:</strong> {{ $guests[$i]['guest_first_name'] }}</li>
+                <li><strong>Guest {{ $i+1 }} Email:</strong> {{ $guests[$i]['guest_email'] }}</li>
+            @endfor
             </ul>
           @endif
         @endif

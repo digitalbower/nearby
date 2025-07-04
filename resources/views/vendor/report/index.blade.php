@@ -54,9 +54,15 @@
                                 <td class="py-3 px-6 text-center">
                                     <span>{{ $booking_item->redeemed_date }}</span>
                                 </td>
+                                @if($booking_item->variant?->product?->types?->product_type !== "Fixed Date")
                                 <td class="py-3 px-6 text-center">
                                     <span>{{ $booking_item->validity }}</span>
                                 </td>
+                                @else
+                                   <td class="py-3 px-6 text-center">
+                                    <span>N/A</span>
+                                </td>
+                                @endif
                                 <td class="py-3 px-6 text-center">
                                     <span>{{ $booking_item->check_in_date }}</span>
                                 </td>

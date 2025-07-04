@@ -572,7 +572,7 @@ table {
                               <input
                                 type="number" name="variants[{{ $variant->id }}][quantity]" data-variant-id="{{ $variant->id }}"
                                 id="quantity_{{ $variant->id }}" 
-                                value="{{ old('quantity', 0) }}"                               
+                                value="{{ old('quantity', $cart->quantity ?? 0) }}"                            
                                 min="0"
                                 readonly
                                 class="w-6 h-6 lg:w-12 lg:h-8 text-center flex justify-center rounded-lg lg:text-lg text-sm font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 variant-quantity"
@@ -611,22 +611,42 @@ table {
                       <p class="font-medium text-[16px]">Select Your Dates</p>
                       <div class="grid grid-cols-2 mt-3 align-items-center">
                         <div class="mr-3">
+                     @php
+                        $oldCheckIn = old('check_in_date');
+
+                        if ($oldCheckIn) {
+                          // Replace dashes with slashes, so it matches the expected format
+                          $normalizedOld = str_replace('-', '/', trim($oldCheckIn));
+
+                          try {
+                            // Parse the normalized date and format to dd/mm/yyyy
+                            $displayCheckIn = \Carbon\Carbon::createFromFormat('d/m/Y', $normalizedOld)->format('d/m/Y');
+                          } catch (\Exception $e) {
+                            // If parsing fails, just show what we got
+                            $displayCheckIn = $oldCheckIn;
+                          }
+                        } else {
+                          // If no old input, format DB date as dd/mm/yyyy or show empty string
+                          $displayCheckIn = $cart?->check_in_date ? date('d/m/Y', strtotime($cart->check_in_date)) : '';
+                        }
+                      @endphp
+
                           <label class="text-sm w-full" for="">Start Date</label>
                           <input type="text" name="variants[{{ $variant->id }}][check_in_date]" data-holiday-length="{{ $variant->holiday_length }}" 
-                          data-variant-id="{{ $variant->id }}"class="w-full h-[40px] datepicker text-xs text-gray-400 border p-2 rounded focus:outline-none" placeholder="dd/mm/yyyy" autocomplete="off">
+                          data-variant-id="{{ $variant->id }}"class="w-full h-[40px] datepicker text-xs text-gray-400 border p-2 rounded focus:outline-none" placeholder="dd/mm/yyyy" autocomplete="off" value="{{  $displayCheckIn  }}">
                         </div>
                         <div class="end-date-wrapper" id="end-date-wrapper-{{ $variant->id }}" style="{{ $variant->holiday_length == 1 ? 'display:none;' : '' }}">
                           <label class="text-sm w-full" for="">End Date</label>
                           <input type="text" 
                             class="w-full h-[40px] datepickertwo text-xs text-gray-400 border p-2 rounded focus:outline-none" 
                             id="checkout-display-{{ $variant->id }}" 
-                            placeholder="dd/mm/yyyy" 
+                            placeholder="dd/mm/yyyy" value="{{ old('check_out_date', $cart?->check_out_date ? date('d/m/Y', strtotime($cart->check_out_date)) : '') }}"
                             readonly disabled>
 
                           <!-- Hidden input for submission -->
                           <input type="hidden" 
                                 name="variants[{{ $variant->id }}][check_out_date]" 
-                                id="checkout-hidden-{{ $variant->id }}">
+                                id="checkout-hidden-{{ $variant->id }}" value="{{ old('check_out_date', $cart?->check_out_date ? date('d/m/Y', strtotime($cart->check_out_date)) : '') }}">
 
                         </div>
                       </div>

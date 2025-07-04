@@ -139,10 +139,12 @@
             <p class="text-sm text-gray-600">Email Address</p>
             <p class="font-semibold text-gray-800">{{ $user->email }}</p>
         </div>
+        @if($user->phone)
         <div>
             <p class="text-sm text-gray-600">Phone Number</p>
-            <p class="font-semibold text-gray-800">{{ $user->phone ?? '-' }}</p>
+            <p class="font-semibold text-gray-800">{{ $user->phone }}</p>
         </div>
+        @endif
     </div>
 </div>
 

@@ -379,9 +379,13 @@ public function addDatedCart(Request $request)
 
     // Passed all validations - save cart
     foreach ($filteredVariants as $variant) {
-        $checkInDate = Carbon::createFromFormat('d-m-Y', $variant['check_in_date'])->format('Y-m-d');
-        $checkOutDate = !empty($variant['check_out_date'])
-            ? Carbon::createFromFormat('d/m/Y', $variant['check_out_date'])->format('Y-m-d')
+        $checkInRaw = str_replace('-', '/', trim($variant['check_in_date']));
+        $checkOutRaw = !empty($variant['check_out_date']) ? str_replace('-', '/', trim($variant['check_out_date'])) : null;
+
+        // Now safely parse with Carbon
+        $checkInDate = Carbon::createFromFormat('d/m/Y', $checkInRaw)->format('Y-m-d');
+        $checkOutDate = $checkOutRaw
+            ? Carbon::createFromFormat('d/m/Y', $checkOutRaw)->format('Y-m-d')
             : null;
 
         $cart = Cart::firstOrNew([

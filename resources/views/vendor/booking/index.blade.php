@@ -58,7 +58,11 @@
                             <td class="px-6 py-4">{{$booking_item->bookingConfirmation->created_at->format('Y-m-d')}}</td>
                             <td class="px-6 py-4">{{$booking_item->check_in_date}}</td>
                             <td class="px-6 py-4">{{$booking_item->check_out_date}}</td>
+                            @if($booking_item->variant?->product?->types?->product_type !== "Fixed Date")
                             <td class="px-6 py-4">{{$booking_item->validity}}</td>
+                            @else
+                             <td class="px-6 py-4">N/A</td>
+                            @endif
                             <td class="px-6 py-4">{{$booking_item->bookingConfirmation?->user?->first_name}}</td>
                             <td class="px-6 py-4">
                                 <span
@@ -143,6 +147,7 @@
                         <span class="font-medium">Expiry Date:</span>
                         <span id="modal-exp-date" class="text-gray-800 font-semibold">Jan 12, 2025</span>
                     </div>
+
                     <div class="flex items-center justify-between hidden">
                         <span class="font-medium">Check In Date:</span>
                         <span id="modal-checkin-date" class="text-gray-800 font-semibold">Jan 12, 2025</span>
@@ -247,7 +252,7 @@ $(document).ready(function () {
         document.getElementById('modal-variant-name').textContent = variantName;
         document.getElementById('modal-customer-name').textContent = customerName;
         document.getElementById('modal-date').textContent = date;
-        document.getElementById('modal-exp-date').textContent = expDate;
+        const expiryDate = document.getElementById('modal-exp-date');
         const checkinElem = document.getElementById('modal-checkin-date');
         const checkoutElem = document.getElementById('modal-checkout-date');
         const checkoutWrapper = document.getElementById('modal-checkout-date-wrapper');
@@ -263,8 +268,11 @@ $(document).ready(function () {
                 checkoutElem.textContent = '';
                 checkoutWrapper.classList.add('hidden');
             }
+           expiryDate.textContent = "N/A";
+
         } else {
             // Hide both dates if not Fixed Date
+            expiryDate.textContent = expDate;
             checkinElem.textContent = '';
             checkoutElem.textContent = '';
             document.getElementById('modal-checkin-date').closest('div').classList.add('hidden');

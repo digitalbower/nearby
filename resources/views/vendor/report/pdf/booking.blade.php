@@ -119,7 +119,9 @@
     @endif
     <p><strong>Customer Name:</strong> {{ $booking->bookingConfirmation->user->first_name }}</p>
     <p><strong>Redeemed Date:</strong> {{ $booking->redeemed_date }}</p>
+    @if($booking->variant->product->types->product_type !== "Fixed Date")
     <p><strong>Expiry Date:</strong> {{ $booking->validity }}</p>
+    @endif
   </div>
 
   <!-- Sticky Footer (outside .email-wrapper) -->
