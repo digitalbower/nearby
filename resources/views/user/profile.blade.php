@@ -463,7 +463,7 @@
                                   <div class="text-sm my-2 text-gray-600">
                                       <p>
                                           <i class="fas fa-calendar-alt mr-2 text-gray-400"></i>
-                                          <strong>Date:</strong> {{ \Carbon\Carbon::parse($item->booking_created_at)->format('d/m/y') }}
+                                          <strong>Booking Date:</strong> {{ \Carbon\Carbon::parse($item->created_at)->format('d/m/y') }}
                                       </p>
                                   </div>
                               
@@ -1018,7 +1018,7 @@
                               <div class="text-sm my-2 text-gray-600">
                                 <p>
                                   <i class="fas fa-calendar-alt mr-2 text-gray-400"></i>
-                                  <strong>Date:</strong> {{ \Carbon\Carbon::parse($item->booking_created_at)->format('d/m/y') }}
+                                  <strong>Booking Date:</strong> {{ \Carbon\Carbon::parse($item->created_at)->format('d/m/y') }}
                                 </p>
                               </div>
                           
