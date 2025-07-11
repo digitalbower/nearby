@@ -453,13 +453,13 @@ body {
     </div>
     @endif
     <div class="container mx-auto relative border-b">
-        <div class=" grid h-full bg-[#58af0838] grid-cols-1  md:grid-cols-5">
+        <div class=" grid h-full bg-[#58af0838] grid-cols-1 lg:grid-cols-7 md:grid-cols-5">
             <aside
-                class="lg:col-span-1 lg:order-1 order-1 sm:col-span-2 w-full shadow-lg  bg-[#58af0838] overflow-hidden relative">
+                class="lg:col-span-2 lg:order-1 order-1 sm:col-span-2 w-full shadow-lg  bg-[#58af0838] overflow-hidden relative">
                 <!-- Mobile Menu Icon -->
-                <div class="md:hidden flex justify-between items-center p-4 bg-[#58af0838]">
+                <div id="menuToggle" class="md:hidden flex justify-between items-center p-4 bg-[#58af0838]">
                     <h2 class="text-2xl font-bold text-gray-700">Categories</h2>
-                    <button id="menuToggle" class="text-gray-700 focus:outline-none">
+                    <button  class="text-gray-700 focus:outline-none">
                         <i class="fa-solid fa-chevron-down"></i>
                     </button>
                 </div>
@@ -494,17 +494,17 @@ body {
             </aside>
 
 
-            <main class="lg:col-span-4 lg:order-2 order-2 sm:col-span-3 h-full lg:p-10 py-4 relative px-4">
+            <main class="lg:col-span-5 lg:order-2 order-2 sm:col-span-3 h-full lg:p-10 py-4 relative px-4">
                 <div class="swiper mySwiper w-full h-full">
                     <div class="swiper-wrapper">
 
                         @foreach ($products as $product)
                         <div class="swiper-slide">
-                            <div class="lg:flex w-full relative mb-10 items-center justify-center">
+                            <div class="lg:flex w-full h-full relative items-center justify-center">
                                 <!-- Left Section (Top Animation) -->
                                 <div id="left-section"
-                                    class="w-full left-10 rounded-xl z-20 transform translate-x-[-50px] opacity-0">
-                                    <div class="rounded-xl lg:w-3/5">
+                                    class="w-full left-10 rounded-xl z-20 transform opacity-0">
+                                    <div class="rounded-xl lg:w-3/3">
                                         <img src="{{ asset('storage/' .$product->image) }}" alt="{{ $product->name }}"
                                             class="w-full h-auto max-h-[300px] lg:pb-0 pb-0 lg:max-h-[500px] rounded-xl object-cover">
                                     </div>
@@ -512,7 +512,7 @@ body {
 
                                 <!-- Right Section (Bottom Animation) -->
                                 <div id="right-section"
-                                    class="lg:absolute flex flex-col w-full lg:w-1/2 bg-white text-gray-800 rounded-lg p-3 lg:p-8 shadow-xl z-20 right-0 transform translate-x-[50px] opacity-0">
+                                    class="flex flex-col w-full lg:w-3/3 bg-white text-gray-800 rounded-lg p-3 lg:p-8 shadow-xl z-20 right-0 transform opacity-0">
 
                                     <h1
                                         class="lg:text-2xl text-xl font-extrabold mb-0 leading-tight text-gray-900 leading-snug">
@@ -1122,11 +1122,12 @@ window.onscroll = function() {
 <script>
 // Initialize Swiper
 var swiper = new Swiper(".mySwiper", {
-    loop: true,
-    autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-    },
+    loop: false,
+    // autoplay: {
+    //     delay: 3000,
+    //     disableOnInteraction: false,
+    //     stopOnLast: true,
+    // },
     pagination: {
         el: ".swiper-pagination",
         clickable: true,
@@ -1244,7 +1245,7 @@ $(document).ready(function() {
                 items: 2
             },
             1000: {
-                items: 4
+                items: 3
             }
         },
         onInitialized: function() {
