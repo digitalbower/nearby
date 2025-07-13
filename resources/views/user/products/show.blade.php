@@ -376,7 +376,7 @@
             <h2 class="md:text-2xl text-base font-bold text-gray-800 mb-3">
               Choose a Variant
             </h2>
-            <div class="space-y-4 overflow-x-hidden xl:max-h-[955px] max-h-[785px] pr-[5px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
+            <div class="space-y-4 overflow-x-hidden 2xl:max-h-[730px] xl:max-h-[560px] max-h-[785px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
 
           
 

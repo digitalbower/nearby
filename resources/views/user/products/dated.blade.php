@@ -137,6 +137,29 @@ table {
   cursor: pointer;
   position: relative;
 }
+
+.ui-datepicker-calendar tbody td span.ui-state-default {
+    color: gray;
+}
+
+.ui-datepicker-calendar tbody td a.ui-state-default {
+    color: #000;
+    margin: 4px;
+    background-color: rgba(242, 241, 276);
+}
+
+.ui-datepicker-calendar tbody td a.ui-state-default.ui-state-active, .ui-datepicker-calendar tbody td a.ui-state-default:hover {
+    background-color: #009688;
+    color: #fff;
+}
+
+@media screen and (max-width:991px) {
+
+.mobile_show_variant{
+  display: none;
+}
+  
+}
 </style>
 @endpush
 @section('content')
@@ -252,22 +275,22 @@ table {
               <div class="flex justify-start space-x-0 bg-gray-50 rounded-lg p-2">
                 <!-- Modern Tabs -->
                 <button id="tab-about" role="tab"
-                  class="lg:px-10 px-2 py-2 text-sm font-medium transition focus:outline-none "
+                  class="xl:px-10 md:px-5 px-2 py-2 text-sm font-medium transition focus:outline-none "
                   onclick="openTab(event, 'about')">
                   About
                 </button>
                 <button id="tab-fine-print" role="tab"
-                  class="lg:px-10 px-2 py-2 text-sm font-medium transition focus:outline-none "
+                  class="xl:px-10 md:px-5 px-2 py-2 text-sm font-medium transition focus:outline-none "
                   onclick="openTab(event, 'fine-print')">
                   Fine Print
                 </button>
                 <button id="tab-reviews" role="tab"
-                  class="lg:px-10 px-2 py-2 text-sm font-medium transition focus:outline-none "
+                  class="xl:px-10 md:px-5 px-2 py-2 text-sm font-medium transition focus:outline-none "
                   onclick="openTab(event, 'reviews')">
                   Reviews
                 </button>
                 <button id="tab-location" role="tab"
-                  class="lg:px-10 px-2 py-2 text-sm font-medium transition focus:outline-none"
+                  class="xl:px-10 md:px-5 px-2 py-2 text-sm font-medium transition focus:outline-none"
                   onclick="openTab(event, 'location')">
                   Location
                 </button>
@@ -488,249 +511,250 @@ table {
         </div>
 
         <!-- Right Column -->
-        <div class=" lg:mt-0 mt-5 w-full pb-20 col-span-1 sticky top-0 h-[100vh] xl:h-[120vh] bg-[#58af0838] rounded-lg  p-3 lg:p-5 space-y-6">
+        <div class="lg:mt-0 mt-5 w-full xl:pb-20 lg:pb-5 col-span-1 sticky top-0 h-full xl:h-[100vh] bg-[#58af0838] rounded-lg  p-3 lg:p-5 space-y-6">
           <!-- Option Selector -->
         <!-- Options -->
         @if($variants && $variants->isNotEmpty())
           <form action="{{route('user.products.add_dated_cart')}}" id="addCartForm" method="POST">
             @csrf
 
-            <h2 class="md:text-2xl text-base font-bold text-gray-800 mb-3">
+            <h2 class="hidden md:block md:text-2xl text-base font-bold text-gray-800 mb-3">
               Choose a Variant
             </h2>
-            <div class="space-y-4 overflow-x-hidden 2xl:max-h-[790px] xl:max-h-[580px] max-h-[785px] pr-[5px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
-
-          
-              @foreach ($variants as $index=>$variant)
-                <label class="mb-4 block" for="hs-checked-checkbox">
-                <div
-                  class="rounded-lg border bg-white text-card-foreground shadow-sm w-full overflow-hidden hover:shadow-xl f transition-all duration-300 ease-in-out transform hover:border-cyan-300 hover:ring-2 hover:ring-cyan-600">
-                  
-                  <div class="checkbox absolute top-4 right-4">
-                    <label class="checkbox-wrapper">
-                      <input type="checkbox" class="checkbox-input" />
-                      {{-- <span class="checkbox-tile px-2 py-1 text-[14px]">Selected</span> --}}
-                    </label>
-                  </div>
-
-                  <div class="flex flex-col space-y-2 p-4 pb-2">
-                    <h3 class="tracking-tight text-base lg:text-2xl font-bold">{{$variant->title}}</h3>
-                    <div class="gap-x-4 flex items-center">
-                      <div>
-                       {!! $variant->product_variant_icon !!}
-                      </div>
-                      <p class="text-sm text-muted-foreground flex items-center gap-2">
-                        <span>{{$variant->short_description}}</span>
-                      </p>
-                    </div>
-                  </div>
-                
-                  <div class="md:p-4 px-2 md:pt-2 space-y-3 relative">
-                    <div
-                      class="text-xs  bg-[#58af0838] rounded-md p-2 text-black flex gap-x-4 items-center rounded-lg p-3">
-                      <p class="font-medium">{!! $variant->short_info !!}</p>
-                      {{-- <p class="text-primary font-semibold">Learn more</p> --}}
+            <h2 class="mob_variant md:hidden md:text-2xl text-base font-bold text-gray-800 mb-2">
+              Choose a Variant
+            </h2>
+            <div class="mobile_show_variant">
+              <div class="space-y-4 overflow-x-hidden 2xl:max-h-[730px] xl:max-h-[560px] max-h-[785px] overflow-y-auto [&::-webkit-scrollbar]:hidden">
+                @foreach ($variants as $index=>$variant)
+                  <label class="mb-4 block" for="hs-checked-checkbox">
+                  <div
+                    class="rounded-lg border bg-white text-card-foreground shadow-sm w-full overflow-hidden hover:shadow-xl f transition-all duration-300 ease-in-out transform hover:border-cyan-300 hover:ring-2 hover:ring-cyan-600">
+                    
+                    <div class="checkbox absolute top-4 right-4">
+                      <label class="checkbox-wrapper">
+                        <input type="checkbox" class="checkbox-input" />
+                        {{-- <span class="checkbox-tile px-2 py-1 text-[14px]">Selected</span> --}}
+                      </label>
                     </div>
 
-                    <div class="flex md:items-center items-end justify-between">
-                      <div class="space-y-1 w-full">
-                        <div class="flex items-center gap-2">
-                          <span class="text-sm font-medium text-muted-foreground">From</span>
-                          <span class="text-sm line-through text-muted-foreground">{{$variant->unit_price}}</span>
-                          <div
-                            class="inline-flex items-center rounded-full border px-2 py-1 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-secondary/80 text-green-600 bg-green-100 font-semibold"
-                            data-v0-t="badge">{{$variant->discounted_percentage}}%</div>
+                    <div class="flex flex-col space-y-2 p-4 pb-2">
+                      <h3 class="tracking-tight text-base lg:text-2xl font-bold">{{$variant->title}}</h3>
+                      <div class="gap-x-4 flex items-center">
+                        <div>
+                        {!! $variant->product_variant_icon !!}
                         </div>
-
-                        
-                        <div class="flex items-center justify-between gap-2 py-3">
-                          <div class="">
-                            <span class="lg:text-3xl text-sm font-bold text-primary">AED {{$variant->discounted_price}}</span>
-                            <span class="md:text-sm text-xs text-muted-foreground">/{{$unit_type}}</span>
-                          </div>
-                
-                          <div class="flex items-center">
-                            <label class="text-md mr-3" for="">Quantity</label>
-                            
-                            <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
-                              <!-- Decrement Button -->
-                              <button
-                                type="button"
-                                class="w-6 h-6 decrementQty lg:w-8 lg:h-8 flex items-center justify-center bg-white border-r text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-300"
-                              onclick="decrementQty({{ $variant->id }})"
-                                aria-label="Decrease Quantity">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                  stroke="currentColor" stroke-width="2">
-                                  <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
-                                </svg>
-                              </button>
+                        <p class="text-sm text-muted-foreground flex items-center gap-2">
+                          <span>{{$variant->short_description}}</span>
+                        </p>
+                      </div>
+                    </div>
                   
-                              <!-- Quantity Display -->
-                              @php
-                              $cart = $user ? $user->carts()->where('product_variant_id', $variant->id)->first() : null;
-                              @endphp
-                              <input
-                                type="number" name="variants[{{ $variant->id }}][quantity]" data-variant-id="{{ $variant->id }}"
-                                id="quantity_{{ $variant->id }}" 
-                                value="{{ old('quantity', $cart->quantity ?? 0) }}"                            
-                                min="0"
-                                readonly
-                                class="w-6 h-6 lg:w-12 lg:h-8 text-center flex justify-center rounded-lg lg:text-lg text-sm font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 variant-quantity"
-                                aria-label="Quantity" />
+                    <div class="md:p-4 px-2 md:pt-2 space-y-3 relative">
+                      <div
+                        class="text-xs  bg-[#58af0838] rounded-md p-2 text-black flex gap-x-4 items-center rounded-lg p-3">
+                        <p class="font-medium">{!! $variant->short_info !!}</p>
+                        {{-- <p class="text-primary font-semibold">Learn more</p> --}}
+                      </div>
 
+                      <div class="flex md:items-center items-end justify-between">
+                        <div class="space-y-1 w-full">
+                          <div class="flex items-center gap-2">
+                            <span class="text-sm font-medium text-muted-foreground">From</span>
+                            <span class="text-sm line-through text-muted-foreground">{{$variant->unit_price}}</span>
+                            <div
+                              class="inline-flex items-center rounded-full border px-2 py-1 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-secondary/80 text-green-600 bg-green-100 font-semibold"
+                              data-v0-t="badge">{{$variant->discounted_percentage}}%</div>
+                          </div>
+
+                          
+                          <div class="flex items-center justify-between gap-2 py-3">
+                            <div class="">
+                              <span class="lg:text-3xl text-sm font-bold text-primary">AED {{$variant->discounted_price}}</span>
+                              <span class="md:text-sm text-[10px] text-muted-foreground">/{{$unit_type}}</span>
+                            </div>
+                  
+                            <div class="flex items-center">
+                              <label class="md:text-md text-xs mr-3" for="">Quantity</label>
                               
-                              <!-- Increment Button -->
-                            <button
+                              <div class="flex items-center space-x-1 bg-white p-0 rounded-xl shadow-lg border border-gray-200">
+                                <!-- Decrement Button -->
+                                <button
                                   type="button"
-                                  id="increment-btn-{{ $variant->id }}"
-                                  class="w-6 h-6 incrementQty lg:w-8 lg:h-8 flex items-center border-l justify-center bg-white text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
-                                  onclick="incrementQty({{ $variant->id }})"
-                                  aria-label="Increase Quantity">
+                                  class="w-6 h-6 decrementQty lg:w-8 lg:h-8 flex items-center justify-center bg-white border-r text-gray-600 rounded-l-md hover:bg-red-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-300"
+                                onclick="decrementQty({{ $variant->id }})"
+                                  aria-label="Decrease Quantity">
                                   <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                      stroke="currentColor" stroke-width="2">
-                                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+                                    stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 12H6" />
                                   </svg>
-                              </button>
+                                </button>
+                    
+                                <!-- Quantity Display -->
+                                @php
+                                $cart = $user ? $user->carts()->where('product_variant_id', $variant->id)->first() : null;
+                                @endphp
+                                <input
+                                  type="number" name="variants[{{ $variant->id }}][quantity]" data-variant-id="{{ $variant->id }}"
+                                  id="quantity_{{ $variant->id }}" 
+                                  value="{{ old('quantity', $cart->quantity ?? 0) }}"                            
+                                  min="0"
+                                  readonly
+                                  class="w-6 h-6 lg:w-12 lg:h-8 text-center flex justify-center rounded-lg lg:text-lg text-sm font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 variant-quantity"
+                                  aria-label="Quantity" />
+
+                                
+                                <!-- Increment Button -->
+                              <button
+                                    type="button"
+                                    id="increment-btn-{{ $variant->id }}"
+                                    class="w-6 h-6 incrementQty lg:w-8 lg:h-8 flex items-center border-l justify-center bg-white text-gray-600 rounded-r-md hover:bg-green-500 hover:text-white transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-300"
+                                    onclick="incrementQty({{ $variant->id }})"
+                                    aria-label="Increase Quantity">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+                                    </svg>
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
+                        <!-- <div
+                          class="bg-primary text-primary-foreground rounded-full md:p-2 p-1 hover:bg-primary/90 transition-colors duration-200 cursor-pointer">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-arrow-right h-6 w-6">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                          </svg>
+                        </div> -->
                       </div>
-                      <!-- <div
-                        class="bg-primary text-primary-foreground rounded-full md:p-2 p-1 hover:bg-primary/90 transition-colors duration-200 cursor-pointer">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="lucide lucide-arrow-right h-6 w-6">
-                          <path d="M5 12h14"></path>
-                          <path d="m12 5 7 7-7 7"></path>
-                        </svg>
-                      </div> -->
-                    </div>
-                    <span id="quantity-error-{{$variant->id}}"></span>
-                    
-                    <div class="p-4 bg-[#f9f9f9] showdate border rounded-lg border-dashed" id="">
-                      <p class="font-medium text-[16px]">Select Your Dates</p>
-                      <div class="grid grid-cols-2 mt-3 align-items-center">
-                        <div class="mr-3">
-                     @php
-                        $oldCheckIn = old('check_in_date');
+                      <span id="quantity-error-{{$variant->id}}"></span>
+                      
+                      <div class="md:p-4 p-2 bg-[#f9f9f9] showdate border rounded-lg border-dashed" id="">
+                        <p class="font-medium text-[16px]">Select Your Dates</p>
+                        <div class="grid grid-cols-2 mt-3 align-items-center">
+                          <div class="mr-3">
+                      @php
+                          $oldCheckIn = old('check_in_date');
 
-                        if ($oldCheckIn) {
-                          // Replace dashes with slashes, so it matches the expected format
-                          $normalizedOld = str_replace('-', '/', trim($oldCheckIn));
+                          if ($oldCheckIn) {
+                            // Replace dashes with slashes, so it matches the expected format
+                            $normalizedOld = str_replace('-', '/', trim($oldCheckIn));
 
-                          try {
-                            // Parse the normalized date and format to dd/mm/yyyy
-                            $displayCheckIn = \Carbon\Carbon::createFromFormat('d/m/Y', $normalizedOld)->format('d/m/Y');
-                          } catch (\Exception $e) {
-                            // If parsing fails, just show what we got
-                            $displayCheckIn = $oldCheckIn;
+                            try {
+                              // Parse the normalized date and format to dd/mm/yyyy
+                              $displayCheckIn = \Carbon\Carbon::createFromFormat('d/m/Y', $normalizedOld)->format('d/m/Y');
+                            } catch (\Exception $e) {
+                              // If parsing fails, just show what we got
+                              $displayCheckIn = $oldCheckIn;
+                            }
+                          } else {
+                            // If no old input, format DB date as dd/mm/yyyy or show empty string
+                            $displayCheckIn = $cart?->check_in_date ? date('d/m/Y', strtotime($cart->check_in_date)) : '';
                           }
-                        } else {
-                          // If no old input, format DB date as dd/mm/yyyy or show empty string
-                          $displayCheckIn = $cart?->check_in_date ? date('d/m/Y', strtotime($cart->check_in_date)) : '';
-                        }
-                      @endphp
+                        @endphp
 
-                          <label class="text-sm w-full" for="">Start Date</label>
-                          <input type="text" name="variants[{{ $variant->id }}][check_in_date]" data-holiday-length="{{ $variant->holiday_length }}" 
-                          data-variant-id="{{ $variant->id }}"class="w-full h-[40px] datepicker text-xs text-gray-400 border p-2 rounded focus:outline-none" placeholder="dd/mm/yyyy" autocomplete="off" value="{{  $displayCheckIn  }}">
-                        </div>
-                        <div class="end-date-wrapper" id="end-date-wrapper-{{ $variant->id }}" style="{{ $variant->holiday_length == 1 ? 'display:none;' : '' }}">
-                          <label class="text-sm w-full" for="">End Date</label>
-                          <input type="text" 
-                            class="w-full h-[40px] datepickertwo text-xs text-gray-400 border p-2 rounded focus:outline-none" 
-                            id="checkout-display-{{ $variant->id }}" 
-                            placeholder="dd/mm/yyyy" value="{{ old('check_out_date', $cart?->check_out_date ? date('d/m/Y', strtotime($cart->check_out_date)) : '') }}"
-                            readonly disabled>
+                            <label class="text-sm w-full" for="">Start Date</label>
+                            <input type="text" name="variants[{{ $variant->id }}][check_in_date]" data-holiday-length="{{ $variant->holiday_length }}" 
+                            data-variant-id="{{ $variant->id }}"class="w-full h-[40px] datepicker text-xs text-gray-400 border p-2 rounded focus:outline-none" placeholder="dd/mm/yyyy" autocomplete="off" value="{{  $displayCheckIn  }}">
+                          </div>
+                          <div class="end-date-wrapper" id="end-date-wrapper-{{ $variant->id }}" style="{{ $variant->holiday_length == 1 ? 'display:none;' : '' }}">
+                            <label class="text-sm w-full" for="">End Date</label>
+                            <input type="text" 
+                              class="w-full h-[40px] datepickertwo text-xs text-gray-400 border p-2 rounded focus:outline-none" 
+                              id="checkout-display-{{ $variant->id }}" 
+                              placeholder="dd/mm/yyyy" value="{{ old('check_out_date', $cart?->check_out_date ? date('d/m/Y', strtotime($cart->check_out_date)) : '') }}"
+                              readonly disabled>
 
-                          <!-- Hidden input for submission -->
-                          <input type="hidden" 
-                                name="variants[{{ $variant->id }}][check_out_date]" 
-                                id="checkout-hidden-{{ $variant->id }}" value="{{ old('check_out_date', $cart?->check_out_date ? date('d/m/Y', strtotime($cart->check_out_date)) : '') }}">
+                            <!-- Hidden input for submission -->
+                            <input type="hidden" 
+                                  name="variants[{{ $variant->id }}][check_out_date]" 
+                                  id="checkout-hidden-{{ $variant->id }}" value="{{ old('check_out_date', $cart?->check_out_date ? date('d/m/Y', strtotime($cart->check_out_date)) : '') }}">
 
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div class="flex items-center justify-between text-sm text-muted-foreground">
-                      <span class="flex items-center gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="lucide lucide-users h-5 w-5 text-gray-800">
-                          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                          <circle cx="9" cy="7" r="4"></circle>
-                          <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                        </svg>
-                        @php
-                          $total_booking_count = $variant->getBookingCountBasedOnvariant();
-                        @endphp
-                        <span class="font-medium text-[10px] md:text-[14px]">
-                          @if ($total_booking_count === 0)
-                              0 booked
-                          @elseif ($total_booking_count === 1)
-                              1 booked
-                          @else
-                              {{ $total_booking_count - 1 }}+ booked
-                          @endif
+                      <div class="flex items-center justify-between text-sm text-muted-foreground">
+                        <span class="flex items-center gap-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-users h-5 w-5 text-gray-800">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                          </svg>
+                          @php
+                            $total_booking_count = $variant->getBookingCountBasedOnvariant();
+                          @endphp
+                          <span class="font-medium text-[10px] md:text-[14px]">
+                            @if ($total_booking_count === 0)
+                                0 booked
+                            @elseif ($total_booking_count === 1)
+                                1 booked
+                            @else
+                                {{ $total_booking_count - 1 }}+ booked
+                            @endif
+                          </span>
                         </span>
-                      </span>
-                      <span class="flex items-center gap-1">
-                        {!! $variant->short_legend_icon !!}
-                        <span class="font-medium  text-[10px] md:text-[14px]">{{$variant->short_legend}}</span>
-                      </span>
+                        <span class="flex items-center gap-1">
+                          {!! $variant->short_legend_icon !!}
+                          <span class="font-medium  text-[10px] md:text-[14px]">{{$variant->short_legend}}</span>
+                        </span>
+                      </div>
+                      <input type="hidden" name="variants[{{ $variant->id }}][product_variant_id]" value="{{ $variant->id }}" />
+                      @php
+                        $blackoutDates = $variant->blackoutDates
+                            ->pluck('date')
+                            ->filter()
+                            ->map(function ($date) {
+                                return \Carbon\Carbon::parse($date)->format('Y-m-d'); // Use Y-m-d for JS compatibility
+                            })
+                            ->values(); // Reset array keys
+                      @endphp     
+                      <input type="hidden"  name="blackout_dates[]"  id="blackout-dates-{{ $variant->id }}" value='@json($blackoutDates)'>
+                      <div id="blackout-error-message-{{ $variant->id }}" class="hidden text-red-500 text-sm font-medium mt-2">
+                    ❌ Booking includes blackout dates. Please choose a different date.
                     </div>
-                    <input type="hidden" name="variants[{{ $variant->id }}][product_variant_id]" value="{{ $variant->id }}" />
-                    @php
-                      $blackoutDates = $variant->blackoutDates
-                          ->pluck('date')
-                          ->filter()
-                          ->map(function ($date) {
-                              return \Carbon\Carbon::parse($date)->format('Y-m-d'); // Use Y-m-d for JS compatibility
-                          })
-                          ->values(); // Reset array keys
-                    @endphp     
-                    <input type="hidden"  name="blackout_dates[]"  id="blackout-dates-{{ $variant->id }}" value='@json($blackoutDates)'>
-                    <div id="blackout-error-message-{{ $variant->id }}" class="hidden text-red-500 text-sm font-medium mt-2">
-                  ❌ Booking includes blackout dates. Please choose a different date.
+                      @error("variants.{$variant->id}.check_in_date")
+                        <div class="text-red-500 text-sm font-medium mt-2">{{ $message }}</div>
+                      @enderror
+                    </div>
                   </div>
-                    @error("variants.{$variant->id}.check_in_date")
-                      <div class="text-red-500 text-sm font-medium mt-2">{{ $message }}</div>
-                    @enderror
-                  </div>
+                  </label>
+                @endforeach
+                  <input type="hidden" name="redirect_to_cart" id="redirect_to_cart" value="0" />
+              </div>
+              <div class="space-y-4">
+                <div id="variant-error-msg" class="hidden text-red-500 text-sm font-medium mt-2"></div>
+                
+
+                <!-- Continue Button -->
+                {{-- @auth
+                <button type="button" onclick="submitAndRedirectToCart()" 
+                  class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                  Continue
+                </button>
+                @endauth --}}
+                @php
+                    $cartCount = \App\Models\Cart::where('user_id', Auth::id())->count();
+                @endphp
+
+                <div id="cart-limit-message" class="hidden text-red-600 text-sm font-semibold mb-2">
+                    ⚠️ You can only add up to 5 products in your cart.
                 </div>
-                </label>
-              @endforeach
-                <input type="hidden" name="redirect_to_cart" id="redirect_to_cart" value="0" />
-                
-                
+
+                    <button type="button" id="submitBtn"
+                            onclick="checkAuthAndSubmit({{ $cartCount }})"
+                            class="relative px-6 w-full py-3 bg-[#58af0838] hover:bg-[#4a910954] text-black font-semibold rounded-lg shadow-md transition-transform transform duration-300 ease-in-out">
+                        <i class="fas fa-shopping-cart mr-2"></i>
+                        Add to Cart
+                    </button>
               </div>
-            <div class="space-y-4">
-              <div id="variant-error-msg" class="hidden text-red-500 text-sm font-medium mt-2"></div>
-              
-
-            <!-- Continue Button -->
-            {{-- @auth
-            <button type="button" onclick="submitAndRedirectToCart()" 
-              class="w-full px-9 py-3 bg-[#58af0838] hover:bg-[#4a910954]   text-black font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
-              Continue
-            </button>
-            @endauth --}}
-           @php
-    $cartCount = \App\Models\Cart::where('user_id', Auth::id())->count();
-@endphp
-
-<div id="cart-limit-message" class="hidden text-red-600 text-sm font-semibold mb-2">
-    ⚠️ You can only add up to 5 products in your cart.
-</div>
-
-<button type="button" id="submitBtn"
-        onclick="checkAuthAndSubmit({{ $cartCount }})"
-        class="relative px-6 w-full py-3 bg-[#58af0838] hover:bg-[#4a910954] text-black font-semibold rounded-lg shadow-md transition-transform transform duration-300 ease-in-out">
-    <i class="fas fa-shopping-cart mr-2"></i>
-    Add to Cart
-</button>
-              </div>
+            </div>
           </form>
           @endif
         </div>
@@ -743,6 +767,22 @@ table {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script>
+$(document).ready(function() {
+  $(".mob_variant").click(function() {
+        $(".mobile_show_variant").toggle();
+  });
+});
+
+// $(document).ready(function(){
+//  $('.mob_variant').click(function () {
+//     if ($('.mobile_show_variant').is('')) {
+//         $('.mobile_show_variant').show();
+//     } else {
+//         $('.mobile_show_variant').hide();
+//     }
+//   }); 
+// });
+
 const isUserLoggedIn = @json(auth()->check());
 
 function isAnyVariantSelected() {
