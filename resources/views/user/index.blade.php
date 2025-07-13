@@ -512,7 +512,7 @@ body {
 
                                 <!-- Right Section (Bottom Animation) -->
                                 <div id="right-section"
-                                    class="flex flex-col w-full lg:w-3/3 bg-white text-gray-800 rounded-lg p-3 lg:p-8 shadow-xl z-20 right-0 transform opacity-0">
+                                    class="flex flex-col w-full h-full lg:w-3/3 bg-white text-gray-800 rounded-lg p-3 lg:p-8 shadow-xl z-20 right-0 transform opacity-0">
 
                                     <h1
                                         class="lg:text-2xl text-xl font-extrabold mb-0 leading-tight text-gray-900 leading-snug">
