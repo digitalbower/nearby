@@ -162,6 +162,13 @@ window.onscroll = function() {
 .accordion-content {
     display: none;
 }
+
+.checkbox:checked {
+    border: none;
+}
+.checkbox:checked + .check-icon {
+    display: flex;
+}
 </style>
 @endpush
 
@@ -453,7 +460,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             </span>
                             <span class="text-gray-700 md:text-lg text-xs">Past Booking</span>
                         </label>
-
                     </div>
 
 
@@ -483,10 +489,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                         <div class="grid md:grid-cols-2 gap-y-2 gap-x-4">
                                             <p class="text-sm text-gray-600">
-                                                Quantity: {{ $item->quantity }}
+                                               <i class="fa-solid fa-cubes me-1"></i> Quantity: {{ $item->quantity }}
                                             </p>
                                             <p class="text-sm text-gray-600">
-                                                Total Price: AED {{ number_format($item->total_price, 2) }}
+                                               <i class="fa-solid fa-money-bill-1-wave me-1"></i> Total Price: AED {{ number_format($item->total_price, 2) }}
                                             </p>
                                             @if($item->variant?->product?->types?->product_type === "Fixed Date")
                                             @if($item->variant?->holiday_length == 1)
@@ -509,12 +515,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                             </p>
                                             @elseif($item->verification_status ==="redeemed")
                                             <p
-                                                class="text-sm text-gray-600 bg-yellow text-white absolute rounded-lg px-2 py-1 top-5 right-2">
+                                                class="text-sm text-gray-600 bg-[#f7f71a] text-white absolute rounded-lg px-2 py-1 top-5 right-2">
                                                 Redeemed
                                             </p>
                                             @elseif($item->verification_status ==="expired")
                                             <p
-                                                class="text-sm text-gray-600 bg-red text-white absolute rounded-lg px-2 py-1 top-5 right-2">
+                                                class="text-sm text-gray-600 bg-[#FF0000] text-white absolute rounded-lg px-2 py-1 top-5 right-2">
                                                 Expired
                                             </p>
                                             @endif
@@ -1013,33 +1019,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             <div class="flex items-center mb-3 space-x-4">
                                 <!-- Inactive Radio Button -->
-                                <div class="flex space-x-4 mb-4">
-                                    <label class="flex items-center space-x-2 cursor-pointer">
+                                <div class="flex space-x-8">
+                                    <label class="flex items-center cursor-pointer">
                                         <input type="radio" name="status" value="upcoming" class="hidden"
                                             onchange="filterBookings(this)" checked>
                                         <span
-                                            class="radio-icon w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
-                                            <i class="fas fa-circle"></i>
+                                            class="radio-icon w-7 h-7 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
+                                            <i class="fas fa-circle text-sm"></i>
                                         </span>
-                                        <span class="text-gray-700">Upcoming Booking</span>
+                                        <span class="text-gray-700 ms-2">Upcoming Booking</span>
                                     </label>
-                                    <label class="flex items-center space-x-2 cursor-pointer">
+                                    <label class="flex items-center cursor-pointer">
                                         <input type="radio" name="status" value="past" class="hidden"
                                             onchange="filterBookings(this)">
                                         <span
-                                            class="radio-icon w-6 h-6 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
-                                            <i class="fas fa-circle"></i>
+                                            class="radio-icon w-7 h-7 flex items-center justify-center border-2 border-gray-400 rounded-full text-gray-400">
+                                            <i class="fas fa-circle text-sm"></i>
                                         </span>
-                                        <span class="text-gray-700">Past Booking</span>
+                                        <span class="text-gray-700 ms-2">Past Booking</span>
                                     </label>
-
                                 </div>
-
-
-
-                                <!-- Active Radio Button -->
-
                             </div>
+
+                            <!-- <div role="radiogroup" class="py-12 flex">
+                                <div class="flex items-center">
+                                    <label id="label1" for="one" class="flex items-center cursor-pointer text-sm leading-4 font-normal text-gray-800 dark:text-gray-100">
+                                        <div class="bg-white dark:bg-gray-100 rounded-full w-5 h-5 me-2 flex flex-shrink-0 justify-center items-center relative">
+                                            <input aria-labelledby="label1" id="one" checked type="radio" value="upcoming" name="status" onchange="filterBookings(this)" class="checkbox appearance-none focus:opacity-100  focus:outline-none border rounded-full border-gray-400 absolute cursor-pointer w-full h-full checked:border-none" />
+                                            <div class="check-icon hidden border-4 border-indigo-700 rounded-full w-full h-full z-1"></div>
+                                        </div>
+                                    Upcomming Booking</label>
+                                </div>
+                                <div class="flex items-center ml-6">
+                                    <label id="label2" for="two" class="flex items-center cursor-pointer ml-2 text-sm leading-4 font-normal text-gray-800 dark:text-gray-100">
+                                        <div class="bg-white dark:bg-gray-100 rounded-full w-5 h-5 me-2 flex flex-shrink-0 justify-center items-center relative">
+                                            <input aria-labelledby="label2" id="two" type="radio" name="status" value="past" onchange="filterBookings(this)" class="checkbox appearance-none focus:opacity-100  focus:outline-none border rounded-full border-gray-400 absolute cursor-pointer w-full h-full checked:border-none" />
+                                            <div class="check-icon hidden border-4 border-indigo-700 rounded-full w-full h-full z-1"></div>
+                                        </div>
+                                    Past Booking</label>
+                                </div>                              
+                            </div> -->
 
                             <div class="space-y grid grid-cols-1 md:grid-cols-2 items-center gap-3">
                                 <!-- Booking Item 1 -->

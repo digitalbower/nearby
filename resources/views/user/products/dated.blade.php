@@ -153,13 +153,13 @@ table {
     color: #fff;
 }
 
-@media screen and (max-width:991px) {
+/* @media screen and (max-width:991px) {
 
 .mobile_show_variant{
   display: none;
 }
   
-}
+} */
 </style>
 @endpush
 @section('content')
@@ -767,20 +767,10 @@ table {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script>
-$(document).ready(function() {
-  $(".mob_variant").click(function() {
-        $(".mobile_show_variant").toggle();
-  });
-});
-
-// $(document).ready(function(){
-//  $('.mob_variant').click(function () {
-//     if ($('.mobile_show_variant').is('')) {
-//         $('.mobile_show_variant').show();
-//     } else {
-//         $('.mobile_show_variant').hide();
-//     }
-//   }); 
+// $(document).ready(function() {
+//   $(".mob_variant").click(function() {
+//         $(".mobile_show_variant").toggle();
+//   });
 // });
 
 const isUserLoggedIn = @json(auth()->check());

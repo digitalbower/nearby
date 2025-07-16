@@ -500,30 +500,30 @@ body {
 
                         @foreach ($products as $product)
                         <div class="swiper-slide">
-                            <div class="lg:flex w-full h-full relative items-center justify-center">
+                            <div class="lg:flex w-full lg:h-full relative items-center justify-center">
                                 <!-- Left Section (Top Animation) -->
                                 <div id="left-section"
-                                    class="w-full left-10 rounded-xl z-20 transform opacity-0">
-                                    <div class="rounded-xl lg:w-3/3">
+                                    class="w-full lg:h-full left-10 rounded-xl z-20 transform opacity-0">
+                                    <div class="rounded-xl rounded-r-none lg:w-3/3 h-full">
                                         <img src="{{ asset('storage/' .$product->image) }}" alt="{{ $product->name }}"
-                                            class="w-full h-auto max-h-[300px] lg:pb-0 pb-0 lg:max-h-[500px] rounded-xl object-cover">
+                                            class="w-full h-auto h-full max-h-[300px] lg:max-h-full lg:pb-0 pb-0 rounded-xl lg:rounded-r-none object-cover">
                                     </div>
                                 </div>
 
                                 <!-- Right Section (Bottom Animation) -->
                                 <div id="right-section"
-                                    class="flex flex-col w-full h-full lg:w-3/3 bg-white text-gray-800 rounded-lg p-3 lg:p-8 shadow-xl z-20 right-0 transform opacity-0">
+                                    class="flex flex-col w-full h-full lg:w-3/3 bg-white text-gray-800 rounded-lg lg:rounded-l-none p-3 lg:p-5 xl:p-8 shadow-xl z-20 right-0 transform opacity-0">
 
                                     <h1
-                                        class="lg:text-2xl text-xl font-extrabold mb-0 leading-tight text-gray-900 leading-snug">
+                                        class="lg:text-2xl text-xl font-extrabold lg:mb-4 leading-tight text-gray-900 leading-snug">
                                         {{ $product->name }}
                                     </h1>
 
                                     <div>
-                                        <h2 class="lg:text-lg text-base font-bold text-gray-900">
+                                        <h2 class="lg:text-lg mb-3 text-base font-bold text-gray-900">
                                         {{ $product->emirate->name }}
                                         </h2>
-                                        <div class="flex items-center space-x-2 text-gray-600">
+                                        <div class="flex items-center space-x-2 text-gray-600 lg:mb-3">
                                             @for ($i = 0; $i < 5; $i++) <span
                                                 class="fas fa-star {{ $i < floor($product->average_rating) ? 'text-yellow-400' : 'text-gray-300' }}">
                                                 </span>
@@ -533,11 +533,11 @@ body {
                                         </div>
                                     </div>
 
-                                    <p class="text-gray-600 text-sm lg:text-base leading-relaxed">
+                                    <p class="text-gray-600 lg:mb-8 lg:pb-8 lg:border-b-2 border-gray-200 text-sm lg:text-base leading-relaxed">
                                         {{ $product->short_description }}
                                     </p>
 
-                                    <div class="flex items-center space-x-4">
+                                    <div class="flex items-center space-x-4 lg:mb-4">
                                         <span class="text-3xl font-bold text-red-600">
                                             AED {{$product->min_discounted_price  }}
                                         </span>
@@ -546,7 +546,7 @@ body {
                                         </span>
                                     </div>
 
-                                    <span class="text-lg text-green-600 font-semibold">
+                                    <span class="text-lg text-green-600 lg:mb-8 font-semibold">
                                         {{ $product->min_discounted_percentage }} %
                                     </span>
 
@@ -1246,6 +1246,9 @@ $(document).ready(function() {
             },
             1000: {
                 items: 3
+            },
+            1200: {
+                items: 4
             }
         },
         onInitialized: function() {
